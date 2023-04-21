@@ -29,11 +29,11 @@ import textwrap
 
 import yaml
 
-from nexusutils.nexus import nexus
-from nexusutils.nyaml2nxdl.comment_collector import CommentCollector
-from nexusutils.nyaml2nxdl.nyaml2nxdl_helper import (get_yaml_escape_char_reverter_dict,
-                                                     nx_name_type_resolving,
-                                                     cleaning_empty_lines, LineLoader)
+from pynxtools.nexus import nexus
+from pynxtools.nyaml2nxdl.comment_collector import CommentCollector
+from pynxtools.nyaml2nxdl.nyaml2nxdl_helper import (get_yaml_escape_char_reverter_dict,
+                                                    nx_name_type_resolving,
+                                                    cleaning_empty_lines, LineLoader)
 
 
 # pylint: disable=too-many-lines, global-statement, invalid-name

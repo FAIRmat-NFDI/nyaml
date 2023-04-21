@@ -27,9 +27,9 @@ import xml.etree.ElementTree as ET
 
 import click
 
-from nexusutils.nyaml2nxdl.nyaml2nxdl_forward_tools import nyaml2nxdl, pretty_print_xml
-from nexusutils.nyaml2nxdl.nyaml2nxdl_backward_tools import (Nxdl2yaml,
-                                                             compare_niac_and_my)
+from pynxtools.nyaml2nxdl.nyaml2nxdl_forward_tools import nyaml2nxdl, pretty_print_xml
+from pynxtools.nyaml2nxdl.nyaml2nxdl_backward_tools import (Nxdl2yaml,
+                                                            compare_niac_and_my)
 
 
 DEPTH_SIZE = "    "

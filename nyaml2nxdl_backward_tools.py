@@ -25,10 +25,10 @@ from typing import List, Dict
 import xml.etree.ElementTree as ET
 import os
 
-from nexusutils.nyaml2nxdl.nyaml2nxdl_helper import (get_node_parent_info,
-                                                     get_yaml_escape_char_dict,
-                                                     cleaning_empty_lines)
-from nexusutils.dataconverter.helpers import remove_namespace_from_tag
+from pynxtools.nyaml2nxdl.nyaml2nxdl_helper import (get_node_parent_info,
+                                                    get_yaml_escape_char_dict,
+                                                    cleaning_empty_lines)
+from pynxtools.dataconverter.helpers import remove_namespace_from_tag
 
 
 DEPTH_SIZE = "  "
