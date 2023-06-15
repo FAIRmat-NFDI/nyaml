@@ -1,0 +1,18 @@
+# Prepare for Documentation
+lxml
+pyyaml
+
+# Documentation building
+sphinx>=5
+sphinx-tabs
+sphinx-comments
+
+# Testing
+pytest
+
+# Code style and auto-formatting
+black>=22.3
+flake8>=4
+isort>=5.10
+
+pynxtools>=0.0.3
