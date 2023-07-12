@@ -13,6 +13,7 @@ from ..globals.errors import NXDLParseError
 from ..globals.nxdl import NXDL_NAMESPACE
 from ..globals.urls import REPO_URL
 from ..utils import nxdl_utils as pynxtools_nxlib
+from ..utils.github import get_file_contributors_via_api
 from ..utils.types import PathLike
 from .anchor_list import AnchorRegistry
 
