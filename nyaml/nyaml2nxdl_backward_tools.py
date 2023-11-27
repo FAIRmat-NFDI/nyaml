@@ -21,6 +21,8 @@
 # limitations under the License.
 #
 
+# pylint: disable=too-many-lines
+
 import re
 import textwrap
 from pathlib import Path
@@ -131,7 +133,7 @@ def add_new_line_with_pipe_on_top(text, depth):
     return text
 
 
-# pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-instance-attributes, too-many-public-methods
 class Nxdl2yaml:
     """Parse XML file and print a YML file."""
 

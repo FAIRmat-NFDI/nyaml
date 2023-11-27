@@ -284,10 +284,10 @@ def test_xml_parsing():
     check_file_fresh_baked(test_xml_file)
 
     test_tree = ET.parse(test_xml_file)
-    test_tree_flattened = set([i.tag.split("}", 1)[1] for i in test_tree.iter()])
+    test_tree_flattened = {[i.tag.split("}", 1)[1] for i in test_tree.iter()]}
 
     ref_tree = ET.parse(ref_xml_file)
-    ref_tree_flattened = set([i.tag.split("}", 1)[1] for i in ref_tree.iter()])
+    ref_tree_flattened = {[i.tag.split("}", 1)[1] for i in ref_tree.iter()]}
 
     assert (
         test_tree_flattened == ref_tree_flattened
