@@ -98,12 +98,9 @@ def test_links():
     """
     Check the correct parsing of links
     """
-    data_path = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)), "../data/nyaml2nxdl"
-    )
-    ref_xml_link_file = "tests/data/nyaml2nxdl/Ref_NXtest_links.nxdl.xml"
-    test_yml_link_file = "tests/data/nyaml2nxdl/NXtest_links.yaml"
-    test_xml_link_file = "tests/data/nyaml2nxdl/NXtest_links.nxdl.xml"
+    ref_xml_link_file = "tests/data/Ref_NXtest_links.nxdl.xml"
+    test_yml_link_file = "tests/data/NXtest_links.yaml"
+    test_xml_link_file = "tests/data/NXtest_links.nxdl.xml"
     # ref_xml_link_file = os.path.abspath(data_path + '/Ref_NXtest_links.nxdl.xml')
     # test_yml_link_file = os.path.abspath(data_path + '/NXtest_links.yaml')
     # test_xml_link_file = os.path.abspath(data_path + '/NXtest_links.nxdl.xml')
@@ -111,7 +108,7 @@ def test_links():
     compare_matches(
         ref_xml_link_file, test_yml_link_file, test_xml_link_file, desired_matches
     )
-    os.remove("tests/data/nyaml2nxdl/NXtest_links.nxdl.xml")
+    os.remove("tests/data/NXtest_links.nxdl.xml")
     sys.stdout.write("Test on links okay.\n")
 
 
@@ -119,12 +116,12 @@ def test_docs():
     """In this test an xml file in converted to yml and then back to xml.
     The xml trees of the two files are then compared.
     """
-    ref_xml_file = "tests/data/nyaml2nxdl/Ref_NXellipsometry-docCheck.nxdl.xml"
-    test_yml_file = "tests/data/nyaml2nxdl/NXellipsometry-docCheck.yaml"
-    test_xml_file = "tests/data/nyaml2nxdl/NXellipsometry-docCheck.nxdl.xml"
+    ref_xml_file = "tests/data/Ref_NXellipsometry-docCheck.nxdl.xml"
+    test_yml_file = "tests/data/NXellipsometry-docCheck.yaml"
+    test_xml_file = "tests/data/NXellipsometry-docCheck.nxdl.xml"
     desired_matches = ["<doc", "</doc>"]
     compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
-    os.remove("tests/data/nyaml2nxdl/NXellipsometry-docCheck.nxdl.xml")
+    os.remove("tests/data/NXellipsometry-docCheck.nxdl.xml")
     sys.stdout.write("Test on documentation formatting okay.\n")
 
 
@@ -135,9 +132,9 @@ def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     to yaml to check if they are correct.
         2. In test-2: Check the nxdl that comes at the end of yaml file as comment.
     """
-    ref_xml_file = "tests/data/nyaml2nxdl/Ref_NXentry.nxdl.xml"
-    ref_yml_file = "tests/data/nyaml2nxdl/Ref_NXentry.yaml"
-    test_yml_file = "tests/data/nyaml2nxdl/Ref_NXentry_parsed.yaml"
+    ref_xml_file = "tests/data/Ref_NXentry.nxdl.xml"
+    ref_yml_file = "tests/data/Ref_NXentry.yaml"
+    test_yml_file = "tests/data/Ref_NXentry_parsed.yaml"
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", ref_xml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
@@ -155,29 +152,27 @@ def test_fileline_error():
     """
     In this test the yaml fileline in the error message is tested.
     """
-    test_yml_file = "tests/data/nyaml2nxdl/NXfilelineError1.yaml"
-    out_nxdl = "tests/data/nyaml2nxdl/NXfilelineError1.nxdl.xml"
-    out_yaml = "tests/data/nyaml2nxdl/temp_NXfilelineError1.yaml"
+    test_yml_file = "tests/data/NXfilelineError1.yaml"
+    out_nxdl = "tests/data/NXfilelineError1.nxdl.xml"
+    out_yaml = "tests/data/temp_NXfilelineError1.yaml"
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", test_yml_file])
     assert result.exit_code == 1
     assert "13" in str(result.exception)
     os.remove(out_nxdl)
     os.remove(out_yaml)
 
-    test_yml_file = "tests/data/nyaml2nxdl/NXfilelineError2.yaml"
-    out_nxdl = "tests/data/nyaml2nxdl/NXfilelineError2.nxdl.xml"
-    out_yaml = "tests/data/nyaml2nxdl/temp_NXfilelineError2.yaml"
-    result = CliRunner().invoke(
-        nyaml2nxdlllllllll.launch_tool, ["--input-file", test_yml_file]
-    )
+    test_yml_file = "tests/data/NXfilelineError2.yaml"
+    out_nxdl = "tests/data/NXfilelineError2.nxdl.xml"
+    out_yaml = "tests/data/temp_NXfilelineError2.yaml"
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", test_yml_file])
     assert result.exit_code == 1
     assert "21" in str(result.exception)
     os.remove(out_nxdl)
     os.remove(out_yaml)
 
-    test_yml_file = "tests/data/nyaml2nxdl/NXfilelineError3.yaml"
-    out_nxdl = "tests/data/nyaml2nxdl/NXfilelineError3.nxdl.xml"
-    out_yaml = "tests/data/nyaml2nxdl/temp_NXfilelineError3.yaml"
+    test_yml_file = "tests/data/NXfilelineError3.yaml"
+    out_nxdl = "tests/data/NXfilelineError3.nxdl.xml"
+    out_yaml = "tests/data/temp_NXfilelineError3.yaml"
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", test_yml_file])
     assert result.exit_code == 1
     assert "25" in str(result.exception)
@@ -191,14 +186,14 @@ def test_symbols():
     """
     Check the correct parsing of symbols
     """
-    ref_xml_symbol_file = "tests/data/nyaml2nxdl/Ref_NXnested_symbols.nxdl.xml"
-    test_yml_symbol_file = "tests/data/nyaml2nxdl/NXnested_symbols.yaml"
-    test_xml_symbol_file = "tests/data/nyaml2nxdl/NXnested_symbols.nxdl.xml"
+    ref_xml_symbol_file = "tests/data/Ref_NXnested_symbols.nxdl.xml"
+    test_yml_symbol_file = "tests/data/NXnested_symbols.yaml"
+    test_xml_symbol_file = "tests/data/NXnested_symbols.nxdl.xml"
     desired_matches = ["<symbols>", "</symbols>", "<symbols"]
     compare_matches(
         ref_xml_symbol_file, test_yml_symbol_file, test_xml_symbol_file, desired_matches
     )
-    os.remove("tests/data/nyaml2nxdl/NXnested_symbols.nxdl.xml")
+    os.remove("tests/data/NXnested_symbols.nxdl.xml")
     sys.stdout.write("Test on symbols okay.\n")
 
 
@@ -207,9 +202,9 @@ def test_attributes():
     Check expected attributes in NeXus fields, groups, and attributes.
     Check proper doc elements.
     """
-    ref_xml_attribute_file = "tests/data/nyaml2nxdl/Ref_NXattributes.nxdl.xml"
-    test_yml_attribute_file = "tests/data/nyaml2nxdl/NXattributes.yaml"
-    test_xml_attribute_file = "tests/data/nyaml2nxdl/NXattributes.nxdl.xml"
+    ref_xml_attribute_file = "tests/data/Ref_NXattributes.nxdl.xml"
+    test_yml_attribute_file = "tests/data/NXattributes.yaml"
+    test_xml_attribute_file = "tests/data/NXattributes.nxdl.xml"
     desired_matches = [
         "<attribute",
         "</attribute>",
@@ -226,7 +221,7 @@ def test_attributes():
         test_xml_attribute_file,
         desired_matches,
     )
-    os.remove("tests/data/nyaml2nxdl/NXattributes.nxdl.xml")
+    os.remove("tests/data/NXattributes.nxdl.xml")
     sys.stdout.write("Test on attributes okay.\n")
 
 
@@ -234,9 +229,9 @@ def test_extends():
     """
     Check the correct handling of extends keyword
     """
-    ref_xml_attribute_file = "tests/data/nyaml2nxdl/Ref_NXattributes.nxdl.xml"
-    test_yml_attribute_file = "tests/data/nyaml2nxdl/NXattributes.yaml"
-    test_xml_attribute_file = "tests/data/nyaml2nxdl/NXattributes.nxdl.xml"
+    ref_xml_attribute_file = "tests/data/Ref_NXattributes.nxdl.xml"
+    test_yml_attribute_file = "tests/data/NXattributes.yaml"
+    test_xml_attribute_file = "tests/data/NXattributes.nxdl.xml"
     runner = CliRunner()
     result = runner.invoke(
         nyaml2nxdl.launch_tool, ["--input-file", test_yml_attribute_file]
@@ -245,7 +240,7 @@ def test_extends():
     ref_root_node = ET.parse(ref_xml_attribute_file).getroot()
     test_root_node = ET.parse(test_xml_attribute_file).getroot()
     assert ref_root_node.attrib == test_root_node.attrib
-    os.remove("tests/data/nyaml2nxdl/NXattributes.nxdl.xml")
+    os.remove("tests/data/NXattributes.nxdl.xml")
     sys.stdout.write("Test on extends keyword okay.\n")
 
 
@@ -254,9 +249,9 @@ def test_symbols_and_enum_docs():
         Check the correct handling of empty attributes
     or attributes fields, e.g. doc
     """
-    ref_xml_file = "tests/data/nyaml2nxdl/Ref_NXmytests.nxdl.xml"
-    test_yml_file = "tests/data/nyaml2nxdl/NXmytests.yaml"
-    test_xml_file = "tests/data/nyaml2nxdl/NXmytests.nxdl.xml"
+    ref_xml_file = "tests/data/Ref_NXmytests.nxdl.xml"
+    test_yml_file = "tests/data/NXmytests.yaml"
+    test_xml_file = "tests/data/NXmytests.nxdl.xml"
     desired_matches = [
         "<attribute",
         "</attribute>",
@@ -279,9 +274,9 @@ def test_xml_parsing():
         In this test an xml file in converted to yml and then back to xml.
     The xml trees of the two files are then compared.
     """
-    ref_xml_file = "tests/data/nyaml2nxdl/Ref_NXellips.nxdl.xml"
-    test_yml_file = "tests/data/nyaml2nxdl/Ref_NXellips_parsed.yaml"
-    test_xml_file = "tests/data/nyaml2nxdl/Ref_NXellips_parsed.nxdl.xml"
+    ref_xml_file = "tests/data/Ref_NXellips.nxdl.xml"
+    test_yml_file = "tests/data/Ref_NXellips_parsed.yaml"
+    test_xml_file = "tests/data/Ref_NXellips_parsed.nxdl.xml"
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", ref_xml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
@@ -299,8 +294,8 @@ def test_xml_parsing():
         test_tree_flattened == ref_tree_flattened
     ), "Ref XML and parsed XML\
 has not the same tree structure!!"
-    os.remove("tests/data/nyaml2nxdl/Ref_NXellips_parsed.nxdl.xml")
-    os.remove("tests/data/nyaml2nxdl/Ref_NXellips_parsed.yaml")
+    os.remove("tests/data/Ref_NXellips_parsed.nxdl.xml")
+    os.remove("tests/data/Ref_NXellips_parsed.yaml")
     sys.stdout.write("Test on xml -> yml -> xml okay.\n")
 
 
@@ -308,9 +303,9 @@ def test_yml_parsing():
     """In this test an xml file in converted to yml and then back to xml.
     The xml trees of the two files are then compared.
     """
-    ref_yml_file = "tests/data/nyaml2nxdl/Ref_NXellipsometry.yaml"
-    test_xml_file = "tests/data/nyaml2nxdl/Ref_NXellipsometry.nxdl.xml"
-    test_yml_file = "tests/data/nyaml2nxdl/Ref_NXellipsometry_parsed.yaml"
+    ref_yml_file = "tests/data/Ref_NXellipsometry.yaml"
+    test_xml_file = "tests/data/Ref_NXellipsometry.nxdl.xml"
+    test_yml_file = "tests/data/Ref_NXellipsometry_parsed.yaml"
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", ref_yml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_xml_file)
@@ -326,8 +321,8 @@ def test_yml_parsing():
         ref_yml_tree
     ), "Ref YML and parsed YML \
 has not the same root entries!!"
-    os.remove("tests/data/nyaml2nxdl/Ref_NXellipsometry_parsed.yaml")
-    os.remove("tests/data/nyaml2nxdl/Ref_NXellipsometry.nxdl.xml")
+    os.remove("tests/data/Ref_NXellipsometry_parsed.yaml")
+    os.remove("tests/data/Ref_NXellipsometry.nxdl.xml")
     sys.stdout.write("Test on yml -> xml -> yml okay.\n")
 
 
@@ -336,8 +331,8 @@ def test_yml_consistency_comment_parsing():
     '.nxdl.xml' to '.yaml'
     """
 
-    ref_yml_file = "tests/data/nyaml2nxdl/Ref_NXcomment.yaml"
-    test_yml_file = "tests/data/nyaml2nxdl/Ref_NXcomment_consistency.yaml"
+    ref_yml_file = "tests/data/Ref_NXcomment.yaml"
+    test_yml_file = "tests/data/Ref_NXcomment_consistency.yaml"
 
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool, ["--input-file", ref_yml_file, "--check-consistency"]
@@ -368,9 +363,9 @@ def test_yml2xml_comment_parsing():
     attribute 'rank' for 'dimension' element and attribute 'exists' for
     'NXentry' group element.
     """
-    input_yml = "tests/data/nyaml2nxdl/NXcomment_yaml2nxdl.yaml"
-    ref_xml = "tests/data/nyaml2nxdl/Ref_NXcomment_yaml2nxdl.nxdl.xml"
-    test_xml = "tests/data/nyaml2nxdl/NXcomment_yaml2nxdl.nxdl.xml"
+    input_yml = "tests/data/NXcomment_yaml2nxdl.yaml"
+    ref_xml = "tests/data/Ref_NXcomment_yaml2nxdl.nxdl.xml"
+    test_xml = "tests/data/NXcomment_yaml2nxdl.nxdl.xml"
 
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", input_yml])
     assert result.exit_code == 0
