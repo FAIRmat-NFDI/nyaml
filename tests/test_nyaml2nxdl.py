@@ -57,7 +57,7 @@ def find_matches(xml_file, desired_matches):
         Read xml file and find desired matches. Return a list of two lists in the form:
     [[matching_line],[matching_line_index]]
     """
-    with open(xml_file, "r") as file:
+    with open(xml_file, "r", encoding="utf-8") as file:
         xml_reference = file.readlines()
     lines = []
     lines_index = []
@@ -72,8 +72,7 @@ def find_matches(xml_file, desired_matches):
     found_matches_clean = delete_duplicates(found_matches)
     assert len(found_matches_clean) == len(
         desired_matches
-    ), "some desired_matches were \
-not found in file"
+    ), "some desired_matches were \nnot found in file"
     return [lines, lines_index]
 
 

@@ -1066,6 +1066,7 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
             doc_type = extend_doc_type(doc_type, string, comment=True)
 
     tmp_xml = "tmp.xml"
+    ET.indent(xml_root, space=DEPTH_SIZE)
     xml_string = ET.tostring(
         xml_root,
         pretty_print=True,
