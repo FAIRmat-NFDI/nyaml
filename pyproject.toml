@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools>=64.0.1", "setuptools-scm[toml]>=6.2"]
+
+[project]
+name = "nyaml"
+dynamic = ["version"]
+authors = [
+    { name = "The NOMAD Authors" },
+]
+description = "A tool to convert yaml NeXus application definitions (nyaml) to nexus definitions language (nxdl)."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+]
+# dependencies = [
+# ]
+
+[project.urls]
+"Homepage" = "https://github.com/FAIRmat-NFDI/nyaml"
+"Bug Tracker" = "https://github.com/FAIRmat-NFDI/nyaml/issues"
+
+# [project.optional-dependencies]
+# dev = [
+#     "mypy",
+#    "pylint",
+#    "pycodestyle",
+#    "pytest",
+#    "pytest-timeout",
+#    "pytest-cov",
+#    "structlog",
+#    "types-pyyaml",
+#    "types-pytz",
+#    "types-requests",
+#    "pip-tools",
+#]
+
+[project.scripts]
+nyaml2nxdl = "nyaml.nyaml2nxdl.nyaml2nxdl:launch_tool"
+
+[tool.setuptools_scm]
+version_scheme = "no-guess-dev"
+local_scheme = "node-and-date"
