@@ -11,10 +11,8 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
-      - name: Install dependencies
+      - name: Update pip
         run: |
-          git submodule sync --recursive
-          git submodule update --init --recursive --jobs=4
           python -m pip install --upgrade pip
       - name: Install package
         run: |
@@ -24,10 +22,10 @@ jobs:
           python -m pip install -r dev-requirements.txt
       - name: pycodestyle
         run: |
-          python -m pycodestyle --ignore=E501,E701,E731,W503 pynxtools tests --exclude=pynxtools/definitions
+          python -m pycodestyle --ignore=E501,E701,E731,W503 nyaml tests
       - name: pylint
         run: |
-          python -m pylint pynxtools tests --ignore definitions
+          python -m pylint nyaml tests
       - name: mypy
         run: |
-          python -m mypy --ignore-missing-imports --follow-imports=silent --no-strict-optional --exclude=pynxtools/definitions pynxtools tests
+          python -m mypy --ignore-missing-imports --follow-imports=silent --no-strict-optional nyaml tests
