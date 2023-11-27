@@ -27,6 +27,8 @@ isort==5.12.0
     #   pylint
 lxml==4.9.3
     # via nyaml (pyproject.toml)
+lxml-stubs==0.4.0
+    # via nyaml (pyproject.toml)
 mccabe==0.7.0
     # via pylint
 mypy==1.7.1

@@ -21,7 +21,6 @@ Tests for nyaml2nxdl tool
 import filecmp
 import os
 import sys
-import xml.etree.ElementTree as ET
 from datetime import datetime
 from pathlib import Path
 

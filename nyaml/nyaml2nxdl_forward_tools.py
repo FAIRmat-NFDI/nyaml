@@ -924,10 +924,10 @@ def xml_handle_fields_or_group(
 
 
 def xml_handle_comment(
-    obj: ET.Element,
+    obj: ET._Element,
     line_annotation: str,
     line_loc_no: int,
-    xml_ele: ET.Element = None,
+    xml_ele: ET._Element = None,
     is_def_cmnt: bool = False,
 ):
     """Handle comment.
@@ -1187,7 +1187,7 @@ application and base are valid categories!"
         "xsi": "http://www.w3.org/2001/XMLSchema-instance",
     }
     # Fill nsmap variable here
-    nsmap.update(namespaces)
+    nsmap.update(namespaces)  # type: ignore
     xml_root.attrib[
         "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"
     ] = "http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd".replace(" ", "%20")
