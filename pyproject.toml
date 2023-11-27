@@ -1,5 +1,6 @@
 [build-system]
 requires = ["setuptools>=64.0.1", "setuptools-scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "nyaml"
@@ -20,8 +21,11 @@ classifiers = [
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
-# dependencies = [
-# ]
+dependencies = [
+    "click",
+    "lxml",
+    "pyyaml"
+]
 
 [project.urls]
 "Homepage" = "https://github.com/FAIRmat-NFDI/nyaml"
@@ -33,13 +37,10 @@ dev = [
     "pylint",
     "pycodestyle",
     "pytest",
-    "black",
+    "isort>=5.10",
+    "black>=22.3",
     "pip-tools",
 ]
 
 [project.scripts]
 nyaml2nxdl = "nyaml.nyaml2nxdl:launch_tool"
-
-[tool.setuptools_scm]
-version_scheme = "no-guess-dev"
-local_scheme = "node-and-date"
