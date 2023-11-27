@@ -36,4 +36,4 @@ jobs:
           python -m pip install -r dev-requirements.txt
       - name: Test with pytest
         run: |
-          coverage run -m pytest -sv --show-capture=no tests
+          pytest -sv --show-capture=no tests
