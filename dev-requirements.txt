@@ -71,11 +71,20 @@ tomli==2.0.1
     #   pytest
 tomlkit==0.12.3
     # via pylint
+types-beautifulsoup4==4.12.0.7
+    # via types-lxml
+types-html5lib==1.1.11.15
+    # via types-beautifulsoup4
+types-lxml==2023.10.21
+    # via nyaml (pyproject.toml)
+types-pyyaml==6.0.12.12
+    # via nyaml (pyproject.toml)
 typing-extensions==4.8.0
     # via
     #   astroid
     #   black
     #   mypy
+    #   types-lxml
 wheel==0.42.0
     # via pip-tools
 

@@ -37,9 +37,11 @@ dev = [
     "pylint",
     "pycodestyle",
     "pytest",
+    "types-lxml",
     "isort>=5.10",
     "black>=22.3",
     "pip-tools",
+    "types-pyyaml",
 ]
 
 [project.scripts]

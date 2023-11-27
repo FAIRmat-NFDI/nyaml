@@ -23,6 +23,7 @@
 
 import datetime
 import pathlib
+import re
 import textwrap
 import warnings
 from typing import Union
@@ -32,18 +33,19 @@ import lxml.etree as ET
 import yaml
 from yaml.scanner import ScannerError
 
-from ..utils import nxdl_utils as pynxtools_nxlib
-from .comment_collector import CommentCollector
-from .nyaml2nxdl_helper import YAML_ATTRIBUTES_ATTRIBUTES
-from .nyaml2nxdl_helper import YAML_FIELD_ATTRIBUTES
-from .nyaml2nxdl_helper import YAML_GROUP_ATTRIBUTES
-from .nyaml2nxdl_helper import YAML_LINK_ATTRIBUTES
-from .nyaml2nxdl_helper import LineLoader
-from .nyaml2nxdl_helper import clean_empty_lines
-from .nyaml2nxdl_helper import get_yaml_escape_char_reverter_dict
-from .nyaml2nxdl_helper import is_dom_comment
-from .nyaml2nxdl_helper import nx_name_type_resolving
-from .nyaml2nxdl_helper import remove_namespace_from_tag
+from nyaml.comment_collector import CommentCollector
+from nyaml.nyaml2nxdl_helper import (
+    YAML_ATTRIBUTES_ATTRIBUTES,
+    YAML_FIELD_ATTRIBUTES,
+    YAML_GROUP_ATTRIBUTES,
+    YAML_LINK_ATTRIBUTES,
+    LineLoader,
+    clean_empty_lines,
+    get_yaml_escape_char_reverter_dict,
+    is_dom_comment,
+    nx_name_type_resolving,
+    remove_namespace_from_tag,
+)
 
 # pylint: disable=too-many-lines, global-statement, invalid-name
 DOM_COMMENT = (
@@ -67,13 +69,9 @@ DOM_COMMENT = (
     f"#\n"
     f"# For further information, see http://www.nexusformat.org\n"
 )
-NX_CLSS = pynxtools_nxlib.get_nx_classes()
-NX_NEW_DEFINED_CLASSES = ["NX_COMPLEX"]
-NX_TYPE_KEYS = pynxtools_nxlib.get_nx_attribute_type()
 NX_ATTR_IDNT = "\\@"
 NX_UNIT_IDNT = "unit"
-DEPTH_SIZE = "    "
-NX_UNIT_TYPES = pynxtools_nxlib.get_nx_units()
+DEPTH_SIZE = 4 * " "
 # Initialised in yml_reader() funtion
 COMMENT_BLOCKS: CommentCollector
 CATEGORY = ""  # Definition would be either 'base' or 'application'
@@ -738,7 +736,7 @@ def helper_keyword_type(kkeyword_type):
     """
     Return a value of keyword_type if it belong to NX_TYPE_KEYS
     """
-    if kkeyword_type in NX_TYPE_KEYS:
+    if re.match(r"NX_[A-Z]+", kkeyword_type):
         return kkeyword_type
     return None
 
@@ -995,9 +993,7 @@ def recursive_build(obj, dct, verbose):
         elif keyword_type == "" and keyword_name == "symbols":
             xml_handle_symbols(dct, obj, keyword, value)
 
-        elif (keyword_type in NX_CLSS) or (
-            keyword_type not in [*NX_TYPE_KEYS, "", *NX_NEW_DEFINED_CLASSES]
-        ):
+        elif re.match(r"NX[a-zA-Z].*", keyword_type) is not None:
             elem_type = "group"
             # we can be sure we need to instantiate a new group
             xml_handle_fields_or_group(
