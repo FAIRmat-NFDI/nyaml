@@ -27,23 +27,18 @@ classifiers = [
 "Homepage" = "https://github.com/FAIRmat-NFDI/nyaml"
 "Bug Tracker" = "https://github.com/FAIRmat-NFDI/nyaml/issues"
 
-# [project.optional-dependencies]
-# dev = [
-#     "mypy",
-#    "pylint",
-#    "pycodestyle",
-#    "pytest",
-#    "pytest-timeout",
-#    "pytest-cov",
-#    "structlog",
-#    "types-pyyaml",
-#    "types-pytz",
-#    "types-requests",
-#    "pip-tools",
-#]
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "pylint",
+    "pycodestyle",
+    "pytest",
+    "black",
+    "pip-tools",
+]
 
 [project.scripts]
-nyaml2nxdl = "nyaml.nyaml2nxdl.nyaml2nxdl:launch_tool"
+nyaml2nxdl = "nyaml.nyaml2nxdl:launch_tool"
 
 [tool.setuptools_scm]
 version_scheme = "no-guess-dev"
