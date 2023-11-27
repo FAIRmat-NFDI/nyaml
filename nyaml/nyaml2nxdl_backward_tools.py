@@ -40,7 +40,7 @@ from .nyaml2nxdl_helper import (
     remove_namespace_from_tag,
 )
 
-DEPTH_SIZE = 4 * " "
+DEPTH_SIZE = 2 * " "
 CMNT_TAG = "!--"
 CMNT_TAG_END = "--"
 CMNT_START = "<!--"

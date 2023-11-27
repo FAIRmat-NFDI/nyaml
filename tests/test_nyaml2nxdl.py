@@ -264,7 +264,7 @@ def test_symbols_and_enum_docs():
         "<dim",
     ]
     compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
-    os.remove("tests/data/nyaml2nxdl/NXmytests.nxdl.xml")
+    os.remove("tests/data/NXmytests.nxdl.xml")
     sys.stdout.write("Test on docs in enumeration and symbols okay.\n")
 
 
