@@ -21,24 +21,28 @@
 # limitations under the License.
 #
 
+# pylint: disable=too-many-lines
+
+import re
+import textwrap
 from pathlib import Path
-from typing import Callable
-from typing import Dict
-from typing import List
+from typing import Callable, Dict, List
 
 import lxml.etree as ET
 
-from .nyaml2nxdl_helper import NXDL_ATTRIBUTES_ATTRIBUTES
-from .nyaml2nxdl_helper import NXDL_FIELD_ATTRIBUTES
-from .nyaml2nxdl_helper import NXDL_GROUP_ATTRIBUTES
-from .nyaml2nxdl_helper import NXDL_LINK_ATTRIBUTES
-from .nyaml2nxdl_helper import clean_empty_lines
-from .nyaml2nxdl_helper import get_node_parent_info
-from .nyaml2nxdl_helper import get_yaml_escape_char_dict
-from .nyaml2nxdl_helper import is_dom_comment
-from .nyaml2nxdl_helper import remove_namespace_from_tag
+from .nyaml2nxdl_helper import (
+    NXDL_ATTRIBUTES_ATTRIBUTES,
+    NXDL_FIELD_ATTRIBUTES,
+    NXDL_GROUP_ATTRIBUTES,
+    NXDL_LINK_ATTRIBUTES,
+    clean_empty_lines,
+    get_node_parent_info,
+    get_yaml_escape_char_dict,
+    is_dom_comment,
+    remove_namespace_from_tag,
+)
 
-DEPTH_SIZE = "  "
+DEPTH_SIZE = 2 * " "
 CMNT_TAG = "!--"
 CMNT_TAG_END = "--"
 CMNT_START = "<!--"
@@ -83,7 +87,7 @@ class _CommentedTreeBuilder(ET.TreeBuilder):
     def start(self, tag, attrs):
         super().start(tag=tag, attrs=attrs)
 
-    def Comment(self, text):
+    def Comment(self, text):  # pylint: disable=invalid-name
         """Defining comment builder in TreeBuilder"""
         self.start(CMNT_TAG, {})
         self.data(text)
@@ -129,7 +133,7 @@ def add_new_line_with_pipe_on_top(text, depth):
     return text
 
 
-# pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-instance-attributes, too-many-public-methods
 class Nxdl2yaml:
     """Parse XML file and print a YML file."""
 
@@ -273,8 +277,7 @@ class Nxdl2yaml:
         """
         Handle the documentation field found at root level.
         """
-        text = node.text
-        text = self.handle_not_root_level_doc(depth=0, text=text)
+        text = self.handle_not_root_level_doc(depth=0, text=node.text)
         self.root_level_doc = text
 
     def clean_and_organise_text(self, text, depth):
@@ -332,6 +335,51 @@ class Nxdl2yaml:
 
         return text
 
+    def check_and_handle_doc_xref_and_other_doc(self, text, indent):
+        """Check for xref doc which comes as a block of text.
+
+        The doc part below is the example how xref comes:
+        '''
+        This concept is related to term `<term>`_ of the <spec> standard.
+        .. _<term>: <url>
+        '''
+        converter as
+        '''
+        <indent>  "xref:
+        <indent>    xpec: <value>
+        <indent>    erm: <value>
+        <indent>    url: <value>"
+        '''
+
+        Parameters
+        ----------
+        text: str
+            plain text.
+        Returns
+        -------
+        str
+            return part of doc as formatted
+        """
+
+        xref_key, spec_key, term_key, url_key = ("xref", "spec", "term", "url")
+        spec, term, url = (None, None, None)
+        matches = re.search(
+            r"This concept is related to term `([^`:]+)`_ of the"
+            r" (.*?) standard\.\s+\.\. _\1: ([^\s]+)",
+            text,
+        )
+        if matches:
+            term = matches.group(1)
+            spec = matches.group(2)
+            url = matches.group(3)
+            indent = indent + DEPTH_SIZE  # see example in func doc
+            return (
+                f'{indent}"{xref_key}:\n{indent + DEPTH_SIZE}{spec_key}: {spec}'
+                f"\n{indent + DEPTH_SIZE}{term_key}"
+                f': {term}\n{indent + DEPTH_SIZE}{url_key}: {url}"'
+            )
+        return text
+
     # pylint: disable=too-many-branches
     def handle_not_root_level_doc(self, depth, text, tag="doc", file_out=None):
         """Handle docs field of group and field but not root.
@@ -341,13 +389,39 @@ class Nxdl2yaml:
             * Topic name
                 Description of topic
         """
-
-        text = self.clean_and_organise_text(text, depth)
         if "}" in tag:
             tag = remove_namespace_from_tag(tag)
         indent = depth * DEPTH_SIZE
+        text = self.clean_and_organise_text(text, depth)  # starts with '\n'
+        docs = re.split(r"\n\s*\n", text)
+        modified_docs = []
+        for doc_part in docs:
+            if not doc_part.isspace():
+                modified_docs.append(
+                    self.check_and_handle_doc_xref_and_other_doc(doc_part, indent)
+                )
+        # doc example:
+        # doc:
+        #  - |
+        #   text
+        #  - |
+        #   xref:
+        #       spec:
+        #       term:
+        if len(modified_docs) > 1:
+            doc_str = f"{indent}{tag}:\n"
+            for mod_doc in modified_docs:
+                if not re.match(
+                    r"^\s*\n", mod_doc
+                ):  # if not starts with 'spaces and/or \n'
+                    mod_doc = "\n" + mod_doc
+                # doc_str = f"{doc_str}{indent} - |\n{textwrap.indent(mod_doc, indent+'  ')}\n"
+                doc_str = f"{doc_str}{indent} - |{textwrap.indent(mod_doc, '')}\n"
+        elif len(modified_docs) == 1:
+            doc_str = f"{indent}{tag}: |{modified_docs[0]}\n"
+        else:
+            doc_str = f"{indent}{tag}: |{text}\n"
 
-        doc_str = f"{indent}{tag}: |{text}\n"
         if file_out:
             file_out.write(doc_str)
             return None
@@ -569,7 +643,7 @@ class Nxdl2yaml:
                         f"NeXus {tag.capitalized()} allows attributes from {allowed_attributes_li}"
                     )
 
-    # pylint: disable=too-many-branches, too-many-locals
+    # pylint: disable=too-many-branches, too-many-locals, too-many-statements
     def handle_dimension(self, depth, node, file_out):
         """Handle the dimension field.
 

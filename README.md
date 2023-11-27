@@ -2,17 +2,21 @@
 
 **NOTE: Please use python3.8 or above to run this converter**
 
-**Tools purpose**: Offer a simple way to edit NeXus definitions in YAML format. These can be NeXus application definitions or base classes. 
-Both forward (YAML -> NXDL.XML) and backward (NXDL.XML -> YAML) conversions are implemented.
+**Tools purpose**: Offer a simple YAML-based schema and a XML-based schema to describe NeXus instances. These can be NeXus application definitions or classes
+such as base or contributed classes. Users either create NeXus instances by writing a YAML file or a XML file which details a hierarchy of data/metadata elements.
+The forward (YAML -> NXDL.XML) and backward (NXDL.XML -> YAML) conversions are implemented.
 
 **How the tool works**:
 - nyaml2nxdl.py
-1. Reads the user-specified NeXus definition, either in YAML or XML format.
-2. If input is in YAML, it creates the definition in NXDL's XML format.
-   If input is an NXDL definition in XML format, it creates a corresponding YAML file.
-3. Optionally, if --append argument is given,
-   the XML or YAML input file is interpreted as an extension of the existing definition,
-   so instead of creating a new file from scratch, the original file is rather extended.
+1. Reads the user-specified NeXus instance, either in YML or XML format.
+2. If input is in YAML, creates an instantiated NXDL schema XML tree by walking the dictionary nest.
+   If input is in XML, creates a YML file walking the dictionary nest.
+3. Write the tree into a YAML file or a properly formatted NXDL XML schema file to disk.
+4. Optionally, if --append argument is given,
+   the XML or YAML input file is interpreted as an extension of a base class and the entries contained in it
+   are appended below a standard NeXus base class.
+   You need to specify both your input file (with YAML or XML extension) and NeXus class (with no extension).
+   Both .yaml and .nxdl.xml file of the extended class are printed.
 
 ```console
 user@box:~$ python nyaml2nxdl.py
@@ -37,10 +41,54 @@ Options:
 * Named NeXus groups, which are instances of NeXus classes especially base or contributed classes. Creating (NXbeam) is a simple example of a request to define a group named according to NeXus default rules. mybeam1(NXbeam) or mybeam2(NXbeam) are examples how to create multiple named instances at the same hierarchy level.
 * Members of groups so-called fields or attributes. A simple example of a member is voltage. Here the datatype is implied automatically as the default NeXus NX_CHAR type.  By contrast, voltage(NX_FLOAT) can be used to instantiate a member of class which should be of NeXus type NX_FLOAT.
 * And attributes of either groups or fields. The mark '\@' have to precede the name of attributes.
-* Optionality: In application definitions, all fields, groups, and attributes are required unless marked recommended or optional.
+* Optionality: For all fields, groups and attributes in `application definitions` are `required` by default, except anything (`recommended` or `optional`) mentioned.
 
-**Special keywords**: Several keywords can be used as childs of groups, fields, and attributes to specify the members of these. Groups, fields and attributes are nodes of the XML tree.
-* **doc**: A human-readable description/docstring
+**Special keywords**: Several keywords can be used as children of groups, fields, and attributes to specify the members of these. Groups, fields and attributes are nodes of the XML tree.
+* **doc**: 
+   - A human-readable description/docstring
+   - Doc string may also come as a list of doc parts when user wants to add `reference` for a concept. Or doc string could be a single doc block.
+      ```yaml
+         energy:  # field
+            doc:
+               - | 
+                 Part1 of the entire doc.
+                 part1 of the entire doc.
+               - |  # Reference for concept
+                 xref:
+                   spec: <spec>
+                   term: <term>
+                   url: <url>"
+               - | 
+                 Rest of the doc
+                 rest of the doc
+         velocity:  # field
+            doc: |
+               A single block of doc string.
+      ```
+      Such structure of doc would appear in `nxdl` as
+      ```xml
+      ...
+      <field name="energy">
+        <doc>
+            Part1 of the entire doc.
+            part1 of the entire doc.
+           
+                This concept is related to term `&lt;term&gt;`_ of the &lt;spec&gt; standard.
+            .. _&lt;term&gt;: &lt;url&gt;
+           
+            Rest of the doc
+            rest of the doc
+        </doc>
+    </field>
+    <field name="velocity">
+      <doc>
+           A single block of doc string.
+      </doc>
+    </field>
+      ```
+
+
+
 * **exists** Options are recommended, required, [min, 1, max, `infty`] numbers like here 1 can be replaced by any `uint` (unsigned integer), or `infty` to indicate no restriction on how frequently the entry can occur inside the NXDL schema at the same hierarchy level.
 * **link** Define links between nodes.
 * **units** A statement introducing NeXus-compliant NXDL units arguments, like NX_VOLTAGE
@@ -48,7 +96,7 @@ Options:
 * **enumeration** Python list of strings which are considered as recommended entries to choose from.
 * **dim_parameters** `dim` which is a child of `dimension` and the `dim` might have several attributes `ref`,
 `incr` including `index` and `value`. So while writing `yaml` file schema definition please following structure:
-```
+```yaml
 dimensions:
    rank: integer value
    dim: [[ind_1, val_1], [ind_2, val_2], ...]

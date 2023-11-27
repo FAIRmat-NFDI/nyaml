@@ -23,31 +23,36 @@
 
 import datetime
 import pathlib
+import re
 import textwrap
 import warnings
+from typing import Union
 from urllib.parse import unquote
 
 import lxml.etree as ET
 import yaml
+from yaml.scanner import ScannerError
 
-from ..utils import nexus as pynxtools_nxlib
-from .comment_collector import CommentCollector
-from .nyaml2nxdl_helper import YAML_ATTRIBUTES_ATTRIBUTES
-from .nyaml2nxdl_helper import YAML_FIELD_ATTRIBUTES
-from .nyaml2nxdl_helper import YAML_GROUP_ATTRIBUTES
-from .nyaml2nxdl_helper import YAML_LINK_ATTRIBUTES
-from .nyaml2nxdl_helper import LineLoader
-from .nyaml2nxdl_helper import clean_empty_lines
-from .nyaml2nxdl_helper import get_yaml_escape_char_reverter_dict
-from .nyaml2nxdl_helper import is_dom_comment
-from .nyaml2nxdl_helper import nx_name_type_resolving
-from .nyaml2nxdl_helper import remove_namespace_from_tag
+from nyaml.comment_collector import CommentCollector
+from nyaml.nyaml2nxdl_helper import (
+    YAML_ATTRIBUTES_ATTRIBUTES,
+    YAML_FIELD_ATTRIBUTES,
+    YAML_GROUP_ATTRIBUTES,
+    YAML_LINK_ATTRIBUTES,
+    LineLoader,
+    clean_empty_lines,
+    get_yaml_escape_char_reverter_dict,
+    is_dom_comment,
+    nx_name_type_resolving,
+    remove_namespace_from_tag,
+)
 
 # pylint: disable=too-many-lines, global-statement, invalid-name
 DOM_COMMENT = (
     f"# NeXus - Neutron and X-ray Common Data Format\n"
     f"# \n"
-    f"# Copyright (C) 2014-{datetime.date.today().year} NeXus International Advisory Committee (NIAC)\n"
+    f"# Copyright (C) 2014-{datetime.date.today().year} "
+    "NeXus International Advisory Committee (NIAC)\n"
     f"# \n"
     f"# This library is free software; you can redistribute it and/or\n"
     f"# modify it under the terms of the GNU Lesser General Public\n"
@@ -65,13 +70,9 @@ DOM_COMMENT = (
     f"#\n"
     f"# For further information, see http://www.nexusformat.org\n"
 )
-NX_CLSS = pynxtools_nxlib.get_nx_classes()
-NX_NEW_DEFINED_CLASSES = ["NX_COMPLEX"]
-NX_TYPE_KEYS = pynxtools_nxlib.get_nx_attribute_type()
 NX_ATTR_IDNT = "\\@"
 NX_UNIT_IDNT = "unit"
-DEPTH_SIZE = "    "
-NX_UNIT_TYPES = pynxtools_nxlib.get_nx_units()
+DEPTH_SIZE = 4 * " "
 # Initialised in yml_reader() funtion
 COMMENT_BLOCKS: CommentCollector
 CATEGORY = ""  # Definition would be either 'base' or 'application'
@@ -129,7 +130,9 @@ def yml_reader(inputfile):
 
 
 def check_for_default_attribute_and_value(xml_element):
-    """NeXus Groups, fields and attributes might have xml default attributes and values that must
+    """Check for default attribute for NeXus concepts.
+
+    NeXus Groups, fields and attributes might have xml default attributes and values that must
     come. For example: 'optional' which is 'true' by default for base class and false otherwise.
     """
 
@@ -253,13 +256,80 @@ def check_for_mapping_char_other(text):
     return text.strip()
 
 
-def xml_handle_doc(obj, value: str, line_number=None, line_loc=None):
+def handle_each_part_doc(text):
+    """Check and handle if the text is corresponds to xref or plain doc.
+
+    In nyaml doc the entire documentation may come in list of small docs.
+    one doc string might be as follows:
+    '''
+    xref:
+        spec: <spec>
+        term: <term>
+        url: <url>
+    '''
+
+    which has to be formatted as
+    '''
+        This concept is related to term `<term>`_ of the <spec> standard.
+    .. _<term>: <url>
+
+
+    Parameters
+    ----------
+    text : string
+        String that looks like yaml notaion.
+
+    return
+    ------
+    Formated text
+    """
+
+    clean_txt = text.strip()
+
+    if not clean_txt.startswith("xref:"):
+        return format_nxdl_doc(check_for_mapping_char_other(clean_txt)).strip()
+
+    no_lines = len(clean_txt.splitlines())
+    try:
+        xref_dict = yaml.safe_load(clean_txt)
+    except ScannerError as scan_err:
+        raise ValueError(
+            "Found invalid xref. Please make sure that your xref entries are valid yaml."
+        ) from scan_err
+    xref_entries = xref_dict.get("xref", {})
+
+    if no_lines != len(xref_entries) + 1:
+        raise ValueError("Invalid xref. It contains nested or duplicate keys.")
+
+    if no_lines > 4:
+        raise ValueError("Invalid xref. Too many keys.")
+
+    for key in xref_entries:
+        if key not in ("term", "spec", "url"):
+            raise ValueError(
+                f"Invalid xref key `{key}`. Must be one of `term`, `spec` or `url`."
+            )
+
+    return (
+        f"    This concept is related to term `{xref_entries.get('term', 'NO TERM')}`_ "
+        f"of the {xref_entries.get('spec', 'NO TERM')} standard.\n"
+        f".. _{xref_entries.get('term', 'NO SPECIFICATION')}: "
+        f"{xref_entries.get('url', 'NO URL')}"
+    )
+
+
+def xml_handle_doc(obj, value: Union[str, list], line_number=None, line_loc=None):
     """This function creates a 'doc' element instance, and appends it to an existing element"""
     # global comment_bolcks
     doc_elemt = ET.SubElement(obj, "doc")
-    text = format_nxdl_doc(check_for_mapping_char_other(value)).strip()
+    text = ""
+    if isinstance(value, list):
+        for doc_part in value:
+            text = text + "\n" + handle_each_part_doc(doc_part) + "\n"
+    else:
+        text = text + "\n" + handle_each_part_doc(value) + "\n"
     # To keep the doc middle of doc tag.
-    doc_elemt.text = f"\n{text}\n"
+    doc_elemt.text = text
     if line_loc is not None and line_number is not None:
         xml_handle_comment(obj, line_number, line_loc, doc_elemt)
 
@@ -389,7 +459,7 @@ def xml_handle_dimensions(dct, obj, keyword, value: dict):
         recursive_build(dims, value, verbose=None)
 
 
-# pylint: disable=too-many-locals, too-many-arguments
+# pylint: disable=too-many-locals, too-many-arguments, too-many-statements
 def xml_handle_dim_from_dimension_dict(
     dct, dims_obj, keyword, value, rank, verbose=False
 ):
@@ -667,7 +737,7 @@ def helper_keyword_type(kkeyword_type):
     """
     Return a value of keyword_type if it belong to NX_TYPE_KEYS
     """
-    if kkeyword_type in NX_TYPE_KEYS:
+    if re.match(r"NX_[A-Z]+", kkeyword_type):
         return kkeyword_type
     return None
 
@@ -791,7 +861,7 @@ def xml_handle_fields_or_group(
             f"No name for NeXus {ele_type} has been found."
             f"Check around line:{line_loc}"
         )
-    elif not keyword_type and not keyword_name:
+    if not keyword_type and not keyword_name:
         raise ValueError(
             f"No name or type for NeXus {ele_type} has been found."
             f"Check around line: {line_loc}"
@@ -924,9 +994,7 @@ def recursive_build(obj, dct, verbose):
         elif keyword_type == "" and keyword_name == "symbols":
             xml_handle_symbols(dct, obj, keyword, value)
 
-        elif (keyword_type in NX_CLSS) or (
-            keyword_type not in [*NX_TYPE_KEYS, "", *NX_NEW_DEFINED_CLASSES]
-        ):
+        elif re.match(r"NX[a-zA-Z].*", keyword_type) is not None:
             elem_type = "group"
             # we can be sure we need to instantiate a new group
             xml_handle_fields_or_group(
@@ -999,6 +1067,7 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
             doc_type = extend_doc_type(doc_type, string, comment=True)
 
     tmp_xml = "tmp.xml"
+    ET.indent(xml_root, space=DEPTH_SIZE)
     xml_string = ET.tostring(
         xml_root,
         pretty_print=True,
@@ -1012,7 +1081,7 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
     with open(tmp_xml, "r", encoding="utf-8") as file_out:
         with open(output_xml, "w", encoding="utf-8") as file_out_mod:
             for i in file_out.readlines():
-                i = unquote(i.encode())
+                i = unquote(i)
                 if "<doc>" not in i and "</doc>" not in i and flag is False:
                     file_out_mod.write(i)
                 elif "<doc>" in i and "</doc>" in i:
@@ -1129,9 +1198,12 @@ application and base are valid categories!"
 
         del yml_appdef["symbols"]
         del yml_appdef["__line__symbols"]
-    assert (
-        isinstance(yml_appdef["doc"], str) and yml_appdef["doc"] != ""
-    ), "Doc has to be a non-empty string!"
+    if isinstance(yml_appdef["doc"], str):
+        assert yml_appdef["doc"] != "", "Doc has to be a non-empty string!"
+    elif isinstance(yml_appdef["doc"], list):
+        assert any(
+            yml_appdef["doc"]
+        ), "One of the doc elements has to be a non-empty string!"
 
     line_number = "__line__doc"
     line_loc_no = yml_appdef[line_number]

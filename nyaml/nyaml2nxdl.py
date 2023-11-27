@@ -2,8 +2,8 @@
 """
 Main file of nyaml2nxdl tool.
 
-To write a definition for an instrument, experiment and/or process in nxdl.xml file from a YAML
-file which details a hierarchy of data/metadata elements. It also allows back and forth
+To write a definition for a instrument, experiment and/or process in nxdl.xml file from a YAML
+file which details a hierarchy of data/metadata elements. It also allows both wa
 conversion beteen YAML and nxdl.xml files that follows rules of NeXus ontology or data format.
 """
 # -*- coding: utf-8 -*-
@@ -30,12 +30,14 @@ import click
 
 from .nyaml2nxdl_backward_tools import Nxdl2yaml
 from .nyaml2nxdl_forward_tools import nyaml2nxdl
-from .nyaml2nxdl_helper import extend_yamlfile_by_nxdl_as_comment
-from .nyaml2nxdl_helper import get_sha256_hash
-from .nyaml2nxdl_helper import separate_hash_yaml_and_nxdl
+from .nyaml2nxdl_helper import (
+    extend_yamlfile_by_nxdl_as_comment,
+    get_sha256_hash,
+    separate_hash_yaml_and_nxdl,
+)
 
 DEPTH_SIZE = 4 * " "
-_nxdl = ".nxdl.xml"
+NXDL_SUFFIX = ".nxdl.xml"
 
 # NOTE: Some handful links for nyaml2nxdl converter:
 # https://manual.nexusformat.org/nxdl_desc.html?highlight=optional
@@ -90,7 +92,8 @@ a YAML or XML file from, respectively.",
     default=False,
     help=(
         "Check if yaml and nxdl can be converted from one to another version recursively and"
-        " get the same version of file. E.g. from NXexample.nxdl.xml to NXexample_consistency.nxdl.xml."
+        " get the same version of file. E.g. from NXexample.nxdl.xml"
+        " to NXexample_consistency.nxdl.xml."
     ),
 )
 @click.option(
@@ -120,7 +123,7 @@ def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency):
     else:
         raise ValueError("Need a valid input file.")
     if ext == "yaml":
-        xml_out_file = raw_name + _nxdl
+        xml_out_file = raw_name + NXDL_SUFFIX
         generate_nxdl_or_retrieve_nxdl(input_file, xml_out_file, verbose)
 
         # For consistency running

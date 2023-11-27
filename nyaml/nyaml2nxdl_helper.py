@@ -96,8 +96,7 @@ def remove_namespace_from_tag(tag):
     """Helper function to remove the namespace from an XML tag."""
     if isinstance(tag, Callable) and tag.__name__ == "Comment":
         return "!--"
-    else:
-        return tag.split("}")[-1]
+    return tag.split("}")[-1]
 
 
 class LineLoader(Loader):  # pylint: disable=too-many-ancestors
