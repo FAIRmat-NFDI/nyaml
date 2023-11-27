@@ -51,7 +51,8 @@ from nyaml.nyaml2nxdl_helper import (
 DOM_COMMENT = (
     f"# NeXus - Neutron and X-ray Common Data Format\n"
     f"# \n"
-    f"# Copyright (C) 2014-{datetime.date.today().year} NeXus International Advisory Committee (NIAC)\n"
+    f"# Copyright (C) 2014-{datetime.date.today().year} "
+    "NeXus International Advisory Committee (NIAC)\n"
     f"# \n"
     f"# This library is free software; you can redistribute it and/or\n"
     f"# modify it under the terms of the GNU Lesser General Public\n"
@@ -458,7 +459,7 @@ def xml_handle_dimensions(dct, obj, keyword, value: dict):
         recursive_build(dims, value, verbose=None)
 
 
-# pylint: disable=too-many-locals, too-many-arguments
+# pylint: disable=too-many-locals, too-many-arguments, too-many-statements
 def xml_handle_dim_from_dimension_dict(
     dct, dims_obj, keyword, value, rank, verbose=False
 ):
@@ -860,7 +861,7 @@ def xml_handle_fields_or_group(
             f"No name for NeXus {ele_type} has been found."
             f"Check around line:{line_loc}"
         )
-    elif not keyword_type and not keyword_name:
+    if not keyword_type and not keyword_name:
         raise ValueError(
             f"No name or type for NeXus {ele_type} has been found."
             f"Check around line: {line_loc}"

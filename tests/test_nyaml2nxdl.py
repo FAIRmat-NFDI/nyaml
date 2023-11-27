@@ -390,6 +390,9 @@ def test_yml2xml_comment_parsing():
 
 
 def test_conversion():
+    """
+    Test conversion of NXentry
+    """
     root = Path(__file__).parent / "data" / "NXentry.nxdl.xml"
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", root])
     assert result.exit_code == 0

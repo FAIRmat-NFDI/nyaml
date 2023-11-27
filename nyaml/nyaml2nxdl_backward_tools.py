@@ -85,7 +85,7 @@ class _CommentedTreeBuilder(ET.TreeBuilder):
     def start(self, tag, attrs):
         super().start(tag=tag, attrs=attrs)
 
-    def Comment(self, text):
+    def Comment(self, text):  # pylint: disable=invalid-name
         """Defining comment builder in TreeBuilder"""
         self.start(CMNT_TAG, {})
         self.data(text)
@@ -641,7 +641,7 @@ class Nxdl2yaml:
                         f"NeXus {tag.capitalized()} allows attributes from {allowed_attributes_li}"
                     )
 
-    # pylint: disable=too-many-branches, too-many-locals
+    # pylint: disable=too-many-branches, too-many-locals, too-many-statements
     def handle_dimension(self, depth, node, file_out):
         """Handle the dimension field.
 
