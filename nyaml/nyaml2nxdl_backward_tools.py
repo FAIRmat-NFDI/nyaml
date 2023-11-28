@@ -377,8 +377,8 @@ class Nxdl2yaml:
                 f'{indent}"{xref_key}:\n{indent + DEPTH_SIZE}{spec_key}: {spec}'
                 f"\n{indent + DEPTH_SIZE}{term_key}"
                 f': {term}\n{indent + DEPTH_SIZE}{url_key}: {url}"'
-            )
-        return text
+            ), True
+        return text, False
 
     # pylint: disable=too-many-branches
     def handle_not_root_level_doc(self, depth, text, tag="doc", file_out=None):
@@ -395,11 +395,14 @@ class Nxdl2yaml:
         text = self.clean_and_organise_text(text, depth)  # starts with '\n'
         docs = re.split(r"\n\s*\n", text)
         modified_docs = []
+        xref_in_doc = False
         for doc_part in docs:
             if not doc_part.isspace():
-                modified_docs.append(
-                    self.check_and_handle_doc_xref_and_other_doc(doc_part, indent)
+                mod_doc, xref_present = self.check_and_handle_doc_xref_and_other_doc(
+                    doc_part, indent
                 )
+                xref_in_doc = xref_in_doc or xref_present
+                modified_docs.append(mod_doc)
         # doc example:
         # doc:
         #  - |
@@ -408,7 +411,9 @@ class Nxdl2yaml:
         #   xref:
         #       spec:
         #       term:
-        if len(modified_docs) > 1:
+        if len(modified_docs) == 1:
+            doc_str = f"{indent}{tag}: |{modified_docs[0]}\n"
+        elif len(modified_docs) > 1 and xref_in_doc:
             doc_str = f"{indent}{tag}:\n"
             for mod_doc in modified_docs:
                 if not re.match(
@@ -417,8 +422,6 @@ class Nxdl2yaml:
                     mod_doc = "\n" + mod_doc
                 # doc_str = f"{doc_str}{indent} - |\n{textwrap.indent(mod_doc, indent+'  ')}\n"
                 doc_str = f"{doc_str}{indent} - |{textwrap.indent(mod_doc, '')}\n"
-        elif len(modified_docs) == 1:
-            doc_str = f"{indent}{tag}: |{modified_docs[0]}\n"
         else:
             doc_str = f"{indent}{tag}: |{text}\n"
 

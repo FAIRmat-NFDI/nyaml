@@ -461,7 +461,7 @@ def test_nxdl2yaml_doc():
     if result.exit_code != 0:
         Path.unlink(parsed_yaml_file)
 
-    assert result.exit_code == 0, "Error in converter execuation."
+    assert result.exit_code == 0, "Error in converter execution."
 
     with open(ref_yaml, mode="r", encoding="utf-8") as yaml1, open(
         parsed_yaml_file, mode="r", encoding="utf-8"
