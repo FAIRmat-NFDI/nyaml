@@ -79,13 +79,7 @@ def split_name_and_extension(file_path):
 
 
 @click.command()
-@click.option(
-    "--input-file",
-    required=True,
-    prompt=True,
-    help="The path to the XML or YAML input data file to read and create \
-a YAML or XML file from, respectively.",
-)
+@click.argument("input-file")
 @click.option(
     "--check-consistency",
     is_flag=True,
