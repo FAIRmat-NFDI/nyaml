@@ -464,7 +464,7 @@ class Nxdl2yaml:
                     line = "# " + line
                 mod_lines.append(line)
         # The starting '\n' to keep multiple comments separate
-        return "\n" + indent + "\n".join(mod_lines)
+        return "\n" + "\n".join(map(lambda line: indent + line, mod_lines))
 
     def print_root_level_info(self, depth, file_out):
         """
