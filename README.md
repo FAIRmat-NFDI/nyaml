@@ -1,38 +1,54 @@
-# YAML to NXDL converter and NXDL to YAML converter
+# Nyaml to nxdl
 
-**NOTE: Please use python3.8 or above to run this converter**
+A tool to convert yaml NeXus application definitions (nyaml) to nexus definitions language (nxdl) and vice versa.
 
-**Tools purpose**: Offer a simple YAML-based schema and a XML-based schema to describe NeXus instances. These can be NeXus application definitions or classes
-such as base or contributed classes. Users either create NeXus instances by writing a YAML file or a XML file which details a hierarchy of data/metadata elements.
-The forward (YAML -> NXDL.XML) and backward (NXDL.XML -> YAML) conversions are implemented.
-
-**How the tool works**:
-- nyaml2nxdl.py
-1. Reads the user-specified NeXus instance, either in YML or XML format.
-2. If input is in YAML, creates an instantiated NXDL schema XML tree by walking the dictionary nest.
-   If input is in XML, creates a YML file walking the dictionary nest.
-3. Write the tree into a YAML file or a properly formatted NXDL XML schema file to disk.
-4. Optionally, if --append argument is given,
-   the XML or YAML input file is interpreted as an extension of a base class and the entries contained in it
-   are appended below a standard NeXus base class.
-   You need to specify both your input file (with YAML or XML extension) and NeXus class (with no extension).
-   Both .yaml and .nxdl.xml file of the extended class are printed.
+This tool is a simple command line interface and can be used by calling `nyaml2nxdl` or its shortcut `n2n`:
 
 ```console
-user@box:~$ python nyaml2nxdl.py
+user@box:~$ nyaml2nxdl --help
+Usage: nyaml2nxdl [OPTIONS] INPUT_FILE
 
-Usage: python nyaml2nxdl.py [OPTIONS]
+  Main function that distinguishes the input file format and launches the
+  tools.
 
 Options:
-   --input-file TEXT     The path to the input data file to read.
-   --append TEXT         Parse xml NeXus file and append to specified base class,
-                         write the base class name with no extension.
-   --check-consistency   Check consistency by generating another version of the input file.
-                         E.g. for input file: NXexample.nxdl.xml the output file
-                         NXexample_consistency.nxdl.xml.
-   --verbose             Additional std output info is printed to help debugging.
-   --help                Show this message and exit.
+  --check-consistency  Check if yaml and nxdl can be converted from one to
+                       another version recursively and get the same version of
+                       file. E.g. from NXexample.nxdl.xml to
+                       NXexample_consistency.nxdl.xml.
+  --do-not-store-nxdl  Whether the input nxdl file will be stored as a comment
+                       at the end of output yaml file.
+  --verbose            Print in standard output keywords and value types to
+                       help possible issues in yaml files
+  --help               Show this message and exit.
+```
 
+**How the tool works**:
+1. Reads the user-specified NeXus instance, either in yaml or xml format.
+2. If input is in yaml, creates an instantiated nxdl schema xml tree by walking the dictionary nest.
+   If input is in xml, creates a yaml file walking the dictionary nest.
+3. Write the tree into a yaml file or a properly formatted nxdl file to disk.
+4. Optionally, if --append argument is given,
+   the XML or yaml input file is interpreted as an extension of a base class and the entries contained in it
+   are appended below a standard NeXus base class.
+   You need to specify both your input file (with yaml or xml extension) and NeXus class (with no extension).
+   Both .yaml and .nxdl.xml file of the extended class are printed.
+
+
+## How to install
+
+The tool can be easily installed via pip
+
+```
+pip install nyaml
+```
+
+or as a development install from this repository
+
+```
+git clone https://github.com/FAIRmat-NFDI/nyaml.git
+cd nyaml
+pip install -e ".[dev]"
 ```
 
 ## Documentation
@@ -44,13 +60,13 @@ Options:
 * Optionality: For all fields, groups and attributes in `application definitions` are `required` by default, except anything (`recommended` or `optional`) mentioned.
 
 **Special keywords**: Several keywords can be used as children of groups, fields, and attributes to specify the members of these. Groups, fields and attributes are nodes of the XML tree.
-* **doc**: 
+* **doc**:
    - A human-readable description/docstring
    - Doc string may also come as a list of doc parts when user wants to add `reference` for a concept. Or doc string could be a single doc block.
       ```yaml
          energy:  # field
             doc:
-               - | 
+               - |
                  Part1 of the entire doc.
                  part1 of the entire doc.
                - |  # Reference for concept
@@ -58,7 +74,7 @@ Options:
                    spec: <spec>
                    term: <term>
                    url: <url>"
-               - | 
+               - |
                  Rest of the doc
                  rest of the doc
          velocity:  # field
@@ -72,10 +88,10 @@ Options:
         <doc>
             Part1 of the entire doc.
             part1 of the entire doc.
-           
+
                 This concept is related to term `&lt;term&gt;`_ of the &lt;spec&gt; standard.
             .. _&lt;term&gt;: &lt;url&gt;
-           
+
             Rest of the doc
             rest of the doc
         </doc>
@@ -105,8 +121,8 @@ dimensions:
       incr: [incr_value_1, incr_value_2, ...]
 ```
 Keep in mind that length of all the lists must have the **same size**.
-**Important Note**: The attributes `ref`, `incr`, `index` are deprecated. 
+**Important Note**: The attributes `ref`, `incr`, `index` are deprecated.
 
-## Next steps
+## Project roadmap
 
 The NOMAD team is currently working to establish a one-to-one mapping between NeXus definitions and the NOMAD MetaInfo(scientific data model in nomad). As soon as this is in place the YAML files will be annotated with further metadata so that they can serve two purposes. On the one hand they can serve as an instance for a schema to create a GUI representation of a NOMAD Oasis ELN schema. On the other hand the YAML to NXDL converter will skip all those pieces of information which are irrelevant from a NeXus perspective.
