@@ -1,10 +1,3 @@
-#!/usr/bin/env python3
-"""File consists of helping functions and variables.
-
-The functions and variables are utilised in the converting tool
-to convert from nyaml to nxdl and vice versa.
-"""
-# -*- coding: utf-8 -*-
 #
 # Copyright The NOMAD Authors.
 #
@@ -22,6 +15,13 @@ to convert from nyaml to nxdl and vice versa.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+"""
+File consists of helping functions and variables.
+
+The functions and variables are utilised in the converting tool
+to convert from nyaml to nxdl and vice versa.
+"""
 
 import hashlib
 from typing import Callable

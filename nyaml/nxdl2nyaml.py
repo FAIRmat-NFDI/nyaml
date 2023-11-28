@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""This file collects the functions for conversion from nxdl.xml to yaml version.
-"""
-
-# -*- coding: utf-8 -*-
 #
 # Copyright The NOMAD Authors.
 #
@@ -20,6 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+"""
+This file collects the functions for conversion from nxdl.xml to yaml version.
+"""
 
 # pylint: disable=too-many-lines
 

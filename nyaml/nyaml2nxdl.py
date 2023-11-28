@@ -1,8 +1,3 @@
-#!/usr/bin/env python3
-"""Creates an instantiated NXDL schema XML tree by walking the dictionary nest
-
-"""
-# -*- coding: utf-8 -*-
 #
 # Copyright The NOMAD Authors.
 #
@@ -20,6 +15,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+"""
+Creates an instantiated NXDL schema XML tree by walking the dictionary nest
+"""
 
 import datetime
 import pathlib

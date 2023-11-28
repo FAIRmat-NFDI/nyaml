@@ -1,7 +1,3 @@
-"""
-# Load paths
-"""
-# -*- coding: utf-8 -*-
 #
 # Copyright The NOMAD Authors.
 #
@@ -19,3 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+"""
+nyaml is a tool to convert nyaml to nxdl and vice versa.
+"""

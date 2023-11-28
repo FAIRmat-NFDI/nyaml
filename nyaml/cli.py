@@ -1,12 +1,3 @@
-#!/usr/bin/env python3
-"""
-Main file of nyaml2nxdl tool.
-
-To write a definition for a instrument, experiment and/or process in nxdl.xml file from a YAML
-file which details a hierarchy of data/metadata elements. It also allows both wa
-conversion beteen YAML and nxdl.xml files that follows rules of NeXus ontology or data format.
-"""
-# -*- coding: utf-8 -*-
 #
 # Copyright The NOMAD Authors.
 #
@@ -24,6 +15,14 @@ conversion beteen YAML and nxdl.xml files that follows rules of NeXus ontology o
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+
+"""
+Main file of nyaml2nxdl tool.
+
+To write a definition for a instrument, experiment and/or process in nxdl.xml file from a YAML
+file which details a hierarchy of data/metadata elements. It also allows both wa
+conversion beteen YAML and nxdl.xml files that follows rules of NeXus ontology or data format.
+"""
 from pathlib import Path
 
 import click
