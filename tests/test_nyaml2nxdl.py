@@ -28,10 +28,11 @@ import lxml.etree as ET
 import pytest
 from click.testing import CliRunner
 
-from nyaml import nyaml2nxdl, nyaml2nxdl_forward_tools
+from nyaml import cli as nyaml2nxdl
+from nyaml import nyaml2nxdl as nyaml2nxdl_forward_tools
 from nyaml.comment_collector import CommentCollector
-from nyaml.nyaml2nxdl_forward_tools import handle_each_part_doc
-from nyaml.nyaml2nxdl_helper import LineLoader, remove_namespace_from_tag
+from nyaml.helper import LineLoader, remove_namespace_from_tag
+from nyaml.nyaml2nxdl import handle_each_part_doc
 
 
 def delete_duplicates(list_of_matching_string):
@@ -84,7 +85,7 @@ def compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
     ref_matches = find_matches(ref_xml_file, desired_matches)
     # Test file is generated
     runner = CliRunner()
-    result = runner.invoke(nyaml2nxdl.launch_tool, ["--input-file", test_yml_file])
+    result = runner.invoke(nyaml2nxdl.launch_tool, [test_yml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_xml_file)
     # Test file is read
@@ -133,7 +134,7 @@ def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     ref_xml_file = "tests/data/Ref_NXentry.nxdl.xml"
     ref_yml_file = "tests/data/Ref_NXentry.yaml"
     test_yml_file = "tests/data/Ref_NXentry_parsed.yaml"
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", ref_xml_file])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
 
@@ -153,7 +154,7 @@ def test_fileline_error():
     test_yml_file = "tests/data/NXfilelineError1.yaml"
     out_nxdl = "tests/data/NXfilelineError1.nxdl.xml"
     out_yaml = "tests/data/temp_NXfilelineError1.yaml"
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", test_yml_file])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [test_yml_file])
     assert result.exit_code == 1
     assert "13" in str(result.exception)
     os.remove(out_nxdl)
@@ -162,7 +163,7 @@ def test_fileline_error():
     test_yml_file = "tests/data/NXfilelineError2.yaml"
     out_nxdl = "tests/data/NXfilelineError2.nxdl.xml"
     out_yaml = "tests/data/temp_NXfilelineError2.yaml"
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", test_yml_file])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [test_yml_file])
     assert result.exit_code == 1
     assert "21" in str(result.exception)
     os.remove(out_nxdl)
@@ -171,7 +172,7 @@ def test_fileline_error():
     test_yml_file = "tests/data/NXfilelineError3.yaml"
     out_nxdl = "tests/data/NXfilelineError3.nxdl.xml"
     out_yaml = "tests/data/temp_NXfilelineError3.yaml"
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", test_yml_file])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [test_yml_file])
     assert result.exit_code == 1
     assert "25" in str(result.exception)
     os.remove(out_nxdl)
@@ -231,9 +232,7 @@ def test_extends():
     test_yml_attribute_file = "tests/data/NXattributes.yaml"
     test_xml_attribute_file = "tests/data/NXattributes.nxdl.xml"
     runner = CliRunner()
-    result = runner.invoke(
-        nyaml2nxdl.launch_tool, ["--input-file", test_yml_attribute_file]
-    )
+    result = runner.invoke(nyaml2nxdl.launch_tool, [test_yml_attribute_file])
     assert result.exit_code == 0
     ref_root_node = ET.parse(ref_xml_attribute_file).getroot()
     test_root_node = ET.parse(test_xml_attribute_file).getroot()
@@ -275,10 +274,10 @@ def test_xml_parsing():
     ref_xml_file = "tests/data/Ref_NXellips.nxdl.xml"
     test_yml_file = "tests/data/Ref_NXellips_parsed.yaml"
     test_xml_file = "tests/data/Ref_NXellips_parsed.nxdl.xml"
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", ref_xml_file])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", test_yml_file])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [test_yml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_xml_file)
 
@@ -304,10 +303,10 @@ def test_yml_parsing():
     ref_yml_file = "tests/data/Ref_NXellipsometry.yaml"
     test_xml_file = "tests/data/Ref_NXellipsometry.nxdl.xml"
     test_yml_file = "tests/data/Ref_NXellipsometry_parsed.yaml"
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", ref_yml_file])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_yml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_xml_file)
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", test_xml_file])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [test_xml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
 
@@ -333,7 +332,7 @@ def test_yml_consistency_comment_parsing():
     test_yml_file = "tests/data/Ref_NXcomment_consistency.yaml"
 
     result = CliRunner().invoke(
-        nyaml2nxdl.launch_tool, ["--input-file", ref_yml_file, "--check-consistency"]
+        nyaml2nxdl.launch_tool, ["--check-consistency", ref_yml_file]
     )
     assert result.exit_code == 0, (
         f"Exception: {result.exception}, \nExecution Info:" "{result.exc_info}"
@@ -365,7 +364,7 @@ def test_yml2xml_comment_parsing():
     ref_xml = "tests/data/Ref_NXcomment_yaml2nxdl.nxdl.xml"
     test_xml = "tests/data/NXcomment_yaml2nxdl.nxdl.xml"
 
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", input_yml])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [input_yml])
     assert result.exit_code == 0
 
     ref_root = ET.parse(ref_xml).getroot()
@@ -393,11 +392,11 @@ def test_conversion():
     Test conversion of NXentry
     """
     root = Path(__file__).parent / "data" / "NXentry.nxdl.xml"
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", root])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(root)])
     assert result.exit_code == 0
     # Replace suffixes
     yaml = root.parent / Path(root.with_suffix("").stem + "_parsed.yaml")
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", yaml])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(yaml)])
     assert result.exit_code == 0
     new_root = yaml.with_suffix(".nxdl.xml")
     with open(root, encoding="utf-8", mode="r") as tmp_f:
@@ -420,7 +419,7 @@ def test_yaml2nxdl_doc():
     )  # doc_file.with_suffix('.nxdl.xml')
     # Test yaml2nxdl
     # Generates '../data/doc_text.nxdl.xml'
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, ["--input-file", str(doc_file)])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(doc_file)])
     if result.exit_code != 0:
         Path.unlink(out_doc_file)
     assert result.exit_code == 0, f"Error: Having issue running input file {doc_file}."
@@ -455,13 +454,13 @@ def test_nxdl2yaml_doc():
     parsed_yaml_file = pwd / "data/doc_nxdl2yaml_parsed.yaml"
 
     result = CliRunner().invoke(
-        nyaml2nxdl.launch_tool, ["--input-file", str(nxdl_file), "--do-not-store-nxdl"]
+        nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", str(nxdl_file)]
     )
 
     if result.exit_code != 0:
         Path.unlink(parsed_yaml_file)
 
-    assert result.exit_code == 0, "Error in converter execuation."
+    assert result.exit_code == 0, "Error in converter execution."
 
     with open(ref_yaml, mode="r", encoding="utf-8") as yaml1, open(
         parsed_yaml_file, mode="r", encoding="utf-8"

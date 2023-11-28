@@ -46,4 +46,5 @@ dev = [
 ]
 
 [project.scripts]
-nyaml2nxdl = "nyaml.nyaml2nxdl:launch_tool"
+nyaml2nxdl = "nyaml.cli:launch_tool"
+n2n = "nyaml.cli:launch_tool"
