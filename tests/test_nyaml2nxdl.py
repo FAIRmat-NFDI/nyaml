@@ -28,10 +28,11 @@ import lxml.etree as ET
 import pytest
 from click.testing import CliRunner
 
-from nyaml import nyaml2nxdl, nyaml2nxdl_forward_tools
+from nyaml import cli as nyaml2nxdl
+from nyaml import nyaml2nxdl as nyaml2nxdl_forward_tools
 from nyaml.comment_collector import CommentCollector
-from nyaml.nyaml2nxdl_forward_tools import handle_each_part_doc
-from nyaml.nyaml2nxdl_helper import LineLoader, remove_namespace_from_tag
+from nyaml.helper import LineLoader, remove_namespace_from_tag
+from nyaml.nyaml2nxdl import handle_each_part_doc
 
 
 def delete_duplicates(list_of_matching_string):

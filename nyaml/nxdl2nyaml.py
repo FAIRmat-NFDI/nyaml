@@ -30,7 +30,7 @@ from typing import Callable, Dict, List
 
 import lxml.etree as ET
 
-from .nyaml2nxdl_helper import (
+from nyaml.helper import (
     NXDL_ATTRIBUTES_ATTRIBUTES,
     NXDL_FIELD_ATTRIBUTES,
     NXDL_GROUP_ATTRIBUTES,

@@ -28,14 +28,9 @@ XMLComment and YAMLComment class.
 """
 
 
-from typing import Any
-from typing import Dict
-from typing import List
-from typing import Tuple
-from typing import Type
-from typing import Union
+from typing import Any, Dict, List, Tuple, Type, Union
 
-from .nyaml2nxdl_helper import LineLoader
+from nyaml.helper import LineLoader
 
 __all__ = ["Comment", "CommentCollector", "XMLComment", "YAMLComment"]
 
