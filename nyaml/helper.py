@@ -80,7 +80,7 @@ NXDL_LINK_ATTRIBUTES = ("name", "target", "napimount")
 # Set up attributes for yaml version
 YAML_GROUP_ATTRIBUTES = (*NXDL_GROUP_ATTRIBUTES, "exists")
 
-YAML_FIELD_ATTRIBUTES = (*NXDL_FIELD_ATTRIBUTES[0:-1], "unit", "exists")
+YAML_FIELD_ATTRIBUTES = (*NXDL_FIELD_ATTRIBUTES[0:-1], "unit", "exists", "dim")
 
 YAML_ATTRIBUTES_ATTRIBUTES = (
     *NXDL_ATTRIBUTES_ATTRIBUTES,

@@ -12,6 +12,7 @@ Usage: nyaml2nxdl [OPTIONS] INPUT_FILE
   tools.
 
 Options:
+  --output-file TEXT   The output file path to write the converted file to
   --check-consistency  Check if yaml and nxdl can be converted from one to
                        another version recursively and get the same version of
                        file. E.g. from NXexample.nxdl.xml to
@@ -95,12 +96,12 @@ pip install -e ".[dev]"
             Rest of the doc
             rest of the doc
         </doc>
-    </field>
-    <field name="velocity">
-      <doc>
-           A single block of doc string.
-      </doc>
-    </field>
+      </field>
+      <field name="velocity">
+        <doc>
+            A single block of doc string.
+        </doc>
+      </field>
       ```
 
 
@@ -109,6 +110,7 @@ pip install -e ".[dev]"
 * **link** Define links between nodes.
 * **units** A statement introducing NeXus-compliant NXDL units arguments, like NX_VOLTAGE
 * **dimensions** Details which dimensional arrays to expect
+* **dim** Shorthand notation for dimensions, e.g., `(n, )` for an 1D array of length `n` or `(n, m)` for an 2D array of size `n x m`.
 * **enumeration** Python list of strings which are considered as recommended entries to choose from.
 * **dim_parameters** `dim` which is a child of `dimension` and the `dim` might have several attributes `ref`,
 `incr` including `index` and `value`. So while writing `yaml` file schema definition please following structure:

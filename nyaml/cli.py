@@ -80,6 +80,11 @@ def split_name_and_extension(file_path):
 @click.command()
 @click.argument("input-file")
 @click.option(
+    "--output-file",
+    required=False,
+    help="The output file path to write the converted file to",
+)
+@click.option(
     "--check-consistency",
     is_flag=True,
     default=False,
@@ -106,7 +111,7 @@ def split_name_and_extension(file_path):
 possible issues in yaml files",
 )
 # def launch_tool(input_file, verbose, check_consistency):
-def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency):
+def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency, output_file):
     """
     Main function that distinguishes the input file format and launches the tools.
     """
@@ -116,18 +121,24 @@ def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency):
     else:
         raise ValueError("Need a valid input file.")
     if ext == "yaml":
-        xml_out_file = raw_name + NXDL_SUFFIX
+        xml_out_file = (
+            f"{raw_name}{NXDL_SUFFIX}" if output_file is None else output_file
+        )
         generate_nxdl_or_retrieve_nxdl(input_file, xml_out_file, verbose)
 
         # For consistency running
         if check_consistency:
-            yaml_out_file = raw_name + "_consistency." + ext
+            yaml_out_file = f"{raw_name}_consistency.{ext}"
             converter = Nxdl2yaml([], [])
             converter.print_yml(xml_out_file, yaml_out_file, verbose)
             Path(xml_out_file).unlink()
     elif ext == "nxdl.xml":
         # if not append:
-        yaml_out_file = raw_name + "_parsed" + ".yaml"
+        yaml_out_file = (
+            f"{raw_name}_parsed.yaml"
+            if output_file is None
+            else f"{raw_name}_parsed.yaml"
+        )
         converter = Nxdl2yaml([], [])
         converter.print_yml(input_file, yaml_out_file, verbose)
         # Store nxdl.xml file in output yaml file under SHA HASH
@@ -149,7 +160,7 @@ def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency):
 
         # Taking care of consistency running
         if check_consistency:
-            xml_out_file = raw_name + "_consistency." + ext
+            xml_out_file = f"{raw_name}_consistency.{ext}"
             generate_nxdl_or_retrieve_nxdl(yaml_out_file, xml_out_file, verbose)
             Path.unlink(yaml_out_file)
     else:
