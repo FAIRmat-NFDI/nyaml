@@ -1,3 +1,5 @@
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/nyaml) [![PyPI](https://img.shields.io/pypi/v/nyaml)](https://pypi.org/project/nyaml/) [![Pytest](hhttps://github.com/FAIRmat-NFDI/nyaml/actions/workflows/pytest.yaml/badge.svg)](hhttps://github.com/FAIRmat-NFDI/nyaml/actions/workflows/pytest.yaml/badge.svg) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
 # Nyaml to nxdl
 
 A tool to convert yaml NeXus application definitions (nyaml) to nexus definitions language (nxdl) and vice versa.
