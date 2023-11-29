@@ -481,6 +481,25 @@ def test_nxdl2yaml_doc():
     Path.unlink(parsed_yaml_file)
 
 
+def test_nyaml_dim_keyword(tmp_path):
+    """
+    The dim keyword is correctly translated into nxdl with rank and dim.
+    """
+
+    pwd = Path(__file__).parent
+    input_file = pwd / "data/dim_keyword.yaml"
+    ref_file = pwd / "data/ref_dim_keyword.nxdl.xml"
+    parsed_file = tmp_path / "dim_keyword.nxdl.xml"
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        ["--do-not-store-nxdl", str(input_file), "--output-file", str(parsed_file)],
+    )
+
+    assert result.exit_code == 0, "Error in converter execution."
+    assert ref_file.read_text() == parsed_file.read_text()
+
+
 @pytest.mark.parametrize(
     "test_input,output,is_valid",
     [
