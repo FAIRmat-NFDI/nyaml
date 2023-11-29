@@ -96,12 +96,12 @@ pip install -e ".[dev]"
             Rest of the doc
             rest of the doc
         </doc>
-    </field>
-    <field name="velocity">
-      <doc>
-           A single block of doc string.
-      </doc>
-    </field>
+      </field>
+      <field name="velocity">
+        <doc>
+            A single block of doc string.
+        </doc>
+      </field>
       ```
 
 
