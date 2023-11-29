@@ -109,6 +109,7 @@ pip install -e ".[dev]"
 * **link** Define links between nodes.
 * **units** A statement introducing NeXus-compliant NXDL units arguments, like NX_VOLTAGE
 * **dimensions** Details which dimensional arrays to expect
+* **dim** Shorthand notation for dimensions, e.g., `(n, )` for an 1D array of length `n` or `(n, m)` for an 2D array of size `n x m`.
 * **enumeration** Python list of strings which are considered as recommended entries to choose from.
 * **dim_parameters** `dim` which is a child of `dimension` and the `dim` might have several attributes `ref`,
 `incr` including `index` and `value`. So while writing `yaml` file schema definition please following structure:
