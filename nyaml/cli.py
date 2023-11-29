@@ -122,7 +122,7 @@ def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency, outpu
         raise ValueError("Need a valid input file.")
     if ext == "yaml":
         xml_out_file = (
-            output_file if output_file is not None else f"{raw_name}{NXDL_SUFFIX}"
+            f"{raw_name}{NXDL_SUFFIX}" if output_file is None else output_file
         )
         generate_nxdl_or_retrieve_nxdl(input_file, xml_out_file, verbose)
 
@@ -135,7 +135,9 @@ def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency, outpu
     elif ext == "nxdl.xml":
         # if not append:
         yaml_out_file = (
-            output_file if output_file is not None else f"{raw_name}_parsed.yaml"
+            f"{raw_name}_parsed.yaml"
+            if output_file is None
+            else f"{raw_name}_parsed.yaml"
         )
         converter = Nxdl2yaml([], [])
         converter.print_yml(input_file, yaml_out_file, verbose)
