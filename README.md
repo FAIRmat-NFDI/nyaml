@@ -12,6 +12,7 @@ Usage: nyaml2nxdl [OPTIONS] INPUT_FILE
   tools.
 
 Options:
+  --output-file TEXT   The output file path to write the converted file to
   --check-consistency  Check if yaml and nxdl can be converted from one to
                        another version recursively and get the same version of
                        file. E.g. from NXexample.nxdl.xml to
