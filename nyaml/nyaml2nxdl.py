@@ -458,7 +458,7 @@ def xml_handle_dimensions(dct, obj, keyword, value: dict):
         recursive_build(dims, value, verbose=None)
 
 
-def xml_handle_dim(dct, obj, keyword, value):
+def xml_handle_dim(obj, value):
     """
     This function creates a 'dimensions' element instance, and appends it to an existing element.
     Allows for handling numpy tensor notation of dimensions. That is,
@@ -934,7 +934,7 @@ def xml_handle_fields_or_group(
                 xml_handle_units(elemt_obj, vval)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
             elif ele_type == "field" and attr == "dim":
-                xml_handle_dim(dct, obj, keyword, value)
+                xml_handle_dim(obj, value)
             elif attr in allowed_attr and not isinstance(vval, dict) and vval:
                 validate_field_attribute_and_value(attr, vval, allowed_attr, value)
                 elemt_obj.set(attr, check_for_mapping_char_other(vval))
@@ -1046,7 +1046,7 @@ def recursive_build(obj, dct, verbose):
         elif keyword == "dimensions":
             xml_handle_dimensions(dct, obj, keyword, value)
         elif keyword == "dim":
-            xml_handle_dim(dct, obj, keyword, value)
+            xml_handle_dim(obj, value)
         elif keyword == "exists":
             xml_handle_exists(dct, obj, keyword, value)
         # Handles fileds e.g. AXISNAME
