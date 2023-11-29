@@ -933,6 +933,8 @@ def xml_handle_fields_or_group(
             elif ele_type == "field" and attr == "unit":
                 xml_handle_units(elemt_obj, vval)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
+            elif ele_type == "field" and attr == "dim":
+                xml_handle_dim(dct, obj, keyword, value)
             elif attr in allowed_attr and not isinstance(vval, dict) and vval:
                 validate_field_attribute_and_value(attr, vval, allowed_attr, value)
                 elemt_obj.set(attr, check_for_mapping_char_other(vval))
