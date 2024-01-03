@@ -49,10 +49,10 @@ from nyaml.helper import (
 # pylint: disable=too-many-lines, global-statement, invalid-name
 DOM_COMMENT = (
     f"# NeXus - Neutron and X-ray Common Data Format\n"
-    f"# \n"
+    f"#\n"
     f"# Copyright (C) 2014-{datetime.date.today().year} "
     "NeXus International Advisory Committee (NIAC)\n"
-    f"# \n"
+    f"#\n"
     f"# This library is free software; you can redistribute it and/or\n"
     f"# modify it under the terms of the GNU Lesser General Public\n"
     f"# License as published by the Free Software Foundation; either\n"
