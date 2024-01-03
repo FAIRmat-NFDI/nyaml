@@ -397,9 +397,9 @@ class Nxdl2yaml:
 
         # Add links to previous docstring
         for i, doc in enumerate(docs):
-            link_match = re.match(r'\s*\.\. _.*', doc)
+            link_match = re.match(r"\s*\.\. _.*", doc)
             if link_match is not None:
-                parts[i-1] += (doc)
+                parts[i - 1] += doc
             else:
                 parts.append(doc)
 
