@@ -393,9 +393,19 @@ class Nxdl2yaml:
         indent = depth * DEPTH_SIZE
         text = self.clean_and_organise_text(text, depth)  # starts with '\n'
         docs = re.split(r"\n\s*\n", text)
+        parts = []
+
+        # Add links to previous docstring
+        for i, doc in enumerate(docs):
+            link_match = re.match(r'\s*\.\. _.*', doc)
+            if link_match is not None:
+                parts[i-1] += (doc)
+            else:
+                parts.append(doc)
+
         modified_docs = []
         xref_in_doc = False
-        for doc_part in docs:
+        for doc_part in parts:
             if not doc_part.isspace():
                 mod_doc, xref_present = self.check_and_handle_doc_xref_and_other_doc(
                     doc_part, indent
