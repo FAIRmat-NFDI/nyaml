@@ -379,7 +379,7 @@ class Nxdl2yaml:
             ), True
         return text, False
 
-    # pylint: disable=too-many-branches
+    # pylint: disable=too-many-branches, too-many-locals
     def handle_not_root_level_doc(self, depth, text, tag="doc", file_out=None):
         """Handle docs field of group and field but not root.
 
