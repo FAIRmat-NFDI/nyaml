@@ -311,7 +311,7 @@ def handle_each_part_doc(text):
 
     return (
         f"    This concept is related to term `{xref_entries.get('term', 'NO TERM')}`_ "
-        f"of the {xref_entries.get('spec', 'NO TERM')} standard.\n"
+        f"of the {xref_entries.get('spec', 'NO TERM')} standard.\n\n"
         f".. _{xref_entries.get('term', 'NO SPECIFICATION')}: "
         f"{xref_entries.get('url', 'NO URL')}"
     )
