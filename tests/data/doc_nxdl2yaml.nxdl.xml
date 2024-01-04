@@ -58,6 +58,19 @@
            .. _term: url
       </doc>
     </field>
+    <field name="double_iso_string" type="NX_CHAR">
+      <doc>
+         Way of scanning the energy axis (fixed or sweep).
+
+             This concept is related to term `12.65`_ of the ISO 18115-1:2023 standard.
+
+         .. _12.65: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.65
+
+             This concept is related to term `12.66`_ of the ISO 18115-1:2023 standard.
+
+         .. _12.66: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.66
+      </doc>
+    </field>
     <field name="collection_identifier" type="NX_CHAR">
       <doc>
            ID of user or DAQ define group of data files
