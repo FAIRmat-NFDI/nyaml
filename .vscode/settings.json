@@ -4,11 +4,12 @@
   "editor.tabSize": 4,
   "files.trimTrailingWhitespace": true,
   "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-      "source.organizeImports": "explicit"
-    }
+      "source.fixAll": true,
+      "source.organizeImports": true
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff"
   },
   "python.testing.pytestArgs": ["tests"],
   "python.testing.unittestEnabled": false,
