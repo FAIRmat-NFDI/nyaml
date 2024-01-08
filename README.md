@@ -73,7 +73,7 @@ When transcribing YAML files, it's important to adhere to the following rules:
 
 - **Optionality**: By default, all fields, groups, and attributes in application definitions are required, except those explicitly marked as recommended or optional.
 
-- **Special Keywords**: Keywords can be used as children of groups, fields, and attributes to specify their properties. These elements are nodes of the XML tree.
+- **Special Keywords**: There exists a set of special keywords that can be used as children of groups, fields, and attributes to specify their properties. These elements are nodes of the XML tree.
 
 ### Doc Structure
 
