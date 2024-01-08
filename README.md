@@ -57,8 +57,6 @@ The tool operates by:
 3. If the input is in XML, it creates a YAML file by parsing the XML tree.
 4. The tool then writes the resulting data structure to either a YAML or NXDL file on disk.
 
-Additionally, if the `--append` argument is provided, the input XML or YAML file is interpreted as an extension of a base class. Entries from the input are appended below a standard NeXus base class. You need to specify both your input file (with YAML or XML extension) and the NeXus class (with no extension). Both the `.yaml` and `.nxdl.xml` files of the extended class are generated.
-
 ## Documentation
 
 ### Rule Set
