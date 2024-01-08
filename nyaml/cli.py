@@ -82,16 +82,15 @@ def split_name_and_extension(file_path):
 @click.option(
     "--output-file",
     required=False,
-    help="The output file path to write the converted file to",
+    help="Specify the output file path for the converted file.",
 )
 @click.option(
     "--check-consistency",
     is_flag=True,
     default=False,
     help=(
-        "Check if yaml and nxdl can be converted from one to another version recursively and"
-        " get the same version of file. E.g. from NXexample.nxdl.xml"
-        " to NXexample_consistency.nxdl.xml."
+        "Check whether YAML and NXDL can be recursively converted, "
+        "ensuring version consistency."
     ),
 )
 @click.option(
@@ -99,16 +98,18 @@ def split_name_and_extension(file_path):
     is_flag=True,
     default=False,
     help=(
-        "Whether the input nxdl file will be stored as a comment"
-        " at the end of output yaml file."
+        "Prevent the input NXDL file from being stored as a "
+        "comment at the end of the output YAML file."
     ),
 )
 @click.option(
     "--verbose",
     is_flag=True,
     default=False,
-    help="Print in standard output keywords and value types to help \
-possible issues in yaml files",
+    help=(
+        "Display keywords and value types in standard output "
+        "to assist in identifying issues in YAML files."
+    ),
 )
 # def launch_tool(input_file, verbose, check_consistency):
 def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency, output_file):

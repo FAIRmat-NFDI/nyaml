@@ -1,12 +1,36 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/nyaml) [![PyPI](https://img.shields.io/pypi/v/nyaml)](https://pypi.org/project/nyaml/)  [![Pytest](https://github.com/FAIRmat-NFDI/nyaml/actions/workflows/pytest.yaml/badge.svg)](https://github.com/FAIRmat-NFDI/nyaml/actions/workflows/pytest.yaml)
 
-# Nyaml to nxdl
+# Converting nyaml to NXDL
 
-A tool to convert yaml NeXus application definitions (nyaml) to nexus definitions language (nxdl) and vice versa.
+`nyaml` is a versatile tool designed for converting NeXus application definitions from YAML (nyaml) to the Nexus Definitions Language (nxdl) format and vice versa. This command-line interface offers a simple and efficient way to work with NeXus data definitions.
 
-This tool is a simple command line interface and can be used by calling `nyaml2nxdl` or its shortcut `n2n`:
+## Installation
 
-```console
+You can easily install the tool using `pip`:
+
+```bash
+pip install nyaml
+```
+
+Alternatively, you can install it as a development package from the GitHub repository:
+
+```bash
+git clone https://github.com/FAIRmat-NFDI/nyaml.git
+cd nyaml
+pip install -e ".[dev]"
+```
+
+We also provide a pre-commit hook for code formatting and linting, which you can install with:
+
+```bash
+pre-commit install
+```
+
+## Usage
+
+The primary commands for using nyaml are `nyaml2nxdl` and its shortcut, `n2n`. Here is an overview of the available options:
+
+```bash
 user@box:~$ nyaml2nxdl --help
 Usage: nyaml2nxdl [OPTIONS] INPUT_FILE
 
@@ -14,127 +38,105 @@ Usage: nyaml2nxdl [OPTIONS] INPUT_FILE
   tools.
 
 Options:
-  --output-file TEXT   The output file path to write the converted file to
-  --check-consistency  Check if yaml and nxdl can be converted from one to
-                       another version recursively and get the same version of
-                       file. E.g. from NXexample.nxdl.xml to
-                       NXexample_consistency.nxdl.xml.
-  --do-not-store-nxdl  Whether the input nxdl file will be stored as a comment
-                       at the end of output yaml file.
-  --verbose            Print in standard output keywords and value types to
-                       help possible issues in yaml files
+  --output-file TEXT   Specify the output file path for the converted file.
+  --check-consistency  Check whether YAML and NXDL can be recursively
+                       converted, ensuring version consistency.
+  --do-not-store-nxdl  Prevent the input NXDL file from being stored as a
+                       comment at the end of the output YAML file.
+  --verbose            Display keywords and value types in standard output to
+                       assist in identifying issues in YAML files.
   --help               Show this message and exit.
 ```
 
-**How the tool works**:
-1. Reads the user-specified NeXus instance, either in yaml or xml format.
-2. If input is in yaml, creates an instantiated nxdl schema xml tree by walking the dictionary nest.
-   If input is in xml, creates a yaml file walking the dictionary nest.
-3. Write the tree into a yaml file or a properly formatted nxdl file to disk.
-4. Optionally, if --append argument is given,
-   the XML or yaml input file is interpreted as an extension of a base class and the entries contained in it
-   are appended below a standard NeXus base class.
-   You need to specify both your input file (with yaml or xml extension) and NeXus class (with no extension).
-   Both .yaml and .nxdl.xml file of the extended class are printed.
+## How It Works
 
+The tool operates by:
 
-## How to install
-
-The tool can be easily installed via pip
-
-```
-pip install nyaml
-```
-
-or as a development install from this repository
-
-```
-git clone https://github.com/FAIRmat-NFDI/nyaml.git
-cd nyaml
-pip install -e ".[dev]"
-```
-
-There is also a [pre-commit hook](https://pre-commit.com/#intro) available which formats the code and checks the
-linting before actually commiting.
-It can be installed with
-```shell
-pre-commit install
-```
-from the root of this repository.
+1. Reading the user-specified NeXus definition, either in YAML or XML format.
+2. If the input is in YAML, it creates an instantiated NXDL schema XML tree by parsing the YAML dictionary.
+3. If the input is in XML, it creates a YAML file by parsing the XML tree.
+4. The tool then writes the resulting data structure to either a YAML or NXDL file on disk.
 
 ## Documentation
 
-**Rule set**: From transcoding YAML files we need to follow several rules.
-* Named NeXus groups, which are instances of NeXus classes especially base or contributed classes. Creating (NXbeam) is a simple example of a request to define a group named according to NeXus default rules. mybeam1(NXbeam) or mybeam2(NXbeam) are examples how to create multiple named instances at the same hierarchy level.
-* Members of groups so-called fields or attributes. A simple example of a member is voltage. Here the datatype is implied automatically as the default NeXus NX_CHAR type.  By contrast, voltage(NX_FLOAT) can be used to instantiate a member of class which should be of NeXus type NX_FLOAT.
-* And attributes of either groups or fields. The mark '\@' have to precede the name of attributes.
-* Optionality: For all fields, groups and attributes in `application definitions` are `required` by default, except anything (`recommended` or `optional`) mentioned.
+### Rule Set
 
-**Special keywords**: Several keywords can be used as children of groups, fields, and attributes to specify the members of these. Groups, fields and attributes are nodes of the XML tree.
-* **doc**:
-   - A human-readable description/docstring
-   - Doc string may also come as a list of doc parts when user wants to add `reference` for a concept. Or doc string could be a single doc block.
-      ```yaml
-         energy:  # field
-            doc:
-               - |
-                 Part1 of the entire doc.
-                 part1 of the entire doc.
-               - |  # Reference for concept
-                 xref:
-                   spec: <spec>
-                   term: <term>
-                   url: <url>"
-               - |
-                 Rest of the doc
-                 rest of the doc
-         velocity:  # field
-            doc: |
-               A single block of doc string.
-      ```
-      Such structure of doc would appear in `nxdl` as
-      ```xml
-      ...
-      <field name="energy">
-        <doc>
-            Part1 of the entire doc.
-            part1 of the entire doc.
+When transcribing YAML files, it's important to adhere to the following rules:
 
-                This concept is related to term `&lt;term&gt;`_ of the &lt;spec&gt; standard.
-            .. _&lt;term&gt;: &lt;url&gt;
+- **Named NeXus Groups**: Instances of NeXus classes, especially base or contributed classes, are represented as named NeXus groups. For example, creating `(NXbeam)` is a simple example of defining a group according to NeXus default rules. You can create multiple named instances at the same hierarchy level, such as `mybeam1(NXbeam)` or `mybeam2(NXbeam)`.
 
-            Rest of the doc
-            rest of the doc
-        </doc>
-      </field>
-      <field name="velocity">
-        <doc>
-            A single block of doc string.
-        </doc>
-      </field>
-      ```
+- **Members of Groups**: Members within groups are referred to as fields or attributes. A simple example is the field `voltage`, where the data type is implied automatically as the default NeXus `NX_CHAR` type. To specify a different type, use `voltage(NX_FLOAT)`.
 
+- **Attributes**: Attributes of groups or fields are preceded by the '@' symbol.
 
+- **Optionality**: By default, all groups, fields, and attributes in application definitions are required, except those explicitly marked as recommended or optional.
 
-* **exists** Options are recommended, required, [min, 1, max, `infty`] numbers like here 1 can be replaced by any `uint` (unsigned integer), or `infty` to indicate no restriction on how frequently the entry can occur inside the NXDL schema at the same hierarchy level.
-* **link** Define links between nodes.
-* **units** A statement introducing NeXus-compliant NXDL units arguments, like NX_VOLTAGE
-* **dimensions** Details which dimensional arrays to expect
-* **dim** Shorthand notation for dimensions, e.g., `(n, )` for an 1D array of length `n` or `(n, m)` for an 2D array of size `n x m`.
-* **enumeration** Python list of strings which are considered as recommended entries to choose from.
-* **dim_parameters** `dim` which is a child of `dimension` and the `dim` might have several attributes `ref`,
-`incr` including `index` and `value`. So while writing `yaml` file schema definition please following structure:
+- **Special Keywords**: There exists a set of special keywords that can be used as children of groups, fields, and attributes to specify their properties. These elements are nodes of the XML tree.
+
+### Doc Structure
+
+The `doc` keyword is used for adding human-readable descriptions or docstrings. It can be a single block or a list of doc parts. Here's an example:
+
 ```yaml
-dimensions:
-   rank: integer value
-   dim: [[ind_1, val_1], [ind_2, val_2], ...]
-   dim_parameters:
-      ref: [ref_value_1, ref_value_2, ...]
-      incr: [incr_value_1, incr_value_2, ...]
+energy:
+  doc:
+    - |
+      Part1 of the entire doc.
+      part1 of the entire doc.
+    - |
+      xref:
+        spec: <spec>
+        term: <term>
+        url: <url>
+    - |
+      Rest of the doc
+      rest of the doc
+  velocity:  # field
+    doc: |
+        A single block of doc string.
 ```
-Keep in mind that length of all the lists must have the **same size**.
-**Important Note**: The attributes `ref`, `incr`, `index` are deprecated.
 
-## Project roadmap
+This structure appears in Nxdl as follows:
 
-The NOMAD team is currently working to establish a one-to-one mapping between NeXus definitions and the NOMAD MetaInfo(scientific data model in nomad). As soon as this is in place the YAML files will be annotated with further metadata so that they can serve two purposes. On the one hand they can serve as an instance for a schema to create a GUI representation of a NOMAD Oasis ELN schema. On the other hand the YAML to NXDL converter will skip all those pieces of information which are irrelevant from a NeXus perspective.
+```xml
+<field name="energy">
+    <doc>
+          Part1 of the entire doc.
+          part1 of the entire doc.
+
+          This concept is related to term `&lt;term&gt;`_ of the &lt;spec&gt; standard.
+
+          .. _&lt;term&gt;: &lt;url&gt;
+
+          Rest of the doc
+          rest of the doc
+    </doc>
+    <field name="velocity">
+        <doc>
+              A single block of doc string.
+        </doc>
+    </field>
+</field>
+```
+
+### Additional Keywords
+
+- **exists**: Options for `exists` can be recommended, required, or specified as `[min, 1, max, infty]`. Replace `1` with any unsigned integer or use `infty` to indicate no restriction on occurrence within the Nxdl schema at the same hierarchy level.
+
+- **link**: Defines [links](https://manual.nexusformat.org/nxdl_desc.html#linktype) between nodes.
+
+- **units**: Introduces [NeXus-compliant `NXDL` units](https://manual.nexusformat.org/nxdl-types.html#nxdl-units) arguments, such as `NX_VOLTAGE`.
+
+- **dimensions**: Details the expected dimensional arrays.
+
+- **dim**: A shorthand notation for dimensions, e.g., `(n, )` for a 1D array of length `n` or `(n, m)` for a 2D array of size `n x m`.
+
+- **enumeration**: A Python list of strings considered as recommended entries.
+
+- **dim_parameters**: A child of `dimension` with attributes like `ref` and `incr`, including `index` and `value`.
+
+Keep in mind that the length of all lists must match. Note that the attributes `ref`, `incr`, and `index` are deprecated.
+
+## Project Roadmap
+
+The NOMAD team is actively working on establishing a one-to-one mapping between NeXus definitions and the [NOMAD schemas](https://nomad-lab.eu/prod/v1/staging/docs/tutorial/custom.html) (scientific data model in NOMAD). Once completed, YAML files will be annotated with additional metadata to serve dual purposes: as an instance for a schema to create a GUI representation of a NOMAD Oasis ELN schema and as a YAML to NXDL converter that ignores irrelevant information from a NeXus perspective.

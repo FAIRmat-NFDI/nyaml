@@ -504,7 +504,7 @@ def test_nyaml_dim_keyword(tmp_path):
         term: <term>
         url: <url>
     """,
-            "    This concept is related to term `<term>`_ "
+            "This concept is related to term `<term>`_ "
             "of the <spec> standard.\n\n.. _<term>: <url>",
             True,
         ),
