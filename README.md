@@ -1,8 +1,8 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/nyaml) [![PyPI](https://img.shields.io/pypi/v/nyaml)](https://pypi.org/project/nyaml/)  [![Pytest](https://github.com/FAIRmat-NFDI/nyaml/actions/workflows/pytest.yaml/badge.svg)](https://github.com/FAIRmat-NFDI/nyaml/actions/workflows/pytest.yaml)
 
-# Nyaml to nxdl
+# Converting nyaml to NXDL
 
-Nyaml to Nxdl is a versatile tool designed for converting NeXus application definitions from YAML (nyaml) to the Nexus Definitions Language (nxdl) format and vice versa. This command-line interface offers a simple and efficient way to work with NeXus data definitions.
+`nyaml` is a versatile tool designed for converting NeXus application definitions from YAML (nyaml) to the Nexus Definitions Language (nxdl) format and vice versa. This command-line interface offers a simple and efficient way to work with NeXus data definitions.
 
 ## Installation
 
@@ -71,7 +71,7 @@ When transcribing YAML files, it's important to adhere to the following rules:
 
 - **Attributes**: Attributes of groups or fields are preceded by the '@' symbol.
 
-- **Optionality**: By default, all fields, groups, and attributes in application definitions are required, except those explicitly marked as recommended or optional.
+- **Optionality**: By default, all groups, fields, and attributes in application definitions are required, except those explicitly marked as recommended or optional.
 
 - **Special Keywords**: There exists a set of special keywords that can be used as children of groups, fields, and attributes to specify their properties. These elements are nodes of the XML tree.
 
@@ -102,19 +102,22 @@ This structure appears in Nxdl as follows:
 
 ```xml
 <field name="energy">
-  <doc>
-    Part1 of the entire doc.
-    part1 of the entire doc.
-    This concept is related to term `<term>`_ of the `<spec>` standard.
-    .. _`<term>`: `<url>`
-    Rest of the doc
-    rest of the doc
-  </doc>
-  <field name="velocity">
     <doc>
-        A single block of doc string.
+          Part1 of the entire doc.
+          part1 of the entire doc.
+
+              This concept is related to term `&lt;term&gt;`_ of the &lt;spec&gt; standard.
+
+          .. _&lt;term&gt;: &lt;url&gt;
+
+          Rest of the doc
+          rest of the doc
     </doc>
-  </field>
+    <field name="velocity">
+        <doc>
+              A single block of doc string.
+        </doc>
+    </field>
 </field>
 ```
 
@@ -122,9 +125,9 @@ This structure appears in Nxdl as follows:
 
 - **exists**: Options for `exists` can be recommended, required, or specified as `[min, 1, max, infty]`. Replace `1` with any unsigned integer or use `infty` to indicate no restriction on occurrence within the Nxdl schema at the same hierarchy level.
 
-- **link**: Defines links between nodes.
+- **link**: Defines [links](https://manual.nexusformat.org/nxdl_desc.html#linktype) between nodes.
 
-- **units**: Introduces NeXus-compliant `NXDL` units arguments, such as `NX_VOLTAGE`.
+- **units**: Introduces [NeXus-compliant `NXDL` units](https://manual.nexusformat.org/nxdl-types.html#nxdl-units) arguments, such as `NX_VOLTAGE`.
 
 - **dimensions**: Details the expected dimensional arrays.
 
@@ -138,4 +141,4 @@ Keep in mind that the length of all lists must match. Note that the attributes `
 
 ## Project Roadmap
 
-The NOMAD team is actively working on establishing a one-to-one mapping between NeXus definitions and the NOMAD MetaInfo (scientific data model in NOMAD). Once completed, YAML files will be annotated with additional metadata to serve dual purposes: as an instance for a schema to create a GUI representation of a NOMAD Oasis ELN schema and as a YAML to NXDL converter that ignores irrelevant information from a NeXus perspective.
+The NOMAD team is actively working on establishing a one-to-one mapping between NeXus definitions and the [NOMAD schemas](https://nomad-lab.eu/prod/v1/staging/docs/tutorial/custom.html) (scientific data model in NOMAD). Once completed, YAML files will be annotated with additional metadata to serve dual purposes: as an instance for a schema to create a GUI representation of a NOMAD Oasis ELN schema and as a YAML to NXDL converter that ignores irrelevant information from a NeXus perspective.
