@@ -52,7 +52,7 @@ Options:
 
 The tool operates by:
 
-1. Reading the user-specified NeXus instance, either in YAML or XML format.
+1. Reading the user-specified NeXus definition, either in YAML or XML format.
 2. If the input is in YAML, it creates an instantiated Nxdl schema XML tree by parsing the YAML dictionary.
 3. If the input is in XML, it creates a YAML file by parsing the XML tree.
 4. The tool then writes the resulting data structure to either a YAML or Nxdl file on disk.
