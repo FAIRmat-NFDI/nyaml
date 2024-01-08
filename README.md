@@ -104,7 +104,7 @@ This structure appears in Nxdl as follows:
           Part1 of the entire doc.
           part1 of the entire doc.
 
-              This concept is related to term `&lt;term&gt;`_ of the &lt;spec&gt; standard.
+          This concept is related to term `&lt;term&gt;`_ of the &lt;spec&gt; standard.
 
           .. _&lt;term&gt;: &lt;url&gt;
 

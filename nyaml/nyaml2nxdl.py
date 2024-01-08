@@ -269,7 +269,7 @@ def handle_each_part_doc(text):
 
     which has to be formatted as
     '''
-        This concept is related to term `<term>`_ of the <spec> standard.
+    This concept is related to term `<term>`_ of the <spec> standard.
     .. _<term>: <url>
 
 
@@ -310,7 +310,7 @@ def handle_each_part_doc(text):
             )
 
     return (
-        f"    This concept is related to term `{xref_entries.get('term', 'NO TERM')}`_ "
+        f"This concept is related to term `{xref_entries.get('term', 'NO TERM')}`_ "
         f"of the {xref_entries.get('spec', 'NO TERM')} standard.\n\n"
         f".. _{xref_entries.get('term', 'NO SPECIFICATION')}: "
         f"{xref_entries.get('url', 'NO URL')}"
@@ -610,9 +610,7 @@ def xml_handle_enumeration(dct, obj, keyword, value, verbose):
     xml_handle_comment(obj, line_number, line_loc)
     enum = ET.SubElement(obj, "enumeration")
 
-    assert (
-        value is not None
-    ), f"Line {line_loc}: enumeration must \
+    assert value is not None, f"Line {line_loc}: enumeration must \
 bear at least an argument !"
     assert (
         len(value) >= 1
@@ -1252,9 +1250,7 @@ application and base are valid categories!"
         f"at root-level! check key at root level {extra_key}"
     )
 
-    assert (
-        "NX" in name_extends and len(name_extends) > 2
-    ), "NX \
+    assert "NX" in name_extends and len(name_extends) > 2, "NX \
 keyword has an invalid pattern, or is too short!"
     # Taking care if definition has empty content
     if yml_appdef[name_extends]:
