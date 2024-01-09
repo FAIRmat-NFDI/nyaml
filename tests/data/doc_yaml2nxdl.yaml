@@ -22,9 +22,9 @@ NXarchive(NXobject):
     experiment_identifier(NX_CHAR):
       doc: 
        - |
-        "unique identifier for the experimenta
+        unique identifier for the experimenta
           lkokö
-          sddfdfd"
+          sddfdfd
        - |
         xref:
           spec: ISO 18115-1:2023
