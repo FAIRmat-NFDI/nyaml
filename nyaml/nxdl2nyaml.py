@@ -373,9 +373,9 @@ class Nxdl2yaml:
             url = matches.group(3)
             indent = indent + DEPTH_SIZE  # see example in func doc
             return (
-                f'{indent}"{xref_key}:\n{indent + DEPTH_SIZE}{spec_key}: {spec}'
+                f"{indent}{xref_key}:\n{indent + DEPTH_SIZE}{spec_key}: {spec}"
                 f"\n{indent + DEPTH_SIZE}{term_key}"
-                f': {term}\n{indent + DEPTH_SIZE}{url_key}: {url}"'
+                f": {term}\n{indent + DEPTH_SIZE}{url_key}: {url}"
             ), True
         return text, False
 
