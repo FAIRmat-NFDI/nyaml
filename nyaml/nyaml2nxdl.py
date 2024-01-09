@@ -1173,7 +1173,10 @@ application and base are valid categories!"
         line_number = f"__line__{kkey}"
         line_loc_no = yml_appdef[line_number]
         if not isinstance(vvalue, dict) and kkey in def_attributes:
-            xml_root.set(kkey, str(vvalue) or "")
+            if isinstance(vvalue, bool):
+                xml_root.set(kkey, "true" if vvalue else "false")
+            else:
+                xml_root.set(kkey, str(vvalue) or "")
             cmnt_text = xml_handle_comment(
                 xml_root, line_number, line_loc_no, is_def_cmnt=True
             )
