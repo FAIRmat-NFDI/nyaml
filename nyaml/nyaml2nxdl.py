@@ -231,7 +231,7 @@ def format_nxdl_doc(string):
         formatted_doc = "\n" + "\n".join(text_lines)
     if not formatted_doc.endswith("\n"):
         formatted_doc += "\n"
-    return formatted_doc
+    return formatted_doc.expandtabs(4)
 
 
 def check_for_mapping_char_other(text):
