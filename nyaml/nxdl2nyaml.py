@@ -373,9 +373,9 @@ class Nxdl2yaml:
             url = matches.group(3)
             indent = indent + DEPTH_SIZE  # see example in func doc
             return (
-                f'{indent}"{xref_key}:\n{indent + DEPTH_SIZE}{spec_key}: {spec}'
+                f"{indent}{xref_key}:\n{indent + DEPTH_SIZE}{spec_key}: {spec}"
                 f"\n{indent + DEPTH_SIZE}{term_key}"
-                f': {term}\n{indent + DEPTH_SIZE}{url_key}: {url}"'
+                f": {term}\n{indent + DEPTH_SIZE}{url_key}: {url}"
             ), True
         return text, False
 
@@ -430,7 +430,7 @@ class Nxdl2yaml:
                 ):  # if not starts with 'spaces and/or \n'
                     mod_doc = "\n" + mod_doc
                 # doc_str = f"{doc_str}{indent} - |\n{textwrap.indent(mod_doc, indent+'  ')}\n"
-                doc_str = f"{doc_str}{indent} - |{textwrap.indent(mod_doc, '')}\n"
+                doc_str = f"{doc_str}{indent}- |{textwrap.indent(mod_doc, '')}\n"
         else:
             doc_str = f"{indent}{tag}: |{text}\n"
 
