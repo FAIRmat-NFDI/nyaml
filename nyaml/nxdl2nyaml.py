@@ -430,7 +430,7 @@ class Nxdl2yaml:
                 ):  # if not starts with 'spaces and/or \n'
                     mod_doc = "\n" + mod_doc
                 # doc_str = f"{doc_str}{indent} - |\n{textwrap.indent(mod_doc, indent+'  ')}\n"
-                doc_str = f"{doc_str}{indent} - |{textwrap.indent(mod_doc, '')}\n"
+                doc_str = f"{doc_str}{indent}- |{textwrap.indent(mod_doc, '')}\n"
         else:
             doc_str = f"{indent}{tag}: |{text}\n"
 
