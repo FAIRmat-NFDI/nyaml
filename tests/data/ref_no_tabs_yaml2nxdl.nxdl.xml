@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
+<!--
+# NeXus - Neutron and X-ray Common Data Format
+#
+# Copyright (C) 2014-2024 NeXus International Advisory Committee (NIAC)
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# For further information, see http://www.nexusformat.org
+-->
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="base" type="group" ignoreExtraFields="true" ignoreExtraAttributes="true" name="NXtest" extends="NXobject" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+    <symbols>
+        <doc>
+             These symbols will be used below to coordinate fields with the same
+             shape.
+        </doc>
+        <symbol name="dataRank">
+            <doc>
+                 rank of the ``DATA`` field
+            </doc>
+        </symbol>
+        <symbol name="n">
+            <doc>
+                 length of the ``AXISNAME`` field
+            </doc>
+        </symbol>
+        <symbol name="nx">
+            <doc>
+                 length of the ``x`` field
+            </doc>
+        </symbol>
+        <symbol name="ny">
+            <doc>
+                 length of the ``y`` field
+            </doc>
+        </symbol>
+        <symbol name="nz">
+            <doc>
+                 length of the ``z`` field
+            </doc>
+        </symbol>
+    </symbols>
+    <doc>
+         * Each :ref:`NXdata` group will define one field as the default
+           plottable data.  The value of the ``signal`` attribute names this field.
+           Additional fields may be used to describe the dimension scales and
+           uncertainities.
+           The ``auxiliary_signals`` attribute is a list of the other fields
+           to be plotted with the ``signal`` data.
+         * The plottable data may be of arbitrary rank up to a maximum
+           of ``NX_MAXRANK=32`` (for compatibility with backend file formats).
+         * The plottable data will be named as the value of
+           the group ``signal`` attribute, such as::
+         
+             data:NXdata
+               @signal = "counts"
+               @axes = "mr"
+               @mr_indices = 0
+               counts: float[100]  --&gt; the default dependent data
+               mr: float[100]  --&gt; the default independent data
+         
+           The field named in the ``signal`` attribute **must** exist, either
+           directly as a NeXus field or defined through a link.
+    </doc>
+    <field name="title">
+        <doc>
+             Title for the plot.
+        </doc>
+    </field>
+</definition>
