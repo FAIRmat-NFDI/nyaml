@@ -775,14 +775,14 @@ class Nxdl2yaml:
         if check_doc:
             indent = depth * DEPTH_SIZE
             tag = remove_namespace_from_tag(node.tag)
-            file_out.write(f"{indent}{tag}: \n")
+            file_out.write(f"{indent}{tag}:\n")
             for child in node_children:
                 tag = remove_namespace_from_tag(child.tag)
                 itm_depth = depth + 1
                 if tag == "item":
                     indent = itm_depth * DEPTH_SIZE
                     value = child.attrib["value"]
-                    file_out.write(f"{indent}{value}: \n")
+                    file_out.write(f"{indent}{value}:\n")
                     child_children = list(child)
                     if child_children:
                         for item_doc in child_children:
