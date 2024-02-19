@@ -28,11 +28,14 @@ NXmpes:
     exists: recommended
     # 9: Title comment
     title:
-    # 10: Group comment
+    # 10: Field comment
     start_time(NX_DATE_TIME):
       doc: "Datetime of the start of the measurement."
+      # 11: dim comments:
+      #  dim comments:
+      dim: (1, 2, 6)
     definition:
-      # 11: version_attribute: comments hrere
+      # 12: version_attribute: comments hrere
       \@version:
       enumeration: ["NXmpes"]
     # 12: Scond comment for Comment NXdata(data)
@@ -43,6 +46,7 @@ NXmpes:
     # 14: Third comment for Comment NXdata(data)
     (NXdata)data:
      # 15: comment (energy(link)):
+     # A comment for energy(link)
       energy(link):
         target: /entry/instrument/fluorescence/energy
      # 16: comment (data(link)):
@@ -59,10 +63,10 @@ NXmpes:
           # 19: dim comments:
           dim: [[1, 2]]
 
-  # 20: File endgin comments
-  # 20: File ending comments
-  # 20: File ending comments
+  # 22: File endgin comments
+  # 22: File ending comments
+  # 22: File ending comments
 
-  # 21: File endgin comments
-  # 21: File ending comments
-  # 21: File ending comments
+  # 23: File endgin comments
+  # 23: File ending comments
+  # 23: File ending comments

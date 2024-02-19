@@ -30,7 +30,7 @@
             <doc>
                  Test
             </doc>
-            <dimensions rank="1">
+            <dimensions>
                 <dim index="1" value="2"/>
             </dimensions>
         </field>
@@ -40,6 +40,22 @@
             </doc>
             <dimensions rank="1">
                 <dim index="1" value="2"/>
+            </dimensions>
+        </field>
+        <field name="my_dim_with_numpy_3d" type="NX_NUMBER">
+            <dimensions>
+                <dim index="1" value="2"/>
+                <dim index="2" value="4"/>
+                <dim index="3" value="5"/>
+            </dimensions>
+        </field>
+        <field name="my_dim_with_doc_and_dim_attr" type="NX_NUMBER">
+            <dimensions>
+                <doc>
+                     Test with doc and dim attribute
+                </doc>
+                <dim index="1" value="2" ref="s"/>
+                <dim index="3" value="4" ref="m"/>
             </dimensions>
         </field>
     </group>
