@@ -52,13 +52,13 @@ n2n = "nyaml.cli:launch_tool"
 [tool.setuptools_scm]
 
 [tool.ruff]
-include = ["pynxtools/*.py", "tests/*.py"]
-select = [
+include = ["nyaml/*.py", "tests/*.py"]
+lint.select = [
     "E", # pycodestyle
     "W", # pycodestyle
     "PL", # pylint
 ]
-ignore = [
+lint.ignore = [
     "E501", # Line too long ({width} > {limit} characters)
     "E701", # Multiple statements on one line (colon)
     "E731", # Do not assign a lambda expression, use a def
@@ -73,8 +73,7 @@ ignore = [
     "PLR1714", # consider-using-in
     "PLR5501", # else-if-used
 ]
-fixable = ["ALL"]
-exclude = ["pynxtools/definitions/*"]
+lint.fixable = ["ALL"]
 
 [tool.mypy]
 strict = false
@@ -82,4 +81,3 @@ ignore_missing_imports = true
 follow_imports = "silent"
 no_strict_optional = true
 disable_error_code = "import, annotation-unchecked"
-exclude = ["pynxtools/definitions/*"]
