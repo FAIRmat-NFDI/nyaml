@@ -52,7 +52,7 @@ n2n = "nyaml.cli:launch_tool"
 [tool.setuptools_scm]
 
 [tool.ruff]
-include = ["pynxtools/*.py", "tests/*.py"]
+include = ["nyaml/*.py", "tests/*.py"]
 lint.select = [
     "E", # pycodestyle
     "W", # pycodestyle
@@ -74,7 +74,6 @@ lint.ignore = [
     "PLR5501", # else-if-used
 ]
 lint.fixable = ["ALL"]
-exclude = ["pynxtools/definitions/*"]
 
 [tool.mypy]
 strict = false
@@ -82,4 +81,3 @@ ignore_missing_imports = true
 follow_imports = "silent"
 no_strict_optional = true
 disable_error_code = "import, annotation-unchecked"
-exclude = ["pynxtools/definitions/*"]
