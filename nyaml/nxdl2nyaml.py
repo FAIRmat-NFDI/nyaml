@@ -667,7 +667,9 @@ class Nxdl2yaml:
         possible_dimemsion_attrs = ["rank"]
 
         def handle_dim_with_value_and_index(depth, node, file_out, dimension_doc):
-            """Handle the dim if it has only value and index attributes"""
+            """
+            Handle <dimenstions> element if <dim> has only value and index attributes, and
+            <diemensions> element has only one attribute 'rank', but has no doc."""
             indent = depth * DEPTH_SIZE
             dim_index_value = ""
             dim_cmnt_nodes = []
@@ -787,8 +789,8 @@ class Nxdl2yaml:
                 else:
                     raise ValueError(
                         f"Dimension has an attribute {attr} that is not valid."
-                        f"Current the allowd atributes are {possible_dimemsion_attrs}."
-                        f" Please have a look"
+                        f"Currently allowed attributes are {possible_dimemsion_attrs}."
+                        f"Please have a look"
                     )
             # taking care of dimension doc
             dimension_doc = ""

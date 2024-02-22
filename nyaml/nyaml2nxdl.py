@@ -523,9 +523,14 @@ def xml_handle_dim_from_dimension_dict(
         if attr == "dim":
             # dim consists of [index, value] list
             llist_ind_value = vvalue
-            assert isinstance(
-                llist_ind_value, list
-            ), f"Line {value[line_number]}: dim argument not a list !"
+            if not isinstance(llist_ind_value, list):
+                if llist_ind_value.startswith("(") and llist_ind_value.endswith(")"):
+                    llist_ind_value = llist_ind_value[1:-1].split(",")
+                    llist_ind_value = tuple([x.strip() for x in llist_ind_value])
+                if not isinstance(llist_ind_value, tuple):
+                    raise TypeError(
+                        f"Around line {dct[header_line_number]}: dim argument not a list or tuple !"
+                    )
             xml_handle_comment(dims_obj, line_number, line_loc)
             if isinstance(rank, int) and rank > 0:
                 assert rank == len(llist_ind_value), (
@@ -535,14 +540,20 @@ def xml_handle_dim_from_dimension_dict(
                     f"{len(llist_ind_value)}."
                 )
             # Taking care of ind and value that comes as list of list
-            for dim_ind_val in llist_ind_value:
+            for ind, dim_ind_val in enumerate(llist_ind_value):
                 dim = ET.SubElement(dims_obj, "dim")
 
-                # Taking care of multidimensions or rank
-                if len(dim_ind_val) >= 1 and dim_ind_val[0]:
+                if (
+                    isinstance(dim_ind_val, list)
+                    and len(dim_ind_val) == 2
+                    and dim_ind_val[1]
+                ):
                     dim.set("index", str(dim_ind_val[0]))
-                if len(dim_ind_val) == 2 and dim_ind_val[1]:
                     dim.set("value", str(dim_ind_val[1]))
+                else:
+                    dim.set("index", str(ind + 1))
+                    dim.set("value", str(dim_ind_val))
+
                 dim_list.append(dim)
             rm_key_list.append(attr)
             rm_key_list.append(line_number)
@@ -986,7 +997,6 @@ def xml_handle_comment(
             obj.remove(xml_ele)
             for string in cmnt_text:
                 # Format comment string to preserve text nxdl to yaml and vice versa
-                string = format_nxdl_doc(string)
                 obj.append(ET.Comment(string))
             obj.append(xml_ele)
         elif not is_def_cmnt and xml_ele is None:
