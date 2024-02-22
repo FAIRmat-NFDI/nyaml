@@ -664,12 +664,12 @@ class Nxdl2yaml:
           and attributes of dim has been handled inside this function here.
         """
         possible_dim_attrs = ["ref", "required", "incr", "refindex"]
-        possible_dimemsion_attrs = ["rank"]
+        possible_dimension_attrs = ["rank"]
 
         def handle_dim_with_value_and_index(depth, node, file_out, dimension_doc):
             """
-            Handle <dimenstions> element if <dim> has only value and index attributes, and
-            <diemensions> element has only one attribute 'rank', but has no doc."""
+            Handle <dimensions> element if <dim> has only value and index attributes, and
+            <diemensions> element has only one attribute 'rank', but no doc."""
             indent = depth * DEPTH_SIZE
             dim_index_value = ""
             dim_cmnt_nodes = []
@@ -704,26 +704,21 @@ class Nxdl2yaml:
                 )
                 file_out.write(f"{indent}dim: {value}\n")
             else:
-                raise ValueError(
-                    "Dimension has no 'value' and 'index' attributes. "
-                    "One of them is required."
-                )
+                raise ValueError("The dim element must have at least a 'value'.")
 
         def handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs):
-            """Handle the dim if it has other attributes along with value and index"""
+            """Handle the dim if it has other attributes along with 'value' and 'index'"""
             dim_index_value = []
             dim_other_parts = {}
             dim_cmnt_nodes = []
-            # Taking care of dim and doc children of dimension
+            # Taking care of dim and doc children of dimensions
             for child in list(node):
                 tag = remove_namespace_from_tag(child.tag)
                 child_attrs = child.attrib
                 # taking care of index and value attributes
                 if tag == "dim":
                     # taking care of index and value in format [[index, value]]
-                    # index = child_attrs.pop("index", "")
                     value = child_attrs.pop("value", "")
-                    # dim_index_value = f"{dim_index_value}[{index}, {value}], "
                     dim_index_value.append(value)
                     # Taking care of doc comes as child of dim
                     for cchild in list(child):
@@ -735,7 +730,7 @@ class Nxdl2yaml:
                             dim_other_parts[ttag].append(text.strip())
                             child.remove(cchild)
                             continue
-                    # taking care of other attributes except index and value
+                    # Taking care of other attributes except index and value
                     for attr, value in child_attrs.items():
                         if attr in possible_dim_attrs:
                             if attr not in dim_other_parts:
@@ -761,7 +756,7 @@ class Nxdl2yaml:
             )
             file_out.write(f"{indent}dim: ({value})\n")
 
-            # Write the attributes, except index and value, and doc of dim as child of dim_parameter.
+            # Write the attributes, except index and value, and doc of dim as child of dim_parameters.
             # But the doc or attributes for each dim come inside list according to the order of dim.
             if dim_other_parts:
                 indent = (depth + 1) * DEPTH_SIZE
@@ -787,16 +782,16 @@ class Nxdl2yaml:
             tag = remove_namespace_from_tag(node.tag)
             file_out.write(f"{indent}{tag}:\n")
             for attr, value in node.attrib.items():
-                if attr in possible_dimemsion_attrs and not isinstance(value, dict):
+                if attr in possible_dimension_attrs and not isinstance(value, dict):
                     indent = (depth + 1) * DEPTH_SIZE
                     file_out.write(f"{indent}{attr}: {value}\n")
                 else:
                     raise ValueError(
                         f"Dimension has an attribute {attr} that is not valid."
-                        f"Currently allowed attributes are {possible_dimemsion_attrs}."
-                        f"Please have a look"
+                        f"Currently allowed attributes are {possible_dimension_attrs}."
+                        f"Please have a close look"
                     )
-            # taking care of dimension doc
+            # Taking care of dimension doc
             dimension_doc = ""
             for child in list(node):
                 tag = remove_namespace_from_tag(child.tag)
@@ -887,7 +882,7 @@ class Nxdl2yaml:
         # Maintain order: name and type in form name(type) or (type)name that come first
         name = node_attr.pop(nm_attr, "")
         if not name:
-            raise ValueError("Attribute must have an name key.")
+            raise ValueError("Attribute must have a name key.")
 
         indent = depth * DEPTH_SIZE
         escapesymbol = r"\@"
