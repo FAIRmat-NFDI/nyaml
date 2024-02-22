@@ -498,7 +498,7 @@ def test_nyaml2nxdl_dim_keyword(tmp_path):
 
 def test_nxdl2yaml_dimensions(tmp_path):
     """
-    Test the proper conversion of nxdl2yaml with dimension and dim keyword.
+    Test the proper conversion of nxdl2yaml with dimension and dim keywords.
     """
 
     pwd = Path(__file__).parent
@@ -513,10 +513,9 @@ def test_nxdl2yaml_dimensions(tmp_path):
 
     assert result.exit_code == 0, "Error in converter execution."
     # read yaml files
-    with (
-        open(ref_file, mode="r", encoding="utf-8") as ref_yaml,
-        open(parsed_file, mode="r", encoding="utf-8") as parsed_yaml,
-    ):
+    with open(ref_file, mode="r", encoding="utf-8") as ref_yaml, open(
+        parsed_file, mode="r", encoding="utf-8"
+    ) as parsed_yaml:
         ref_yaml_dict = LineLoader(ref_yaml).get_single_data()
         parsed_yaml_dict = LineLoader(parsed_yaml).get_single_data()
 
