@@ -711,7 +711,7 @@ class Nxdl2yaml:
 
         def handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs):
             """Handle the dim if it has other attributes along with value and index"""
-            dim_index_value = ""
+            dim_index_value = []
             dim_other_parts = {}
             dim_cmnt_nodes = []
             # Taking care of dim and doc children of dimension
@@ -721,10 +721,10 @@ class Nxdl2yaml:
                 # taking care of index and value attributes
                 if tag == "dim":
                     # taking care of index and value in format [[index, value]]
-                    index = child_attrs.pop("index", "")
+                    # index = child_attrs.pop("index", "")
                     value = child_attrs.pop("value", "")
-                    dim_index_value = f"{dim_index_value}[{index}, {value}], "
-
+                    # dim_index_value = f"{dim_index_value}[{index}, {value}], "
+                    dim_index_value.append(value)
                     # Taking care of doc comes as child of dim
                     for cchild in list(child):
                         ttag = cchild.tag.split("}", 1)[1]
@@ -754,8 +754,12 @@ class Nxdl2yaml:
             # index and value attributes of dim elements
             indent = (depth + 1) * DEPTH_SIZE
             # Numpy style for dim
-            value = dim_index_value[:-2] or ""
-            file_out.write(f"{indent}dim: [{value}]\n")
+            value = (
+                ", ".join(dim_index_value)
+                if len(dim_index_value) > 1
+                else f"{dim_index_value[0]},"
+            )
+            file_out.write(f"{indent}dim: ({value})\n")
 
             # Write the attributes, except index and value, and doc of dim as child of dim_parameter.
             # But the doc or attributes for each dim come inside list according to the order of dim.

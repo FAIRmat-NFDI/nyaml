@@ -93,6 +93,17 @@ def compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
     assert test_matches == ref_matches
 
 
+def compare_yaml_content(yaml_dict1, yaml_dict2, test_key_list):
+    for k_val1, k_val2 in zip(yaml_dict1.items(), yaml_dict2.items()):
+        key1, val1 = k_val1
+        key2, val2 = k_val2
+        for ref_key in test_key_list:
+            if key1 == ref_key and key2 == ref_key:
+                assert val1 == val2, f"{ref_key} content is not the same."
+            elif isinstance(val1, dict) and isinstance(val2, dict):
+                compare_yaml_content(val1, val2, test_key_list)
+
+
 def test_links():
     """
     Check the correct parsing of links
@@ -126,7 +137,7 @@ def test_docs():
 
 def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     """
-    This test for two reason:
+    This test for two reasons:
         1. In test-1 an nxdl file with all kind of doc formats are translated
     to yaml to check if they are correct.
         2. In test-2: Check the nxdl that comes at the end of yaml file as comment.
@@ -462,20 +473,11 @@ def test_nxdl2yaml_doc():
         yaml_dict1 = LineLoader(yaml1).get_single_data()
         yaml_dict2 = LineLoader(yaml2).get_single_data()
 
-    def compare_yaml_doc(yaml_dict1, yaml_dict2):
-        for k_val1, k_val2 in zip(yaml_dict1.items(), yaml_dict2.items()):
-            key1, val1 = k_val1
-            key2, val2 = k_val2
-            if key1 == "doc" and key2 == "doc":
-                assert val1 == val2, "Doc texts are not the same."
-            elif isinstance(val1, dict) and isinstance(val2, dict):
-                compare_yaml_doc(val1, val2)
-
-    compare_yaml_doc(yaml_dict1, yaml_dict2)
+    compare_yaml_content(yaml_dict1, yaml_dict2, ["doc"])
     Path.unlink(parsed_yaml_file)
 
 
-def test_nyaml_dim_keyword(tmp_path):
+def test_nyaml2nxdl_dim_keyword(tmp_path):
     """
     The dim keyword is correctly translated into nxdl with rank and dim.
     """
@@ -492,6 +494,33 @@ def test_nyaml_dim_keyword(tmp_path):
 
     assert result.exit_code == 0, "Error in converter execution."
     assert ref_file.read_text() == parsed_file.read_text()
+
+
+def test_nxdl2yaml_dimensions(tmp_path):
+    """
+    Test the proper conversion of nxdl2yaml with dimension and dim keyword.
+    """
+
+    pwd = Path(__file__).parent
+    input_file = pwd / "data/dimensions.nxdl.xml"
+    ref_file = pwd / "data/ref_dimensions.yaml"
+    parsed_file = tmp_path / "dimension_parsed.yaml"
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        ["--do-not-store-nxdl", str(input_file), "--output-file", str(parsed_file)],
+    )
+
+    assert result.exit_code == 0, "Error in converter execution."
+    # read yaml files
+    with (
+        open(ref_file, mode="r", encoding="utf-8") as ref_yaml,
+        open(parsed_file, mode="r", encoding="utf-8") as parsed_yaml,
+    ):
+        ref_yaml_dict = LineLoader(ref_yaml).get_single_data()
+        parsed_yaml_dict = LineLoader(parsed_yaml).get_single_data()
+
+    compare_yaml_content(ref_yaml_dict, parsed_yaml_dict, ["dimensions", "dim"])
 
 
 def test_yaml2nxdl_no_tabs(tmp_path):
