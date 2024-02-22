@@ -38,7 +38,7 @@
             <doc>
                  Testarray with dimensions spelled out
             </doc>
-            <dimensions rank="1">
+            <dimensions>
                 <dim index="1" value="10"/>
                 <dim index="2" value="30"/>
             </dimensions>
