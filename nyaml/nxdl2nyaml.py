@@ -664,94 +664,147 @@ class Nxdl2yaml:
           and attributes of dim has been handled inside this function here.
         """
         possible_dim_attrs = ["ref", "required", "incr", "refindex"]
-        possible_dimemsion_attrs = ["rank"]
+        possible_dimension_attrs = ["rank"]
 
-        # taking care of Dimension tag
-        indent = depth * DEPTH_SIZE
-        tag = remove_namespace_from_tag(node.tag)
-        file_out.write(f"{indent}{tag}:\n")
-        for attr, value in node.attrib.items():
-            if attr in possible_dimemsion_attrs and not isinstance(value, dict):
-                indent = (depth + 1) * DEPTH_SIZE
-                file_out.write(f"{indent}{attr}: {value}\n")
-            else:
-                raise ValueError(
-                    f"Dimension has an attribute {attr} that is not valid."
-                    f"Current the allowd atributes are {possible_dimemsion_attrs}."
-                    f" Please have a look"
+        def handle_dim_with_value_and_index(depth, node, file_out, dimension_doc):
+            """
+            Handle <dimensions> element if <dim> has only value and index attributes, and
+            <diemensions> element has only one attribute 'rank', but no doc."""
+            indent = depth * DEPTH_SIZE
+            dim_index_value = ""
+            dim_cmnt_nodes = []
+            for child in list(node):
+                tag = remove_namespace_from_tag(child.tag)
+                child_attrs = child.attrib
+                # taking care of index and value attributes
+                if tag == "dim":
+                    # If dim has only one attr 'value' use numpy style
+                    if child_attrs.get("value", "") and not dimension_doc:
+                        dim_index_value = (
+                            f"{dim_index_value[:-1]} {child_attrs['value']},)"
+                            if dim_index_value
+                            else f"({child_attrs['value']},)"
+                        )
+                        node.remove(child)
+                elif tag == CMNT_TAG and self.include_comment:
+                    # Store and remove node so that comment nodes from dim node so
+                    # that it does not call in xmlparser function
+                    dim_cmnt_nodes.append(child)
+                    node.remove(child)
+            # All 'dim' element comments on top of 'dim' yaml key
+            if dim_cmnt_nodes:
+                for ch_nd in dim_cmnt_nodes:
+                    self.handle_comment(depth, ch_nd, file_out)
+
+            if dim_index_value:
+                value = (
+                    dim_index_value[:-2] + ")"
+                    if len(dim_index_value.split(",")) > 2
+                    else dim_index_value
                 )
-        # taking care of dimension doc
-        for child in list(node):
-            tag = remove_namespace_from_tag(child.tag)
-            if tag == "doc":
-                text = self.handle_not_root_level_doc(depth + 1, child.text)
-                file_out.write(text)
-                node.remove(child)
+                file_out.write(f"{indent}dim: {value}\n")
+            else:
+                raise ValueError("The dim element must have at least a 'value'.")
 
-        dim_index_value = ""
-        dim_other_parts = {}
-        dim_cmnt_node = []
-        # taking care of dim and doc children of dimension
-        for child in list(node):
-            tag = remove_namespace_from_tag(child.tag)
-            child_attrs = child.attrib
-            # taking care of index and value attributes
-            if tag == "dim":
-                # taking care of index and value in format [[index, value]]
-                index = child_attrs.pop("index", "")
-                value = child_attrs.pop("value", "")
-                dim_index_value = f"{dim_index_value}[{index}, {value}], "
+        def handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs):
+            """Handle the dim if it has other attributes along with 'value' and 'index'"""
+            dim_index_value = []
+            dim_other_parts = {}
+            dim_cmnt_nodes = []
+            # Taking care of dim and doc children of dimensions
+            for child in list(node):
+                tag = remove_namespace_from_tag(child.tag)
+                child_attrs = child.attrib
+                # taking care of index and value attributes
+                if tag == "dim":
+                    # taking care of index and value in format [[index, value]]
+                    value = child_attrs.pop("value", "")
+                    dim_index_value.append(value)
+                    # Taking care of doc comes as child of dim
+                    for cchild in list(child):
+                        ttag = cchild.tag.split("}", 1)[1]
+                        if ttag == ("doc"):
+                            if ttag not in dim_other_parts:
+                                dim_other_parts[ttag] = []
+                            text = cchild.text
+                            dim_other_parts[ttag].append(text.strip())
+                            child.remove(cchild)
+                            continue
+                    # Taking care of other attributes except index and value
+                    for attr, value in child_attrs.items():
+                        if attr in possible_dim_attrs:
+                            if attr not in dim_other_parts:
+                                dim_other_parts[attr] = []
+                            dim_other_parts[attr].append(value)
+                if tag == CMNT_TAG and self.include_comment:
+                    # Store and remove node so that comment nodes from dim node so
+                    # that it does not call in xmlparser function
+                    dim_cmnt_nodes.append(child)
+                    node.remove(child)
 
-                # Taking care of doc comes as child of dim
-                for cchild in list(child):
-                    ttag = cchild.tag.split("}", 1)[1]
-                    if ttag == ("doc"):
-                        if ttag not in dim_other_parts:
-                            dim_other_parts[ttag] = []
-                        text = cchild.text
-                        dim_other_parts[ttag].append(text.strip())
-                        child.remove(cchild)
-                        continue
-                # taking care of other attributes except index and value
-                for attr, value in child_attrs.items():
-                    if attr in possible_dim_attrs:
-                        if attr not in dim_other_parts:
-                            dim_other_parts[attr] = []
-                        dim_other_parts[attr].append(value)
-            if tag == CMNT_TAG and self.include_comment:
-                # Store and remove node so that comment nodes from dim node so
-                # that it does not call in xmlparser function
-                dim_cmnt_node.append(child)
-                node.remove(child)
-
-        # All 'dim' element comments on top of 'dim' yaml key
-        if dim_cmnt_node:
-            for ch_nd in dim_cmnt_node:
-                self.handle_comment(depth + 1, ch_nd, file_out)
-        # index and value attributes of dim elements
-        indent = (depth + 1) * DEPTH_SIZE
-        value = dim_index_value[:-2] or ""
-        file_out.write(f"{indent}dim: [{value}]\n")
-
-        # Write the attributes, except index and value, and doc of dim as child of dim_parameter.
-        # But the doc or attributes for each dim come inside list according to the order of dim.
-        if dim_other_parts:
+            # All 'dim' element comments on top of 'dim' yaml key
+            if dim_cmnt_nodes:
+                for ch_nd in dim_cmnt_nodes:
+                    self.handle_comment(depth + 1, ch_nd, file_out)
+            # index and value attributes of dim elements
             indent = (depth + 1) * DEPTH_SIZE
-            file_out.write(f"{indent}dim_parameters:\n")
-            # depth = depth + 2 dim_parameter has child such as doc of dim
-            indent = (depth + 2) * DEPTH_SIZE
-            for key, value in dim_other_parts.items():
-                if key == "doc":
-                    value = self.handle_not_root_level_doc(
-                        depth + 2, str(value), key, file_out
-                    )
+            # Numpy style for dim
+            value = (
+                ", ".join(dim_index_value)
+                if len(dim_index_value) > 1
+                else f"{dim_index_value[0]},"
+            )
+            file_out.write(f"{indent}dim: ({value})\n")
+
+            # Write the attributes, except index and value, and doc of dim as child of dim_parameters.
+            # But the doc or attributes for each dim come inside list according to the order of dim.
+            if dim_other_parts:
+                indent = (depth + 1) * DEPTH_SIZE
+                file_out.write(f"{indent}dim_parameters:\n")
+                # depth = depth + 2 dim_parameter has child such as doc of dim
+                indent = (depth + 2) * DEPTH_SIZE
+                for key, value in dim_other_parts.items():
+                    if key == "doc":
+                        value = self.handle_not_root_level_doc(
+                            depth + 2, str(value), key, file_out
+                        )
+                    else:
+                        # Increase depth size inside handle_map...() for writing text with one
+                        # more indentation.
+                        file_out.write(
+                            f"{indent}{key}: "
+                            f"{handle_mapping_char(value, depth + 3, False)}\n"
+                        )
+
+        # Dimension has other attributes including index and value
+        if remove_namespace_from_tag(node[0].tag) == "doc" or len(node.attrib) > 0:
+            indent = depth * DEPTH_SIZE
+            tag = remove_namespace_from_tag(node.tag)
+            file_out.write(f"{indent}{tag}:\n")
+            for attr, value in node.attrib.items():
+                if attr in possible_dimension_attrs and not isinstance(value, dict):
+                    indent = (depth + 1) * DEPTH_SIZE
+                    file_out.write(f"{indent}{attr}: {value}\n")
                 else:
-                    # Increase depth size inside handle_map...() for writing text with one
-                    # more indentation.
-                    file_out.write(
-                        f"{indent}{key}: "
-                        f"{handle_mapping_char(value, depth + 3, False)}\n"
+                    raise ValueError(
+                        f"Dimension has an attribute {attr} that is not valid."
+                        f"Currently allowed attributes are {possible_dimension_attrs}."
+                        f"Please have a close look"
                     )
+            # Taking care of dimension doc
+            dimension_doc = ""
+            for child in list(node):
+                tag = remove_namespace_from_tag(child.tag)
+                if tag == "doc":
+                    dimension_doc = self.handle_not_root_level_doc(
+                        depth + 1, child.text
+                    )
+                    file_out.write(dimension_doc)
+                    node.remove(child)
+            handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs)
+        # Dimension has only index and value
+        else:
+            handle_dim_with_value_and_index(depth, node, file_out, dimension_doc="")
 
     def handle_enumeration(self, depth, node, file_out):
         """
@@ -829,7 +882,7 @@ class Nxdl2yaml:
         # Maintain order: name and type in form name(type) or (type)name that come first
         name = node_attr.pop(nm_attr, "")
         if not name:
-            raise ValueError("Attribute must have an name key.")
+            raise ValueError("Attribute must have a name key.")
 
         indent = depth * DEPTH_SIZE
         escapesymbol = r"\@"

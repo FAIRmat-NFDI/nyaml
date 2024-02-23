@@ -25,7 +25,7 @@ import pathlib
 import re
 import textwrap
 import warnings
-from typing import Union
+from typing import Optional, Union
 from urllib.parse import unquote
 
 import lxml.etree as ET
@@ -458,7 +458,7 @@ def xml_handle_dimensions(dct, obj, keyword, value: dict):
         recursive_build(dims, value, verbose=None)
 
 
-def xml_handle_dim(obj, value):
+def xml_handle_dim(dct, obj, keyword, value):
     """
     This function creates a 'dimensions' element instance, and appends it to an existing element.
     Allows for handling numpy tensor notation of dimensions. That is,
@@ -468,6 +468,9 @@ def xml_handle_dim(obj, value):
     can be replaced by
     dim: (3,)
     """
+    line_number = f"__line__{keyword}"
+    line_loc = dct[line_number]
+    dims: Optional[ET.Element] = None
     if isinstance(value, str):
         if value[0] == "(" and value[-1] == ")":
             valid_dims = []
@@ -476,13 +479,15 @@ def xml_handle_dim(obj, value):
                     valid_dims.append(entry)
             if len(valid_dims) > 0:
                 dims = ET.SubElement(obj, "dimensions")
-                dims.set("rank", str(len(valid_dims)))
+                # dims.set("rank", str(len(valid_dims)))
                 dim_idx = 1
                 for dim_name in valid_dims:
                     dim = ET.SubElement(dims, "dim")
                     dim.set("index", str(dim_idx))
                     dim.set("value", str(dim_name))
                     dim_idx += 1
+    # Comments for all <dim> elements will be on top of the <dimensions> element
+    xml_handle_comment(obj, line_number, line_loc, dims)
 
 
 # pylint: disable=too-many-locals, too-many-arguments, too-many-statements
@@ -518,9 +523,14 @@ def xml_handle_dim_from_dimension_dict(
         if attr == "dim":
             # dim consists of [index, value] list
             llist_ind_value = vvalue
-            assert isinstance(
-                llist_ind_value, list
-            ), f"Line {value[line_number]}: dim argument not a list !"
+            if not isinstance(llist_ind_value, list):
+                if llist_ind_value.startswith("(") and llist_ind_value.endswith(")"):
+                    llist_ind_value = llist_ind_value[1:-1].split(",")
+                    llist_ind_value = tuple([x.strip() for x in llist_ind_value])
+                if not isinstance(llist_ind_value, tuple):
+                    raise TypeError(
+                        f"Around line {dct[header_line_number]}: dim argument not a list or tuple !"
+                    )
             xml_handle_comment(dims_obj, line_number, line_loc)
             if isinstance(rank, int) and rank > 0:
                 assert rank == len(llist_ind_value), (
@@ -530,14 +540,20 @@ def xml_handle_dim_from_dimension_dict(
                     f"{len(llist_ind_value)}."
                 )
             # Taking care of ind and value that comes as list of list
-            for dim_ind_val in llist_ind_value:
+            for ind, dim_ind_val in enumerate(llist_ind_value):
                 dim = ET.SubElement(dims_obj, "dim")
 
-                # Taking care of multidimensions or rank
-                if len(dim_ind_val) >= 1 and dim_ind_val[0]:
+                if (
+                    isinstance(dim_ind_val, list)
+                    and len(dim_ind_val) == 2
+                    and dim_ind_val[1]
+                ):
                     dim.set("index", str(dim_ind_val[0]))
-                if len(dim_ind_val) == 2 and dim_ind_val[1]:
                     dim.set("value", str(dim_ind_val[1]))
+                else:
+                    dim.set("index", str(ind + 1))
+                    dim.set("value", str(dim_ind_val))
+
                 dim_list.append(dim)
             rm_key_list.append(attr)
             rm_key_list.append(line_number)
@@ -931,8 +947,11 @@ def xml_handle_fields_or_group(
             elif ele_type == "field" and attr == "unit":
                 xml_handle_units(elemt_obj, vval)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
+                rm_key_list.append(attr)
             elif ele_type == "field" and attr == "dim":
-                xml_handle_dim(obj, value)
+                # Comment handeled in xml_handle_dim
+                xml_handle_dim(dct=value, obj=elemt_obj, keyword=attr, value=vval)
+                rm_key_list.append(attr)
             elif attr in allowed_attr and not isinstance(vval, dict) and vval:
                 validate_field_attribute_and_value(attr, vval, allowed_attr, value)
                 elemt_obj.set(attr, check_for_mapping_char_other(vval))
@@ -978,7 +997,6 @@ def xml_handle_comment(
             obj.remove(xml_ele)
             for string in cmnt_text:
                 # Format comment string to preserve text nxdl to yaml and vice versa
-                string = format_nxdl_doc(string)
                 obj.append(ET.Comment(string))
             obj.append(xml_ele)
         elif not is_def_cmnt and xml_ele is None:
@@ -1044,7 +1062,8 @@ def recursive_build(obj, dct, verbose):
         elif keyword == "dimensions":
             xml_handle_dimensions(dct, obj, keyword, value)
         elif keyword == "dim":
-            xml_handle_dim(obj, value)
+            xml_handle_dim(dct, obj, keyword, value)
+        #   xml_handle_dim(obj, value)
         elif keyword == "exists":
             xml_handle_exists(dct, obj, keyword, value)
         # Handles fileds e.g. AXISNAME
