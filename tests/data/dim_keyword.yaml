@@ -10,14 +10,22 @@ NXarchive(NXobject):
     my_dim_array2(NX_NUMBER):
       doc: Testarray with dimensions spelled out
       dimensions:
-        rank: 1
+        rank: 2
         dim: (10, 30)
     my_dim_with_numpy_3d(NX_NUMBER):
       dim: (2, 4, 5)
-    my_dim_with_doc_and_dim_attr(NX_NUMBER):
+    my_dim_with_doc_rank_and_dim_attr(NX_NUMBER):
       dimensions:
         doc: |
           Test with doc and dim attribute
+        rank: 2
         dim: [[1, 2], [3, 4]]
+        dim_parameters:
+          ref: ['s', 'm']
+    my_dim_with_doc_and_short_dim_attr(NX_NUMBER):
+      dimensions:
+        doc: |
+          Test with doc and dim attribute
+        dim: (2, 4)
         dim_parameters:
           ref: ['s', 'm']

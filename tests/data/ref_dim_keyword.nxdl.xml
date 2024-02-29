@@ -38,7 +38,7 @@
             <doc>
                  Testarray with dimensions spelled out
             </doc>
-            <dimensions rank="1">
+            <dimensions rank="2">
                 <dim index="1" value="10"/>
                 <dim index="2" value="30"/>
             </dimensions>
@@ -50,13 +50,22 @@
                 <dim index="3" value="5"/>
             </dimensions>
         </field>
-        <field name="my_dim_with_doc_and_dim_attr" type="NX_NUMBER">
-            <dimensions>
+        <field name="my_dim_with_doc_rank_and_dim_attr" type="NX_NUMBER">
+            <dimensions rank="2">
                 <doc>
                      Test with doc and dim attribute
                 </doc>
                 <dim index="1" value="2" ref="s"/>
                 <dim index="3" value="4" ref="m"/>
+            </dimensions>
+        </field>
+        <field name="my_dim_with_doc_and_short_dim_attr" type="NX_NUMBER">
+            <dimensions>
+                <doc>
+                     Test with doc and dim attribute
+                </doc>
+                <dim index="1" value="2" ref="s"/>
+                <dim index="2" value="4" ref="m"/>
             </dimensions>
         </field>
     </group>
