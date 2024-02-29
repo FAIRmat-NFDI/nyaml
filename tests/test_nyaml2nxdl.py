@@ -151,7 +151,7 @@ def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
 
     result = filecmp.cmp(ref_yml_file, test_yml_file, shallow=False)
     assert result, "Ref YML and parsed YML\
-has not the same structure!!"
+don't have the same structure!!"
     os.remove(test_yml_file)
     sys.stdout.write("Test on xml -> yml doc formatting okay.\n")
 
@@ -520,6 +520,29 @@ def test_nxdl2nyaml_dimensions(tmp_path):
         parsed_yaml_dict = LineLoader(parsed_yaml).get_single_data()
 
     compare_yaml_content(ref_yaml_dict, parsed_yaml_dict, ["dimensions", "dim"])
+
+
+def test_nxdl2yaml_dimensions_with_wrong_attrib():
+    """
+    Test that an ndxdl node with dimensions and a wrong attritues does not convert
+    properly.
+    """
+
+    pwd = Path(__file__).parent
+    input_file = pwd / "data/dimensions_with_wrong_attribs.nxdl.xml"
+    parsed_file = pwd / "data/dimensions_with_wrong_attribs_parsed.yaml"
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        ["--do-not-store-nxdl", str(input_file)],
+    )
+
+    assert isinstance(result.exception, ValueError)
+    assert (
+        "Dimension has an attribute wrong_attrib that is not valid. Currently allowed attributes are ['rank']. Please have a close look"
+        in str(result.exception)
+    )
+    os.remove(parsed_file)
 
 
 def test_yaml2nxdl_no_tabs(tmp_path):

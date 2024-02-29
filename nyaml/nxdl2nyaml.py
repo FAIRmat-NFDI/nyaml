@@ -780,8 +780,8 @@ class Nxdl2yaml:
         for attr in node.attrib.keys():
             if attr not in possible_dimension_attrs:
                 raise ValueError(
-                    f"Dimension has an attribute {attr} that is not valid."
-                    f"Currently allowed attributes are {possible_dimension_attrs}."
+                    f"Dimension has an attribute {attr} that is not valid. "
+                    f"Currently allowed attributes are {possible_dimension_attrs}. "
                     f"Please have a close look"
                 )
 
