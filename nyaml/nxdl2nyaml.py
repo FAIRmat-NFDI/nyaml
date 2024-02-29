@@ -749,12 +749,17 @@ class Nxdl2yaml:
             # index and value attributes of dim elements
             indent = (depth + 1) * DEPTH_SIZE
             # Numpy style for dim
-            value = (
-                ", ".join(dim_index_value)
-                if len(dim_index_value) > 1
-                else f"{dim_index_value[0]},"
-            )
-            file_out.write(f"{indent}dim: ({value})\n")
+            if dim_index_value:
+                value = (
+                    ", ".join(dim_index_value)
+                    if len(dim_index_value) > 1
+                    else f"{dim_index_value[0]},"
+                )
+                value = f"({value})"
+            else:
+                # if dim is empty
+                value = []
+            file_out.write(f"{indent}dim: {value}\n")
 
             # Write the attributes, except index and value, and doc of dim as child of dim_parameters.
             # But the doc or attributes for each dim come inside list according to the order of dim.

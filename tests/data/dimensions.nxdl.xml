@@ -43,6 +43,13 @@
                 <dim index="2" value="30"/>
             </dimensions>
         </field>
+        <field name="my_dim_without_dimension" type="NX_NUMBER">
+            <dimensions rank="dataRank">
+                <doc>
+                     Dim without dimension.
+                </doc>
+            </dimensions>
+        </field>
         <field name="my_dim_with_numpy_3d" type="NX_NUMBER">
             <dimensions rank="3">
                 <dim index="1" value="2"/>

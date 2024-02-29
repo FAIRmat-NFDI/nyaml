@@ -12,6 +12,11 @@ NXarchive(NXobject):
       doc: |
         Testarray with dimensions spelled out
       dim: (10, 30)
+    my_dim_without_dimension(NX_NUMBER):
+      dimensions:
+        doc: |
+          Dim without dimension.
+        dim: []
     my_dim_with_numpy_3d(NX_NUMBER):
       dim: (2, 4, 5)
     my_dim_with_doc_and_dim_attr(NX_NUMBER):
