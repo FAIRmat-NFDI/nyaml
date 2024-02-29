@@ -57,7 +57,7 @@ NXentry(NXobject):
   (NXsubentry):
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 6e5f16c6d106f3b59aa4df6a9f254e1ba2041ed235e1f4377d7788adcb8f01a9
+# 4d3957dd863d0307a70837558b6f6d88ab6a089e37f33dd7f58ca0e1da8e13bf
 # <?xml version="1.0" encoding="UTF-8"?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl" ?>
 # <definition name="NXentry" 
