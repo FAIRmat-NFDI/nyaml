@@ -479,7 +479,7 @@ def xml_handle_dim(dct, obj, keyword, value):
                     valid_dims.append(entry)
             if len(valid_dims) > 0:
                 dims = ET.SubElement(obj, "dimensions")
-                # dims.set("rank", str(len(valid_dims)))
+                dims.set("rank", str(len(valid_dims)))
                 dim_idx = 1
                 for dim_name in valid_dims:
                     dim = ET.SubElement(dims, "dim")
