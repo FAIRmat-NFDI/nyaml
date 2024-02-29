@@ -21,3 +21,10 @@ NXarchive(NXobject):
         dim: (2, 4)
         dim_parameters:
           ref: ['s', 'm']
+    my_dimensions_without_rank(NX_NUMBER):
+      dimensions:
+        doc: |
+          Test with doc and dim attribute
+        dim: (2, 4)
+        dim_parameters:
+          ref: ['s', 'm']

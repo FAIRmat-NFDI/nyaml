@@ -669,7 +669,7 @@ class Nxdl2yaml:
         def handle_dim_with_value_and_index(depth, node, file_out, dimension_doc):
             """
             Handle <dimensions> element if <dim> has only value and index attributes, and
-            <diemensions> element has only one attribute 'rank', but no doc."""
+            <dimensions> element has only one attribute 'rank', but no doc."""
             indent = depth * DEPTH_SIZE
             dim_index_value = ""
             dim_cmnt_nodes = []
@@ -776,21 +776,21 @@ class Nxdl2yaml:
                             f"{handle_mapping_char(value, depth + 3, False)}\n"
                         )
 
+        # Check that dimension only has valid attributes.
+        for attr in node.attrib.keys():
+            if attr not in possible_dimension_attrs:
+                raise ValueError(
+                    f"Dimension has an attribute {attr} that is not valid."
+                    f"Currently allowed attributes are {possible_dimension_attrs}."
+                    f"Please have a close look"
+                )
+
         # Dimension has other attributes including index and value
-        if remove_namespace_from_tag(node[0].tag) == "doc" or len(node.attrib) > 0:
+        if remove_namespace_from_tag(node[0].tag) == "doc":
             indent = depth * DEPTH_SIZE
             tag = remove_namespace_from_tag(node.tag)
             file_out.write(f"{indent}{tag}:\n")
-            for attr, value in node.attrib.items():
-                if attr in possible_dimension_attrs and not isinstance(value, dict):
-                    indent = (depth + 1) * DEPTH_SIZE
-                    file_out.write(f"{indent}{attr}: {value}\n")
-                else:
-                    raise ValueError(
-                        f"Dimension has an attribute {attr} that is not valid."
-                        f"Currently allowed attributes are {possible_dimension_attrs}."
-                        f"Please have a close look"
-                    )
+
             # Taking care of dimension doc
             dimension_doc = ""
             for child in list(node):

@@ -496,7 +496,7 @@ def test_nyaml2nxdl_dim_keyword(tmp_path):
     assert ref_file.read_text() == parsed_file.read_text()
 
 
-def test_nxdl2yaml_dimensions(tmp_path):
+def test_nxdl2nyaml_dimensions(tmp_path):
     """
     Test the proper conversion of nxdl2yaml with dimension and dim keywords.
     """
