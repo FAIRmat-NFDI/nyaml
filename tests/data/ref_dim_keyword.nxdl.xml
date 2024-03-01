@@ -30,7 +30,7 @@
             <doc>
                  Test
             </doc>
-            <dimensions>
+            <dimensions rank="1">
                 <dim index="1" value="2"/>
             </dimensions>
         </field>
@@ -38,25 +38,43 @@
             <doc>
                  Testarray with dimensions spelled out
             </doc>
-            <dimensions rank="1">
+            <dimensions rank="2">
                 <dim index="1" value="10"/>
                 <dim index="2" value="30"/>
             </dimensions>
         </field>
         <field name="my_dim_with_numpy_3d" type="NX_NUMBER">
-            <dimensions>
+            <dimensions rank="3">
                 <dim index="1" value="2"/>
                 <dim index="2" value="4"/>
                 <dim index="3" value="5"/>
             </dimensions>
         </field>
-        <field name="my_dim_with_doc_and_dim_attr" type="NX_NUMBER">
-            <dimensions>
+        <field name="my_dim_with_doc_rank_and_dim_attr" type="NX_NUMBER">
+            <dimensions rank="2">
                 <doc>
                      Test with doc and dim attribute
                 </doc>
                 <dim index="1" value="2" ref="s"/>
                 <dim index="3" value="4" ref="m"/>
+            </dimensions>
+        </field>
+        <field name="my_dim_with_doc_and_short_dim_attr" type="NX_NUMBER">
+            <dimensions rank="2">
+                <doc>
+                     Test with doc and dim attribute
+                </doc>
+                <dim index="1" value="2" ref="s"/>
+                <dim index="2" value="4" ref="m"/>
+            </dimensions>
+        </field>
+        <field name="my_dim_without_value" type="NX_NUMBER">
+            <dimensions>
+                <doc>
+                    Test with dimension, dim, and no value,
+                    as in NXsensor/value_deriv1.
+                </doc>
+                <dim index="1" ref="value"/>
             </dimensions>
         </field>
     </group>

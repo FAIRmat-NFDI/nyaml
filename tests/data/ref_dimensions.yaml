@@ -12,6 +12,11 @@ NXarchive(NXobject):
       doc: |
         Testarray with dimensions spelled out
       dim: (10, 30)
+    my_dim_without_dimension(NX_NUMBER):
+      dimensions:
+        doc: |
+          Dim without dimension.
+        dim: []
     my_dim_with_numpy_3d(NX_NUMBER):
       dim: (2, 4, 5)
     my_dim_with_doc_and_dim_attr(NX_NUMBER):
@@ -21,3 +26,18 @@ NXarchive(NXobject):
         dim: (2, 4)
         dim_parameters:
           ref: ['s', 'm']
+    my_dimensions_without_rank(NX_NUMBER):
+      dimensions:
+        doc: |
+          Test with doc and dim attribute
+        dim: (2, 4)
+        dim_parameters:
+          ref: ['s', 'm']
+    my_dim_without_value(NX_NUMBER):
+      dimensions:
+        doc: |
+          Test with dimension, dim, and no value,
+          as in NXsensor/value_deriv2.  
+        dim: [[1, ]]
+        dim_parameters:
+          ref: ['value']
