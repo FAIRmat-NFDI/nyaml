@@ -72,7 +72,7 @@
             <dimensions>
                 <doc>
                     Test with dimension, dim, and no value,
-                    as in NXsensor/value_deriv2.                   
+                    as in NXsensor/value_deriv1.
                 </doc>
                 <dim index="1" ref="value"/>
             </dimensions>

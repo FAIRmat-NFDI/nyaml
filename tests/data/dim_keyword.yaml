@@ -33,7 +33,7 @@ NXarchive(NXobject):
       dimensions:
         doc: |
           Test with dimension, dim, and no value,
-          as in NXsensor/value_deriv2.
+          as in NXsensor/value_deriv1.
         dim: [[1, ]]
         dim_parameters:
           ref: ['value']
