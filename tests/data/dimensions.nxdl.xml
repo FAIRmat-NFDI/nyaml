@@ -60,7 +60,7 @@
         <field name="my_dim_with_doc_and_dim_attr" type="NX_NUMBER">
             <dimensions rank="2">
                 <doc>
-                     Test with doc and dim attribute
+                        Test with doc and dim attribute
                 </doc>
                 <dim index="1" value="2" ref="s"/>
                 <dim index="3" value="4" ref="m"/>
@@ -73,6 +73,15 @@
                 </doc>
                 <dim index="1" value="2" ref="s"/>
                 <dim index="3" value="4" ref="m"/>
+            </dimensions>
+        </field>
+        <field name="my_dim_without_value" type="NX_NUMBER">
+            <dimensions>
+                <doc>
+                    Test with dimension, dim, and no value,
+                    as in NXsensor/value_deriv2.
+                </doc>
+                <dim index="1" ref="value"/>
             </dimensions>
         </field>
     </group>
