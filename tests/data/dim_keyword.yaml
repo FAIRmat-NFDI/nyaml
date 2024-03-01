@@ -30,10 +30,10 @@ NXarchive(NXobject):
         dim_parameters:
           ref: ['s', 'm']
     my_dim_without_value(NX_NUMBER):
-      doc: |
-        Test with dimension, dim, and no value,
-        as in NXsensor/value_deriv2.
       dimensions:
+        doc: |
+          Test with dimension, dim, and no value,
+          as in NXsensor/value_deriv2.
         dim: [[1, ]]
         dim_parameters:
           ref: ['value']
