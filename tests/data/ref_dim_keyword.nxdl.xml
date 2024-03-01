@@ -60,7 +60,7 @@
             </dimensions>
         </field>
         <field name="my_dim_with_doc_and_short_dim_attr" type="NX_NUMBER">
-            <dimensions>
+            <dimensions rank="2">
                 <doc>
                      Test with doc and dim attribute
                 </doc>
