@@ -285,7 +285,7 @@ NXmpes(NXobject):
 ### Root section for base classes and application definitions:
 Within the YAML format, the root section denotes the top-level description of the application definition or base class schema, comprising the `category`, `type`, `doc`, `symbols` block, and the name of the schema (e.g. `NXmpes(NXobject)`). Correspondingly, the root section refers to the XML element `definition`, encompassing the first `doc` child of the `definition` and `symbols`. The definition element encapsulates essential xml attributes such as the schema's `name` (and xml attribute), the object it `extends` (an xml attribute), and the schema `type` (an xml attribute), with additional XML attributes (e.i. `xmlns:xsi`) handled by the nyaml converter. The accurate designation of category as either `base` or `application` distinguishes between an `application definition` and a `base class`. The schema name (e.i. `NXmpes(NXobject)`) with paranthesis indicates the extension of the current application definition, noting that base classes must `extends` NXobject, whereas application definitions may `extends` either `NXobject` or another `application definition` (excluding base classes). Schemas may incorporate one or multiple symbols, each imbued with specialized physical meanings beyond their literal interpretation, which are utilised over the application definition.
 
-A typical root section for the application definition `NXmpes` is outlined below:
+**A typical root section for the application definition `NXmpes` outlined**
 
 ```yaml
 category: application
@@ -394,6 +394,8 @@ Presently, the accepted values for the `exists` keyword encompass:
 `required`: Indicates that the NeXus concet must be present within the structure.
 `[min, <number>, max, <number> or infty]`: Represents an array type value that signifies the multiplicity of the NeXus concepts. For instance, concept belonging `exists: [min, 3, max, infty]` implies that the concept must come a minimum of three instances and may extend to any number.
 
+**`exists` in YAML**
+
 ```yaml
 transmission_correction(NXcalibration):
   exists: optional
@@ -405,6 +407,8 @@ In the above example the greoup `transmission_correction` is a optional group.
 ### Keyword `unit`
 A statement introducing NeXus-compliant NXDL attribute `units` attributes to the `field` e.g. `NX_VOLTAGE` to assign predefied pyhsical unit.
 
+**`unit` in YAML**
+
 ```yaml
 detector_voltage(NX_FLOAT):
   unit: NX_VOLTAGE
@@ -415,7 +419,7 @@ detector_voltage(NX_FLOAT):
 ### Keyword `dimensions`
 The `dimensions` term  describes the multidimensional nature of the data, specifying its rank, dimensional indices, and corresponding length of the rank. For example, the attribute `rank` defines the dimension of the data set. To elucidate each dimension we use other two keywords `dim` and `dim_parameters`. The `dim` keyword comprises an array of arrays, the nested array encapsulates values for `index` and `value` (NeXus keywords) pairs. Each array within the `dim` array corresponds to a specific dimension of the multidimensional data. For example, for 2D particle motion, the `dim` array may be represented as `[[0, nx], [1, ny]]`, indicating the axes index and its length. Another keyword `dim_parameters` contains further information of each dimension such as `doc`, `ref`, etc. It is important to note that each term or keyword within `dim_parameters` must have the same length as the value of the rank keyword.
 
-**Dimensions in YAML**
+**`dimensions` in YAML**
 ```yaml
 # 2D particle motion
 dimensions:
@@ -444,9 +448,10 @@ definition:
 ```
 In the example the valid value for NeXus field `definition` is `NXmpes`.
 
-### Keywprd `xref`
+### Keyword `xref`
 The `xref` keyword used inside the `doc` to refer any other ontology or any other standard such `ISO`. The `xref` in the example `doc` will reflect the information inside the xml `doc`.
 
+**`xref` in YAML**
 ```yaml
 (NXinstrument):
   doc:
