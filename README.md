@@ -1,37 +1,56 @@
-# Table of Contents
+# nyaml
 
+## Scope and purpose:
+## may edit again
+Make working with the NeXus Schema Definition Language more convenient for end users.
+NeXus and its respective NeXus Definition Language (NXDL) represents a concerted effort for standardizing the terminology and granularization for the exchange of serialized data and metadata within and across scientific communities. NeXus is rooted in the neutron, X-ray, and muon research [J. Appl. Cryst. (2015). 48, 301-305](https://doi.org/10.1107/S1600576714027575). The tool nyaml is an effort of members of the solid-state physics community within the German National Research Data Infrastructure ([German NFDI](https://www.github.com/FAIRmat-NFDI) to extend NeXus for standardized information exchange in the research fields of materials characterization.
+
+NeXus describes concepts through general data storage objects (so-called base classes). From these building blocks, a so-called application definition is composed. This is a measurement- and instrument-specific graph that can be used to define which pieces of information are communicated with instance data such as files or database artifacts. Base classes and application definitions are defined through a so-called NXDL schema definition file using the Extensible Markup Language, [XML](https://www.w3.org/TR/REC-xml/REC-xml-20081126.xml). The nyaml tool makes the process of working and editing NXDL schema definitions more efficient by using Yet Another Markup Language ([YAML](https://yaml.org/) with its indentation-driven approach to eliminate the need for editing starting and ending XML tags. Thereby, the schema definitions read more concisely and enable grasping more intuitively class inheritance that NeXus allows for. 
+
+The [nyaml](https://github.com/FAIRmat-NFDI/nyaml/tree/main) Python package serves as a tool for bidirectional converting between the `YAML` and `XML` expressed NXDL data schemas. 
+This `README.md` documents the specific simplified set of notation whereby users can write base class schemas or application definition schemas using `YAML`. Noteworthy, this `README.md` does not introduce the capabilities of the NeXus Definition Language (specifically its NeXus objects, terms, or types). Please refer to the official NeXus documentation at NeXus [official site](https://www.nexusformat.org/).
+
+## Table of contents
 1. [Introduction](#introduction)
-2. [nyaml Workflow](#nyaml-workflow)
-3. [How to Use nyaml Tool](#how-to-use-nyaml-tool)
-4. [Conversion from YAML to XML](#conversion-from-yaml-to-xml)
-5. [Design of NeXus Ontology and Terms in YAML](#design-of-nexus-dataformat-and-terms-in-yaml)
-   - [Root section for base classes and application definitions](#root-section-for-base-classes-and-application-definitions)
-   - [NeXus Group](#nexus-group)
-   - [NeXus Field and NeXus Attrubute](#nexus-field-and-nexus-attrubute)
-   - [NeXus Link](#nexus-link)
-   - [NeXus Choice](#nexus-choice)
-6. [Special Keywords in YAML](#special-keywords-in-yaml)
+2. [Getting started with nyaml](#how-to-use-nyaml-tool)
+3. [Workflow](#nyaml-workflow)
+4. [How to use nyaml](#how-to-use-nyaml-tool)
+5. [Conversion from YAML to XML](#conversion-from-yaml-to-xml)
+6. [Design of NeXusOntology and terms in YAML](#design-of-nexus-dataformat-and-terms-in-yaml)
+   - [NeXus root section for base classes and application definitions](#root-section-for-base-classes-and-application-definitions)
+   - [NeXus group](#nexus-group)
+   - [NeXus field and NeXus attribute](#nexus-field-and-nexus-attrubute)
+   - [NeXus link](#nexus-link)
+   - [NeXus choice](#nexus-choice)
+7. [Special keywords in YAML](#special-keywords-in-yaml)
    - [Keyword `exists`](#keyword-exists)
    - [Keyword `unit`](#keyword-unit)
    - [Keyword `dimensions`](#keyword-dimensions)
    - [Keyword `enumeration`](#keyword-enumeration)
    - [Keyword `xref`](#keywprd-xref)
-7. [How to Install nyaml](#how-to-use-nyaml-tool)
 8. [Conclusion](#conclusion)
 9. [References](#references)
 
-## Introduction
 
-The NeXus data format, described by the NeXus Definition Language (NXDL), represents a concerted effort aimed at facilitating data exchange within scientific communities, particularly among those engaged in neutron, X-ray, and muon research [J. Appl. Cryst. (2015). 48, 301-305](https://doi.org/10.1107/S1600576714027575). It serves as a standardized framework for both data exchange and storage. At its core, the NeXus Definition Language (NXDL) functions as the cornerstone through which scientists delineate the nomenclature and organizational structure of information within NeXus data files, tailored to specific scientific techniques.
+## Getting started with nyaml
+As an end user, it is most convenient to install nyaml through its `PyPI` package using pip into a virtual or conda environment:
+```bash
+$ pip install nyaml
+```
 
-NXDL is used to define general data storage objects (base classes) and use them as the building blocks for defining measurement-specific or even instrument-specific data storage objects (application definitions). In this process, members and definitions of individual base classes can be used as is or customized. In essence, the process of schema development, whether for a base class or an application definition, entails crafting an NXDL schema definition file with the extension 'nxdl.xml', utilizing the Extensible Markup Language, [XML](https://www.w3.org/TR/REC-xml/REC-xml-20081126.xml) .
+As a software developer, specifically if you would like to contribute to the tool, it is best to clone the respective repository and install with developer dependencies:
+```bash
+$ git clone https://github.com/FAIRmat-NFDI/nyaml.git
+$ cd nyaml
+$ pip install -e ".[dev]"
+```
 
-To expedite the schema development process, we have introduced Yet Another Markup Language ([YAML](https://yaml.org/)), which provides a syntax or style specifically tailored for defining scientific domain-driven schemas with NXDL. One significant advantage of YAML over XML is its indentation-driven approach, which eliminates the need for starting and ending tags for each entity within the schema. The `YAML` format results in a reduction of NXDL keyword repetition and allows for a more intuitive grasp of Python syntax, such as class inheritance. These benefits are attained without compromising the integrity of the original NeXus schema, which is traditionally expressed in XML format.
+As a software developer, installing a pre-commit hook, offers functionalities for code formatting and linting
+```bash
+$ pre-commit install
+```
 
-The `YAML` format, while not an official version of NeXus application definitions or base classes, necessitates a method for transcoding it into `XML`. The [nyaml](https://github.com/FAIRmat-NFDI/nyaml/tree/main) Python package serves as a converter tool designed specifically for this purpose. It enables the conversion of NXDL from `YAML` format to `XML`, thereby enhancing the capability of NeXus schema developers to incorporate domain-specific scientific knowledge into the schema. Furthermore, the tool offers the flexibility to extend existing NeXus schemas in XML by facilitating conversion back and forth between the two formats. It is important to note that this paper does not introduce NeXus objects, terms, or types, which are fundamental for writing base class schemas or application definition schemas. For individuals new to NeXus, please refer to the official NeXus site at NeXus [official site](https://www.nexusformat.org/).
-
-## nyaml Workflow
-
+## Workflow `nyaml`, `YAML`, `XML`, and NXDL files
 Like every scientific software, the `nyaml` tool also follows a specific workflow.
 
 ```mermaid
@@ -64,27 +83,11 @@ graph TD;
   id6-->id8
 ```
 
-With input file the `nyaml` converter checks for the correct file type and call appropriate converter. For XML file, the XML converter parse the `XML` file, by [lxml](https://lxml.de/) python library, into a `XML` tree object. By following the NXDL rules the converter writes the application definition or base class object into `yaml` file following the `nyaml` syntax. If the input file is `yaml` then the `yaml` converter collects the comments in a `Comments` object and parse the `yaml` file into python `dictionary` object. Later, the application definition or base classes will be written into `XML` file from the `Comments` and python `dictionary` object.
+The tool is a command line application which picks up provided input in either YAML or XML triggering a conversion vice versa automatically. Functionalities of the [lxml](https://lxml.de/) python library are used to process an `XML` tree object. By following the NXDL rules the converter writes the application definition or base class object into `yaml` file following the `nyaml` syntax. If the input file is `yaml` then the `yaml` converter collects the comments in a `Comments` object and parse the `yaml` file into python `dictionary` object. Later, the application definition or base classes will be written into `XML` file from the `Comments` and python `dictionary` object.
 
-## How to Install nyaml
-The tool is published to `PyPI` and available for plain install
-```bash
-$ pip install nyaml
-```
-To contribute on the tool or to install in a develpment mode
-```bash
-$ git clone https://github.com/FAIRmat-NFDI/nyaml.git
-$ cd nyaml
-$ pip install -e ".[dev]"
-```
 
-To install pre-commit hook for code formatting and linting
-```bash
-$ pre-commit install
-```
+## How to use `nyaml` as a command line tool
 
-## How to Use nyaml Tool
-This is a command line tool to convert NeXus application definition or base class in `yaml` file format into `nxdl.xml` file format and vice-versa. The converter can be called by command
 ```bash
 $ nyaml2nxdl [OPTIONS] [INPUT_FILE]
 ```
@@ -95,17 +98,17 @@ with the available options:
                        converted, ensuring version consistency.
   --do-not-store-nxdl  Prevent the input NXDL file from being stored as a
                        comment at the end of the output YAML file.
-  --verbose            Display keywords and value types in standard output to
-                       assist in identifying issues in YAML files.
+  --verbose            Print keywords and value types to the standard output stream
+                       to assist with identifying issues in YAML files.
   --help               Show this message and exit.
 ```
 
 The `--output-file` option if user wants to define output file name (including extension) otherwise converter will define the output file name e.g. from input file `NXapplication.nxdl.xml (NXapplication.yaml)` the resultant file will be `NXapplication_parser.yaml (NXapplication.nxdl.xml)`. With the option `--check-consistency` the converter produces the same type of file as the input, e.g. for input `NXapplication.nxdl.xml` the output file is `NXapplication_consistency.nxd.xml`. The intention for this option is to verify proper file and version conversion of the file. When converting the `nxdl.xml` file into `yaml` it also stores the `nxdl.xml` file at the end of `yaml` file with a hash. The option `--do-not-store-nxdl` prevents the `yaml` file from storing `nxdl.xml` text. The `verbose` option is to identify the issue, if there are some unexpected conversion, while converting the file from one to another.
 
-## Conversion from YAML to XML
-Presented below is a concise and trimmed example of the `NXmpes` application definition in `YAML` format, alongside its corresponding translation into `XML` format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of the basic structure of NXDL, readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html). Throughout the followed discussions, various components of the NXmpes application definition will be discussed in the light of `nyaml` converter.
+## Conversion from `YAML` to `YAML` to `XML`
+Presented below is a concise and trimmed example of the `NXmpes` application definition in `YAML` format, alongside its corresponding translation into `XML` format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of NXDL readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html).
 
-**NXmpes application definition in YAML format**
+**NXmpes application definition in `YAML` format**
 ```yaml
 category: application
 type: group
@@ -121,7 +124,7 @@ symbols:
     Number of data points in the transmission function.
 NXmpes(NXobject):
   (NXentry):
-    exsits: required
+    exists: required
     definition:
       \@version:
       enumeration: [NXmpes]
@@ -280,10 +283,10 @@ NXmpes(NXobject):
   </definition>
 ```
 
-## Design of NeXus Ontology and Terms in YAML
+## Design of NeXus Vocabulary expressed using `YAML`
 
 ### Root section for base classes and application definitions:
-Within the YAML format, the root section denotes the top-level description of the application definition or base class schema, comprising the `category`, `type`, `doc`, `symbols` block, and the name of the schema (e.g. `NXmpes(NXobject)`). Correspondingly, the root section refers to the XML element `definition`, encompassing the first `doc` child of the `definition` and `symbols`. The definition element encapsulates essential xml attributes such as the schema's `name` (and xml attribute), the object it `extends` (an xml attribute), and the schema `type` (an xml attribute), with additional XML attributes (e.i. `xmlns:xsi`) handled by the nyaml converter. The accurate designation of category as either `base` or `application` distinguishes between an `application definition` and a `base class`. The schema name (e.i. `NXmpes(NXobject)`) with paranthesis indicates the extension of the current application definition, noting that base classes must `extends` NXobject, whereas application definitions may `extends` either `NXobject` or another `application definition` (excluding base classes). Schemas may incorporate one or multiple symbols, each imbued with specialized physical meanings beyond their literal interpretation, which are utilised over the application definition.
+Within the YAML format, the root section denotes the top-level description of the application definition or base class schema, comprising the `category`, `type`, `doc`, `symbols` block, and the name of the schema (e.g. `NXmpes(NXobject)`). Correspondingly, the root section refers to the XML element `definition`, encompassing the first `doc` child of the `definition` and `symbols`. The definition element encapsulates essential XML attributes such as the `name` (and XML attribute), the object it `extends` (an XML attribute), and the schema `type` (an XML attribute), with additional XML attributes (e.i. `xmlns:xsi`) handled by the nyaml converter. The category specifies if a `base class` or an `application definition` is defined. The schema name (e.i. `NXmpes(NXobject)`) `NXmpes` is supplemented with a class name in parenthesis that defines which concept NXmpes extents. A base class can only extend NXobject, whereas an application definition extends either `NXobject` or another `application definition` (excluding base classes). Schemas may incorporate one or multiple symbols, each imbued with specialized physical meanings beyond their literal interpretation.
 
 **A typical root section for the application definition `NXmpes` outlined**
 
@@ -303,19 +306,22 @@ symbols:
 NXmpes(NXobject):
 ```
 
-### NeXus Group
+### Uniqueness of NeXus concepts
+A fundamental point to understand is that the symbol `definition` has to be seen always in tight connection to its chain of parents. That is the concept is not a `definition` alone but an `NXmpes/definition`.
+These full concept names have to be unique in the set of concepts for every base class and application definition.
+
+### NeXus group
 [NeXus groups](https://manual.nexusformat.org/design.html#design-groups), as instances of NeXus base classes, embody the compositional structure of application definitions. These groups can be initialized dynamically or statically, each approach offering distinct advantages.
 
-Dynamic initialization allows for the instantiation of groups while implementing the NeXus definition to store data (in HDF5 file format called NeXus file). This method provides flexibility for multiple instances at the same level within the NeXus file. For instance, the group `(NXmanipulator)` can initialize multiple groups such as `manipulator1` and `manipulator2` of the base class `NXmanipulator` during data writing.
-
-In contrast, static initialization, exemplified by syntax like `value_log(NXlog)`, references a single group `value_log` of the base class `NXlog`, disallowing the construction of other groups from `NXlog` at the same level. Such groups appear only once within the same level of current application definition.
+Dynamic initialization allows for the instantiation of groups while implementing the NeXus definition to serialize data in so-called NeXus files. So far, the Hierarchical Data Format 5 [HDF5](https://www.hdfgroup.org/solutions/hdf5/) has been used as the most frequent library and format to express these files with. Typical examples of multiple groups to initialize are instances `manipulator1` and `manipulator2`. In contrast, static initialization specifies the symbol to be used, exemplified for `value_log(NXlog)` this means that there must be only a single instance with symbol `value_log` at the same level that is based on the base class `NXlog`.
 
 Descriptive information about NeXus groups is encapsulated within the `doc` child of the respective group. It is important to note that the group annotation of `source_TYPE(NXsource)` or `(NXsource)source_TYPE` signifies the encapsulation of the group's `name` as `source_TYPE` and its type as `NXsource` base class. Notably, the order between `name` and `type` within the XML element must be inverted such two different syntax.
 
-Furthermore, the uppercase part of the group's name can be dynamically overwritten, allowing for the instantiation of multiple instances. For example, `source_electric` and `source_magnetic` can coexist from `NXsource`. It is essential to adhere to the uppercase dynamic rules for NeXus groups, fields, and attributes.
+Uppercase substrings of a symbol can be dynamically overwritten, allowing for the instantiation of multiple instances. For example, `source_electric` and `source_magnetic` can coexist as childs of an `NXsource`.
+It is essential to adhere to the uppercase dynamic rules for NeXus groups, fields, and attributes.
 
 
-**NeXus Groups in YAML format**
+**NeXus groups expressed in `YAML` format**
 ```yaml
 # NeXus groups in YAML format
 source_TYPE(NXsource):
@@ -465,10 +471,12 @@ The `xref` keyword used inside the `doc` to refer any other ontology or any othe
 ```
 
 ## Conclusion
-Defining a NeXus application definition or base class in YAML format is not a official structure of NeXus, but it a format to reduce the effor of the application developer to construct an application definition or base class. The `nyaml` is the tool that converts the application definitions or base classes from `YAML` format to `nxdl.xml` (`XML` type) format with any knowledge of `XML` style or syntax. This is a open source software funded by [NFDI](https://www.nfdi.de/) under FARImat progect and sitting on the github repo therefore anyone can create an issue after detecting a bug, suggestion for improvement and open to contribution. The `nyaml` is also [published in PyPi](https://pypi.org/project/nyaml/) and can be installed with `pip` python package manageer.
+The Python software `nyaml` is an open-source project to reduce typing effort when working with NeXus data schemas. As a tool developed for software developers, data stewards, and scientists, `nyaml` converts base classes and application definitions bidirectionally between `YAML` and the `XML` serialization of the NeXus Definition Language. The tool is open source accessible through [PyPi](https://pypi.org/project/nyaml/). 
+Contributions in the form of bug reports and other suggestions for improvements are welcomed on this git repository. The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) – 460197019 (FAIRmat). FAIRmat is a consortium within the German National Research Data Infrastructure [German NFDI](https://www.nfdi.de/). The software has been accepted as a community contribution by the NeXus International Advisory Board (NIAC) which substantiates the cross-community interaction and efforts to improve on the interoperability of serialized data artifacts and their more expressive and comprehensive expression using knowledge graphs and semantic technology. The work on `nyaml` is connected to recent efforts within NeXus to express the concepts of NeXus as rigorous semantic artifacts through efforts like the [NeXusOntology](https://github.com/FAIRmat-NFDI/NeXusOntology).
 
+Although `YAML` is not used as as the  serialization Defining a NeXus application definition or base class in YAML format is not a official structure of NeXus.
 
 
 ## References
-[@Könnecke]: J. Appl. Cryst. (2015). 48, 301-305
-             (https://doi.org/10.1107/S1600576714027575)
+[@Könnecke]: J. Appl. Cryst., (2015), 48, 301-305 (https://doi.org/10.1107/S1600576714027575)
+[@Könnecke]: Physica B, (2006), 385–386, Part 2, 1343-1345 (https://doi.org/10.1016/j.physb.2006.06.106)
