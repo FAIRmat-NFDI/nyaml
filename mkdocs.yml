@@ -1,4 +1,20 @@
 site_name: NYAML Docs
 
+plugins:
+  - mkdocstrings
+  # - search
+  # - mkdocs-material
+  # - mkdocs-awesome-pages-plugin
+  # - mkdocs-git-revision-date-localized-plugin
+  # - mkdocs-minify-plugin
+  # - mkdocs-redirects
+  # - mkdocs-macros-plugin
 theme:
   name: "material"
+
+nav:
+  - Home: index.md
+  - Tutorial: tutorials.md
+  - How To Guide : how_to_guide.md
+  - Reference: references.md
+  - Explanation: explanations.md
