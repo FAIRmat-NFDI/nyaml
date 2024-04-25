@@ -15,7 +15,7 @@ theme:
 
 nav:
   - Home: index.md
-  - Tutorial: tutorials.md
-  - How-To-Guide : how_to_guide.md
-  - Reference: references.md
-  - Explanation: explanations.md
+  # - Tutorial: tutorials.md
+  # - How-To-Guide : how_to_guide.md
+  # - Reference: references.md
+  # - Explanation: explanations.md
