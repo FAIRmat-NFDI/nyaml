@@ -42,6 +42,12 @@ dev = [
     "types-pyyaml",
     "lxml-stubs",
     "uv>=0.4.10",
+    # Mkdocs and the related plugins
+    "mkdocs",
+    "mkdocs-mermaid2-plugin"
+    "mkdocstrings",
+    "mkdocs-material"
+
 ]
 
 [project.scripts]
