@@ -9,12 +9,13 @@ plugins:
   # - mkdocs-minify-plugin
   # - mkdocs-redirects
   # - mkdocs-macros-plugin
+  - mermaid2
 theme:
   name: "material"
 
 nav:
   - Home: index.md
   - Tutorial: tutorials.md
-  - How To Guide : how_to_guide.md
+  - How-To-Guide : how_to_guide.md
   - Reference: references.md
   - Explanation: explanations.md
