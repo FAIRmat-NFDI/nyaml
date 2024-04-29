@@ -451,7 +451,7 @@ definition:
 In the example the valid value for NeXus field `definition` is `NXmpes`.
 
 ### Keyword `xref`
-The `xref` keyword (which can only inside the keyword `doc`) is used to refer any other ontology or any other standard such `ISO`. The `xref` in the example `doc` will reflect the information inside the XML `doc`. Note that, the keyword only available for `YAML` representation, which transform the content into the special representaion inside the `doc` text in `XML`.
+The `xref` keyword (which can only inside the keyword `doc`) is used to refer any other ontology or any other standard such `ISO`. The `xref` in the example `doc` will reflect the information inside the XML `doc`. Note that the `xref` keyword is only available in the `YAML` representation and will be transformed into its textual representation inside the `doc` text in `XML`.
 
 **`xref` in YAML**
 ```yaml
