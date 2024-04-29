@@ -17,7 +17,7 @@
    - [Keyword `unit`](#keyword-unit)
    - [Keyword `dimensions`](#keyword-dimensions)
    - [Keyword `enumeration`](#keyword-enumeration)
-   - [Keyword `xref`](#keywprd-xref)
+   - [Keyword `xref`](#keyword-xref)
 7. [How to Install nyaml](#how-to-use-nyaml-tool)
 8. [Conclusion](#conclusion)
 9. [References](#references)
@@ -28,7 +28,7 @@ The NeXus data format, described by the NeXus Definition Language (NXDL), repres
 
 NXDL is used to define general data storage objects (base classes) and the base classes are the building blocks for defining measurement-specific or even instrument-specific or software-specific data storage objects (application definitions). In this process, members and definitions of individual base classes can be used as is or customized. In essence, the process of schema development, whether for a base class or an application definition, entails crafting an NXDL schema definition file with the extension 'nxdl.xml', utilizing the Extensible Markup Language, [XML](https://www.w3.org/TR/REC-xml/REC-xml-20081126.xml) .
 
-To expedite the schema development process, we have introduced Yet Another Markup Language ([YAML](https://yaml.org/)), which provides a syntax or style specifically tailored for defining scientific domain-driven schemas with NXDL. One significant advantage of YAML over XML is its indentation-driven approach, which eliminates the need for starting and ending tags for each entity within the schema. The `YAML` format results in a reduction of NXDL keyword repetition and allows for a intuitive grasp with object oriented programing domain, such as class inheritance. These benefits are attained without compromising the integrity of the original NeXus schema, which is traditionally expressed in XML format.
+To expedite the schema development process, we have introduced the use of Yet Another Markup Language ([YAML](https://yaml.org/)), which provides a syntax or style specifically tailored for defining scientific domain-driven schemas with NXDL. One significant advantage of YAML over XML is its indentation-driven approach, which eliminates the need for starting and ending tags for each entity within the schema. The `YAML` format results in a reduction of NXDL keyword repetition and allows for a intuitive grasp with object oriented programing domain, such as class inheritance. These benefits are attained without compromising the integrity of the original NeXus schema, which is traditionally expressed in XML format.
 
 The `YAML` format, while not yet an official version of NeXus application definitions or base classes, necessitates a method for transcoding it into `XML`. The [nyaml](https://github.com/FAIRmat-NFDI/nyaml/tree/main) Python package serves as a converter tool designed specifically for this purpose. It enables the conversion of NXDL from `YAML` format to `XML`, thereby enhancing the capability of NeXus schema developers to incorporate domain-specific scientific knowledge into the schema. Furthermore, the tool offers the flexibility to extend existing NeXus schemas in XML by facilitating conversion back and forth between the two formats. It is important to note that here we do not introduce NeXus data objects, terms, or types, which are fundamental for writing base class schemas or application definition schemas. For individuals new to NeXus, we refer to the official NeXus site at NeXus [official site](https://www.nexusformat.org/).
 
@@ -451,7 +451,7 @@ definition:
 In the example the valid value for NeXus field `definition` is `NXmpes`.
 
 ### Keyword `xref`
-The `xref` keyword (which can only inside the keyword `doc`) is used to refer any other ontology or any other standard such `ISO`. The `xref` in the example `doc` will reflect the information inside the XML `doc`.
+The `xref` keyword (which can only inside the keyword `doc`) is used to refer any other ontology or any other standard such `ISO`. The `xref` in the example `doc` will reflect the information inside the XML `doc`. Note that, the keyword only available for `YAML` representation, which transform the content into the special representaion inside the `doc` text in `XML`.
 
 **`xref` in YAML**
 ```yaml
