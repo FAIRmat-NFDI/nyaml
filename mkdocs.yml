@@ -1,21 +1,15 @@
 site_name: NYAML Docs
-
+site_description:
+  The documentation for NYAML tools that is a converter tools to transcode  NeXus schema from YAML format to the XML format (.nxdl.xml).
+site_author: "The FAIRmat authors"
+nav:
+  - Home: index.md
+  - Tutorial: tutorials.md
+  - How-To-Guide : how_to_guide.md
+  - Reference: references.md
+  - Explanation: explanations.md
 plugins:
   - mkdocstrings
-  # - search
-  # - mkdocs-material
-  # - mkdocs-awesome-pages-plugin
-  # - mkdocs-git-revision-date-localized-plugin
-  # - mkdocs-minify-plugin
-  # - mkdocs-redirects
-  # - mkdocs-macros-plugin
   - mermaid2
 theme:
   name: "material"
-
-nav:
-  - Home: index.md
-  # - Tutorial: tutorials.md
-  # - How-To-Guide : how_to_guide.md
-  # - Reference: references.md
-  # - Explanation: explanations.md
