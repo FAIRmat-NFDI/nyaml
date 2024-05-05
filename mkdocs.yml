@@ -10,19 +10,50 @@ nav:
   - Explanation: explanations.md
 plugins:
   - mkdocstrings
-  - mermaid2
+  - mermaid2  # conflict with pymdownx.superfences
+  - search
 markdown_extensions:
   - abbr
   - attr_list
   - pymdownx.snippets
   - admonition
   - pymdownx.details
-  - pymdownx.superfences
+  - pymdownx.superfences:  # conflict with mermaid2
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+
 theme:
   name: "material"
+  feature:
+  - navigation.tabs
+  - navigation.sections
+  - navigation.top
+  - navigation.bottom
+  - toc.integrate
+  - search.suggest
+  - search.highlight
+  - content.tabs.link
+  - content.tabs.copy
+  - content.code.annotation
   icon:
     admonition:
       note: octicons/tag-16
+
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+      primary: #2196F3  # Header, text, links, the sidebars and several other components
+      accent: #2196F3  # hovered links, buttons and scrollbars
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+      primary: teal
+      accent: teal
 
 extra_css:
   - stylesheets/extra.css
