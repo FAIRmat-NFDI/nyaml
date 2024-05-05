@@ -11,5 +11,18 @@ nav:
 plugins:
   - mkdocstrings
   - mermaid2
+markdown_extensions:
+  - abbr
+  - attr_list
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
 theme:
   name: "material"
+  icon:
+    admonition:
+      note: octicons/tag-16
+
+extra_css:
+  - stylesheets/extra.css
