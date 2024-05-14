@@ -32,7 +32,6 @@ An introduction to NeXus and its design principles.
 
 </div>
 <div markdown="block">
-
 ### Reference
 Relavent references that supported to develop this tool:
 - [NYAML GitHub repository](https://github.com/FAIRmat-NFDI/nyaml)
@@ -42,7 +41,5 @@ Relavent references that supported to develop this tool:
 
 - [NYAML developed under project FAIRmat-NFDI](https://github.com/FAIRmat-NFDI)
 - [National Research Data Infrastructure (NFDI) funded FAIRmat-NFDI](https://www.nfdi.de/?lang=en)
-
-
 </div>
 </div>
