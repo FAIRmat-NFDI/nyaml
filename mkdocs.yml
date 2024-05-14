@@ -10,7 +10,7 @@ nav:
   - Explanation: explanations.md
 plugins:
   - mkdocstrings
-  - mermaid2  # conflict with pymdownx.superfences
+  - mermaid2
   - search
 markdown_extensions:
   - abbr
@@ -19,12 +19,11 @@ markdown_extensions:
   - admonition
   - pymdownx.details
   - md_in_html
-  - pymdownx.superfences:  # conflict with mermaid2
+  - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-
 theme:
   name: "material"
   feature:
@@ -41,6 +40,5 @@ theme:
   icon:
     admonition:
       note: octicons/tag-16
-
 extra_css:
   - stylesheets/extra.css
