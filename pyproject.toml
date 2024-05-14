@@ -43,6 +43,12 @@ dev = [
     "pre-commit",
     "types-pyyaml",
     "lxml-stubs",
+    "mkdocs",
+    # Mkdocs and the related plugins
+    "mkdocs-mermaid2-plugin"
+    "mkdocstrings",
+    "mkdocs-material"
+
 ]
 
 [project.scripts]
