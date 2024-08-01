@@ -526,7 +526,12 @@ def xml_handle_dim_from_dimension_dict(
             if not isinstance(llist_ind_value, list):
                 if llist_ind_value.startswith("(") and llist_ind_value.endswith(")"):
                     llist_ind_value = llist_ind_value[1:-1].split(",")
-                    llist_ind_value = tuple([x.strip() for x in llist_ind_value])
+                    llist_ind_value = (
+                        llist_ind_value[0:-1]
+                        if llist_ind_value[-1] == ""
+                        else llist_ind_value
+                    )
+                    llist_ind_value = tuple(map(lambda x: x.strip(), llist_ind_value))
                 if not isinstance(llist_ind_value, tuple):
                     raise TypeError(
                         f"Around line {dct[header_line_number]}: dim argument not a list or tuple !"
