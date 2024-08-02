@@ -43,6 +43,14 @@
                 <dim index="2" value="30"/>
             </dimensions>
         </field>
+        <field name="my_dim_array3" type="NX_NUMBER">
+            <doc>
+                 Testarray with dimensions spelled out
+            </doc>
+            <dimensions rank="1">
+                <dim index="1" value="10"/>
+            </dimensions>
+        </field>
         <field name="my_dim_with_numpy_3d" type="NX_NUMBER">
             <dimensions>
                 <dim index="1" value="2"/>
