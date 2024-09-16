@@ -18,6 +18,7 @@
 """
 Tests for nyaml2nxdl tool
 """
+
 import filecmp
 import os
 import sys
