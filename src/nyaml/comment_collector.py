@@ -25,7 +25,6 @@ The class Comment is an abstract class for general functions or method to be imp
 XMLComment and YAMLComment class.
 """
 
-
 from typing import Any, Dict, List, Tuple, Type, Union
 
 from nyaml.helper import LineLoader

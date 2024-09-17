@@ -1240,9 +1240,9 @@ application and base are valid categories!"
     }
     # Fill nsmap variable here
     nsmap.update(namespaces)  # type: ignore
-    xml_root.attrib[
-        "{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"
-    ] = "http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd".replace(" ", "%20")
+    xml_root.attrib["{http://www.w3.org/2001/XMLSchema-instance}schemaLocation"] = (
+        "http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd".replace(" ", "%20")
+    )
 
     # Taking care of Symbols elements
     if "symbols" in yml_appdef.keys():
