@@ -38,10 +38,10 @@ authors:
 repository-code: 'https://github.com/FAIRmat-NFDI/nyaml'
 # url: Not available yet
 abstract:
-  This python software tool converts YAML files to XML files and vice versa,
-  XML is the official file format of NeXus Definition Language (NXDL) format
-  (https://www.nexusformat.org/). To define a scientific instrument,
-  experiment, or a scientific data object in the flavor of schema the NXDL
+  The nyaml, python software tool, converts YAML files to XML files and vice
+  versa, the XML is the official file format of NeXus Definition Language (NXDL)
+  format (https://www.nexusformat.org/). To define a scientific instrument,
+  experiment setup, or a scientific data object in the flavor of schema the NXDL
   can be utilized. As the origial NXDL format comes in XML, this tool allows
   users to write the schema in YAML format, which is comparatively developer
   friendly, and convert it to official NXDL in XML format. To use the nyaml
