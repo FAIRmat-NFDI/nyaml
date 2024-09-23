@@ -1,0 +1,57 @@
+cff-version: 1.2.0
+title: A python package converts YAML to NXDL format and vice versa
+message:
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+version: 0.1.0
+authors:
+  - given-names: Rubel
+    family-names: Mozumder
+    orcid: 'https://orcid.org/0009-0007-5926-6646'
+  - given-names: Andrea
+    family-names: Albino
+    orcid: 'https://orcid.org/0000-0001-9280-7431'
+  - given names: Sherjeel
+    family names: Shabih
+    orcid: 'https://orcid.org/0009-0008-6635-4465'
+  - given-names: Florian
+    family-names: Dobener
+    orcid: 'https://orcid.org/0000-0003-1987-6224'
+  - given-names: Lukas
+    family-names: Pielsticker
+    orcid: 'https://orcid.org/0000-0001-9361-8333'
+  - given-names: Markus
+    family-names: Kühbach
+    orcid: 'https://orcid.org/0000-0002-7117-5196'
+  - given-names: Sandor
+    family-names: Brockhauser
+    orcid: 'https://orcid.org/0000-0002-9700-4803'
+
+
+# NOTE: After publishing this software in zenodo, replace add DOI and URL
+# Each indivisual version has a own doi, but DOI should be the all version
+# doi that will always points to the latest version
+# of the release. Similarly, zenodo will provide single URL for the published
+# software.
+# doi: Not available yet
+repository-code: 'https://github.com/FAIRmat-NFDI/nyaml'
+# url: Not available yet
+abstract:
+  This python software tool converts YAML files to XML files and vice versa,
+  XML is the official file format of NeXus Definition Language (NXDL) format
+  (https://www.nexusformat.org/). To define a scientific instrument,
+  experiment, or a scientific data object in the flavor of schema the NXDL
+  can be utilized. As the origial NXDL format comes in XML, this tool allows
+  users to write the schema in YAML format, which is comparatively developer
+  friendly, and convert it to official NXDL in XML format. To use the nyaml
+  tool users need to follow a certain implicit grammer (full documentation
+  - https://fairmat-nfdi.github.io/nyaml/), the read the YAML format
+  equivalent of the NXDL schema.
+
+  This small project is a part of the FAIRmat project (project id 460197019)
+  funded by the Deutsche Forschungsgemeinschaft (DFG, German Research
+  Foundation)(https://gepris.dfg.de/gepris/projekt/460197019?language=en).
+
+
+license: Apache-2.0
