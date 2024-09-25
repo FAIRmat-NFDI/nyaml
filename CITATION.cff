@@ -38,20 +38,22 @@ authors:
 repository-code: 'https://github.com/FAIRmat-NFDI/nyaml'
 # url: Not available yet
 abstract:
-  The nyaml, python software tool, converts YAML files to XML files and vice
-  versa, the XML is the official file format of NeXus Definition Language (NXDL)
-  format (https://www.nexusformat.org/). To define a scientific instrument,
-  experiment setup, or a scientific data object in the flavor of schema the NXDL
-  can be utilized. As the origial NXDL format comes in XML, this tool allows
-  users to write the schema in YAML format, which is comparatively developer
-  friendly, and convert it to official NXDL in XML format. To use the nyaml
-  tool users need to follow a certain implicit grammer (full documentation
-  - https://fairmat-nfdi.github.io/nyaml/), the read the YAML format
-  equivalent of the NXDL schema.
+  The nyaml converter is a Python software tool designed to transform the NeXus Definition
+  Language (NXDL) from YAML format to XML, the official format for NeXus data exchange format
+  (https://www.nexusformat.org/), and vice versa. NXDL is used to define experiment instruments,
+  setups, or scientific data objects from experiments in a schema-based structure. While the
+  official NXDL format is in XML, this tool enables users to write the schema in a more
+  developer-friendly YAML format and seamlessly convert it into the official XML format.
 
-  This small project is a part of the FAIRmat project (project id 460197019)
-  funded by the Deutsche Forschungsgemeinschaft (DFG, German Research
-  Foundation)(https://gepris.dfg.de/gepris/projekt/460197019?language=en).
+  The `nyaml` tool also supports the reverse process, converting XML-based NXDL schemas into
+  YAML format. Users can benefit from a more accessible and human-readable way to define
+  NeXus data structures, while still adhering to NeXus standards. The tool requires users to
+  follow a specific grammar (see full documentation at https://fairmat-nfdi.github.io/nyaml/)
+  for embedding NeXus data structures, ensuring compatibility with the XML-based NXDL.
+
+  This work is part of the FAIRmat project (project ID 460197019), funded by the Deutsche
+  Forschungsgemeinschaft (DFG, German Research Foundation)
+  (https://gepris.dfg.de/gepris/projekt/460197019?language=en). The project aims to promote FAIR data principles—making scientific data Findable, Accessible, Interoperable, and Reusable—within the materials science community.
 
 
 license: Apache-2.0

@@ -19,5 +19,3 @@
 """
 nyaml is a tool to convert nyaml to nxdl and vice versa.
 """
-
-__version__ = "0.1.0"
