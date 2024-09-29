@@ -44,7 +44,6 @@ dev = [
     "types-pyyaml",
     "lxml-stubs",
     "uv>=0.4.10",
-    "cffconvert", # validates CITATION.cff
 ]
 
 [project.scripts]
