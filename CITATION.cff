@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-title: A python package converts YAML to NXDL format and vice versa
+title: A Python package that converts YAML to NXDL format and vice versa
 message:
   If you use this software, please cite it using the
   metadata from this file.
