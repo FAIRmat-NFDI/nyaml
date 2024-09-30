@@ -1,4 +1,4 @@
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/nyaml) [![PyPI](https://img.shields.io/pypi/v/nyaml)](https://pypi.org/project/nyaml/) [![Pytest](https://github.com/FAIRmat-NFDI/nyaml/actions/workflows/pytest.yaml/badge.svg)](https://github.com/FAIRmat-NFDI/nyaml/actions/workflows/pytest.yaml)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1323437.svg)](not available yet)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/nyaml) [![PyPI](https://img.shields.io/pypi/v/nyaml)](https://pypi.org/project/nyaml/) [![Pytest](https://github.com/FAIRmat-NFDI/nyaml/actions/workflows/pytest.yaml/badge.svg)](https://github.com/FAIRmat-NFDI/nyaml/actions/workflows/pytest.yaml)[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1323437.svg)](10.5281/zenodo.13860810)
 
 # Table of Contents
 
