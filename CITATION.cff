@@ -4,7 +4,7 @@ message:
   If you use this software, please cite it using the
   metadata from this file.
 type: software
-version: 0.1.0
+version: 0.1.1
 authors:
   - given-names: Andrea
     family-names: Albino
@@ -28,9 +28,9 @@ authors:
     family-names: Shabih
     orcid: 'https://orcid.org/0009-0008-6635-4465'
 
-# doi: Not available yet
+doi: 10.5281/zenodo.13860810
 repository-code: 'https://github.com/FAIRmat-NFDI/nyaml'
-# url: Not available yet
+url: https://doi.org/10.5281/zenodo.13860810
 abstract:
   The nyaml converter is a Python software tool designed to transform the NeXus Definition
   Language (NXDL) from YAML format to XML, the official format for NeXus data exchange format
