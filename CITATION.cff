@@ -12,29 +12,22 @@ authors:
   - given-names: Rubel
     family-names: Mozumder
     orcid: 'https://orcid.org/0009-0007-5926-6646'
-  - given-names: Sherjeel
-    family-names: Shabih
-    orcid: 'https://orcid.org/0009-0008-6635-4465'
-  - given-names: Florian
-    family-names: Dobener
-    orcid: 'https://orcid.org/0000-0003-1987-6224'
-  - given-names: Lukas
-    family-names: Pielsticker
-    orcid: 'https://orcid.org/0000-0001-9361-8333'
-  - given-names: Markus
-    family-names: Kühbach
-    orcid: 'https://orcid.org/0000-0002-7117-5196'
   - given-names: Sandor
     family-names: Brockhauser
     orcid: 'https://orcid.org/0000-0002-9700-4803'
+  - given-names: Florian
+    family-names: Dobener
+    orcid: 'https://orcid.org/0000-0003-1987-6224'
+  - given-names: Markus
+    family-names: Kühbach
+    orcid: 'https://orcid.org/0000-0002-7117-5196'
+  - given-names: Lukas
+    family-names: Pielsticker
+    orcid: 'https://orcid.org/0000-0001-9361-8333'
+  - given-names: Sherjeel
+    family-names: Shabih
+    orcid: 'https://orcid.org/0009-0008-6635-4465'
 
-
-
-# NOTE: After publishing this software in zenodo, replace add DOI and URL
-# Each indivisual version has a own doi, but DOI should be the all version
-# doi that will always points to the latest version
-# of the release. Similarly, zenodo will provide single URL for the published
-# software.
 # doi: Not available yet
 repository-code: 'https://github.com/FAIRmat-NFDI/nyaml'
 # url: Not available yet
@@ -54,7 +47,8 @@ abstract:
 
   This work is part of the FAIRmat project (project ID 460197019), funded by the Deutsche
   Forschungsgemeinschaft (DFG, German Research Foundation)
-  (https://gepris.dfg.de/gepris/projekt/460197019?language=en). Visit the [FAIRmat page](https://www.fairmat-nfdi.eu/fairmat/about-fairmat/consortium-fairmat) for more info. 
+  (https://gepris.dfg.de/gepris/projekt/460197019?language=en). Visit the
+  [FAIRmat page](https://www.fairmat-nfdi.eu/fairmat/about-fairmat/consortium-fairmat) for more info.
 
 
 license: Apache-2.0
