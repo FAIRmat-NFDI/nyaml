@@ -46,29 +46,7 @@ from nyaml.helper import (
     remove_namespace_from_tag,
 )
 
-# pylint: disable=too-many-lines, global-statement, invalid-name
-DOM_COMMENT = (
-    f"# NeXus - Neutron and X-ray Common Data Format\n"
-    f"#\n"
-    f"# Copyright (C) 2014-{datetime.date.today().year} "
-    "NeXus International Advisory Committee (NIAC)\n"
-    f"#\n"
-    f"# This library is free software; you can redistribute it and/or\n"
-    f"# modify it under the terms of the GNU Lesser General Public\n"
-    f"# License as published by the Free Software Foundation; either\n"
-    f"# version 3 of the License, or (at your option) any later version.\n"
-    f"#\n"
-    f"# This library is distributed in the hope that it will be useful,\n"
-    f"# but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-    f"# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
-    f"# Lesser General Public License for more details.\n"
-    f"#\n"
-    f"# You should have received a copy of the GNU Lesser General Public\n"
-    f"# License along with this library; if not, write to the Free Software\n"
-    f"# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
-    f"#\n"
-    f"# For further information, see http://www.nexusformat.org\n"
-)
+DOM_COMMENT = ""
 NX_ATTR_IDNT = "\\@"
 NX_UNIT_IDNT = "unit"
 DEPTH_SIZE = 4 * " "
@@ -100,6 +78,65 @@ def check_for_dom_comment_in_yaml():
         COMMENT_BLOCKS.remove_comment(dom_comment_ind)
 
     return dom_comment
+
+
+# pylint: disable=too-many-lines
+def set_copyright_text(
+    yml_copyright_year,
+    nxdl_copyright_year,
+):
+    """Priotize the copyright date and set in copyright docs.
+
+
+    yml_copyright_year will be prioritized on top of nxdl_copyright_year,
+    If none of them is found create a copyright data from the fist creation date
+    of the schema.
+    """
+    copyright_year = f"{datetime.datetime.now().year}-{datetime.datetime.now().year}"
+    if yml_copyright_year:
+        parts = yml_copyright_year.split("-")
+        try:
+            start = int(parts[0]) > 1000
+            end = int(parts[1]) > start
+            if not start and not end:
+                raise ValueError(
+                    "CopyrightYearConventionError: "
+                    "Check first line of the yaml file. "
+                    "should be in the format 'YYYY-YYYY'."
+                )
+        except ValueError as e:
+            raise ValueError(
+                "CopyrightYearConventionError: "
+                "Check first line of the yaml file. "
+                "should be in the format 'YYYY-YYYY'."
+            ) from e
+        copyright_year = yml_copyright_year
+    elif nxdl_copyright_year:
+        copyright_year = nxdl_copyright_year
+
+    global DOM_COMMENT
+    DOM_COMMENT = (
+        f"# NeXus - Neutron and X-ray Common Data Format\n"
+        f"#\n"
+        f"# Copyright (C) {copyright_year} "
+        "NeXus International Advisory Committee (NIAC)\n"
+        f"#\n"
+        f"# This library is free software; you can redistribute it and/or\n"
+        f"# modify it under the terms of the GNU Lesser General Public\n"
+        f"# License as published by the Free Software Foundation; either\n"
+        f"# version 3 of the License, or (at your option) any later version.\n"
+        f"#\n"
+        f"# This library is distributed in the hope that it will be useful,\n"
+        f"# but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+        f"# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
+        f"# Lesser General Public License for more details.\n"
+        f"#\n"
+        f"# You should have received a copy of the GNU Lesser General Public\n"
+        f"# License along with this library; if not, write to the Free Software\n"
+        f"# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
+        f"#\n"
+        f"# For further information, see http://www.nexusformat.org\n"
+    )
 
 
 def yml_reader(inputfile):
@@ -1147,9 +1184,28 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
     tmp_xml_path = pathlib.Path(tmp_xml)
     pathlib.Path.unlink(tmp_xml_path)
 
+def extract_copyright_year(cmnt_list):
+    """Find out copyright year from yml appdef"""
+    if cmnt_list:
+        yml_copyright_year = ""
+        yml_copyright_year_ind = -1
+        for ind, cmnt in enumerate(cmnt_list):
+            match = re.search(r"^[\ ]*copyright:[\ ]*([0-9]{4}-[0-9]{4})$", cmnt)
+
+            if match:
+                yml_copyright_year = match.group(1)
+                yml_copyright_year_ind = ind
+                break
+        if yml_copyright_year_ind != -1:
+            cmnt_list.pop(yml_copyright_year_ind)
+
+        return yml_copyright_year, yml_copyright_year != ""
+
+    return "", False
+
 
 # pylint: disable=too-many-statements
-def nyaml2nxdl(input_file: str, out_file, verbose: bool):
+def nyaml2nxdl(input_file: str, out_file, verbose: bool, nxdl_copyright_year=""):
     """
     Main of the nyaml2nxdl converter, creates XML tree, namespace and
     schema, definitions then evaluates a nested dictionary of groups recursively and
@@ -1188,19 +1244,26 @@ application and base are valid categories!"
 
     name_extends = ""
     yml_appdef_copy = yml_appdef.copy()
+    yml_copyright_year = ""
     for kkey, vvalue in yml_appdef_copy.items():
         if "__line__" in kkey:
             continue
         line_number = f"__line__{kkey}"
         line_loc_no = yml_appdef[line_number]
         if not isinstance(vvalue, dict) and kkey in def_attributes:
+
             if isinstance(vvalue, bool):
                 xml_root.set(kkey, "true" if vvalue else "false")
             else:
                 xml_root.set(kkey, str(vvalue) or "")
+
             cmnt_text = xml_handle_comment(
                 xml_root, line_number, line_loc_no, is_def_cmnt=True
             )
+            if not yml_copyright_year:
+                yml_copyright_year, has_yml_copyright_year = extract_copyright_year(
+                    cmnt_text
+                )
             def_cmnt_text += cmnt_text
 
             del yml_appdef[line_number]
@@ -1276,6 +1339,10 @@ application and base are valid categories!"
 
     assert "NX" in name_extends and len(name_extends) > 2, "NX \
 keyword has an invalid pattern, or is too short!"
+    # Write copyright year in doc string
+    set_copyright_text(
+        yml_copyright_year=yml_copyright_year, nxdl_copyright_year=nxdl_copyright_year
+    )
     # Taking care if definition has empty content
     if yml_appdef[name_extends]:
         recursive_build(xml_root, yml_appdef[name_extends], verbose)

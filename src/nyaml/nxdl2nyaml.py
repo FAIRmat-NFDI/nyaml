@@ -151,6 +151,7 @@ class Nxdl2yaml:
         self.symbol_list = symbol_list
         self.include_comment = True
         self.pi_comments = None
+        self.copyright_date = ""
         # NOTE: Here is how root_level_comments organised for storing comments
         # root_level_comment= {'root_doc': comment,
         #                      'symbols': comment,
@@ -180,8 +181,24 @@ class Nxdl2yaml:
         depth = 0
 
         self.pi_comments, root = parse(input_file)
+
+        for comment in self.pi_comments:
+            if not self.copyright_date:
+                self.collect_copyright_date(comment)
+
         xml_tree = {"tree": root, "node": root}
         self.xmlparse(output_yml, xml_tree, depth, verbose)
+
+    def collect_copyright_date(self, comment):
+        """
+        Find out copywrite date of nxdl and store it.
+        """
+        match = re.search(
+            r"Copyright \(C\) (\d{4}\-\d{4}) NeXus International Advisory Committee \(NIAC\)",
+            comment,
+        )
+        if match:
+            self.copyright_date = match.group(1)
 
     def handle_symbols(self, depth, node):
         """Handle symbols field and its childs symbol"""
@@ -483,6 +500,13 @@ class Nxdl2yaml:
         if depth < 0:
             raise ValueError("Somthing wrong with indentation in root level.")
 
+        if not self.copyright_date:
+            raise ValueError("No copywrite date has been found.")
+        self.write_out(
+            indent=0 * DEPTH_SIZE,
+            text=f"# copyright_date: {self.copyright_date}",
+            file_out=file_out,
+        )
         has_category = False
         for def_line in self.root_level_definition:
             if def_line in DEFINITION_CATEGORIES:
