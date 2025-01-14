@@ -37,7 +37,7 @@ from nyaml.helper import (
     clean_empty_lines,
     get_node_parent_info,
     get_yaml_escape_char_dict,
-    is_dom_comment,
+    is_copyright_comment,
     remove_namespace_from_tag,
 )
 
@@ -182,23 +182,8 @@ class Nxdl2yaml:
 
         self.pi_comments, root = parse(input_file)
 
-        for comment in self.pi_comments:
-            if not self.copyright_date:
-                self.collect_copyright_date(comment)
-
         xml_tree = {"tree": root, "node": root}
         self.xmlparse(output_yml, xml_tree, depth, verbose)
-
-    def collect_copyright_date(self, comment):
-        """
-        Find out copywrite date of nxdl and store it.
-        """
-        match = re.search(
-            r"Copyright \(C\) (\d{4}\-\d{4}) NeXus International Advisory Committee \(NIAC\)",
-            comment,
-        )
-        if match:
-            self.copyright_date = match.group(1)
 
     def handle_symbols(self, depth, node):
         """Handle symbols field and its childs symbol"""
@@ -429,7 +414,7 @@ class Nxdl2yaml:
                 )
                 xref_in_doc = xref_in_doc or xref_present
                 modified_docs.append(mod_doc)
-        # doc example:
+        # Note on doc example:
         # doc:
         #  - |
         #   text
@@ -500,13 +485,6 @@ class Nxdl2yaml:
         if depth < 0:
             raise ValueError("Somthing wrong with indentation in root level.")
 
-        if not self.copyright_date:
-            raise ValueError("No copywrite date has been found.")
-        self.write_out(
-            indent=0 * DEPTH_SIZE,
-            text=f"# copyright_date: {self.copyright_date}",
-            file_out=file_out,
-        )
         has_category = False
         for def_line in self.root_level_definition:
             if def_line in DEFINITION_CATEGORIES:
@@ -554,7 +532,7 @@ class Nxdl2yaml:
         indent = depth * DEPTH_SIZE
         # Take care copyright doc string
         for comment in self.pi_comments:
-            if comment and not is_dom_comment(comment):
+            if comment and not is_copyright_comment(comment):
                 self.write_out(
                     indent, self.convert_to_yaml_comment(depth, comment), file_out
                 )

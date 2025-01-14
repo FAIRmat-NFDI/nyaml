@@ -24,7 +24,6 @@ file which details a hierarchy of data/metadata elements. It also allows both wa
 conversion beteen YAML and nxdl.xml files that follows rules of NeXus ontology or data format.
 """
 
-import re
 from pathlib import Path
 
 import click
@@ -43,7 +42,6 @@ NXDL_SUFFIX = ".nxdl.xml"
 # NOTE: Some handful links for nyaml2nxdl converter:
 # https://manual.nexusformat.org/nxdl_desc.html?highlight=optional
 
-
 def generate_nxdl_or_retrieve_nxdl(yaml_file, out_xml_file, verbose):
     """
     Generate yaml, nxdl and hash.
@@ -56,23 +54,12 @@ def generate_nxdl_or_retrieve_nxdl(yaml_file, out_xml_file, verbose):
     pa_path, rel_file = file_path.parent, file_path.name
     sep_yaml = (pa_path / f"temp_{rel_file}").as_posix()
     hash_found = separate_hash_yaml_and_nxdl(yaml_file, sep_yaml, out_xml_file)
-    copyright_year = ""
     if hash_found:
         gen_hash = get_sha256_hash(sep_yaml)
         if hash_found == gen_hash:
             Path(sep_yaml).unlink()
             return
-        with open(out_xml_file, mode="r", encoding="utf-8") as nxdl_file:
-            nxdl_content = nxdl_file.read()
-            match = re.search(
-                r"Copyright \(C\) (\d{4}\-\d{4}) NeXus International Advisory Committee \(NIAC\)",
-                nxdl_content,
-            )
-
-            if match:
-                copyright_year = match.group(1)
-
-    nyaml2nxdl(sep_yaml, out_xml_file, verbose, nxdl_copyright_year=copyright_year)
+    nyaml2nxdl(sep_yaml, out_xml_file, verbose)
     Path(sep_yaml).unlink()
 
 

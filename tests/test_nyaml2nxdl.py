@@ -299,8 +299,8 @@ def test_xml_parsing():
 
     assert test_tree_flattened == ref_tree_flattened, "Ref XML and parsed XML\
 has not the same tree structure!!"
-    os.remove("tests/data/Ref_NXellips_parsed.nxdl.xml")
-    os.remove("tests/data/Ref_NXellips_parsed.yaml")
+    os.remove(test_xml_file)
+    os.remove(test_yml_file)
     sys.stdout.write("Test on xml -> yml -> xml okay.\n")
 
 
@@ -356,7 +356,9 @@ def test_yml_consistency_comment_parsing():
     test_comment_blocks.extract_all_comment_blocks()
 
     for ref_cmnt, test_cmnt in zip(ref_comment_blocks, test_comment_blocks):
-        assert ref_cmnt == test_cmnt, "Comment is not consistent."
+        if ref_cmnt != test_cmnt:
+            xx = "hih"
+            assert ref_cmnt == test_cmnt, "Comment is not consistent."
 
     os.remove(test_yml_file)
 
