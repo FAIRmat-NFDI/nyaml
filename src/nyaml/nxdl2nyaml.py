@@ -151,7 +151,6 @@ class Nxdl2yaml:
         self.symbol_list = symbol_list
         self.include_comment = True
         self.pi_comments = None
-        self.copyright_date = ""
         # NOTE: Here is how root_level_comments organised for storing comments
         # root_level_comment= {'root_doc': comment,
         #                      'symbols': comment,
@@ -181,7 +180,6 @@ class Nxdl2yaml:
         depth = 0
 
         self.pi_comments, root = parse(input_file)
-
         xml_tree = {"tree": root, "node": root}
         self.xmlparse(output_yml, xml_tree, depth, verbose)
 

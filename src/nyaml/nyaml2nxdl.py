@@ -91,13 +91,7 @@ def get_nxdl_copyright_license(nxdl_file):
 
 # pylint: disable=too-many-lines
 def set_copyright_text(nxdl_copyright_license=""):
-    """Priotize the copyright date and set in copyright docs.
-
-
-    yml_copyright_year will be prioritized on top of nxdl_copyright_year,
-    If none of them is found create a copyright data from the fist creation date
-    of the schema.
-    """
+    """Set copyright text from nxdl file or create from current year."""
 
     global DOM_COMMENT
     if nxdl_copyright_license:
@@ -927,7 +921,7 @@ def xml_handle_fields_or_group(
     keyword_name, keyword_type = nx_name_type_resolving(keyword)
     if ele_type == "field" and not keyword_name:
         raise ValueError(
-            f"No name for NeXus {ele_type} has been found.Check around line:{line_loc}"
+            f"No name for NeXus {ele_type} has been found. Check around line:{line_loc}"
         )
     if not keyword_type and not keyword_name:
         raise ValueError(
@@ -1174,26 +1168,6 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
     pathlib.Path.unlink(tmp_xml_path)
 
 
-def extract_copyright_year(cmnt_list):
-    """Find out copyright year from yml appdef"""
-    if cmnt_list:
-        yml_copyright_year = ""
-        yml_copyright_year_ind = -1
-        for ind, cmnt in enumerate(cmnt_list):
-            match = re.search(r"^[\ ]*copyright:[\ ]*([0-9]{4}-[0-9]{4})$", cmnt)
-
-            if match:
-                yml_copyright_year = match.group(1)
-                yml_copyright_year_ind = ind
-                break
-        if yml_copyright_year_ind != -1:
-            cmnt_list.pop(yml_copyright_year_ind)
-
-        return yml_copyright_year, yml_copyright_year != ""
-
-    return "", False
-
-
 # pylint: disable=too-many-statements
 def nyaml2nxdl(input_file: str, out_file, verbose: bool):
     """
@@ -1248,7 +1222,6 @@ application and base are valid categories!"
                 xml_root.set(kkey, "true" if vvalue else "false")
             else:
                 xml_root.set(kkey, str(vvalue) or "")
-
             cmnt_text = xml_handle_comment(
                 xml_root, line_number, line_loc_no, is_def_cmnt=True
             )
