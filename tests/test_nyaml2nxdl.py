@@ -151,7 +151,9 @@ def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     check_file_fresh_baked(test_yml_file)
 
     result = filecmp.cmp(ref_yml_file, test_yml_file, shallow=False)
-    assert result, "Ref YML and parsed YML\
+    assert (
+        result
+    ), "Ref YML and parsed YML\
 has not the same structure!!"
     os.remove(test_yml_file)
     sys.stdout.write("Test on xml -> yml doc formatting okay.\n")
@@ -297,7 +299,9 @@ def test_xml_parsing():
     ref_tree = ET.parse(ref_xml_file)
     ref_tree_flattened = {i.tag.split("}", 1)[1] for i in ref_tree.iter()}
 
-    assert test_tree_flattened == ref_tree_flattened, "Ref XML and parsed XML\
+    assert (
+        test_tree_flattened == ref_tree_flattened
+    ), "Ref XML and parsed XML\
 has not the same tree structure!!"
     os.remove(test_xml_file)
     os.remove(test_yml_file)
@@ -322,7 +326,9 @@ def test_yml_parsing():
 
     ref_yml_tree = nyaml2nxdl_forward_tools.yml_reader(ref_yml_file)
 
-    assert list(test_yml_tree) == list(ref_yml_tree), "Ref YML and parsed YML \
+    assert list(test_yml_tree) == list(
+        ref_yml_tree
+    ), "Ref YML and parsed YML \
 has not the same root entries!!"
     os.remove("tests/data/Ref_NXellipsometry_parsed.yaml")
     os.remove("tests/data/Ref_NXellipsometry.nxdl.xml")

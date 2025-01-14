@@ -88,6 +88,7 @@ def get_nxdl_copyright_license(nxdl_file):
                         is_comment_end = False
         return ""
 
+
 # pylint: disable=too-many-lines
 def set_copyright_text(nxdl_copyright_license=""):
     """Priotize the copyright date and set in copyright docs.
@@ -652,7 +653,9 @@ def xml_handle_enumeration(dct, obj, keyword, value, verbose):
     xml_handle_comment(obj, line_number, line_loc)
     enum = ET.SubElement(obj, "enumeration")
 
-    assert value is not None, f"Line {line_loc}: enumeration must \
+    assert (
+        value is not None
+    ), f"Line {line_loc}: enumeration must \
 bear at least an argument !"
     assert (
         len(value) >= 1
@@ -1171,6 +1174,7 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
     tmp_xml_path = pathlib.Path(tmp_xml)
     pathlib.Path.unlink(tmp_xml_path)
 
+
 def extract_copyright_year(cmnt_list):
     """Find out copyright year from yml appdef"""
     if cmnt_list:
@@ -1321,7 +1325,9 @@ application and base are valid categories!"
         f"at root-level! check key at root level {extra_key}"
     )
 
-    assert "NX" in name_extends and len(name_extends) > 2, "NX \
+    assert (
+        "NX" in name_extends and len(name_extends) > 2
+    ), "NX \
 keyword has an invalid pattern, or is too short!"
     # Write copyright year in doc string
     # Taking care if definition has empty content

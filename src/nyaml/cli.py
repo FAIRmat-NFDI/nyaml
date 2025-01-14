@@ -42,6 +42,7 @@ NXDL_SUFFIX = ".nxdl.xml"
 # NOTE: Some handful links for nyaml2nxdl converter:
 # https://manual.nexusformat.org/nxdl_desc.html?highlight=optional
 
+
 def generate_nxdl_or_retrieve_nxdl(yaml_file, out_xml_file, verbose):
     """
     Generate yaml, nxdl and hash.
