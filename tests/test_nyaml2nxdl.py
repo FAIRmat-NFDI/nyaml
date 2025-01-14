@@ -362,9 +362,7 @@ def test_yml_consistency_comment_parsing():
     test_comment_blocks.extract_all_comment_blocks()
 
     for ref_cmnt, test_cmnt in zip(ref_comment_blocks, test_comment_blocks):
-        if ref_cmnt != test_cmnt:
-            xx = "hih"
-            assert ref_cmnt == test_cmnt, "Comment is not consistent."
+        assert ref_cmnt == test_cmnt, "Comment is not consistent."
 
     os.remove(test_yml_file)
 
