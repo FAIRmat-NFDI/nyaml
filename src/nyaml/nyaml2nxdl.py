@@ -65,8 +65,8 @@ def get_nxdl_copyright_license(nxdl_file):
     is_comment_end = False
 
     if os.path.isfile(nxdl_file):
-        with open(nxdl_file, "r", encoding="utf-8") as nxdl_file:
-            nxdl_lines = nxdl_file.readlines()
+        with open(nxdl_file, "r", encoding="utf-8") as nxdl_file_obj:
+            nxdl_lines = nxdl_file_obj.readlines()
             comment = ""
             for line in nxdl_lines:
                 # Find a single comment
