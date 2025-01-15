@@ -34,7 +34,7 @@ from nyaml import cli as nyaml2nxdl
 from nyaml import nyaml2nxdl as nyaml2nxdl_forward_tools
 from nyaml.comment_collector import CommentCollector
 from nyaml.helper import LineLoader, remove_namespace_from_tag
-from nyaml.nyaml2nxdl import handle_each_part_doc
+from nyaml.nyaml2nxdl import get_nxdl_copyright_license, handle_each_part_doc
 
 LATEST_COPYRIGHT_YEAR = f"{datetime.now().year}-{datetime.now().year}"
 LATEST_COPYRIGHT = rf"# Copyright \(C\) {LATEST_COPYRIGHT_YEAR} NeXus International Advisory Committee \(NIAC\)"
@@ -43,17 +43,17 @@ COPYRIGHT_REPLACEMENT = (
 )
 
 
-def check_and_replace_latest_copyright(file):
+def check_and_replace_latest_copyright(nxdl_file):
     """Check if the latest copyright date has been written properly,
     and replace it accordingly to the test data file.
     """
-    content = file.read_text()
+    content = nxdl_file.read_text()
     generated_copyright = re.findall(LATEST_COPYRIGHT, content, re.DOTALL)
     assert len(generated_copyright) == 1, (
-        f"No copyright or not correct copyright year found in {file}"
+        f"No copyright or not correct copyright year found in {nxdl_file}"
     )
     content = re.sub(LATEST_COPYRIGHT, COPYRIGHT_REPLACEMENT, content)
-    file.write_text(content)
+    nxdl_file.write_text(content)
 
 def delete_duplicates(list_of_matching_string):
     """
@@ -581,6 +581,56 @@ def test_yaml2nxdl_no_tabs(tmp_path):
             ), f"DOCS ARE NOT SAME: node {parent1}, node {parent2}"
 
     compare_nxdl_doc(ref_nxdl, out_nxdl)
+
+def test_copyright_license_new_yaml(tmp_path):
+    """While converting the newly developed yaml to nxdl the license text should have
+    the latest year.
+    """
+    pwd = Path(__file__).parent
+    input_file = pwd / "data/dim_keyword.yaml"
+    output = tmp_path / "dim_keyword.nxdl.xml"
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool, [str(input_file), "--output-file", str(output)]
+    )
+    assert result.exit_code == 0, (
+        f"Error in converter execution input file {input_file}."
+    )
+    # Check if the latest copyright year is written
+    check_and_replace_latest_copyright(output)
+
+
+def test_check_copyright_license_in_modified_yaml(tmp_path):
+    """While converting the modified yaml to nxdl the license text should
+    come from stored nxdl file.
+    """
+    pwd = Path(__file__).parent
+    yaml_file = pwd / "data/Ref_NXentry.yaml"
+    modified_yaml = tmp_path / "NXentry_modified.yaml"
+    output = tmp_path / "NXentry_modified.nxdl.xml"
+
+    content = yaml_file.read_text()
+    find_pattern = r"my nice doc string in root level, line 2."
+    replace_pattern = "my nice doc string in root level, line 2. Modified."
+    updated_content = re.sub(find_pattern, replace_pattern, content)
+    modified_yaml.write_text(updated_content)
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool, [str(modified_yaml), "--output-file", str(output)]
+    )
+    assert result.exit_code == 0, (
+        f"Error in converter execution input file {modified_yaml}."
+    )
+
+    expected_text = (
+        r"Copyright \(C\) 2010-2020 NeXus International Advisory Committee \(NIAC\)"
+    )
+
+    license_text = get_nxdl_copyright_license(output)
+    assert license_text, "License text not found in nxdl file."
+    text_list = re.findall(expected_text, license_text, re.DOTALL)
+
+    assert len(text_list) == 1, "License text is not correct."
 
 
 @pytest.mark.parametrize(
