@@ -58,7 +58,6 @@ CATEGORY = ""  # Definition would be either 'base' or 'application'
 
 def get_nxdl_copyright_license(nxdl_file):
     """Extract the license part from nxdl file if nxdl file as input."""
-    copyright_lincense = ""
     comment_start_sym = "^<!--"
     comment_end_sym = "-->\n+$"
     is_comment_start = False
@@ -79,7 +78,6 @@ def get_nxdl_copyright_license(nxdl_file):
                         comment += line
                 # Varifiy for copyright comment
                 if is_comment_start and is_comment_end:
-                    print(" ##### comment : ", comment)
                     if is_copyright_comment(comment):
                         return comment
                     else:

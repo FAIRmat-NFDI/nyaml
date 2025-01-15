@@ -21,6 +21,7 @@ Tests for nyaml2nxdl tool
 
 import filecmp
 import os
+import re
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -35,6 +36,24 @@ from nyaml.comment_collector import CommentCollector
 from nyaml.helper import LineLoader, remove_namespace_from_tag
 from nyaml.nyaml2nxdl import handle_each_part_doc
 
+LATEST_COPYRIGHT_YEAR = f"{datetime.now().year}-{datetime.now().year}"
+LATEST_COPYRIGHT = rf"# Copyright \(C\) {LATEST_COPYRIGHT_YEAR} NeXus International Advisory Committee \(NIAC\)"
+COPYRIGHT_REPLACEMENT = (
+    f"# Copyright (C) 2010-2020 NeXus International Advisory Committee (NIAC)"
+)
+
+
+def check_and_replace_latest_copyright(file):
+    """Check if the latest copyright date has been written properly,
+    and replace it accordingly to the test data file.
+    """
+    content = file.read_text()
+    generated_copyright = re.findall(LATEST_COPYRIGHT, content, re.DOTALL)
+    assert len(generated_copyright) == 1, (
+        f"No copyright or not correct copyright year found in {file}"
+    )
+    content = re.sub(LATEST_COPYRIGHT, COPYRIGHT_REPLACEMENT, content)
+    file.write_text(content)
 
 def delete_duplicates(list_of_matching_string):
     """
@@ -435,7 +454,8 @@ def test_yaml2nxdl_doc():
     if result.exit_code != 0:
         Path.unlink(out_doc_file)
     assert result.exit_code == 0, f"Error: Having issue running input file {doc_file}."
-
+    # Check copyright year and repalce it according to the ref file
+    check_and_replace_latest_copyright(out_doc_file)
     ref_nxdl = ET.parse(str(ref_doc_file)).getroot()
     out_nxdl = ET.parse(str(out_doc_file)).getroot()
 
@@ -500,6 +520,7 @@ def test_nyaml2nxdl_dim_keyword(tmp_path):
     )
 
     assert result.exit_code == 0, "Error in converter execution."
+    check_and_replace_latest_copyright(parsed_file)
     assert ref_file.read_text() == parsed_file.read_text()
 
 
@@ -542,7 +563,7 @@ def test_yaml2nxdl_no_tabs(tmp_path):
         nyaml2nxdl.launch_tool, [str(doc_file), "--output-file", str(out_doc_file)]
     )
     assert result.exit_code == 0, f"Error: Having issue running input file {doc_file}."
-
+    check_and_replace_latest_copyright(out_doc_file)
     ref_nxdl = ET.parse(str(ref_doc_file)).getroot()
     out_nxdl = ET.parse(str(out_doc_file)).getroot()
 
