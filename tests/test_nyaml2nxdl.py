@@ -599,6 +599,42 @@ def test_copyright_license_new_yaml(tmp_path):
     # Check if the latest copyright year is written
     check_and_replace_latest_copyright(output)
 
+def test_check_copyright_license_in_full_modification_yaml_cycle(tmp_path):
+    pwd = Path(__file__).parent
+    nxdl_file = pwd / "data/Ref_NXentry_Licence.nxdl.xml"
+    yaml_file = tmp_path / "Ref_NXentry_Licence_parsed.yaml"
+    modified_yaml_gen = tmp_path / "Ref_NXentry_Licence_modified.yaml"
+    modified_yaml_ref = pwd / "data/Ref_NXentry_Licence_modified.yaml"
+    latest_nxdl = tmp_path / "Ref_NXentry_Licence_modified.nxdl.xml"
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool, [str(nxdl_file), "--output-file", str(yaml_file)]
+    )
+    assert result.exit_code == 0, (
+        f"Error in converter execution input file {nxdl_file}."
+    )
+    content = yaml_file.read_text()
+    find_pattern = r"my nice doc string in root level, line 2."
+    replace_pattern = "my nice doc string in root level, line 2. Modified."
+    updated_content = re.sub(find_pattern, replace_pattern, content)
+    modified_yaml_gen.write_text(updated_content)
+    # Compare two yaml and modified yaml
+    with open(modified_yaml_gen, mode="r", encoding="utf-8") as gen_yaml, open(
+        modified_yaml_ref, mode="r", encoding="utf-8"
+    ) as ref_yaml:
+        gen_yaml_dict = LineLoader(gen_yaml).get_single_data()
+        ref_yaml_dict = LineLoader(ref_yaml).get_single_data()
+    compare_yaml_content(gen_yaml_dict, ref_yaml_dict, ["doc"])
+
+    # Convert modified yaml to nxdl
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        [str(modified_yaml_gen), "--output-file", str(latest_nxdl)],
+    )
+
+    gen_license_text = get_nxdl_copyright_license(latest_nxdl)
+    original_license_text = get_nxdl_copyright_license(nxdl_file)
+    assert gen_license_text == original_license_text, "License text is not correct."
 
 def test_check_copyright_license_in_modified_yaml(tmp_path):
     """While converting the modified yaml to nxdl the license text should
