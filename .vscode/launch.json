@@ -11,12 +11,20 @@
             "cwd": "${workspaceFolder}",
             "program": "../../.py3.11.11/bin/nyaml2nxdl",
             "args": [//"tests/NXaberration.nxdl.xml",
-                     "tests/NXdata.nxdl.xml",
+                     //"tests/NXdata.nxdl.xml",
                      //"tests/NXcg_primitive_set.nxdl.xml",
+                     //"tests/NXdetector_group.nxdl.xml",
+                     "tests/NXem.yaml",
+                     //"tests/NXem.yaml.NXem.nxdl.xml",
+                     //"tests/NXem.yaml",
                      "--verbose",
                      //"--output-file=tests/NXcg_primitive_set.yaml"],
-                     "--output-file=tests/NXdata.yaml"],
+                     //"--output-file=tests/NXdata.yaml"],
                      //"--output-file=tests/NXaberration.yaml"],
+                     //"--output-file=tests/NXdetector_group.yaml"],
+                     "--output-file=tests/NXem.nxdl.xml"],
+                     //"--output-file=tests/NXem.yaml.NXem.nxdl.xml.NXem.yaml"],
+                     //"--output-file=tests/NXem.yaml.NXem.nxdl.xml"],
         }
     ]
 }
