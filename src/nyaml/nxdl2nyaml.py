@@ -741,6 +741,13 @@ class Nxdl2yaml:
                     # that it does not call in xmlparser function
                     dim_cmnt_nodes.append(child)
                     node.remove(child)
+            # special case for NXdata field DATA, rank is a symbol
+            if (
+                len(dim_index_value) == 0
+                and len(node.attrib) == 1
+                and "rank" in node.attrib
+            ):
+                dim_index_value.append(node.attrib["rank"])
 
             # All 'dim' element comments on top of 'dim' yaml key
             if dim_cmnt_nodes:

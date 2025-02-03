@@ -1,0 +1,22 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "nyaml debug",
+            "type": "python",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "program": "../../.py3.11.11/bin/nyaml2nxdl",
+            "args": [//"tests/NXaberration.nxdl.xml",
+                     "tests/NXdata.nxdl.xml",
+                     //"tests/NXcg_primitive_set.nxdl.xml",
+                     "--verbose",
+                     //"--output-file=tests/NXcg_primitive_set.yaml"],
+                     "--output-file=tests/NXdata.yaml"],
+                     //"--output-file=tests/NXaberration.yaml"],
+        }
+    ]
+}
