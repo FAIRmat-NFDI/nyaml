@@ -35,7 +35,7 @@ dependencies = [
 dev = [
     "virtualenv>=20.26.6",
     "mypy",
-    "ruff",
+    "ruff==0.9.4",
     "pytest",
     "types-lxml",
     "isort>=5.10",

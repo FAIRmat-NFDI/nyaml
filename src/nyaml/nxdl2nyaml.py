@@ -686,6 +686,14 @@ class Nxdl2yaml:
                             else f"({child_attrs['value']},)"
                         )
                         node.remove(child)
+                    # the next branch is only for legacy support of deprecated ref
+                    # as seen in NXdetector_group
+                    elif child_attrs.get("ref", "") and not dimension_doc:
+                        dim_index_value = (
+                            f"{dim_index_value[:-1]} {child_attrs['ref']},)"
+                            if dim_index_value
+                            else f"({child_attrs['ref']},)"
+                        )
                 elif tag == CMNT_TAG and self.include_comment:
                     # Store and remove node so that comment nodes from dim node so
                     # that it does not call in xmlparser function
@@ -741,7 +749,7 @@ class Nxdl2yaml:
                     # that it does not call in xmlparser function
                     dim_cmnt_nodes.append(child)
                     node.remove(child)
-            # special case for NXdata field DATA, rank is a symbol
+            # special case for NXdata.nxdl.xml's field DATA where rank is a symbol
             if (
                 len(dim_index_value) == 0
                 and len(node.attrib) == 1
@@ -784,34 +792,42 @@ class Nxdl2yaml:
                         )
 
         # Dimension has other attributes including index and value
-        if remove_namespace_from_tag(node[0].tag) == "doc" or len(node.attrib) > 0:
-            indent = depth * DEPTH_SIZE
-            tag = remove_namespace_from_tag(node.tag)
-            file_out.write(f"{indent}{tag}:\n")
-            for attr, value in node.attrib.items():
-                if attr in possible_dimension_attrs and not isinstance(value, dict):
-                    indent = (depth + 1) * DEPTH_SIZE
-                    file_out.write(f"{indent}{attr}: {value}\n")
-                else:
-                    raise ValueError(
-                        f"Dimension has an attribute {attr} that is not valid."
-                        f"Currently allowed attributes are {possible_dimension_attrs}."
-                        f"Please have a close look"
-                    )
-            # Taking care of dimension doc
-            dimension_doc = ""
-            for child in list(node):
-                tag = remove_namespace_from_tag(child.tag)
-                if tag == "doc":
-                    dimension_doc = self.handle_not_root_level_doc(
-                        depth + 1, child.text
-                    )
-                    file_out.write(dimension_doc)
-                    node.remove(child)
-            handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs)
-        # Dimension has only index and value
+        if len(node) > 0:
+            if remove_namespace_from_tag(node[0].tag) == "doc" or len(node.attrib) > 0:
+                indent = depth * DEPTH_SIZE
+                tag = remove_namespace_from_tag(node.tag)
+                file_out.write(f"{indent}{tag}:\n")
+                for attr, value in node.attrib.items():
+                    if attr in possible_dimension_attrs and not isinstance(value, dict):
+                        indent = (depth + 1) * DEPTH_SIZE
+                        file_out.write(f"{indent}{attr}: {value}\n")
+                    else:
+                        raise ValueError(
+                            f"Dimension has an attribute {attr} that is not valid."
+                            f"Currently allowed attributes are {possible_dimension_attrs}."
+                            f"Please have a close look"
+                        )
+                # Taking care of dimension doc
+                dimension_doc = ""
+                for child in list(node):
+                    tag = remove_namespace_from_tag(child.tag)
+                    if tag == "doc":
+                        dimension_doc = self.handle_not_root_level_doc(
+                            depth + 1, child.text
+                        )
+                        file_out.write(dimension_doc)
+                        node.remove(child)
+                handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs)
+            # Dimension has only index and value
+            else:
+                handle_dim_with_value_and_index(depth, node, file_out, dimension_doc="")
         else:
-            handle_dim_with_value_and_index(depth, node, file_out, dimension_doc="")
+            # dimension has only rank as seen in NXfresnel_zone_plate.nxdl.xml
+            if len(node.attrib) == 1 and "rank" in node.attrib:
+                indent = depth * DEPTH_SIZE
+                file_out.write(f"{indent}dim: (,)\n")
+            else:
+                raise NotImplementedError()
 
     def handle_enumeration(self, depth, node, file_out):
         """

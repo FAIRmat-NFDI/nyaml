@@ -344,9 +344,9 @@ def xml_handle_exists(dct, obj, keyword, value):
     This function creates an 'exists' element instance, and appends it to an existing element
     """
     line_number = f"__line__{keyword}"
-    assert (
-        value is not None
-    ), f"Line {dct[line_number]}: exists argument must not be None !"
+    assert value is not None, (
+        f"Line {dct[line_number]}: exists argument must not be None !"
+    )
     if isinstance(value, list):
         if len(value) == 4:
             if value[0] == "min" and value[2] == "max":
@@ -412,9 +412,9 @@ def xml_handle_dimensions(dct, obj, keyword, value: dict):
     possible_dimension_attrs = ["rank"]  # nxdl attributes
     line_number = f"__line__{keyword}"
     line_loc = dct[line_number]
-    assert (
-        "dim" in value.keys()
-    ), f"Line {line_loc}: No dim as child of dimension has been found."
+    assert "dim" in value.keys(), (
+        f"Line {line_loc}: No dim as child of dimension has been found."
+    )
     xml_handle_comment(obj, line_number, line_loc)
     dims = ET.SubElement(obj, "dimensions")
     # Consider all the children under dimension is dim element and
@@ -628,11 +628,13 @@ def xml_handle_enumeration(dct, obj, keyword, value, verbose):
     xml_handle_comment(obj, line_number, line_loc)
     enum = ET.SubElement(obj, "enumeration")
 
-    assert value is not None, f"Line {line_loc}: enumeration must \
+    assert value is not None, (
+        f"Line {line_loc}: enumeration must \
 bear at least an argument !"
-    assert (
-        len(value) >= 1
-    ), f"Line {dct[line_number]}: enumeration must not be an empty list!"
+    )
+    assert len(value) >= 1, (
+        f"Line {dct[line_number]}: enumeration must not be an empty list!"
+    )
     if isinstance(value, list):
         for element in value:
             itm = ET.SubElement(enum, "item")
@@ -731,9 +733,9 @@ def xml_handle_symbols(dct, obj, keyword, value: dict):
     """Handle a set of NXDL symbols as a child to obj"""
     line_number = f"__line__{keyword}"
     line_loc = dct[line_number]
-    assert (
-        len(list(value.keys())) > 0
-    ), f"Line {line_loc}: symbols table must not be empty !"
+    assert len(list(value.keys())) > 0, (
+        f"Line {line_loc}: symbols table must not be empty !"
+    )
     xml_handle_comment(obj, line_number, line_loc)
     syms = ET.SubElement(obj, "symbols")
     if "doc" in value.keys():
@@ -750,9 +752,9 @@ def xml_handle_symbols(dct, obj, keyword, value: dict):
             line_number = f"__line__{kkeyword}"
             line_loc = value[line_number]
             xml_handle_comment(syms, line_number, line_loc)
-            assert vvalue is not None and isinstance(
-                vvalue, str
-            ), f"Line {line_loc}: put a comment in doc string !"
+            assert vvalue is not None and isinstance(vvalue, str), (
+                f"Line {line_loc}: put a comment in doc string !"
+            )
             sym = ET.SubElement(syms, "symbol")
             sym.set("name", kkeyword)
             xml_handle_doc(sym, vvalue)
@@ -900,8 +902,7 @@ def xml_handle_fields_or_group(
     keyword_name, keyword_type = nx_name_type_resolving(keyword)
     if ele_type == "field" and not keyword_name:
         raise ValueError(
-            f"No name for NeXus {ele_type} has been found."
-            f"Check around line:{line_loc}"
+            f"No name for NeXus {ele_type} has been found.Check around line:{line_loc}"
         )
     if not keyword_type and not keyword_name:
         raise ValueError(
@@ -1176,14 +1177,16 @@ def nyaml2nxdl(input_file: str, out_file, verbose: bool):
         None: "http://definition.nexusformat.org/nxdl/3.1",
     }
     xml_root = ET.Element("definition", attrib={}, nsmap=nsmap)
-    assert (
-        "category" in yml_appdef.keys()
-    ), "Required root-level keyword category is missing!"
+    assert "category" in yml_appdef.keys(), (
+        "Required root-level keyword category is missing!"
+    )
     assert yml_appdef["category"] in [
         "application",
         "base",
-    ], "Only \
+    ], (
+        "Only \
 application and base are valid categories!"
+    )
     assert "doc" in yml_appdef.keys(), "Required root-level keyword doc is missing!"
 
     name_extends = ""
@@ -1253,9 +1256,9 @@ application and base are valid categories!"
     if isinstance(yml_appdef["doc"], str):
         assert yml_appdef["doc"] != "", "Doc has to be a non-empty string!"
     elif isinstance(yml_appdef["doc"], list):
-        assert any(
-            yml_appdef["doc"]
-        ), "One of the doc elements has to be a non-empty string!"
+        assert any(yml_appdef["doc"]), (
+            "One of the doc elements has to be a non-empty string!"
+        )
 
     line_number = "__line__doc"
     line_loc_no = yml_appdef[line_number]
@@ -1274,8 +1277,10 @@ application and base are valid categories!"
         f"at root-level! check key at root level {extra_key}"
     )
 
-    assert "NX" in name_extends and len(name_extends) > 2, "NX \
+    assert "NX" in name_extends and len(name_extends) > 2, (
+        "NX \
 keyword has an invalid pattern, or is too short!"
+    )
     # Taking care if definition has empty content
     if yml_appdef[name_extends]:
         recursive_build(xml_root, yml_appdef[name_extends], verbose)
