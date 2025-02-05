@@ -294,7 +294,7 @@ def separate_hash_yaml_and_nxdl(yaml_file, sep_yaml, sep_xml):
 
 
 def is_copyright_comment(text):
-    """Analyze a comment, whether it is a dom comment or not.
+    """Analyze a comment, whether it is a copyright comment or not.
 
     Return true if dom comment.
     """
