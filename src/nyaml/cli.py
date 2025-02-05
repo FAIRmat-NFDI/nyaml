@@ -73,9 +73,9 @@ def split_name_and_extension(file_path):
     return file raw name and extension
     """
     path = Path(file_path)
-    if file_path.endswith("yaml"):
+    if file_path.endswith(".yaml"):
         ext = "yaml"
-    elif file_path.endswith("nxdl.xml"):
+    elif file_path.endswith(".nxdl.xml"):
         ext = "nxdl.xml"
     else:
         ext = "".join(path.suffixes)[1:]

@@ -1,0 +1,15 @@
+category: base
+doc: |
+  NXnametype test
+type: group
+NXnametype(NXobject):
+  IDgroup(NXobject):
+  groupID(NXobject):
+  OBJECT(NXobject):
+  GROUP(NXobject):
+  object(NXobject):
+  test(NXobject):
+    IDfield(NX_CHAR):
+    fieldID(NX_CHAR):
+    FIELD(NX_CHAR):
+    field(NX_CHAR):

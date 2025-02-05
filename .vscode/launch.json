@@ -9,25 +9,12 @@
             "type": "python",
             "request": "launch",
             "cwd": "${workspaceFolder}",
-            "program": "../../.py3.11.11/bin/nyaml2nxdl",  //might need to change me
-            "args": [//"tests/NXaberration.nxdl.xml",
-                     //"tests/NXdata.nxdl.xml",
-                     //"tests/NXcg_primitive_set.nxdl.xml",
-                     //"tests/NXdetector_group.nxdl.xml",
-                     //"tests/NXfresnel_zone_plate.nxdl.xml",
-                     "tests/NXfresnel_zone_plate.yaml",
-                     //"tests/NXem.yaml",
-                     //"tests/NXem.yaml.NXem.nxdl.xml",
-                     //"tests/NXem.yaml",
+            "program": "../.py3.11.11/bin/nyaml2nxdl",  //might need to change me
+            "args": [//"tests/data/NXnametype.yaml",
+                     "tests/data/NXcanSAS.yaml",
                      "--verbose",
-                     //"--output-file=tests/NXcg_primitive_set.yaml"],
-                     //"--output-file=tests/NXdata.yaml"],
-                     //"--output-file=tests/NXaberration.yaml"],
-                     //"--output-file=tests/NXdetector_group.yaml"],
-                     "--output-file=tests/NXfresnel_zone_plate.yaml.nxdl.xml"],
-                     //"--output-file=tests/NXem.nxdl.xml"],
-                     //"--output-file=tests/NXem.yaml.NXem.nxdl.xml.NXem.yaml"],
-                     //"--output-file=tests/NXem.yaml.NXem.nxdl.xml"],
+                     "--output-file=tests/data/NXcanSAS.nxdl.xml"],
+                     //"--output-file=tests/data/NXnametype.nxdl.xml"],
         }
     ]
 }
