@@ -47,7 +47,28 @@ from nyaml.helper import (
     remove_namespace_from_tag,
 )
 
-DOM_COMMENT = ""
+DOM_COMMENT = (
+    "# NeXus - Neutron and X-ray Common Data Format\n"
+    "#\n"
+    "# Copyright (C) __COPYRIGHT_YEAR__ "
+    "NeXus International Advisory Committee (NIAC)\n"
+    "#\n"
+    "# This library is free software; you can redistribute it and/or\n"
+    "# modify it under the terms of the GNU Lesser General Public\n"
+    "# License as published by the Free Software Foundation; either\n"
+    "# version 3 of the License, or (at your option) any later version.\n"
+    "#\n"
+    "# This library is distributed in the hope that it will be useful,\n"
+    "# but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+    "# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
+    "# Lesser General Public License for more details.\n"
+    "#\n"
+    "# You should have received a copy of the GNU Lesser General Public\n"
+    "# License along with this library; if not, write to the Free Software\n"
+    "# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
+    "#\n"
+    "# For further information, see http://www.nexusformat.org\n"
+)
 NX_ATTR_IDNT = "\\@"
 NX_UNIT_IDNT = "unit"
 DEPTH_SIZE = 4 * " "
@@ -99,28 +120,7 @@ def set_copyright_text(nxdl_copyright_license=""):
             f"{datetime.datetime.now().year}-{datetime.datetime.now().year}"
         )
 
-        DOM_COMMENT = (
-            f"# NeXus - Neutron and X-ray Common Data Format\n"
-            f"#\n"
-            f"# Copyright (C) {copyright_year} "
-            "NeXus International Advisory Committee (NIAC)\n"
-            f"#\n"
-            f"# This library is free software; you can redistribute it and/or\n"
-            f"# modify it under the terms of the GNU Lesser General Public\n"
-            f"# License as published by the Free Software Foundation; either\n"
-            f"# version 3 of the License, or (at your option) any later version.\n"
-            f"#\n"
-            f"# This library is distributed in the hope that it will be useful,\n"
-            f"# but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-            f"# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
-            f"# Lesser General Public License for more details.\n"
-            f"#\n"
-            f"# You should have received a copy of the GNU Lesser General Public\n"
-            f"# License along with this library; if not, write to the Free Software\n"
-            f"# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
-            f"#\n"
-            f"# For further information, see http://www.nexusformat.org\n"
-        )
+        DOM_COMMENT = DOM_COMMENT.replace("__COPYRIGHT_YEAR__", copyright_year)
 
 
 def yml_reader(inputfile):
