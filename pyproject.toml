@@ -34,9 +34,9 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "virtualenv>=20.26.6",
-    "mypy>=1.15.0",
+    "mypy",
     "ruff==0.9.4",
-    "pytest>=8.3.4",
+    "pytest",
     "types-lxml",
     "isort>=5.10",
     "black>=24.3.0",
