@@ -21,6 +21,7 @@ Creates an instantiated NXDL schema XML tree by walking the dictionary nest
 """
 
 import datetime
+import os
 import pathlib
 import re
 import textwrap
@@ -41,33 +42,32 @@ from nyaml.helper import (
     LineLoader,
     clean_empty_lines,
     get_yaml_escape_char_reverter_dict,
-    is_dom_comment,
+    is_copyright_comment,
     nx_name_type_resolving,
     remove_namespace_from_tag,
 )
 
-# pylint: disable=too-many-lines, global-statement, invalid-name
 DOM_COMMENT = (
-    f"# NeXus - Neutron and X-ray Common Data Format\n"
-    f"#\n"
-    f"# Copyright (C) 2014-{datetime.date.today().year} "
+    "# NeXus - Neutron and X-ray Common Data Format\n"
+    "#\n"
+    "# Copyright (C) __COPYRIGHT_YEAR__ "
     "NeXus International Advisory Committee (NIAC)\n"
-    f"#\n"
-    f"# This library is free software; you can redistribute it and/or\n"
-    f"# modify it under the terms of the GNU Lesser General Public\n"
-    f"# License as published by the Free Software Foundation; either\n"
-    f"# version 3 of the License, or (at your option) any later version.\n"
-    f"#\n"
-    f"# This library is distributed in the hope that it will be useful,\n"
-    f"# but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
-    f"# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
-    f"# Lesser General Public License for more details.\n"
-    f"#\n"
-    f"# You should have received a copy of the GNU Lesser General Public\n"
-    f"# License along with this library; if not, write to the Free Software\n"
-    f"# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
-    f"#\n"
-    f"# For further information, see http://www.nexusformat.org\n"
+    "#\n"
+    "# This library is free software; you can redistribute it and/or\n"
+    "# modify it under the terms of the GNU Lesser General Public\n"
+    "# License as published by the Free Software Foundation; either\n"
+    "# version 3 of the License, or (at your option) any later version.\n"
+    "#\n"
+    "# This library is distributed in the hope that it will be useful,\n"
+    "# but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+    "# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n"
+    "# Lesser General Public License for more details.\n"
+    "#\n"
+    "# You should have received a copy of the GNU Lesser General Public\n"
+    "# License along with this library; if not, write to the Free Software\n"
+    "# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA\n"
+    "#\n"
+    "# For further information, see http://www.nexusformat.org\n"
 )
 NX_ATTR_IDNT = "\\@"
 NX_UNIT_IDNT = "unit"
@@ -77,29 +77,50 @@ COMMENT_BLOCKS: CommentCollector
 CATEGORY = ""  # Definition would be either 'base' or 'application'
 
 
-def check_for_dom_comment_in_yaml():
-    """Check the yaml file has dom comment or dom comment needed to be hard coded."""
+def get_nxdl_copyright_license(nxdl_file):
+    """Extract the license part from nxdl file if nxdl file as input."""
+    comment_start_sym = "^<!--"
+    comment_end_sym = "-->\n+$"
+    is_comment_start = False
+    is_comment_end = False
 
-    # Check for dom comments in first five comments
-    dom_comment = ""
-    dom_comment_ind = 1
-    for ind, comnt in enumerate(COMMENT_BLOCKS[0:5]):
-        cmnt_list = comnt.get_comment_text_list()
-        if len(cmnt_list) == 1:
-            text = cmnt_list[0]
-        else:
-            continue
-        if is_dom_comment(text):
-            dom_comment = text
-            dom_comment_ind = ind
-            break
+    if os.path.isfile(nxdl_file):
+        with open(nxdl_file, "r", encoding="utf-8") as nxdl_file_obj:
+            nxdl_lines = nxdl_file_obj.readlines()
+            comment = ""
+            for line in nxdl_lines:
+                # Find a single comment
+                if re.match(comment_start_sym, line):
+                    is_comment_start = True
+                elif is_comment_start:
+                    if re.match(comment_end_sym, line):
+                        is_comment_end = True
+                    else:
+                        comment += line
+                # Varifiy for copyright comment
+                if is_comment_start and is_comment_end:
+                    if is_copyright_comment(comment):
+                        return comment
+                    else:
+                        comment = ""
+                        is_comment_start = False
+                        is_comment_end = False
+        return ""
 
-    # deactivate the root dom_comment, So that the corresponding comment would not be
-    # considered as comment for definition xml element.
-    if dom_comment:
-        COMMENT_BLOCKS.remove_comment(dom_comment_ind)
 
-    return dom_comment
+# pylint: disable=too-many-lines
+def set_copyright_text(nxdl_copyright_license=""):
+    """Set copyright text from nxdl file or create from current year."""
+
+    global DOM_COMMENT
+    if nxdl_copyright_license:
+        DOM_COMMENT = nxdl_copyright_license
+    else:
+        copyright_year = (
+            f"{datetime.datetime.now().year}-{datetime.datetime.now().year}"
+        )
+
+        DOM_COMMENT = DOM_COMMENT.replace("__COPYRIGHT_YEAR__", copyright_year)
 
 
 def yml_reader(inputfile):
@@ -113,10 +134,6 @@ def yml_reader(inputfile):
         loaded_yaml = loader.get_single_data()
     COMMENT_BLOCKS = CommentCollector(inputfile, loaded_yaml)
     COMMENT_BLOCKS.extract_all_comment_blocks()
-    dom_cmnt_frm_yaml = check_for_dom_comment_in_yaml()
-    global DOM_COMMENT
-    if dom_cmnt_frm_yaml:
-        DOM_COMMENT = dom_cmnt_frm_yaml
 
     if "category" not in loaded_yaml.keys():
         raise ValueError(
@@ -902,7 +919,7 @@ def xml_handle_fields_or_group(
     keyword_name, keyword_type = nx_name_type_resolving(keyword)
     if ele_type == "field" and not keyword_name:
         raise ValueError(
-            f"No name for NeXus {ele_type} has been found.Check around line:{line_loc}"
+            f"No name for NeXus {ele_type} has been found. Check around line:{line_loc}"
         )
     if not keyword_type and not keyword_name:
         raise ValueError(
@@ -1156,6 +1173,8 @@ def nyaml2nxdl(input_file: str, out_file, verbose: bool):
     schema, definitions then evaluates a nested dictionary of groups recursively and
     fields or (their) attributes as children of the groups
     """
+    nxdl_copyright_license = get_nxdl_copyright_license(nxdl_file=out_file)
+    set_copyright_text(nxdl_copyright_license=nxdl_copyright_license)
     def_attributes = [
         "deprecated",
         "ignoreExtraGroups",
@@ -1281,6 +1300,7 @@ application and base are valid categories!"
         "NX \
 keyword has an invalid pattern, or is too short!"
     )
+    # Write copyright year in doc string
     # Taking care if definition has empty content
     if yml_appdef[name_extends]:
         recursive_build(xml_root, yml_appdef[name_extends], verbose)

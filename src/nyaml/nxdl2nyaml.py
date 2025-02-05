@@ -37,7 +37,7 @@ from nyaml.helper import (
     clean_empty_lines,
     get_node_parent_info,
     get_yaml_escape_char_dict,
-    is_dom_comment,
+    is_copyright_comment,
     remove_namespace_from_tag,
 )
 
@@ -412,7 +412,7 @@ class Nxdl2yaml:
                 )
                 xref_in_doc = xref_in_doc or xref_present
                 modified_docs.append(mod_doc)
-        # doc example:
+        # Note on doc example:
         # doc:
         #  - |
         #   text
@@ -530,7 +530,7 @@ class Nxdl2yaml:
         indent = depth * DEPTH_SIZE
         # Take care copyright doc string
         for comment in self.pi_comments:
-            if comment and not is_dom_comment(comment):
+            if comment and not is_copyright_comment(comment):
                 self.write_out(
                     indent, self.convert_to_yaml_comment(depth, comment), file_out
                 )
