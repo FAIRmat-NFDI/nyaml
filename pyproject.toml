@@ -36,7 +36,7 @@ dev = [
     "virtualenv>=20.26.6",
     "mypy>=1.15.0",
     "ruff==0.9.4",
-    "pytest",
+    "pytest>=8.3.4",
     "types-lxml",
     "isort>=5.10",
     "black>=24.3.0",
