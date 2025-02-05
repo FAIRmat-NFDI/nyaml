@@ -178,7 +178,7 @@ class CommentCollector:
             return self._comment_chain[start_n:end_n]
 
     def __iter__(self):
-        """get comment ieratively"""
+        """get comment iteratively"""
         return iter(self._comment_chain)
 
 

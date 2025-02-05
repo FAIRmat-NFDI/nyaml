@@ -1,7 +1,7 @@
 category: base
 doc: |
   my nice doc string in root level.
-  my nice doc string in root level, line 2.
+  my nice doc string in root level, line 2. Modified.
 type: group
 NXentry(NXobject):
   \@default:
@@ -97,7 +97,7 @@ NXentry(NXobject):
 #     </attribute>
 #     <doc>
 #         my nice doc string in root level.
-#         my nice doc string in root level, line 2.
+#         my nice doc string in root level, line 2. Modified.
 #     </doc>
 #     <group type="NXdata">
 #         <doc>my nice doc string.
