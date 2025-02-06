@@ -5,11 +5,22 @@ type: group
 NXnametype(NXobject):
   IDgroup(NXobject):
   groupID(NXobject):
-  OBJECT(NXobject):
   GROUP(NXobject):
-  object(NXobject):
-  test(NXobject):
+  gROUp(NXobject):
+  grOUp(NXobject):
+    nameType: specified
+  group(NXobject):
     IDfield(NX_CHAR):
     fieldID(NX_CHAR):
     FIELD(NX_CHAR):
+    fIELd(NX_CHAR):
+    fiELd(NX_CHAR):
+      nameType: specified
     field(NX_CHAR):
+      \@IDattribute(NX_CHAR):
+      \@attributeID(NX_CHAR):
+      \@ATTRIBUTE(NX_CHAR):
+      \@attrIBUte(NX_CHAR):
+      \@attrIbute(NX_CHAR):
+        nameType: specified
+      \@attribute(NX_CHAR):

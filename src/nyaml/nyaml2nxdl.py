@@ -815,30 +815,50 @@ def xml_handle_nametype(keyword, keyword_name, dct, obj):
     """
     Identify NeXus nameType attribute for field, group, attribute use hint if required.
     """
-    if keyword_name.islower():
+    if not keyword_name.startswith("\\@"):
+        concept_name = keyword_name
+    else:
+        concept_name = keyword_name[2:]
+    if concept_name == "":
+        # no explicit name given as e.g. in group type="NXobject"
+        # obj.set("nameType", "any")
+        # cannot be specified because having no/empty concept name is not allowed
+        # cannot be partial because if no hint is given why should it be partial
+        pass
+    elif concept_name.islower():
         # obj.set("nameType", "specified")  # is the NeXus default, no need to add
         pass
-    elif keyword_name.isupper():
+    elif concept_name.isupper():
         # nameType="any" correct for almost all cases except for those where an
         # explicit nameType hint is made in the yaml file
         # this is relevant for e.g. NXcanSAS ENTRY/DATA/Q which is specified
-        if "nameType" in dct[keyword]:
-            supported = ["specified", "any", "partial"]
-            if dct[keyword]["nameType"] in supported:
-                obj.set("nameType", dct[keyword]["nameType"])
+        if dct[keyword] is not None:
+            if "nameType" in dct[keyword]:
+                supported = ["specified", "any", "partial"]
+                if dct[keyword]["nameType"] in supported:
+                    obj.set("nameType", dct[keyword]["nameType"])
+                else:
+                    raise ValueError(f"nameType for {keyword} is not in {supported}")
             else:
-                raise ValueError(f"nameType for {keyword} is not in {supported}")
+                obj.set("nameType", "any")
         else:
-            obj.set("nameType", "any")
+            # cases like (NXgroup), no nameType required
+            pass
     else:
-        variable_prefix_match = re.search("^[A-Z]*[a-z0-9_.]*$", keyword_name)
-        variable_suffix_match = re.search("^[a-z0-9_.]*[A-Z]*$", keyword_name)
+        if dct[keyword] is not None:
+            if "nameType" in dct[keyword]:
+                supported = ["specified", "any", "partial"]
+                if dct[keyword]["nameType"] in supported:
+                    obj.set("nameType", dct[keyword]["nameType"])
+                    return
+        variable_prefix_match = re.search("^[A-Z]*[a-z0-9_.]*$", concept_name)
+        variable_suffix_match = re.search("^[a-z0-9_.]*[A-Z]*$", concept_name)
         if (variable_prefix_match is not None) or (variable_suffix_match is not None):
             # nameType="partial"
             obj.set("nameType", "partial")
         # else obj.set("nameType", "specified"), the default
         # NXcanSAS dQw suggests it is specified or is this an error in that appdef
-        # raise ValueError(f"nameType for {keyword_name} undefined")
+        # raise ValueError(f"nameType for {concept_name} undefined")
 
 
 def xml_handle_attributes(dct, obj, keyword, value, verbose):
