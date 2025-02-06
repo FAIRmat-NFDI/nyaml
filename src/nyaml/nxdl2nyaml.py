@@ -694,6 +694,7 @@ class Nxdl2yaml:
                             if dim_index_value
                             else f"({child_attrs['ref']},)"
                         )
+                        node.remove(child)
                 elif tag == CMNT_TAG and self.include_comment:
                     # Store and remove node so that comment nodes from dim node so
                     # that it does not call in xmlparser function
