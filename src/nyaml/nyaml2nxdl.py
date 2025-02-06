@@ -811,6 +811,56 @@ def verbose_flag(verbose, keyword, value):
         print(f"key:{keyword}; value type is {type(value)}\n")
 
 
+def xml_handle_nametype(keyword, keyword_name, dct, obj):
+    """
+    Identify NeXus nameType attribute for field, group, attribute use hint if required.
+    """
+    if not keyword_name.startswith("\\@"):
+        concept_name = keyword_name
+    else:
+        concept_name = keyword_name[2:]
+    if concept_name == "":
+        # no explicit name given as e.g. in group type="NXobject"
+        # obj.set("nameType", "any")
+        # cannot be specified because having no/empty concept name is not allowed
+        # cannot be partial because if no hint is given why should it be partial
+        pass
+    elif concept_name.islower():
+        # obj.set("nameType", "specified")  # is the NeXus default, no need to add
+        pass
+    elif concept_name.isupper():
+        # nameType="any" correct for almost all cases except for those where an
+        # explicit nameType hint is made in the yaml file
+        # this is relevant for e.g. NXcanSAS ENTRY/DATA/Q which is specified
+        if dct[keyword] is not None:
+            if "nameType" in dct[keyword]:
+                supported = ["specified", "any", "partial"]
+                if dct[keyword]["nameType"] in supported:
+                    obj.set("nameType", dct[keyword]["nameType"])
+                else:
+                    raise ValueError(f"nameType for {keyword} is not in {supported}")
+            else:
+                obj.set("nameType", "any")
+        else:
+            # cases like (NXgroup), no nameType required
+            pass
+    else:
+        if dct[keyword] is not None:
+            if "nameType" in dct[keyword]:
+                supported = ["specified", "any", "partial"]
+                if dct[keyword]["nameType"] in supported:
+                    obj.set("nameType", dct[keyword]["nameType"])
+                    return
+        variable_prefix_match = re.search("^[A-Z]*[a-z0-9_.]*$", concept_name)
+        variable_suffix_match = re.search("^[a-z0-9_.]*[A-Z]*$", concept_name)
+        if (variable_prefix_match is not None) or (variable_suffix_match is not None):
+            # nameType="partial"
+            obj.set("nameType", "partial")
+        # else obj.set("nameType", "specified"), the default
+        # NXcanSAS dQw suggests it is specified or is this an error in that appdef
+        # raise ValueError(f"nameType for {concept_name} undefined")
+
+
 def xml_handle_attributes(dct, obj, keyword, value, verbose):
     """Handle the attributes found connected to attribute field"""
 
@@ -828,6 +878,9 @@ def xml_handle_attributes(dct, obj, keyword, value, verbose):
     elemt_obj.set("name", keyword_name[2:])
     if keyword_typ:
         elemt_obj.set("type", keyword_typ)
+
+    # handle nameType
+    xml_handle_nametype(keyword, keyword_name, dct, elemt_obj)
 
     rm_key_list = []
     if value and value:
@@ -941,6 +994,8 @@ def xml_handle_fields_or_group(
     else:
         elemt_obj.set("name", keyword_name)
 
+    xml_handle_nametype(keyword, keyword_name, dct, elemt_obj)
+
     if value:
         rm_key_list = []
         # In each each if clause apply xml_handle_comment(), to collect
@@ -964,11 +1019,11 @@ def xml_handle_fields_or_group(
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
-            elif ele_type == "field" and attr == "unit":
+            elif attr == "unit" and ele_type == "field":
                 xml_handle_units(elemt_obj, vval)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
                 rm_key_list.append(attr)
-            elif ele_type == "field" and attr == "dim":
+            elif attr == "dim" and ele_type == "field":
                 # Comment handeled in xml_handle_dim
                 xml_handle_dim(dct=value, obj=elemt_obj, keyword=attr, value=vval)
                 rm_key_list.append(attr)
