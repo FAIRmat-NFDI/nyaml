@@ -73,16 +73,11 @@ def split_name_and_extension(file_path):
     return file raw name and extension
     """
     path = Path(file_path)
-    if file_path.endswith(".yaml"):
-        ext = "yaml"
-    elif file_path.endswith(".nxdl.xml"):
-        ext = "nxdl.xml"
-    else:
-        ext = "".join(path.suffixes)[1:]
-        # but even this is not always correct! see https://github.com/python/cpython/issues/100157
-        # when filenames contain dots in between, e.g. NXem.yaml.NXem.nxdl.xml.NXem.yaml
+    ext = "".join(path.suffixes)
+    # assuming that in NeXus yaml and nxdl files follow the pattern
+    # NX<classname>.yaml and NX<classname>.nxdl.xml
     full_path_stem = file_path[0 : file_path.index(ext)]
-    return full_path_stem, ext
+    return full_path_stem, ext[1:]
 
 
 @click.command()
