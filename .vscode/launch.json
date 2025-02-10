@@ -10,12 +10,15 @@
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "program": "../.py3.11.11/bin/nyaml2nxdl",  //might need to change me
-            "args": [//"tests/data/NXnametype.yaml",
-                     "tests/NXdetector_group.nxdl.xml",
+            "args": ["tests/data/NXnametype.yaml",
+                     //"tests/NXdetector_group.nxdl.xml",
+                     //"tests/NXcanSAS.nxdl.xml",
+                     //"tests/NXcanSAS.yaml",
                      //"tests/NXdetector_group.yaml",
                      "--verbose",
-                     //"--output-file=tests/data/NXnametype.nxdl.xml"
-                     "--output-file=tests/NXdetector_group.yaml"]
+                     "--output-file=tests/data/NXnametype.nxdl.xml"]
+                     //"--output-file=tests/NXtest.nxdl.xml"]
+                     //"--output-file=tests/NXdetector_group.yaml"]
         }
     ]
 }

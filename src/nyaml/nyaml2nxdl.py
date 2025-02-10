@@ -815,50 +815,48 @@ def xml_handle_nametype(keyword, keyword_name, dct, obj):
     """
     Identify NeXus nameType attribute for field, group, attribute use hint if required.
     """
-    if not keyword_name.startswith("\\@"):
-        concept_name = keyword_name
-    else:
-        concept_name = keyword_name[2:]
+    concept_name = keyword_name[2:] if keyword_name.startswith("\\@") else keyword_name
     if concept_name == "":
         # no explicit name given as e.g. in group type="NXobject"
         # obj.set("nameType", "any")
         # cannot be specified because having no/empty concept name is not allowed
         # cannot be partial because if no hint is given why should it be partial
-        pass
-    elif concept_name.islower():
+        return
+    if concept_name.islower():
         # obj.set("nameType", "specified")  # is the NeXus default, no need to add
-        pass
-    elif concept_name.isupper():
+        return
+    if concept_name.isupper():
         # nameType="any" correct for almost all cases except for those where an
         # explicit nameType hint is made in the yaml file
         # this is relevant for e.g. NXcanSAS ENTRY/DATA/Q which is specified
-        if dct[keyword] is not None:
-            if "nameType" in dct[keyword]:
-                supported = ["specified", "any", "partial"]
-                if dct[keyword]["nameType"] in supported:
-                    obj.set("nameType", dct[keyword]["nameType"])
-                else:
-                    raise ValueError(f"nameType for {keyword} is not in {supported}")
+        if dct.get(keyword) and "nameType" in dct[keyword]:
+            supported = ["specified", "any", "partial"]
+            name_type = dct[keyword]["nameType"]
+            if name_type in supported:
+                obj.set("nameType", name_type)
             else:
-                obj.set("nameType", "any")
+                raise ValueError(f"nameType for {keyword} is not in {supported}")
         else:
-            # cases like (NXgroup), no nameType required
-            pass
-    else:
-        if dct[keyword] is not None:
-            if "nameType" in dct[keyword]:
-                supported = ["specified", "any", "partial"]
-                if dct[keyword]["nameType"] in supported:
-                    obj.set("nameType", dct[keyword]["nameType"])
-                    return
-        variable_prefix_match = re.search("^[A-Z]*[a-z0-9_.]*$", concept_name)
-        variable_suffix_match = re.search("^[a-z0-9_.]*[A-Z]*$", concept_name)
-        if (variable_prefix_match is not None) or (variable_suffix_match is not None):
-            # nameType="partial"
-            obj.set("nameType", "partial")
-        # else obj.set("nameType", "specified"), the default
-        # NXcanSAS dQw suggests it is specified or is this an error in that appdef
-        # raise ValueError(f"nameType for {concept_name} undefined")
+            obj.set("nameType", "any")
+        return
+    # Mixed-case names: Check if an explicit nameType hint is provided.
+    if dct.get(keyword) and "nameType" in dct[keyword]:
+        supported = ["specified", "any", "partial"]
+        name_type = dct[keyword]["nameType"]
+        if name_type in supported:
+            obj.set("nameType", name_type)
+            return
+
+    # Determine if the name follows a variable-like pattern.
+    variable_prefix_match = re.search("^[A-Z]*[a-z0-9_.]*$", concept_name)
+    variable_suffix_match = re.search("^[a-z0-9_.]*[A-Z]*$", concept_name)
+    if variable_prefix_match or variable_suffix_match:
+        # nameType="partial"
+        obj.set("nameType", "partial")
+        return
+    # Default case: NeXus assumes "specified" as the default, so no need to set it explicitly.
+    # NXcanSAS dQw suggests it is specified, or is this an error in that appdef?
+    # raise ValueError(f"nameType for {concept_name} undefined")
 
 
 def xml_handle_attributes(dct, obj, keyword, value, verbose):
@@ -878,9 +876,6 @@ def xml_handle_attributes(dct, obj, keyword, value, verbose):
     elemt_obj.set("name", keyword_name[2:])
     if keyword_typ:
         elemt_obj.set("type", keyword_typ)
-
-    # handle nameType
-    xml_handle_nametype(keyword, keyword_name, dct, elemt_obj)
 
     rm_key_list = []
     if value and value:
@@ -909,6 +904,8 @@ def xml_handle_attributes(dct, obj, keyword, value, verbose):
                     )
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
+                elif attr == "nameType":
+                    xml_handle_nametype(keyword, keyword_name, dct, elemt_obj)
                 else:
                     elemt_obj.set(attr, check_for_mapping_char_other(attr_val))
                     rm_key_list.append(attr)
@@ -994,9 +991,15 @@ def xml_handle_fields_or_group(
     else:
         elemt_obj.set("name", keyword_name)
 
-    xml_handle_nametype(keyword, keyword_name, dct, elemt_obj)
-
-    if value:
+    if isinstance(value, dict):
+        # calls to this field_or_group function need to deal specifically with entries
+        # like nameType: somevalue because we do not require fields, or attributes
+        # to include a datatype attribute when we assume that is (NX_CHAR)
+        # hence nameType: specified could be misinterpreted as introducing a new child
+        # there is a clear signature though to assure if we face a group, field, or attribute,
+        # namely when value is only a dictionary and not a string
+        # i.e. conceptname(class or datatype): may only be have trailing comments
+        # on the same line
         rm_key_list = []
         # In each each if clause apply xml_handle_comment(), to collect
         # comments on that yaml line.
@@ -1019,6 +1022,8 @@ def xml_handle_fields_or_group(
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
+            elif attr == "nameType":
+                xml_handle_nametype(keyword, keyword_name, dct, elemt_obj)
             elif attr == "unit" and ele_type == "field":
                 xml_handle_units(elemt_obj, vval)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
@@ -1039,8 +1044,8 @@ def xml_handle_fields_or_group(
         # Check for skipped attributes
         check_for_skipped_attributes(ele_type, value, allowed_attr, verbose)
 
-    if isinstance(value, dict) and value != {}:
-        recursive_build(elemt_obj, value, verbose)
+        if value != {}:
+            recursive_build(elemt_obj, value, verbose)
 
 
 def xml_handle_comment(
