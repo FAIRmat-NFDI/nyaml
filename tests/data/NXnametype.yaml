@@ -32,14 +32,15 @@ NXnametype(NXobject):
         nameType: any
       \@attribute_with_PARTIALNAME(NX_CHAR):
         nameType: partial
-  # LInk(link):
-  #   target: field
-  # liNK(link):
-  #   target: field
-  # LINK(link):
-  #   target: field
-  # lINk(link):
-  #   target: field
-  #   nameType: specified
-  # link(link):
-  #   target: field
+  # nameType distinctions for links not yet proposed to the NIAC
+  LInk(link):
+    target: field
+  liNK(link):
+    target: field
+  LINK(link):
+    target: field
+  lINk(link):
+    target: field
+    nameType: specified
+  link(link):
+    target: field

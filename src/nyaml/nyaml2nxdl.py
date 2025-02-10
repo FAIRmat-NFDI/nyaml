@@ -1105,6 +1105,20 @@ def recursive_build(obj, dct, verbose):
         line_number = f"__line__{keyword}"
         line_loc = dct[line_number]
         keyword_name, keyword_type = nx_name_type_resolving(keyword)
+        # keyword's like nameType are problematic take this example
+        # group(NXobject):
+        #   nameType:  # convenience rule NX_CHAR does not need to be mentioned
+        #   nameType(NX_CHAR):
+        #     nameType: specified  # required, because concept group/nameType has at least
+        #     one letter
+        #   Q:
+        #     nameType: specified  # required, as all upper Q that is by default NX_CHAR
+        #   dQw:
+        #     nameType: specified  # required definition of nameType for mixed case dQw
+        if 0 < sum(1 for char in keyword if char.isupper()) < len(keyword):
+            if isinstance(value, str):
+                continue
+
         check_keyword_variable(verbose, dct, keyword, value)
         if verbose:
             print(f"keyword_name:{keyword_name} keyword_type {keyword_type}\n")
