@@ -794,6 +794,29 @@ class Nxdl2yaml:
 
         # Dimension has other attributes including index and value
         if len(node) > 0:
+            # this following logic is incorrect as for some deprecated cases like
+            # <dimensions><dim index="1" ref="group_index"/></dimensions>
+            # handle_dim_with_all_dim_attr is not visited if the next line is commented
+            # out that all_dim_attr will be visited but generates incorrect yaml
+            # the root cause is the above dimension line does not contain a "value"
+            # attribute, a different logic is required:
+            # first all dim attributes should be collected in a temporary based on index
+            # if there is at least one without value, yaml should report the full
+            # dictionary nest i.e.
+            # dimensions:
+            #   1:
+            #     ref: group_index
+            #     doc: comment if present
+            #   2 ... if there are more dim lines
+            # benefit of this would be that also doc
+            # that would e.g. however make
+            # dimensions:
+            #   1:
+            #     value: 3
+            #   2:
+            #     value: 3
+            # too verbose in which case the shorthand
+            # dim: (3, 3) is useful
             if remove_namespace_from_tag(node[0].tag) == "doc" or len(node.attrib) > 0:
                 indent = depth * DEPTH_SIZE
                 tag = remove_namespace_from_tag(node.tag)
@@ -819,7 +842,7 @@ class Nxdl2yaml:
                         file_out.write(dimension_doc)
                         node.remove(child)
                 handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs)
-            # Dimension has only index and value
+                # Dimension has only index and value
             else:
                 handle_dim_with_value_and_index(depth, node, file_out, dimension_doc="")
         else:
