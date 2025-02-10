@@ -666,7 +666,7 @@ class Nxdl2yaml:
         possible_dim_attrs = ["ref", "required", "incr", "refindex"]
         possible_dimension_attrs = ["rank"]
 
-        def handle_dim_with_value_and_index(depth, node, file_out, dimension_doc):
+        def handle_dim_when_only_value_and_index(depth, node, file_out, dimension_doc):
             """
             Handle <dimensions> element if <dim> has only value and index attributes, and
             <diemensions> element has only one attribute 'rank', but no doc."""
@@ -751,12 +751,12 @@ class Nxdl2yaml:
                     dim_cmnt_nodes.append(child)
                     node.remove(child)
             # special case for NXdata.nxdl.xml's field DATA where rank is a symbol
-            if (
-                len(dim_index_value) == 0
-                and len(node.attrib) == 1
-                and "rank" in node.attrib
-            ):
-                dim_index_value.append(node.attrib["rank"])
+            # if (
+            #     len(dim_index_value) == 0
+            #     and len(node.attrib) == 1
+            #     and "rank" in node.attrib
+            # ):
+            #     dim_index_value.append(node.attrib["rank"])
 
             # All 'dim' element comments on top of 'dim' yaml key
             if dim_cmnt_nodes:
@@ -765,12 +765,13 @@ class Nxdl2yaml:
             # index and value attributes of dim elements
             indent = (depth + 1) * DEPTH_SIZE
             # Numpy style for dim
-            value = (
-                ", ".join(dim_index_value)
-                if len(dim_index_value) > 1
-                else f"{dim_index_value[0]},"
-            )
-            file_out.write(f"{indent}dim: ({value})\n")
+            if len(dim_index_value) > 0:
+                value = (
+                    ", ".join(dim_index_value)
+                    if len(dim_index_value) > 1
+                    else f"{dim_index_value[0]},"
+                )
+                file_out.write(f"{indent}dim: ({value})\n")
 
             # Write the attributes, except index and value, and doc of dim as child of dim_parameters.
             # But the doc or attributes for each dim come inside list according to the order of dim.
@@ -793,58 +794,60 @@ class Nxdl2yaml:
                         )
 
         # Dimension has other attributes including index and value
-        if len(node) > 0:
-            # this following logic is incorrect as for some deprecated cases like
-            # <dimensions><dim index="1" ref="group_index"/></dimensions>
-            # handle_dim_with_all_dim_attr is not visited if the next line is commented
-            # out that all_dim_attr will be visited but generates incorrect yaml
-            # the root cause is the above dimension line does not contain a "value"
-            # attribute, a different logic is required:
-            # first all dim attributes should be collected in a temporary based on index
-            # if there is at least one without value, yaml should report the full
-            # dictionary nest i.e.
-            # dimensions:
-            #   1:
-            #     ref: group_index
-            #     doc: comment if present
-            #   2 ... if there are more dim lines
-            # benefit of this would be that also doc
-            # that would e.g. however make
-            # dimensions:
-            #   1:
-            #     value: 3
-            #   2:
-            #     value: 3
-            # too verbose in which case the shorthand
-            # dim: (3, 3) is useful
-            if remove_namespace_from_tag(node[0].tag) == "doc" or len(node.attrib) > 0:
-                indent = depth * DEPTH_SIZE
-                tag = remove_namespace_from_tag(node.tag)
-                file_out.write(f"{indent}{tag}:\n")
-                for attr, value in node.attrib.items():
-                    if attr in possible_dimension_attrs and not isinstance(value, dict):
-                        indent = (depth + 1) * DEPTH_SIZE
-                        file_out.write(f"{indent}{attr}: {value}\n")
-                    else:
-                        raise ValueError(
-                            f"Dimension has an attribute {attr} that is not valid."
-                            f"Currently allowed attributes are {possible_dimension_attrs}."
-                            f"Please have a close look"
-                        )
-                # Taking care of dimension doc
-                dimension_doc = ""
-                for child in list(node):
-                    tag = remove_namespace_from_tag(child.tag)
-                    if tag == "doc":
-                        dimension_doc = self.handle_not_root_level_doc(
-                            depth + 1, child.text
-                        )
-                        file_out.write(dimension_doc)
-                        node.remove(child)
-                handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs)
-                # Dimension has only index and value
-            else:
-                handle_dim_with_value_and_index(depth, node, file_out, dimension_doc="")
+        # if len(node) > 0:
+        # this following logic is incorrect as for some deprecated cases like
+        # <dimensions><dim index="1" ref="group_index"/></dimensions>
+        # handle_dim_with_all_dim_attr is not visited if the next line is commented
+        # out that all_dim_attr will be visited but generates incorrect yaml
+        # the root cause is the above dimension line does not contain a "value"
+        # attribute, a different logic is required:
+        # first all dim attributes should be collected in a temporary based on index
+        # if there is at least one without value, yaml should report the full
+        # dictionary nest i.e.
+        # dimensions:
+        #   1:
+        #     ref: group_index
+        #     doc: comment if present
+        #   2 ... if there are more dim lines
+        # benefit of this would be that also doc
+        # that would e.g. however make
+        # dimensions:
+        #   1:
+        #     value: 3
+        #   2:
+        #     value: 3
+        # too verbose in which case the shorthand
+        # dim: (3, 3) is useful
+        if remove_namespace_from_tag(node.tag) == "doc" or len(node.attrib) > 0:
+            indent = depth * DEPTH_SIZE
+            tag = remove_namespace_from_tag(node.tag)
+            file_out.write(f"{indent}{tag}:\n")
+            for attr, value in node.attrib.items():
+                if attr in possible_dimension_attrs and not isinstance(value, dict):
+                    indent = (depth + 1) * DEPTH_SIZE
+                    file_out.write(f"{indent}{attr}: {value}\n")
+                else:
+                    raise ValueError(
+                        f"Dimension has an attribute {attr} that is not valid."
+                        f"Currently allowed attributes are {possible_dimension_attrs}."
+                        f"Please have a close look"
+                    )
+            # Taking care of dimension doc
+            dimension_doc = ""
+            for child in list(node):
+                tag = remove_namespace_from_tag(child.tag)
+                if tag == "doc":
+                    dimension_doc = self.handle_not_root_level_doc(
+                        depth + 1, child.text
+                    )
+                    file_out.write(dimension_doc)
+                    node.remove(child)
+            handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs)
+        else:
+            handle_dim_when_only_value_and_index(
+                depth, node, file_out, dimension_doc=""
+            )
+        """
         else:
             # dimension has only rank as seen in NXfresnel_zone_plate.nxdl.xml
             if len(node.attrib) == 1 and "rank" in node.attrib:
@@ -852,6 +855,7 @@ class Nxdl2yaml:
                 file_out.write(f"{indent}dim: (,)\n")
             else:
                 raise NotImplementedError()
+        """
 
     def handle_enumeration(self, depth, node, file_out):
         """
