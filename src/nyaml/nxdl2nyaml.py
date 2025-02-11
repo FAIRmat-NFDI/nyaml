@@ -656,6 +656,183 @@ class Nxdl2yaml:
                     )
 
     # pylint: disable=too-many-branches, too-many-locals, too-many-statements
+    def handle_dimension_refactored(self, depth, node, file_out):
+        """
+        Handle instances of dimensionsType and its child nodes.
+
+        # example definitions with non-trivial usage of dimensions useful for dev purposes
+        # https://github.com/FAIRmat-NFDI/nexus_definitions/commit/f7ba53f4fb409b03fde6af6ccf29146392a2c142
+        # applications/NXmx, use of required
+        # applications/NXstxm, use docstring for dimensions node
+        # base_classes/NXfresnel_zone_plate, use of rank only
+        # base_classes/NXmonitor, use of rank only and index, ref pairs
+        # base_classes/NXdetector_group, use of index, ref pairs
+        # base_classes/NXsensor, use of index, value and index, ref pairs respectively
+        # https://manual.nexusformat.org/nxdl_desc.html#nxdl-data-type-dimensionstype
+        #   there is no doc string for individual dim childs of a dimensionsType node
+        #   but only a single docstring for dimensionsType
+
+        # observations on current status:
+        # plain index, value pairs the most frequently used,
+        #   use short-hand
+        # refindex and incr are deprecated plus no longer used in any class,
+        #   do not support any long instead raise NotImplementedError()
+        # required is only used in NXmx and deprecated ref is seldom used
+        #   warrants deviation from shorthand-notation
+
+        # envisaged redesign of dimensions
+
+        # observing that
+        # for dim childs required = true is the default
+        # therefore, rank is redundant
+        #   provided that all dim childs have index, value or index, ref specified
+        # most classes use plain dimensionsType without a docstring and only
+        #   dim child nodes with index, value pairs
+        #   in this case having a short-hand numpy notation saves much typing work
+
+        # it is proposed, in summary, yaml syntax,
+        # i.e. NXDL creates either short-hand or dictionary nest
+        # array_shorthand(NX_DATA_TYPE class):
+        #   dim: (1, symbol_a, symbol_b)
+        # and alternative envisioned to be used only for those cases where
+        # the short-hand notation is insufficient
+        # array_full(NX_DATA_TYPE class):
+        #   dim:
+        #     rank:
+        #     1:
+        #       # one key named according to the possible elements of dimensionsType e.g.
+        #       value: 1
+        #       ref: group_index
+        #       required: false
+        #       incr:
+        #       refindex:
+        # suggestion to remove dictionary nyaml keyword dimensions
+        # in favour for dim throughout
+        # it is proposed, in summary, for nxdl, i.e. for yaml2nxdl
+        # given that the shorthand is always on the same line
+        # or alternatively a dictionary nest this forward instantiation for NXDL is straight
+        """
+        yml_dim_dct = {"dim": {}}
+        # dimensionsType, docstring, if present
+        for child in list(node):
+            tag = remove_namespace_from_tag(child.tag)
+            if tag == "doc":
+                yml_dim_dct["dim"]["doc"] = self.handle_not_root_level_doc(
+                    depth + 1, child.text
+                )
+                break  # dimensionsType can have only one top-level docstring
+
+        # dimensionsType, rank if present
+        for attr, val in node.attrib.items():
+            if not isinstance(val, dict):
+                if attr in ["rank"]:
+                    # indent = (depth + 1) * DEPTH_SIZE
+                    yml_dim_dct["dim"]["rank"] = val
+                    break  # rank is the only allowed attribute of a dimensionsType node
+
+        # individual dimensionsType dim elements - the individual dimensions - if present
+        ##################################
+        ##################################
+        ##################################
+        dim_index_value = []
+        dim_other_parts = {}
+        dim_cmnt_nodes = []
+        # Taking care of dim and doc children of dimensions
+        for child in list(node):
+            tag = remove_namespace_from_tag(child.tag)
+            child_attrs = child.attrib
+            # taking care of index and value attributes
+            if tag == "dim":
+                # taking care of index and value in format [[index, value]]
+                if "index" in child_attrs:
+                    idx_val = child_attrs.pop("index", "")
+                    if idx_val != "":
+                        yml_dim_dct["dim"][idx_val] = {}
+                        for child_attrs_key, child_attrs_val in child_attrs.items():
+                            if child_attrs_key in ["value", "required"]:
+                                yml_dim_dct["dim"][idx_val][child_attrs_key] = (
+                                    child_attrs_val
+                                )
+                            elif child_attrs_key in ["ref", "incr", "refindex"]:
+                                # deprecated !
+                                yml_dim_dct["dim"][idx_val][child_attrs_key] = (
+                                    child_attrs_val
+                                )
+                            else:
+                                raise ValueError(
+                                    f"Found incorrect dim child attribute {child_attrs_key}, {child_attrs_val} !"
+                                )
+                    else:
+                        raise ValueError(
+                            f"Found incorrect dim child that has no index attribute !"
+                        )
+                    # individual dim childs cannot have a dim docstring
+                    # see https://github.com/nexusformat/definitions/blob/main/nxdl.xsd
+                    # for dim_child in list(child):
+                    #     ctag = dim_child.tag
+                    #     if ctag == "doc" and dim_child.text != "":
+                    #         yml_dim_dct["dim"][idx_val]["doc"] = dim_child.text.strip()
+                    #         break  # only one docstring for each index
+        ############################
+        ############################
+
+        indent = depth * DEPTH_SIZE
+        # special case for NXdata.nxdl.xml's field DATA where rank is a symbol
+        # if (
+        #     len(dim_index_value) == 0
+        #     and len(node.attrib) == 1
+        #     and "rank" in node.attrib
+        # ):
+        #     dim_index_value.append(node.attrib["rank"])
+
+        # All 'dim' element comments on top of 'dim' yaml key
+        if dim_cmnt_nodes:
+            for ch_nd in dim_cmnt_nodes:
+                self.handle_comment(depth + 1, ch_nd, file_out)
+        # index and value attributes of dim elements
+        indent = (depth + 1) * DEPTH_SIZE
+        # Numpy style for dim
+        if len(dim_index_value) > 0:
+            if not all(val == "" for val in dim_index_value):
+                value = (
+                    ", ".join(dim_index_value)
+                    if len(dim_index_value) > 1
+                    else f"{dim_index_value[0]},"
+                )
+                file_out.write(f"{indent}dim: ({value})\n")
+            else:
+                if len(dim_index_value) == 1:
+                    value = "1,"
+                    file_out.write(f"{indent}dim: ({value})\n")
+                else:
+                    raise NotImplementedError()
+
+        # Write the attributes, except index and value, and doc of dim as child of dim_parameters.
+        # But the doc or attributes for each dim come inside list according to the order of dim.
+        if dim_other_parts:
+            indent = (depth + 1) * DEPTH_SIZE
+            file_out.write(f"{indent}dim_parameters:\n")
+            # depth = depth + 2 dim_parameter has child such as doc of dim
+            indent = (depth + 2) * DEPTH_SIZE
+            for key, value in dim_other_parts.items():
+                if key == "doc":
+                    value = self.handle_not_root_level_doc(
+                        depth + 2, str(value), key, file_out
+                    )
+                else:
+                    # Increase depth size inside handle_map...() for writing text with one
+                    # more indentation.
+                    file_out.write(
+                        f"{indent}{key}: "
+                        f"{handle_mapping_char(value, depth + 3, False)}\n"
+                    )
+        ###################################
+        ###################################
+        ###################################
+
+        # analyze whether short-hand notation is sufficient or
+        # full formatting is required because additional (deprecated attributes are used)
+
     def handle_dimension(self, depth, node, file_out):
         """Handle the dimension field.
 
@@ -1130,7 +1307,8 @@ class Nxdl2yaml:
             if tag == ("attribute"):
                 self.handle_attributes(depth, node, file_out)
             if tag == ("dimensions"):
-                self.handle_dimension(depth, node, file_out)
+                # self.handle_dimension(depth, node, file_out)
+                self.handle_dimension_refactored(depth, node, file_out)
             if tag == ("link"):
                 self.handle_link(depth, node, file_out)
             if tag == ("choice"):
