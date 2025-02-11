@@ -12,9 +12,10 @@
             "program": "../.py3.11.11/bin/nyaml2nxdl",  //might need to change me
             "args": [//"tests/data/NXnametype.yaml",
                      //"tests/data/NXnametype.nxdl.xml",
-                     "tests/NXfresnel_zone_plate.nxdl.xml",
+                     //"tests/NXfresnel_zone_plate.nxdl.xml",
+                     //"tests/NXfresnel_zone_plate.yaml",
                      //"tests/NXdetector_group.nxdl.xml",
-                     //"tests/NXdetector_group.yaml",
+                     "tests/NXdetector_group.yaml",
                      //"tests/NXsensor.nxdl.xml",
                      //"tests/NXsensor.yaml",
                      //"tests/NXmonitor.nxdl.xml",
@@ -26,9 +27,10 @@
                      //"--output-file=tests/data/NXnametype.nxdl.xml"]
                      //"--output-file=tests/data/BK_NXnametype.yaml"]
                      //"--output-file=tests/NXtest.nxdl.xml"]
-                     "--output-file=tests/NXfresnel_zone_plate.yaml"]
+                     //"--output-file=tests/NXfresnel_zone_plate.yaml"]
+                     //"--output-file=tests/BK.NXfresnel_zone_plate.nxdl.xml"]
                      //"--output-file=tests/NXdetector_group.yaml"]
-                     //"--output-file=tests/BK.NXdetector_group.nxdl"]
+                     "--output-file=tests/BK.NXdetector_group.nxdl.xml"]
                      //"--output-file=tests/NXsensor.yaml"]
                      //"--output-file=tests/BK.NXsensor.nxdl.xml"]
                      //"--output-file=tests/NXmonitor.yaml"]

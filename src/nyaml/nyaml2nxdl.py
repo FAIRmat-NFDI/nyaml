@@ -429,9 +429,10 @@ def xml_handle_dimensions(dct, obj, keyword, value: dict):
     possible_dimension_attrs = ["rank"]  # nxdl attributes
     line_number = f"__line__{keyword}"
     line_loc = dct[line_number]
-    assert "dim" in value.keys(), (
-        f"Line {line_loc}: No dim as child of dimension has been found."
-    )
+    # must not assert here because NXmonitor does not have a dim!
+    # assert "dim" in value.keys(), (
+    #     f"Line {line_loc}: No dim as child of dimension has been found."
+    # )
     xml_handle_comment(obj, line_number, line_loc)
     dims = ET.SubElement(obj, "dimensions")
     # Consider all the children under dimension is dim element and
@@ -571,7 +572,15 @@ def xml_handle_dim_from_dimension_dict(
                     dim.set("value", str(dim_ind_val[1]))
                 else:
                     dim.set("index", str(ind + 1))
-                    dim.set("value", str(dim_ind_val))
+                    # in the case of NXmonitor/time_of_flight and NXsensor the next line
+                    # adds incorrectly a value attribute resulting in
+                    # dim index="1" value="" ref="" where in the original NIAC
+                    # version only index="1" ref ... was typed!
+                    if "dim_parameters" in value:
+                        if "ref" not in value["dim_parameters"]:
+                            dim.set("value", str(dim_ind_val))
+                    else:
+                        dim.set("value", str(dim_ind_val))
 
                 dim_list.append(dim)
             rm_key_list.append(attr)
