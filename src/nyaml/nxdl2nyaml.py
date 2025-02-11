@@ -828,6 +828,17 @@ class Nxdl2yaml:
         # if remove_namespace_from_tag(node.tag) == "doc" or len(node.attrib) > 0:
         indent = depth * DEPTH_SIZE
         tag = remove_namespace_from_tag(node.tag)
+        # this next line always adds a dimensions group below which then
+        # dim or other attr and values are added but the short-hand notation
+        # dim: (1,) used in the majority of cases in FAIRmat does not demand
+        # such an additional nesting i.e. instead of dimensions/dim: (1,)
+        # only dim: (1,) should be added but as the code here sequentially processes
+        # off the child attributes and directly writes back dimensions has already
+        # been written before the first attribute is visited this may break repetitive
+        # roundtrip conversions because a yaml file with shorthand dim: gets promoted
+        # to proper NIAC XML a dimensions object with dim childs but when converted
+        # back returns a yaml with an unnecessary dimensions below which only ! the dim
+        # short-hand notation is stored !
         file_out.write(f"{indent}{tag}:\n")
         for attr, value in node.attrib.items():
             if attr in possible_dimension_attrs and not isinstance(value, dict):
