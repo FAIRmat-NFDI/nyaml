@@ -7,26 +7,26 @@ NXarchive(NXobject):
     my_dim_array(NX_NUMBER):
       doc: |
         Test
-      dimensions:
-        dim: (2,)
+      dim: (2,)
     my_dim_array2(NX_NUMBER):
       doc: |
         Testarray with dimensions spelled out
-      dimensions:
-        dim: (10, 30)
+      dim: (10, 30)
     my_dim_with_numpy_3d(NX_NUMBER):
-      dimensions:
-        dim: (2, 4, 5)
+      dim: (2, 4, 5)
     my_dim_with_doc_and_dim_attr(NX_NUMBER):
-      dimensions:
+      dim:
+        1:
+          value: 2
+          ref: s
+        3:
+          value: 4
+          ref: m
         doc: |
           Test with doc and dim attribute
-        dim: (2, 4)
-        dim_parameters:
-          ref: ['s', 'm']
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# c4a2f7e1a2105d780dbfdd4138b44de5fade43f7f493e62746ae4c193f121def
+# 25ee2eab3464849fe22499d25049c3d330e21c26f6742c31328b4c69d4fa1e59
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--

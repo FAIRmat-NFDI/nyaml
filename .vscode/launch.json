@@ -17,13 +17,13 @@
                      //"tests/NXfresnel_zone_plate.yaml",
                      //"tests/NXdetector_group.nxdl.xml",
                      //"tests/NXdetector_group.yaml",
-                     "tests/NXsensor.nxdl.xml",
+                     //"tests/NXsensor.nxdl.xml",
                      //"tests/NXsensor.yaml",
                      //"tests/NXmx.nxdl.xml",
                      //"tests/NXmx.yaml",
                      //"tests/NXstxm.nxdl.xml",
                      //"tests/NXstxm.yaml",
-                     //"tests/NXmonitor.nxdl.xml",
+                     "tests/NXmonitor.nxdl.xml",
                      //"tests/NXmonitor.yaml",
                      //"tests/NXcanSAS.nxdl.xml",
                      //"tests/NXcanSAS.yaml",
@@ -37,13 +37,13 @@
                      //"--output-file=tests/BK.NXfresnel_zone_plate.nxdl.xml"]
                      //"--output-file=tests/NXdetector_group.yaml"]
                      //"--output-file=tests/BK.NXdetector_group.nxdl.xml"]
-                     "--output-file=tests/NXsensor.yaml"]
+                     //"--output-file=tests/NXsensor.yaml"]
                      //"--output-file=tests/BK.NXsensor.nxdl.xml"]
                      //"--output-file=tests/NXmx.yaml"]
                      //"--output-file=tests/BK.NXmx.nxdl.xml"]
                      //"--output-file=tests/NXstxm.yaml"]
                      //"--output-file=tests/BK.NXstxm.nxdl.xml"]
-                     //"--output-file=tests/NXmonitor.yaml"]
+                     "--output-file=tests/NXmonitor.yaml"]
                      //"--output-file=tests/BK.NXmonitor.nxdl.xml"]
         }
     ]
