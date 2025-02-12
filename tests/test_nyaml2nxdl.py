@@ -767,3 +767,32 @@ def test_handle_xref(test_input, output, is_valid):
         handle_each_part_doc(test_input)
 
     assert output == err.value.args[0]
+
+
+@pytest.mark.parametrize(
+    "test_input",
+    [
+        ('NXattributes'),
+        ('NXcomment_yaml2nxdl'),
+        ('NXellipsometry-doCheck'),
+        ('NXmytests'),
+    ],
+)
+def test_files(test_input):
+    """
+    Tests if the conversion of specific test files results as expected.
+    input files shall be in tests/data/ as yaml files
+    expected output files shall have the corresponding name with the prefix Ref_
+    """
+    test_yml_input_file = "tests/data/"+test_input+".yaml"
+    test_xml_output_file = "tests/data/"+test_input+".nxdl.xml"
+    ref_xml_output_file = "tests/data/Ref_"+test_input+".nxdl.xml"
+    runner = CliRunner()
+    result = runner.invoke(nyaml2nxdl.launch_tool, [test_yml_input_file])
+    assert result.exit_code == 0
+
+    with open(test_xml_output_file, "r", encoding="utf-8") as logfile:
+        log = logfile.readlines()
+    with open(ref_xml_output_file, "r", encoding="utf-8") as reffile:
+        ref = reffile.readlines()
+    assert log == ref
