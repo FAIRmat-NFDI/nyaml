@@ -4,5 +4,6 @@ NXentry:
    (NXdata):
      polar_angle(link):
        target: here1
+       nameType: specified
      target_angle(link):
        target: here2

@@ -45,6 +45,7 @@ NXDL_GROUP_ATTRIBUTES = (
     "maxOccurs",
     "minOccurs",
     "deprecated",
+    "nameType",
 )
 NXDL_FIELD_ATTRIBUTES = (
     "optional",
@@ -65,6 +66,7 @@ NXDL_FIELD_ATTRIBUTES = (
     "required",
     "deprecated",
     "units",
+    "nameType",
 )
 
 NXDL_ATTRIBUTES_ATTRIBUTES = (
@@ -73,9 +75,10 @@ NXDL_ATTRIBUTES_ATTRIBUTES = (
     "recommended",
     "optional",
     "deprecated",
+    "nameType",
 )
 
-NXDL_LINK_ATTRIBUTES = ("name", "target", "napimount")
+NXDL_LINK_ATTRIBUTES = ("name", "target", "napimount", "nameType")
 
 # Set up attributes for yaml version
 YAML_GROUP_ATTRIBUTES = (*NXDL_GROUP_ATTRIBUTES, "exists")

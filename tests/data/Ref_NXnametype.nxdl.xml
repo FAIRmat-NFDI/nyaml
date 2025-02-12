@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
+<!--
+# NeXus - Neutron and X-ray Common Data Format
+#
+# Copyright (C) 2025-2025 NeXus International Advisory Committee (NIAC)
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# For further information, see http://www.nexusformat.org
+-->
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="base" type="group" name="NXnametype" extends="NXobject" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+    <doc>
+         NXnametype test
+    </doc>
+    <!--Using IDgroup, groupID, IDfield, fieldID, IDattribute, attributeID is incorrect notation
+in a yaml file if not annotated by an attribute nameType: partial-->
+    <group name="IDgroup" type="NXobject"/>
+    <group name="groupID" type="NXobject"/>
+    <group name="GROUP" type="NXobject"/>
+    <!--Using mixed upper/lower case like gROUp is incorrect notation in a yaml
+if not annotated by an attribute nameType: specified-->
+    <group name="gROUp" type="NXobject"/>
+    <group name="grOUp" type="NXobject" nameType="specified"/>
+    <group name="group" type="NXobject">
+        <field name="IDfield" type="NX_CHAR"/>
+        <field name="fieldID" type="NX_CHAR"/>
+        <field name="FIELD" type="NX_CHAR"/>
+        <field name="fIELd" type="NX_CHAR"/>
+        <field name="fiELd" type="NX_CHAR" nameType="specified"/>
+        <field name="field" type="NX_CHAR">
+            <attribute name="IDattribute" type="NX_CHAR"/>
+            <attribute name="attributeID" type="NX_CHAR"/>
+            <attribute name="ATTRIBUTE" type="NX_CHAR"/>
+            <attribute name="attrIBUte" type="NX_CHAR"/>
+            <attribute name="attriBUte" type="NX_CHAR" nameType="specified"/>
+            <attribute name="attribute" type="NX_CHAR"/>
+            <attribute name="ANYATTRIBUTE" type="NX_CHAR" nameType="any"/>
+            <attribute name="attribute_with_PARTIALNAME" type="NX_CHAR" nameType="partial"/>
+        </field>
+    </group>
+    <!--nameType distinctions for links not yet proposed to the NIAC-->
+    <link name="LInk" target="field"/>
+    <link name="liNK" target="field"/>
+    <link name="LINK" target="field"/>
+    <link name="lINk" target="field" nameType="specified"/>
+    <link name="link" target="field"/>
+</definition>

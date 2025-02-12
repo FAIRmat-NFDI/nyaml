@@ -656,6 +656,163 @@ class Nxdl2yaml:
                     )
 
     # pylint: disable=too-many-branches, too-many-locals, too-many-statements
+    def handle_dimension_refactored(self, depth, node, file_out):
+        """
+        Handle instances of dimensionsType and its child nodes.
+
+        # example definitions with non-trivial usage of dimensions useful for dev purposes
+        # https://github.com/FAIRmat-NFDI/nexus_definitions/commit/f7ba53f4fb409b03fde6af6ccf29146392a2c142
+        # applications/NXmx, use of required
+        # applications/NXstxm, use docstring for dimensions node
+        # base_classes/NXfresnel_zone_plate, use of rank only
+        # base_classes/NXmonitor, use of rank only and index, ref pairs
+        # base_classes/NXdetector_group, use of index, ref pairs
+        # base_classes/NXsensor, use of index, value and index, ref pairs respectively
+        # https://manual.nexusformat.org/nxdl_desc.html#nxdl-data-type-dimensionstype
+        #   there is no doc string for individual dim childs of a dimensionsType node
+        #   but only a single docstring for dimensionsType
+
+        # observations on current status:
+        # plain index, value pairs the most frequently used,
+        #   use short-hand
+        # refindex and incr are deprecated plus no longer used in any class,
+        #   do not support any long instead raise NotImplementedError()
+        # required is only used in NXmx and deprecated ref is seldom used
+        #   warrants deviation from shorthand-notation
+
+        # envisaged redesign of dimensions
+
+        # observing that
+        # for dim childs required = true is the default
+        # therefore, rank is redundant
+        #   provided that all dim childs have index, value or index, ref specified
+        # most classes use plain dimensionsType without a docstring and only
+        #   dim child nodes with index, value pairs
+        #   in this case having a short-hand numpy notation saves much typing work
+
+        # it is proposed, in summary, yaml syntax,
+        # i.e. NXDL creates either short-hand or dictionary nest
+        # array_shorthand(NX_DATA_TYPE class):
+        #   dim: (1, symbol_a, symbol_b)
+        # and alternative envisioned to be used only for those cases where
+        # the short-hand notation is insufficient
+        # array_full(NX_DATA_TYPE class):
+        #   dim:
+        #     doc: mydocstring
+        #     rank: myrank also dealing
+        #     1:
+        #       # flat list of key, value pairs, named according to
+        #       # elements possible of dim childs for XSD complexType dimensionsType e.g.
+        #       value: 1
+        #       ref: group_index
+        #       required: false
+        #       incr: notusedbyanybodyanymore?
+        #       refindex: notusedbyanybodyanymore?
+        # suggestion to remove dictionary nyaml keyword dimensions
+        # in favour for dim throughout
+        # it is proposed, in summary, for nxdl, i.e. for yaml2nxdl
+        # given that the shorthand is always on the same line
+        # or alternatively a dictionary nest this forward instantiation for NXDL is straight
+        """
+        yml_dim_dct = {}
+        # dimensionsType, docstring, if present
+        for child in list(node):
+            tag = remove_namespace_from_tag(child.tag)
+            if tag == "doc":
+                yml_dim_dct["doc"] = self.handle_not_root_level_doc(
+                    depth + 1, child.text, "doc", None
+                )
+                break  # dimensionsType can have only one top-level docstring
+
+        # dimensionsType, rank if present
+        for attr, val in node.attrib.items():
+            if not isinstance(val, dict):
+                if attr in ["rank"]:
+                    # indent = (depth + 1) * DEPTH_SIZE
+                    yml_dim_dct["rank"] = val
+                    break  # rank is the only allowed attribute of a dimensionsType node
+
+        # individual dimensionsType dim elements - the individual dimensions - if present
+        for child in list(node):
+            tag = remove_namespace_from_tag(child.tag)
+            child_attrs = child.attrib
+            # taking care of index and value attributes
+            if tag == "dim":
+                # taking care of index and value in format [[index, value]]
+                if "index" in child_attrs:
+                    idx_val = child_attrs.pop("index", "")
+                    if idx_val != "":
+                        yml_dim_dct[idx_val] = {}
+                        for child_attrs_key, child_attrs_val in child_attrs.items():
+                            if child_attrs_key in ["value", "required"]:
+                                yml_dim_dct[idx_val][child_attrs_key] = child_attrs_val
+                            elif child_attrs_key in ["ref", "incr", "refindex"]:
+                                # deprecated !
+                                yml_dim_dct[idx_val][child_attrs_key] = child_attrs_val
+                            else:
+                                raise ValueError(
+                                    f"Found incorrect dim child attribute {child_attrs_key}, {child_attrs_val} !"
+                                )
+                    else:
+                        raise ValueError(
+                            f"Found incorrect dim child that has no index attribute !"
+                        )
+                    # individual dim childs cannot have a dim docstring
+                    # see https://github.com/nexusformat/definitions/blob/main/nxdl.xsd
+                    # for dim_child in list(child):
+                    #     ctag = dim_child.tag
+                    #     if ctag == "doc" and dim_child.text != "":
+                    #         yml_dim_dct["dim"][idx_val]["doc"] = dim_child.text.strip()
+                    #         break  # only one docstring for each index
+
+        use_shorthand_notation = True  # try to falsify this default assumption
+        for key, obj in yml_dim_dct.items():
+            if key in ["doc", "rank"]:
+                use_shorthand_notation = False
+                break
+            else:
+                if isinstance(obj, dict):  # inside an individual dimension
+                    for attr_key, attr_val in obj.items():
+                        if attr_key in ["ref", "required", "incr", "refindex"]:
+                            use_shorthand_notation = False
+                            break
+        # one could make this loop nest more efficient if breaking earlier
+        # one could also add a consistence test that check if objs are contiguous
+        # and a gap free sequence from 1 to N dims
+
+        indent = depth * DEPTH_SIZE
+        if use_shorthand_notation:
+            dim_index_value = []
+            for key, obj in yml_dim_dct.items():
+                if key not in ["doc", "rank"] and isinstance(obj, dict):
+                    # inside an individual dimension
+                    for attr_key, attr_val in obj.items():
+                        # will be in order now because numbered indices!
+                        if attr_key == "value" and attr_val != "":
+                            dim_index_value.append(attr_val)
+            if len(dim_index_value) > 1:
+                file_out.write(f"{indent}dim: ({', '.join(dim_index_value)})\n")
+            elif len(dim_index_value) == 1:
+                file_out.write(f"{indent}dim: ({dim_index_value[0]},)\n")
+        else:
+            file_out.write(f"{indent}dim:\n")
+            # assure that doc comes first, followed by rank
+            if "rank" in yml_dim_dct:
+                file_out.write(f"{indent}{' ' * 2}rank: {yml_dim_dct['rank']}\n")
+            # followed by dimension dicts with index as dictionary name
+            for key, obj in sorted(yml_dim_dct.items()):
+                if key != "rank" and isinstance(obj, dict):
+                    if (
+                        sum(1 for attr_key, attr_val in obj.items() if attr_val != "")
+                        > 0
+                    ):
+                        file_out.write(f"{indent}{' ' * 2}{key}:\n")
+                        for attr_key, attr_val in obj.items():
+                            if attr_val != "":
+                                file_out.write(
+                                    f"{indent}{' ' * 4}{attr_key}: {attr_val}\n"
+                                )
+
     def handle_dimension(self, depth, node, file_out):
         """Handle the dimension field.
 
@@ -666,7 +823,7 @@ class Nxdl2yaml:
         possible_dim_attrs = ["ref", "required", "incr", "refindex"]
         possible_dimension_attrs = ["rank"]
 
-        def handle_dim_with_value_and_index(depth, node, file_out, dimension_doc):
+        def handle_dim_when_only_value_and_index(depth, node, file_out, dimension_doc):
             """
             Handle <dimensions> element if <dim> has only value and index attributes, and
             <diemensions> element has only one attribute 'rank', but no doc."""
@@ -684,6 +841,15 @@ class Nxdl2yaml:
                             f"{dim_index_value[:-1]} {child_attrs['value']},)"
                             if dim_index_value
                             else f"({child_attrs['value']},)"
+                        )
+                        node.remove(child)
+                    # the next branch is only for legacy support of deprecated ref
+                    # as seen in NXdetector_group
+                    elif child_attrs.get("ref", "") and not dimension_doc:
+                        dim_index_value = (
+                            f"{dim_index_value[:-1]} {child_attrs['ref']},)"
+                            if dim_index_value
+                            else f"({child_attrs['ref']},)"
                         )
                         node.remove(child)
                 elif tag == CMNT_TAG and self.include_comment:
@@ -741,6 +907,13 @@ class Nxdl2yaml:
                     # that it does not call in xmlparser function
                     dim_cmnt_nodes.append(child)
                     node.remove(child)
+            # special case for NXdata.nxdl.xml's field DATA where rank is a symbol
+            # if (
+            #     len(dim_index_value) == 0
+            #     and len(node.attrib) == 1
+            #     and "rank" in node.attrib
+            # ):
+            #     dim_index_value.append(node.attrib["rank"])
 
             # All 'dim' element comments on top of 'dim' yaml key
             if dim_cmnt_nodes:
@@ -749,12 +922,20 @@ class Nxdl2yaml:
             # index and value attributes of dim elements
             indent = (depth + 1) * DEPTH_SIZE
             # Numpy style for dim
-            value = (
-                ", ".join(dim_index_value)
-                if len(dim_index_value) > 1
-                else f"{dim_index_value[0]},"
-            )
-            file_out.write(f"{indent}dim: ({value})\n")
+            if len(dim_index_value) > 0:
+                if not all(val == "" for val in dim_index_value):
+                    value = (
+                        ", ".join(dim_index_value)
+                        if len(dim_index_value) > 1
+                        else f"{dim_index_value[0]},"
+                    )
+                    file_out.write(f"{indent}dim: ({value})\n")
+                else:
+                    if len(dim_index_value) == 1:
+                        value = "1,"
+                        file_out.write(f"{indent}dim: ({value})\n")
+                    else:
+                        raise NotImplementedError()
 
             # Write the attributes, except index and value, and doc of dim as child of dim_parameters.
             # But the doc or attributes for each dim come inside list according to the order of dim.
@@ -777,34 +958,77 @@ class Nxdl2yaml:
                         )
 
         # Dimension has other attributes including index and value
-        if remove_namespace_from_tag(node[0].tag) == "doc" or len(node.attrib) > 0:
-            indent = depth * DEPTH_SIZE
-            tag = remove_namespace_from_tag(node.tag)
-            file_out.write(f"{indent}{tag}:\n")
-            for attr, value in node.attrib.items():
-                if attr in possible_dimension_attrs and not isinstance(value, dict):
-                    indent = (depth + 1) * DEPTH_SIZE
-                    file_out.write(f"{indent}{attr}: {value}\n")
-                else:
-                    raise ValueError(
-                        f"Dimension has an attribute {attr} that is not valid."
-                        f"Currently allowed attributes are {possible_dimension_attrs}."
-                        f"Please have a close look"
-                    )
-            # Taking care of dimension doc
-            dimension_doc = ""
-            for child in list(node):
-                tag = remove_namespace_from_tag(child.tag)
-                if tag == "doc":
-                    dimension_doc = self.handle_not_root_level_doc(
-                        depth + 1, child.text
-                    )
-                    file_out.write(dimension_doc)
-                    node.remove(child)
-            handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs)
-        # Dimension has only index and value
+        # if len(node) > 0:
+        # this following logic is incorrect as for some deprecated cases like
+        # <dimensions><dim index="1" ref="group_index"/></dimensions>
+        # handle_dim_with_all_dim_attr is not visited if the next line is commented
+        # out that all_dim_attr will be visited but generates incorrect yaml
+        # the root cause is the above dimension line does not contain a "value"
+        # attribute, a different logic is required:
+        # first all dim attributes should be collected in a temporary based on index
+        # if there is at least one without value, yaml should report the full
+        # dictionary nest i.e.
+        # dimensions:
+        #   1:
+        #     ref: group_index
+        #     doc: comment if present
+        #   2 ... if there are more dim lines
+        # benefit of this would be that also doc
+        # that would e.g. however make
+        # dimensions:
+        #   1:
+        #     value: 3
+        #   2:
+        #     value: 3
+        # too verbose in which case the shorthand
+        # dim: (3, 3) is useful
+        # if remove_namespace_from_tag(node.tag) == "doc" or len(node.attrib) > 0:
+        indent = depth * DEPTH_SIZE
+        tag = remove_namespace_from_tag(node.tag)
+        # this next line always adds a dimensions group below which then
+        # dim or other attr and values are added but the short-hand notation
+        # dim: (1,) used in the majority of cases in FAIRmat does not demand
+        # such an additional nesting i.e. instead of dimensions/dim: (1,)
+        # only dim: (1,) should be added but as the code here sequentially processes
+        # off the child attributes and directly writes back dimensions has already
+        # been written before the first attribute is visited this may break repetitive
+        # roundtrip conversions because a yaml file with shorthand dim: gets promoted
+        # to proper NIAC XML a dimensions object with dim childs but when converted
+        # back returns a yaml with an unnecessary dimensions below which only ! the dim
+        # short-hand notation is stored !
+        file_out.write(f"{indent}{tag}:\n")
+        for attr, value in node.attrib.items():
+            if attr in possible_dimension_attrs and not isinstance(value, dict):
+                indent = (depth + 1) * DEPTH_SIZE
+                file_out.write(f"{indent}{attr}: {value}\n")
+            else:
+                raise ValueError(
+                    f"Dimension has an attribute {attr} that is not valid."
+                    f"Currently allowed attributes are {possible_dimension_attrs}."
+                    f"Please have a close look"
+                )
+        # Taking care of dimension doc
+        dimension_doc = ""
+        for child in list(node):
+            tag = remove_namespace_from_tag(child.tag)
+            if tag == "doc":
+                dimension_doc = self.handle_not_root_level_doc(depth + 1, child.text)
+                file_out.write(dimension_doc)
+                node.remove(child)
+        handle_dim_with_all_dim_attr(depth, node, file_out, possible_dim_attrs)
+        # else:
+        #     handle_dim_when_only_value_and_index(
+        #         depth, node, file_out, dimension_doc=""
+        #     )
+        """
         else:
-            handle_dim_with_value_and_index(depth, node, file_out, dimension_doc="")
+            # dimension has only rank as seen in NXfresnel_zone_plate.nxdl.xml
+            if len(node.attrib) == 1 and "rank" in node.attrib:
+                indent = depth * DEPTH_SIZE
+                file_out.write(f"{indent}dim: (,)\n")
+            else:
+                raise NotImplementedError()
+        """
 
     def handle_enumeration(self, depth, node, file_out):
         """
@@ -1063,7 +1287,8 @@ class Nxdl2yaml:
             if tag == ("attribute"):
                 self.handle_attributes(depth, node, file_out)
             if tag == ("dimensions"):
-                self.handle_dimension(depth, node, file_out)
+                # self.handle_dimension(depth, node, file_out)
+                self.handle_dimension_refactored(depth, node, file_out)
             if tag == ("link"):
                 self.handle_link(depth, node, file_out)
             if tag == ("choice"):

@@ -74,6 +74,8 @@ def split_name_and_extension(file_path):
     """
     path = Path(file_path)
     ext = "".join(path.suffixes)
+    # assuming that in NeXus yaml and nxdl files follow the pattern
+    # NX<classname>.yaml and NX<classname>.nxdl.xml
     full_path_stem = file_path[0 : file_path.index(ext)]
     return full_path_stem, ext[1:]
 

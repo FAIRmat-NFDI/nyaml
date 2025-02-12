@@ -69,8 +69,6 @@ DOM_COMMENT = (
     "#\n"
     "# For further information, see http://www.nexusformat.org\n"
 )
-NX_ATTR_IDNT = "\\@"
-NX_UNIT_IDNT = "unit"
 DEPTH_SIZE = 4 * " "
 # Initialised in yml_reader() funtion
 COMMENT_BLOCKS: CommentCollector
@@ -409,72 +407,6 @@ def xml_handle_exists(dct, obj, keyword, value):
             obj.set("minOccurs", "0")
 
 
-def xml_handle_dimensions(dct, obj, keyword, value: dict):
-    """
-    This function creates a 'dimensions' element instance, and appends it to an existing element
-
-    NOTE: we could create xml_handle_dim() function.
-        But, the dim elements in yaml file is defined as 'dim =[[index, value]]'
-        but dim has other attributes such as 'ref' and also might have doc as chlid.
-        so in that sense 'dim' should have come as dict keeping attributes and child as members of
-        dict.
-        Regarding this situation all the attributes of 'dimensions' and child 'doc' has been
-        included here.
-
-        Other attributes, except 'index' and 'value', of 'dim' comes under nested dict named
-        'dim_parameter:
-            incr:[...]'
-    """
-
-    possible_dimension_attrs = ["rank"]  # nxdl attributes
-    line_number = f"__line__{keyword}"
-    line_loc = dct[line_number]
-    assert "dim" in value.keys(), (
-        f"Line {line_loc}: No dim as child of dimension has been found."
-    )
-    xml_handle_comment(obj, line_number, line_loc)
-    dims = ET.SubElement(obj, "dimensions")
-    # Consider all the children under dimension is dim element and
-    # its attributes
-
-    rm_key_list = []
-    rank = ""
-    for key, val in value.items():
-        if "__line__" in key:
-            continue
-        line_number = f"__line__{key}"
-        line_loc = value[line_number]
-        if key == "rank":
-            rank = val or ""
-            if isinstance(rank, int) and rank < 0:
-                raise ValueError(
-                    f"Dimension must have some info about rank which is not "
-                    f"available. Please check around Line: {dct[line_number]}"
-                )
-            dims.set(key, str(val))
-            rm_key_list.append(key)
-            rm_key_list.append(line_number)
-            xml_handle_comment(obj, line_number, line_loc, dims)
-        # Check dimension doc and handle it
-        elif key == "doc" and isinstance(val, str):
-            xml_handle_doc(dims, val, line_number, line_loc)
-            rm_key_list.append(key)
-            rm_key_list.append(line_number)
-        elif key in possible_dimension_attrs and not isinstance(val, dict):
-            dims.set(key, str(val))
-            rm_key_list.append(key)
-            rm_key_list.append(line_number)
-            xml_handle_comment(obj, line_number, line_loc, dims)
-
-    for key in rm_key_list:
-        del value[key]
-
-    xml_handle_dim_from_dimension_dict(dct, dims, keyword, value, rank=False)
-
-    if isinstance(value, dict) and value != {}:
-        recursive_build(dims, value, verbose=None)
-
-
 def xml_handle_dim(dct, obj, keyword, value):
     """
     This function creates a 'dimensions' element instance, and appends it to an existing element.
@@ -496,141 +428,34 @@ def xml_handle_dim(dct, obj, keyword, value):
                     valid_dims.append(entry)
             if len(valid_dims) > 0:
                 dims = ET.SubElement(obj, "dimensions")
-                # dims.set("rank", str(len(valid_dims)))
                 dim_idx = 1
                 for dim_name in valid_dims:
                     dim = ET.SubElement(dims, "dim")
-                    dim.set("index", str(dim_idx))
-                    dim.set("value", str(dim_name))
+                    dim.set("index", f"{dim_idx}")
+                    dim.set("value", f"{dim_name}")
                     dim_idx += 1
+    elif isinstance(value, dict):
+        # top-level docstring dealt with already by caller
+        n_dims = len(
+            [key for key in value if re.match("^[0-9]+$", f"{key}") is not None]
+        )
+        if n_dims > 0 or "rank" in value:
+            # translate numeral keys into dim instances with index and their attributes
+            dims = ET.SubElement(obj, "dimensions")
+            if "rank" in value:
+                dims.set("rank", f"{value['rank']}")
+            if "doc" in value:
+                dims.set("doc", f"{value['doc']}")
+            for dim_key, dim_obj in value.items():
+                if dim_key != "doc" and isinstance(dim_obj, dict):
+                    dim = ET.SubElement(dims, "dim")
+                    dim.set("index", str(dim_key))
+                    for k, v in dim_obj.items():
+                        if not k.startswith("__line__"):
+                            dim.set(f"{k}", f"{v}")
+
     # Comments for all <dim> elements will be on top of the <dimensions> element
     xml_handle_comment(obj, line_number, line_loc, dims)
-
-
-# pylint: disable=too-many-locals, too-many-arguments, too-many-statements
-def xml_handle_dim_from_dimension_dict(
-    dct, dims_obj, keyword, value, rank, verbose=False
-):
-    """
-    Handling dim element.
-    NOTE: The inputs 'keyword' and 'value' are as input for xml_handle_dimensions
-    function. please also read note in xml_handle_dimensions.
-    """
-    deprecated_dim_attrs = ["ref", "incr", "refindex"]
-    possible_dim_attrs = [*deprecated_dim_attrs, "required"]
-
-    # Some attributes might have equivalent name e.g. 'required' is correct one and
-    # 'optional' could be another name. Then change attribute to the correct one.
-    wrong_to_correct_attr = [("optional", "required")]
-    header_line_number = f"__line__{keyword}"
-    dim_list = []
-    rm_key_list = []
-    # NOTE: dim doc and other attributes except 'index' and 'value' will come as list of value
-    # under dim_parameters
-    if not value:
-        return
-    rank = ""
-    # pylint: disable=too-many-nested-blocks
-    for attr, vvalue in value.items():
-        if "__line__" in attr:
-            continue
-        line_number = f"__line__{attr}"
-        line_loc = value[line_number]
-        # dim comes in precedence
-        if attr == "dim":
-            # dim consists of [index, value] list
-            llist_ind_value = vvalue
-            if not isinstance(llist_ind_value, list):
-                if llist_ind_value.startswith("(") and llist_ind_value.endswith(")"):
-                    llist_ind_value = [
-                        x.strip() for x in llist_ind_value[1:-1].split(",")
-                    ]
-                    llist_ind_value = tuple(filter(lambda x: x != "", llist_ind_value))
-                if not isinstance(llist_ind_value, tuple):
-                    raise TypeError(
-                        f"Around line {dct[header_line_number]}: dim argument not a list or tuple !"
-                    )
-            xml_handle_comment(dims_obj, line_number, line_loc)
-            if isinstance(rank, int) and rank > 0:
-                assert rank == len(llist_ind_value), (
-                    f"Wrong dimension rank check around Line {dct[header_line_number]}.\n"
-                    f"Line {[dct[header_line_number]]} rank value {rank} "
-                    f"is not the same as dim array = "
-                    f"{len(llist_ind_value)}."
-                )
-            # Taking care of ind and value that comes as list of list
-            for ind, dim_ind_val in enumerate(llist_ind_value):
-                dim = ET.SubElement(dims_obj, "dim")
-
-                if (
-                    isinstance(dim_ind_val, list)
-                    and len(dim_ind_val) == 2
-                    and dim_ind_val[1]
-                ):
-                    dim.set("index", str(dim_ind_val[0]))
-                    dim.set("value", str(dim_ind_val[1]))
-                else:
-                    dim.set("index", str(ind + 1))
-                    dim.set("value", str(dim_ind_val))
-
-                dim_list.append(dim)
-            rm_key_list.append(attr)
-            rm_key_list.append(line_number)
-        elif attr == "dim_parameters" and isinstance(vvalue, dict):
-            xml_handle_comment(dims_obj, line_number, line_loc)
-            for kkkey, vvval in vvalue.items():
-                if "__line__" in kkkey:
-                    continue
-                cmnt_number = f"__line__{kkkey}"
-                cmnt_loc = vvalue[cmnt_number]
-                # Check whether any optional attributes added
-                for tuple_wng_crt in wrong_to_correct_attr:
-                    if kkkey == tuple_wng_crt[0]:
-                        raise ValueError(
-                            f"{cmnt_loc}: Attribute '{kkkey}' is prohibited, use "
-                            f"'{tuple_wng_crt[1]}"
-                        )
-                if kkkey == "doc" and dim_list:
-                    # doc comes as list of doc
-                    for i, dim in enumerate(dim_list):
-                        if isinstance(vvval, list) and i < len(vvval):
-                            tmp_val = vvval[i]
-                            xml_handle_doc(dim, vvval[i], cmnt_number, cmnt_loc)
-                        # Check all the dim have doc if not skip
-                        elif isinstance(vvval, list) and i >= len(vvval):
-                            pass
-                else:
-                    if kkkey in deprecated_dim_attrs:
-                        dep_text = (
-                            f"Attrbute {kkkey} is deprecated. "
-                            f"Check attributes after line {cmnt_loc}"
-                        )
-                        warnings.warn(dep_text, DeprecationWarning)
-                    for i, dim in enumerate(dim_list):
-                        # all atribute of dims comes as list
-                        if isinstance(vvval, list) and i < len(vvval):
-                            tmp_val = vvval[i]
-                            dim.set(kkkey, str(tmp_val))
-
-                        # Check all the dim have doc if not skip
-                        elif isinstance(vvval, list) and i >= len(vvval):
-                            pass
-                        # All dim might have the same value for the same attribute
-                        elif not isinstance(vvval, list):
-                            tmp_val = value
-                            dim.set(kkkey, str(tmp_val))
-            rm_key_list.append(attr)
-            rm_key_list.append(line_number)
-        else:
-            raise ValueError(
-                f"Got unexpected block except 'dim' and 'dim_parameters'."
-                f"Please check around line {line_number}"
-            )
-
-    for key in rm_key_list:
-        del value[key]
-
-    check_for_skipped_attributes("dim", value, possible_dim_attrs, verbose)
 
 
 def xml_handle_enumeration(dct, obj, keyword, value, verbose):
@@ -811,6 +636,54 @@ def verbose_flag(verbose, keyword, value):
         print(f"key:{keyword}; value type is {type(value)}\n")
 
 
+def xml_handle_nametype(keyword, keyword_name, dct, obj):
+    """
+    Identify NeXus nameType attribute for field, group, attribute use hint if required.
+    """
+    concept_name = keyword_name[2:] if keyword_name.startswith("\\@") else keyword_name
+    if concept_name == "":
+        # no explicit name given as e.g. in group type="NXobject"
+        # obj.set("nameType", "any")
+        # cannot be specified because having no/empty concept name is not allowed
+        # cannot be partial because if no hint is given why should it be partial
+        return
+    if concept_name.islower():
+        # obj.set("nameType", "specified")  # is the NeXus default, no need to add
+        return
+    if concept_name.isupper():
+        # nameType="any" correct for almost all cases except for those where an
+        # explicit nameType hint is made in the yaml file
+        # this is relevant for e.g. NXcanSAS ENTRY/DATA/Q which is specified
+        if dct.get(keyword) and "nameType" in dct[keyword]:
+            supported = ["specified", "any", "partial"]
+            name_type = dct[keyword]["nameType"]
+            if name_type in supported:
+                obj.set("nameType", name_type)
+            else:
+                raise ValueError(f"nameType for {keyword} is not in {supported}")
+        else:
+            obj.set("nameType", "any")
+        return
+    # Mixed-case names: Check if an explicit nameType hint is provided.
+    if dct.get(keyword) and "nameType" in dct[keyword]:
+        supported = ["specified", "any", "partial"]
+        name_type = dct[keyword]["nameType"]
+        if name_type in supported:
+            obj.set("nameType", name_type)
+            return
+
+    # Determine if the name follows a variable-like pattern.
+    variable_prefix_match = re.search("^[A-Z]*[a-z0-9_.]*$", concept_name)
+    variable_suffix_match = re.search("^[a-z0-9_.]*[A-Z]*$", concept_name)
+    if variable_prefix_match or variable_suffix_match:
+        # nameType="partial"
+        obj.set("nameType", "partial")
+        return
+    # Default case: NeXus assumes "specified" as the default, so no need to set it explicitly.
+    # NXcanSAS dQw suggests it is specified, or is this an error in that appdef?
+    # raise ValueError(f"nameType for {concept_name} undefined")
+
+
 def xml_handle_attributes(dct, obj, keyword, value, verbose):
     """Handle the attributes found connected to attribute field"""
 
@@ -856,6 +729,8 @@ def xml_handle_attributes(dct, obj, keyword, value, verbose):
                     )
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
+                elif attr == "nameType":
+                    xml_handle_nametype(keyword, keyword_name, dct, elemt_obj)
                 else:
                     elemt_obj.set(attr, check_for_mapping_char_other(attr_val))
                     rm_key_list.append(attr)
@@ -941,7 +816,15 @@ def xml_handle_fields_or_group(
     else:
         elemt_obj.set("name", keyword_name)
 
-    if value:
+    if isinstance(value, dict):
+        # calls to this field_or_group function need to deal specifically with entries
+        # like nameType: somevalue because we do not require fields, or attributes
+        # to include a datatype attribute when we assume that is (NX_CHAR)
+        # hence nameType: specified could be misinterpreted as introducing a new child
+        # there is a clear signature though to assure if we face a group, field, or attribute,
+        # namely when value is only a dictionary and not a string
+        # i.e. conceptname(class or datatype): may only be have trailing comments
+        # on the same line
         rm_key_list = []
         # In each each if clause apply xml_handle_comment(), to collect
         # comments on that yaml line.
@@ -964,12 +847,13 @@ def xml_handle_fields_or_group(
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
-            elif ele_type == "field" and attr == "unit":
+            elif attr == "nameType":
+                xml_handle_nametype(keyword, keyword_name, dct, elemt_obj)
+            elif attr == "unit" and ele_type == "field":
                 xml_handle_units(elemt_obj, vval)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
                 rm_key_list.append(attr)
-            elif ele_type == "field" and attr == "dim":
-                # Comment handeled in xml_handle_dim
+            elif attr == "dim" and ele_type == "field":
                 xml_handle_dim(dct=value, obj=elemt_obj, keyword=attr, value=vval)
                 rm_key_list.append(attr)
             elif attr in allowed_attr and not isinstance(vval, dict) and vval:
@@ -984,8 +868,8 @@ def xml_handle_fields_or_group(
         # Check for skipped attributes
         check_for_skipped_attributes(ele_type, value, allowed_attr, verbose)
 
-    if isinstance(value, dict) and value != {}:
-        recursive_build(elemt_obj, value, verbose)
+        if value != {}:
+            recursive_build(elemt_obj, value, verbose)
 
 
 def xml_handle_comment(
@@ -1045,6 +929,20 @@ def recursive_build(obj, dct, verbose):
         line_number = f"__line__{keyword}"
         line_loc = dct[line_number]
         keyword_name, keyword_type = nx_name_type_resolving(keyword)
+        # keyword's like nameType are problematic take this example
+        # group(NXobject):
+        #   nameType:  # convenience rule NX_CHAR does not need to be mentioned
+        #   nameType(NX_CHAR):
+        #     nameType: specified  # required, because concept group/nameType has at least
+        #     one letter
+        #   Q:
+        #     nameType: specified  # required, as all upper Q that is by default NX_CHAR
+        #   dQw:
+        #     nameType: specified  # required definition of nameType for mixed case dQw
+        if 0 < sum(1 for char in keyword if char.isupper()) < len(keyword):
+            if isinstance(value, str):
+                continue
+
         check_keyword_variable(verbose, dct, keyword, value)
         if verbose:
             print(f"keyword_name:{keyword_name} keyword_type {keyword_type}\n")
@@ -1053,11 +951,9 @@ def recursive_build(obj, dct, verbose):
             xml_handle_link(dct, obj, keyword, value, verbose)
         elif keyword[-8:] == "(choice)":
             xml_handle_choice(dct, obj, keyword, value)
-        # The below xml_symbol clause is for the symbols that come ubde filed or attributes
-        # Root level symbols has been inside nyaml2nxdl()
+        # symbols of fields or attributes, root level symbols dealt with by nyaml2nxdl()
         elif keyword_type == "" and keyword_name == "symbols":
             xml_handle_symbols(dct, obj, keyword, value)
-
         elif re.match(r"NX[a-zA-Z].*", keyword_type) is not None:
             elem_type = "group"
             # we can be sure we need to instantiate a new group
@@ -1070,20 +966,17 @@ def recursive_build(obj, dct, verbose):
                 YAML_GROUP_ATTRIBUTES,
                 verbose=False,
             )
-
-        elif keyword_name[0:2] == NX_ATTR_IDNT:  # check if obj qualifies
+        elif keyword_name[0:2] == "\\@":  # check if obj qualifies as a NeXus attribute
             xml_handle_attributes(dct, obj, keyword, value, verbose)
         elif keyword == "doc":
             xml_handle_doc(obj, value, line_number, line_loc)
-        elif keyword == NX_UNIT_IDNT:
+        elif keyword == "unit":
             xml_handle_units(obj, value)
         elif keyword == "enumeration":
             xml_handle_enumeration(dct, obj, keyword, value, verbose)
-        elif keyword == "dimensions":
-            xml_handle_dimensions(dct, obj, keyword, value)
+        # yaml keyword "dimensions" is no longer supported use "dim"
         elif keyword == "dim":
             xml_handle_dim(dct, obj, keyword, value)
-        #   xml_handle_dim(obj, value)
         elif keyword == "exists":
             xml_handle_exists(dct, obj, keyword, value)
         # Handles fileds e.g. AXISNAME
@@ -1103,6 +996,9 @@ def recursive_build(obj, dct, verbose):
                 f"An unknown type of element {keyword} has been found which is "
                 f"not be able to be resolved. Check around line {dct[line_number]}"
             )
+        if isinstance(value, dict):
+            if "dim" in value:
+                xml_handle_dim(dct, obj, keyword, value)
 
 
 def extend_doc_type(doc_type, new_component, comment=False):
