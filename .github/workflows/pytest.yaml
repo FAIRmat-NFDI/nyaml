@@ -9,28 +9,22 @@ on:
   pull_request:
     branches: [main]
 
-env:
-  UV_SYSTEM_PYTHON: true
-
 jobs:
   pytest:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python_version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           submodules: recursive
-      - name: Set up Python ${{ matrix.python_version }}
-        uses: actions/setup-python@v5
+      - name: Install uv and set the python version
+        uses: astral-sh/setup-uv@v5
         with:
-          python-version: ${{ matrix.python_version }}
-      - name: Install UV
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
+          python-version: ${{ matrix.python-version }}
       - name: Install package
         run: |
           uv pip install ".[dev]"
