@@ -767,7 +767,7 @@ def test_nyaml2nxdl_nameType(tmp_path):
     # Handle correct conversion
     input_file = pwd / "data/nameType.yaml"
     ref_file = pwd / "data/Ref_nameType.nxdl.xml"
-    parsed_file = tmp_path / "nameType.nxdl.xml"
+    parsed_file = tmp_path / "nameType_parsed.nxdl.xml"
 
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool,
@@ -807,7 +807,7 @@ def test_nyaml2nxdl_nameType(tmp_path):
     ids=[
         "Prohibited_nameType_field",
         "Prohibited_nameType_attribute",
-        "Prohibited_attribute_nameType",
+        "Prohibited_attribute_group",
     ],
 )
 def test_nyaml2nxdl_prohibited_nameType(input_file, error_message, tmp_path):
