@@ -757,7 +757,7 @@ def test_handle_xref(test_input, output, is_valid):
     assert output == err.value.args[0]
 
 
-def test_nyaml2nxdl_nameType(tmp_path, caplog):
+def test_nyaml2nxdl_nameType(tmp_path):
     """
     Test the proper conversion of yaml2nxdl with name and type.
     """
@@ -785,21 +785,21 @@ def test_nyaml2nxdl_nameType(tmp_path, caplog):
         (
             "Prohibited_nameType_field.yaml",
             (
-                "Line 7: Name distance1 (with all letters lowercase)"
+                "Line/Node 7: Name distance1 (with all letters lowercase)"
                 " should have nameType as 'specific'."
             ),
         ),
         (
             "Prohibited_nameType_attribute.yaml",
             (
-                "Line 9: Name \\@attr_test (with all letters lowercase) "
+                "Line/Node 9: Name \\@attr_test (with all letters lowercase) "
                 "should have nameType as 'specific'."
             ),
         ),
         (
             "Prohibited_nameType_group.yaml",
             (
-                "Line 6: Name INSTRUMENT (with all letters uppercase)"
+                "Line/Node 6: Name INSTRUMENT (with all letters uppercase)"
                 " should have nameType as 'any' or 'specific'."
             ),
         ),
@@ -810,15 +810,42 @@ def test_nyaml2nxdl_nameType(tmp_path, caplog):
         "Prohibited_attribute_nameType",
     ],
 )
-def test_nyaml2nxdl_prohibited_nameType(input_file, error_message, tmp_path, caplog):
+def test_nyaml2nxdl_prohibited_nameType(input_file, error_message, tmp_path):
     """Run the nyaml tools on incorrect files"""
     pwd = Path(__file__).parent / "data"
     tmp_file = tmp_path / input_file.replace(".yaml", ".nxdl.xml")
 
-    with caplog.at_level(logging.ERROR):
-        result = CliRunner().invoke(
-            nyaml2nxdl.launch_tool,
-            [str(pwd / input_file), "--output-file", str(tmp_file)],
-        )
-        assert result.exit_code == 1
-        assert result.exception.args[0] == error_message
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        [str(pwd / input_file), "--output-file", str(tmp_file)],
+    )
+    assert result.exit_code == 1
+    assert result.exception.args[0] == error_message
+
+def test_nxdl2nyaml_nameType(tmp_path):
+    """
+    Test the proper conversion of nxdl2yaml with name and type.
+    """
+
+    pwd = Path(__file__).parent
+
+    # Handle correct conversion
+    input_file = pwd / "data/nameType.nxdl.xml"
+    ref_file = pwd / "data/Ref_nameType.yaml"
+    parsed_file = tmp_path / "nameType_parsed.yaml"
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        ["--do-not-store-nxdl", str(input_file), "--output-file", str(parsed_file)],
+    )
+
+    assert result.exit_code == 0, "Error in converter execution."
+
+    # read yaml files
+    with open(ref_file, mode="r", encoding="utf-8") as ref_yaml, open(
+        parsed_file, mode="r", encoding="utf-8"
+    ) as parsed_yaml:
+        ref_yaml_dict = LineLoader(ref_yaml).get_single_data()
+        parsed_yaml_dict = LineLoader(parsed_yaml).get_single_data()
+
+    compare_yaml_content(parsed_yaml_dict, ref_yaml_dict, ["nameType"])

@@ -104,17 +104,17 @@ def check_for_proper_nameType(name, nameType, error_location):
 
     if name.isupper():
         assert nameType in ["any", "specific"], (
-            f"Line {error_location}: Name {name} (with all letters upper"
+            f"Line/Node {error_location}: Name {name} (with all letters upper"
             "case) should have nameType as 'any' or 'specific'."
         )
     elif name.islower():
         assert nameType == "specific", (
-            f"Line {error_location}: Name {name} (with all letters lower"
+            f"Line/Node {error_location}: Name {name} (with all letters lower"
             "case) should have nameType as 'specific'."
         )
     elif not name.isupper() and not name.islower():
         assert nameType in ["specific", "partial"], (
-            f"Line: {error_location}: Name {name} (with mixed case) should have nameType as 'specific' or 'partial'."
+            f"Line/node {error_location}: Name {name} (with mixed case) should have nameType as 'specific' or 'partial'."
         )
 
 
