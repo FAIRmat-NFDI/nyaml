@@ -37,8 +37,6 @@ dev = [
     "ruff",
     "pytest",
     "types-lxml",
-    "isort>=5.10",
-    "black>=22.3",
     "pip-tools",
     "pre-commit",
     "types-pyyaml",
