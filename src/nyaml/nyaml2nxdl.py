@@ -40,6 +40,7 @@ from nyaml.helper import (
     YAML_GROUP_ATTRIBUTES,
     YAML_LINK_ATTRIBUTES,
     LineLoader,
+    check_for_proper_nameType,
     clean_empty_lines,
     get_yaml_escape_char_reverter_dict,
     is_copyright_comment,
@@ -856,6 +857,13 @@ def xml_handle_attributes(dct, obj, keyword, value, verbose):
                     )
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
+                elif keyword_name and attr == "nameType":
+                    check_for_proper_nameType(
+                        name=keyword_name, nameType=attr_val, error_location=line_loc
+                    )
+                    elemt_obj.set(attr, attr_val)
+                    rm_key_list.append(attr)
+                    rm_key_list.append(line_number)
                 else:
                     elemt_obj.set(attr, check_for_mapping_char_other(attr_val))
                     rm_key_list.append(attr)
@@ -959,6 +967,14 @@ def xml_handle_fields_or_group(
                 )
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
+            elif keyword_name and attr == "nameType":
+                check_for_proper_nameType(
+                    name=keyword_name, nameType=vval, error_location=line_loc
+                )
+                elemt_obj.set(attr, vval)
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+                xml_handle_comment(obj, line_number, line_loc, elemt_obj)
             elif attr == "exists" and vval:
                 xml_handle_exists(value, elemt_obj, attr, vval)
                 rm_key_list.append(attr)

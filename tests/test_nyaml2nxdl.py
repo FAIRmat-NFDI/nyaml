@@ -20,6 +20,7 @@ Tests for nyaml2nxdl tool
 """
 
 import filecmp
+import logging
 import os
 import re
 import sys
@@ -54,6 +55,7 @@ def check_and_replace_latest_copyright(nxdl_file):
     )
     content = re.sub(LATEST_COPYRIGHT, COPYRIGHT_REPLACEMENT, content)
     nxdl_file.write_text(content)
+
 
 def delete_duplicates(list_of_matching_string):
     """
@@ -90,9 +92,9 @@ def find_matches(xml_file, desired_matches):
                 found_matches.append(desired_match)
     # ascertain that all the desired matches were found in file
     found_matches_clean = delete_duplicates(found_matches)
-    assert len(found_matches_clean) == len(
-        desired_matches
-    ), "some desired_matches were \nnot found in file"
+    assert len(found_matches_clean) == len(desired_matches), (
+        "some desired_matches were \nnot found in file"
+    )
     return [lines, lines_index]
 
 
@@ -170,10 +172,10 @@ def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     check_file_fresh_baked(test_yml_file)
 
     result = filecmp.cmp(ref_yml_file, test_yml_file, shallow=False)
-    assert (
-        result
-    ), "Ref YML and parsed YML\
+    assert result, (
+        "Ref YML and parsed YML\
 has not the same structure!!"
+    )
     os.remove(test_yml_file)
     sys.stdout.write("Test on xml -> yml doc formatting okay.\n")
 
@@ -318,10 +320,10 @@ def test_xml_parsing():
     ref_tree = ET.parse(ref_xml_file)
     ref_tree_flattened = {i.tag.split("}", 1)[1] for i in ref_tree.iter()}
 
-    assert (
-        test_tree_flattened == ref_tree_flattened
-    ), "Ref XML and parsed XML\
+    assert test_tree_flattened == ref_tree_flattened, (
+        "Ref XML and parsed XML\
 has not the same tree structure!!"
+    )
     os.remove(test_xml_file)
     os.remove(test_yml_file)
     sys.stdout.write("Test on xml -> yml -> xml okay.\n")
@@ -345,10 +347,10 @@ def test_yml_parsing():
 
     ref_yml_tree = nyaml2nxdl_forward_tools.yml_reader(ref_yml_file)
 
-    assert list(test_yml_tree) == list(
-        ref_yml_tree
-    ), "Ref YML and parsed YML \
+    assert list(test_yml_tree) == list(ref_yml_tree), (
+        "Ref YML and parsed YML \
 has not the same root entries!!"
+    )
     os.remove("tests/data/Ref_NXellipsometry_parsed.yaml")
     os.remove("tests/data/Ref_NXellipsometry.nxdl.xml")
     sys.stdout.write("Test on yml -> xml -> yml okay.\n")
@@ -366,7 +368,7 @@ def test_yml_consistency_comment_parsing():
         nyaml2nxdl.launch_tool, ["--check-consistency", ref_yml_file]
     )
     assert result.exit_code == 0, (
-        f"Exception: {result.exception}, \nExecution Info:" "{result.exc_info}"
+        f"Exception: {result.exception}, \nExecution Info:{{result.exc_info}}"
     )
     with open(ref_yml_file, "r", encoding="utf-8") as ref_yml:
         loader = LineLoader(ref_yml)
@@ -403,12 +405,12 @@ def test_yml2xml_comment_parsing():
 
     def recursive_compare(ref_root, test_root):
         assert ref_root.attrib.items() == test_root.attrib.items(), (
-            "Got different xml element" "Atribute."
+            "Got different xml elementAtribute."
         )
         if ref_root.text and test_root.text:
-            assert (
-                ref_root.text.strip() == test_root.text.strip()
-            ), "Got differen element text."
+            assert ref_root.text.strip() == test_root.text.strip(), (
+                "Got differen element text."
+            )
         if len(ref_root) > 0 and len(test_root) > 0:
             for x, y in zip(ref_root, test_root):
                 recursive_compare(x, y)
@@ -468,9 +470,9 @@ def test_yaml2nxdl_doc():
             remove_namespace_from_tag(parent1.tag) == "doc"
             and remove_namespace_from_tag(parent2.tag) == "doc"
         ):
-            assert (
-                parent1.text == parent2.text
-            ), f"DOCS ARE NOT SAME: node {parent1}, node {parent2}"
+            assert parent1.text == parent2.text, (
+                f"DOCS ARE NOT SAME: node {parent1}, node {parent2}"
+            )
 
     compare_nxdl_doc(ref_nxdl, out_nxdl)
 
@@ -576,11 +578,12 @@ def test_yaml2nxdl_no_tabs(tmp_path):
             remove_namespace_from_tag(parent1.tag) == "doc"
             and remove_namespace_from_tag(parent2.tag) == "doc"
         ):
-            assert (
-                parent1.text == parent2.text
-            ), f"DOCS ARE NOT SAME: node {parent1}, node {parent2}"
+            assert parent1.text == parent2.text, (
+                f"DOCS ARE NOT SAME: node {parent1}, node {parent2}"
+            )
 
     compare_nxdl_doc(ref_nxdl, out_nxdl)
+
 
 def test_copyright_license_new_yaml(tmp_path):
     """While converting the newly developed yaml to nxdl the license text should have
@@ -598,6 +601,7 @@ def test_copyright_license_new_yaml(tmp_path):
     )
     # Check if the latest copyright year is written
     check_and_replace_latest_copyright(output)
+
 
 def test_check_copyright_license_in_full_modification_yaml_cycle(tmp_path):
     pwd = Path(__file__).parent
@@ -635,6 +639,7 @@ def test_check_copyright_license_in_full_modification_yaml_cycle(tmp_path):
     gen_license_text = get_nxdl_copyright_license(latest_nxdl)
     original_license_text = get_nxdl_copyright_license(nxdl_file)
     assert gen_license_text == original_license_text, "License text is not correct."
+
 
 def test_check_copyright_license_in_modified_yaml(tmp_path):
     """While converting the modified yaml to nxdl the license text should
@@ -750,3 +755,70 @@ def test_handle_xref(test_input, output, is_valid):
         handle_each_part_doc(test_input)
 
     assert output == err.value.args[0]
+
+
+def test_nyaml2nxdl_nameType(tmp_path, caplog):
+    """
+    Test the proper conversion of yaml2nxdl with name and type.
+    """
+
+    pwd = Path(__file__).parent
+
+    # Handle correct conversion
+    input_file = pwd / "data/nameType.yaml"
+    ref_file = pwd / "data/Ref_nameType.nxdl.xml"
+    parsed_file = tmp_path / "nameType.nxdl.xml"
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        ["--do-not-store-nxdl", str(input_file), "--output-file", str(parsed_file)],
+    )
+
+    assert result.exit_code == 0, "Error in converter execution."
+    check_and_replace_latest_copyright(parsed_file)
+    assert ref_file.read_text() == parsed_file.read_text()
+
+
+@pytest.mark.parametrize(
+    "input_file,error_message",
+    [
+        (
+            "Prohibited_nameType_field.yaml",
+            (
+                "Line 7: Name distance1 (with all letters lowercase)"
+                " should have nameType as 'specific'."
+            ),
+        ),
+        (
+            "Prohibited_nameType_attribute.yaml",
+            (
+                "Line 9: Name \\@attr_test (with all letters lowercase) "
+                "should have nameType as 'specific'."
+            ),
+        ),
+        (
+            "Prohibited_nameType_group.yaml",
+            (
+                "Line 6: Name INSTRUMENT (with all letters uppercase)"
+                " should have nameType as 'any' or 'specific'."
+            ),
+        ),
+    ],
+    ids=[
+        "Prohibited_nameType_field",
+        "Prohibited_nameType_attribute",
+        "Prohibited_attribute_nameType",
+    ],
+)
+def test_nyaml2nxdl_prohibited_nameType(input_file, error_message, tmp_path, caplog):
+    """Run the nyaml tools on incorrect files"""
+    pwd = Path(__file__).parent / "data"
+    tmp_file = tmp_path / input_file.replace(".yaml", ".nxdl.xml")
+
+    with caplog.at_level(logging.ERROR):
+        result = CliRunner().invoke(
+            nyaml2nxdl.launch_tool,
+            [str(pwd / input_file), "--output-file", str(tmp_file)],
+        )
+        assert result.exit_code == 1
+        assert result.exception.args[0] == error_message

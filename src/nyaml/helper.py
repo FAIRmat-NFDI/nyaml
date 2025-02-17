@@ -45,6 +45,7 @@ NXDL_GROUP_ATTRIBUTES = (
     "maxOccurs",
     "minOccurs",
     "deprecated",
+    "nameType",
 )
 NXDL_FIELD_ATTRIBUTES = (
     "optional",
@@ -65,6 +66,7 @@ NXDL_FIELD_ATTRIBUTES = (
     "required",
     "deprecated",
     "units",
+    "nameType",
 )
 
 NXDL_ATTRIBUTES_ATTRIBUTES = (
@@ -73,6 +75,7 @@ NXDL_ATTRIBUTES_ATTRIBUTES = (
     "recommended",
     "optional",
     "deprecated",
+    "nameType",
 )
 
 NXDL_LINK_ATTRIBUTES = ("name", "target", "napimount")
@@ -90,6 +93,29 @@ YAML_ATTRIBUTES_ATTRIBUTES = (
 )
 
 YAML_LINK_ATTRIBUTES = NXDL_LINK_ATTRIBUTES
+
+def check_for_proper_nameType(name, nameType, error_location):
+    """Check for proper nameType.
+
+    Name with all upper case letters should have nameType as `any` or `specific`.
+    Name with all lower case letters should have nameType as `specific`.
+    Name with uper case or lower case letters should have nameType as `spcific` or `partial`.
+    """
+
+    if name.isupper():
+        assert nameType in ["any", "specific"], (
+            f"Line {error_location}: Name {name} (with all letters upper"
+            "case) should have nameType as 'any' or 'specific'."
+        )
+    elif name.islower():
+        assert nameType == "specific", (
+            f"Line {error_location}: Name {name} (with all letters lower"
+            "case) should have nameType as 'specific'."
+        )
+    elif not name.isupper() and not name.islower():
+        assert nameType in ["specific", "partial"], (
+            f"Line: {error_location}: Name {name} (with mixed case) should have nameType as 'specific' or 'partial'."
+        )
 
 
 def remove_namespace_from_tag(tag):

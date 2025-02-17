@@ -1,0 +1,24 @@
+category: base
+doc: "This is a test for nymaType"
+NXbeam:
+  distance1(NX_FLOAT):
+    unit: NX_LENGTH
+    doc: "Distance from sample"
+    nameType: any
+  distance2(NX_FLOAT):
+    unit: NX_LENGTH
+    doc: "Distance from sample"
+    nameType: partial
+  NAMEOFENERGY_energy(NX_FLOAT):
+    unit: NX_ENERGY
+    doc: "Energy on entering beamline component"
+    nameType: partial
+    dimensions:
+      rank: 1
+      dim: [[1, i]]
+  INSTRUMENT(NXinstrument):
+    doc: "Instrument definition"
+    nameType: specific
+    \@VENDOR:
+      doc: "Vendor of the instrument"
+      nameType: any
