@@ -875,8 +875,10 @@ class Nxdl2yaml:
             else:
                 tmp_dict[key] = val
 
-        if data_type := tmp_dict.get("type"):
-            name_txt = f"{indent}{escapesymbol}{name}({data_type}):\n"
+        datatype = tmp_dict.get("type")
+
+        if datatype:
+            name_txt = f"{indent}{escapesymbol}{name}({datatype}):\n"
             del tmp_dict["type"]
         else:
             name_txt = f"{indent}{escapesymbol}{name}:\n"
