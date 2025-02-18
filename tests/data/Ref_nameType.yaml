@@ -1,0 +1,80 @@
+category: base
+doc: |
+  This is a test for nymaType
+type: group
+NXbeam(NXobject):
+  distance(NX_FLOAT):
+    unit: NX_LENGTH
+    nameType: specific
+    doc: |
+      Distance from sample
+  NAMEOFENERGY_energy(NX_FLOAT):
+    unit: NX_ENERGY
+    nameType: partial
+    doc: |
+      Energy on entering beamline component
+    dimensions:
+      rank: 1
+      dim: (i,)
+  INSTRUMENT(NXinstrument):
+    nameType: specific
+    doc: |
+      Instrument definition
+    \@VENDOR:
+      nameType: any
+      doc: |
+        Vendor of the instrument
+
+# ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
+# d560157816840669c8ee3e6d622f2c7562271d65ea5140c6645e84c77c9026e3
+# <?xml version='1.0' encoding='UTF-8'?>
+# <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
+# <!--
+# # NeXus - Neutron and X-ray Common Data Format
+# #
+# # Copyright (C) 2010-2020 NeXus International Advisory Committee (NIAC)
+# #
+# # This library is free software; you can redistribute it and/or
+# # modify it under the terms of the GNU Lesser General Public
+# # License as published by the Free Software Foundation; either
+# # version 3 of the License, or (at your option) any later version.
+# #
+# # This library is distributed in the hope that it will be useful,
+# # but WITHOUT ANY WARRANTY; without even the implied warranty of
+# # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# # Lesser General Public License for more details.
+# #
+# # You should have received a copy of the GNU Lesser General Public
+# # License along with this library; if not, write to the Free Software
+# # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# #
+# # For further information, see http://www.nexusformat.org
+# -->
+# <definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="base" name="NXbeam" extends="NXobject" type="group" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+#     <doc>
+#          This is a test for nymaType
+#     </doc>
+#     <field name="distance" type="NX_FLOAT" units="NX_LENGTH" nameType="specific">
+#         <doc>
+#              Distance from sample
+#         </doc>
+#     </field>
+#     <field name="NAMEOFENERGY_energy" type="NX_FLOAT" units="NX_ENERGY" nameType="partial">
+#         <doc>
+#              Energy on entering beamline component
+#         </doc>
+#         <dimensions rank="1">
+#             <dim index="1" value="i"/>
+#         </dimensions>
+#     </field>
+#     <group name="INSTRUMENT" type="NXinstrument" nameType="specific">
+#         <doc>
+#              Instrument definition
+#         </doc>
+#         <attribute name="VENDOR" nameType="any">
+#             <doc>
+#                  Vendor of the instrument
+#             </doc>
+#         </attribute>
+#     </group>
+# </definition>

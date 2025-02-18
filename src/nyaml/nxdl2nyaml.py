@@ -34,6 +34,7 @@ from nyaml.helper import (
     NXDL_FIELD_ATTRIBUTES,
     NXDL_GROUP_ATTRIBUTES,
     NXDL_LINK_ATTRIBUTES,
+    check_for_proper_nameType,
     clean_empty_lines,
     get_node_parent_info,
     get_yaml_escape_char_dict,
@@ -578,13 +579,17 @@ class Nxdl2yaml:
 
         name_type = ""
         node_attr = node.attrib
+        node_name = ""
+
         rm_key_list = []
         # Maintain order: name and type in form name(type) or (type)name that come first
         for key, val in node_attr.items():
             if key == "name":
+                node_name = val
                 name_type = name_type + val
                 rm_key_list.append(key)
             elif key == "type":
+                node_name = node_name if node_name else val[2:].upper()
                 name_type = f"{name_type}({val})"
                 rm_key_list.append(key)
         if not name_type:
@@ -611,6 +616,13 @@ class Nxdl2yaml:
                 self.handle_exists(exists_dict, key, val)
             elif key == "units":
                 tmp_dict["unit"] = str(val)
+            elif key == "nameType":
+                check_for_proper_nameType(
+                    name=node_name,
+                    nameType=val,
+                    error_location=remove_namespace_from_tag(node.tag),
+                )
+                tmp_dict["nameType"] = str(val)
             else:
                 tmp_dict[key] = str(val)
 
@@ -901,6 +913,13 @@ class Nxdl2yaml:
                 if "exists" not in tmp_dict:
                     tmp_dict["exists"] = []
                 self.handle_exists(exists_dict, key, val)
+            elif key == "nameType":
+                check_for_proper_nameType(
+                    name=name,
+                    nameType=val,
+                    error_location="attribute",
+                )
+                tmp_dict["nameType"] = val
             elif key == "units":
                 tmp_dict["unit"] = val
             else:

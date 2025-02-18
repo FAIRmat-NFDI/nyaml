@@ -1,0 +1,9 @@
+category: base
+doc: "This is a test for nymaType"
+NXbeam:
+  INSTRUMENT(NXinstrument):
+    doc: "Instrument definition"
+    nameType: partial
+    \@VENDOR:
+      doc: "Vendor of the instrument"
+      nameType: any
