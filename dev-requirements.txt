@@ -17,13 +17,13 @@ distlib==0.3.9
     # via virtualenv
 filelock==3.17.0
     # via virtualenv
-identify==2.6.6
+identify==2.6.7
     # via pre-commit
 iniconfig==2.0.0
     # via pytest
 isort==6.0.0
     # via nyaml (pyproject.toml)
-lxml==5.3.0
+lxml==5.3.1
     # via nyaml (pyproject.toml)
 lxml-stubs==0.5.1
     # via nyaml (pyproject.toml)
@@ -42,7 +42,7 @@ packaging==24.2
     #   pytest
 pathspec==0.12.1
     # via black
-pip==25.0
+pip==25.0.1
     # via pip-tools
 pip-tools==7.4.1
     # via nyaml (pyproject.toml)
@@ -80,9 +80,9 @@ typing-extensions==4.12.2
     # via
     #   mypy
     #   types-lxml
-uv==0.5.28
+uv==0.6.1
     # via nyaml (pyproject.toml)
-virtualenv==20.29.1
+virtualenv==20.29.2
     # via
     #   nyaml (pyproject.toml)
     #   pre-commit

@@ -417,12 +417,13 @@ def test_yml2xml_comment_parsing():
 
     def recursive_compare(ref_root, test_root):
         assert ref_root.attrib.items() == test_root.attrib.items(), (
-            "Got different xml elementAtribute."
+            "Got different xml element" "Attribute."
         )
         if ref_root.text and test_root.text:
-            assert ref_root.text.strip() == test_root.text.strip(), (
-                "Got differen element text."
-            )
+            print(ref_root.text, test_root.text)
+            assert (
+                ref_root.text.strip() == test_root.text.strip()
+            ), "Got different element text."
         if len(ref_root) > 0 and len(test_root) > 0:
             for x, y in zip(ref_root, test_root):
                 recursive_compare(x, y)
