@@ -94,6 +94,7 @@ YAML_ATTRIBUTES_ATTRIBUTES = (
 
 YAML_LINK_ATTRIBUTES = NXDL_LINK_ATTRIBUTES
 
+
 def check_for_proper_nameType(name, nameType, error_location):
     """Check for proper nameType.
 
