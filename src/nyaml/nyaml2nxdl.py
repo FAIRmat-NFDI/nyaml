@@ -1158,7 +1158,7 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
                     white_spaces = len(i) - len(i.lstrip())
                     file_out_mod.write(i)
                 elif "<doc>" not in i and "</doc>" not in i and flag is True:
-                    file_out_mod.write((white_spaces + 5) * " " + i)
+                    file_out_mod.write((white_spaces + 4) * " " + i)
                 elif "<doc>" not in i and "</doc>" in i and flag is True:
                     file_out_mod.write(white_spaces * " " + i)
                     flag = False

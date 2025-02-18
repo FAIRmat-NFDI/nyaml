@@ -23,12 +23,12 @@
 -->
 <definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="application" type="group" name="NXarchive" extends="NXobject" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
     <doc>
-         This is a test for the dimension keywords.
+        This is a test for the dimension keywords.
     </doc>
     <group type="NXentry">
         <field name="my_dim_array" type="NX_NUMBER">
             <doc>
-                 Test
+                Test
             </doc>
             <dimensions>
                 <dim index="1" value="2"/>
@@ -36,7 +36,7 @@
         </field>
         <field name="my_dim_array2" type="NX_NUMBER">
             <doc>
-                 Testarray with dimensions spelled out
+                Testarray with dimensions spelled out
             </doc>
             <dimensions rank="1">
                 <dim index="1" value="10"/>
@@ -45,7 +45,7 @@
         </field>
         <field name="my_dim_array3" type="NX_NUMBER">
             <doc>
-                 Testarray with dimensions spelled out
+                Testarray with dimensions spelled out
             </doc>
             <dimensions rank="1">
                 <dim index="1" value="10"/>
@@ -61,7 +61,7 @@
         <field name="my_dim_with_doc_and_dim_attr" type="NX_NUMBER">
             <dimensions>
                 <doc>
-                     Test with doc and dim attribute
+                    Test with doc and dim attribute
                 </doc>
                 <dim index="1" value="2" ref="s"/>
                 <dim index="3" value="4" ref="m"/>
