@@ -4,12 +4,17 @@ doc: |
 type: group
 NXdimensions(NXobject):
   (NXentry):
-    shorthand_terse_(NX_NUMBER):
+    rank_only(NX_NUMBER):
       doc: |
-        The most terse way to define dimensionsType that uses
-        numpy style notation and sets rank based on the number
+        Cases where only rank is specified
+      dimensions:
+        rank: symbol_a
+    # provided a proper escape sign is used also an even more compact way could be possible
+    shorthand_terse(NX_NUMBER):
+      doc: |
+        A compact way to define dimensionsType using numpy style
+        notation and an automatism to set rank based on the number
         of entries in dim.
-      # will set rank automatically!
       dimensions:
         dim: (1, symbol_a, symbol_b)
     shorthand_explicit_rank_new(NX_NUMBER):
@@ -21,15 +26,15 @@ NXdimensions(NXobject):
       dimensions:
         rank: 2
         dim: (1, symbol_a, symbol_b)
-    shorthand_explicit_rank_old(NX_NUMBER):
-      doc: |
-        A version of shorthand_explicit_rank_new that supports
-        legacy formatting (double edge brackets) still left before
-        the yaml and nxdl files where reprocessed while integrating
-        changes of the NIAC Autumn 2024 meeting done Febr, 2025.
-      dimensions:
-        rank: 2
-        dim: [[1, symbol_a, symbol_b]]
+    # shorthand_explicit_rank_old(NX_NUMBER):
+    #   doc: |
+    #     A version of shorthand_explicit_rank_new that supports
+    #     legacy formatting (double edge brackets) still left before
+    #     the yaml and nxdl files where reprocessed while integrating
+    #     changes of the NIAC Autumn 2024 meeting done Febr, 2025.
+    #   dimensions:
+    #     rank: 2
+    #     dim: [[1, symbol_a, symbol_b]]
     full_syntax(NX_NUMBER):
       doc: |
         The full syntax that also supports keywords from older

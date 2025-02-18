@@ -25,7 +25,6 @@ import os
 import pathlib
 import re
 import textwrap
-import warnings
 from typing import Optional, Union
 from urllib.parse import unquote
 
@@ -409,7 +408,7 @@ def xml_handle_exists(dct, obj, keyword, value):
 
 def xml_handle_dim(dct, obj, keyword, value):
     """
-    This function creates a 'dimensions' element instance, and appends it to an existing element.
+    This function creates an 'dimensions' element instance, and appends it to an existing element.
     Allows for handling numpy tensor notation of dimensions. That is,
     dimensions:
       rank: 1
@@ -420,31 +419,26 @@ def xml_handle_dim(dct, obj, keyword, value):
     line_number = f"__line__{keyword}"
     line_loc = dct[line_number]
     dims: Optional[ET.Element] = None
-    if isinstance(value, str):
-        if value[0] == "(" and value[-1] == ")":
-            valid_dims = []
-            for entry in value[1:-1].replace(" ", "").split(","):
-                if len(entry) > 0:  # ignore trailing comma and empty mnemonics
-                    valid_dims.append(entry)
-            if len(valid_dims) > 0:
-                dims = ET.SubElement(obj, "dimensions")
-                dim_idx = 1
-                for dim_name in valid_dims:
-                    dim = ET.SubElement(dims, "dim")
-                    dim.set("index", f"{dim_idx}")
-                    dim.set("value", f"{dim_name}")
-                    dim_idx += 1
-    elif isinstance(value, dict):
-        # top-level docstring dealt with already by caller
-        n_dims = len(
+    if isinstance(value, dict):
+        # top-level docstring dealt with already by the caller
+        n_idx_dicts = len(
             [key for key in value if re.match("^[0-9]+$", f"{key}") is not None]
         )
-        if n_dims > 0 or "rank" in value:
-            # translate numeral keys into dim instances with index and their attributes
+        n_line_cmts = 0
+        for key in value:
+            if isinstance(key, str):
+                if key.startswith("__line__"):
+                    n_line_cmts += 1
+        if (len(value) - n_line_cmts) == 1 and "rank" in value:
+            # only rank
+            dims = ET.SubElement(obj, "dimensions")
+            dims.set("rank", f"{value['rank']}")
+        elif n_idx_dicts > 0:
+            # full_syntax
             dims = ET.SubElement(obj, "dimensions")
             if "rank" in value:
                 dims.set("rank", f"{value['rank']}")
-            if "doc" in value:
+            if "doc" in value:  # is this branch ever visited?
                 dims.set("doc", f"{value['doc']}")
             for dim_key, dim_obj in value.items():
                 if dim_key != "doc" and isinstance(dim_obj, dict):
@@ -453,6 +447,46 @@ def xml_handle_dim(dct, obj, keyword, value):
                     for k, v in dim_obj.items():
                         if not k.startswith("__line__"):
                             dim.set(f"{k}", f"{v}")
+        elif "dim" in value and not isinstance(value["dim"], list):
+            # one of the short variants
+            if re.match("^\\([A-Za-z0-9_, ]+\\)$", value["dim"]) is not None:
+                # common for cases shorthand_terse and shorthand_explicit_rank_new
+                dims = ET.SubElement(obj, "dimensions")
+                rank = 0
+                for idx, val in enumerate(
+                    value["dim"][1:-1].replace(" ", "").split(",")
+                ):
+                    dim = ET.SubElement(dims, "dim")
+                    dim.set("index", f"{idx + 1}")
+                    dim.set("value", f"{val}")
+                    rank += 1
+                if "rank" in value:  # shorthand_explicit_rank_new
+                    dims.set("rank", f"{value['rank']}")
+                else:  # shorthand_terse
+                    dims.set("rank", f"{rank}")
+        elif "dim" in value and isinstance(value["dim"], list) and "rank" in value:
+            # shorthand_explicit_rank_old
+            raise NotImplementedError()
+            """
+            dims = ET.SubElement(obj, "dimensions")
+            dims.set("rank", f"{value['rank']}")
+            for idx, val in enumerate(value["dim"][2:-2].replace(" ", "").split(",")):
+                dim = ET.SubElement(dims, "dim")
+                dim.set("index", f"{idx + 1}")
+                dim.set("value", f"{val}")
+            """
+    elif isinstance(value, str):
+        if re.match("^\\([A-Za-z0-9_, ]+\\)$", value):
+            valid_dims = []
+            for entry in value[1:-1].replace(" ", "").split(","):
+                if len(entry) > 0:  # ignore trailing comma and empty mnemonics
+                    valid_dims.append(entry)
+            if len(valid_dims) > 0:
+                dims = ET.SubElement(obj, "dimensions")
+                for dim_idx, dim_name in enumerate(valid_dims):
+                    dim = ET.SubElement(dims, "dim")
+                    dim.set("index", f"{dim_idx + 1}")
+                    dim.set("value", f"{dim_name}")
 
     # Comments for all <dim> elements will be on top of the <dimensions> element
     xml_handle_comment(obj, line_number, line_loc, dims)
@@ -853,7 +887,7 @@ def xml_handle_fields_or_group(
                 xml_handle_units(elemt_obj, vval)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
                 rm_key_list.append(attr)
-            elif attr == "dim" and ele_type == "field":
+            elif attr in ["dimensions", "dims"] and ele_type == "field":
                 xml_handle_dim(dct=value, obj=elemt_obj, keyword=attr, value=vval)
                 rm_key_list.append(attr)
             elif attr in allowed_attr and not isinstance(vval, dict) and vval:
@@ -974,8 +1008,7 @@ def recursive_build(obj, dct, verbose):
             xml_handle_units(obj, value)
         elif keyword == "enumeration":
             xml_handle_enumeration(dct, obj, keyword, value, verbose)
-        # yaml keyword "dimensions" is no longer supported use "dim"
-        elif keyword == "dim":
+        elif keyword in ["dimensions", "dims"]:
             xml_handle_dim(dct, obj, keyword, value)
         elif keyword == "exists":
             xml_handle_exists(dct, obj, keyword, value)
@@ -997,7 +1030,7 @@ def recursive_build(obj, dct, verbose):
                 f"not be able to be resolved. Check around line {dct[line_number]}"
             )
         if isinstance(value, dict):
-            if "dim" in value:
+            if "dimensions" in value:
                 xml_handle_dim(dct, obj, keyword, value)
 
 
