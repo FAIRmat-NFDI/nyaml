@@ -1,0 +1,42 @@
+category: base
+doc: |
+  This is a test for enumerations.
+type: group
+NXtest_with_enums(NXobject):
+  (NXentry):
+    closed_enum_no_docs:
+      doc: |
+        This is a closed enumeration without any docstrings for the individual items.
+      enumeration: [value0, value1, value2]
+    closed_enum_with_docs:
+      doc: |
+        This is a closed enumeration, with each item havin a docstring.
+      enumeration:
+        value0:
+          doc: |
+            Doc for value0
+        value1:
+          doc: |
+            Doc for value1
+        value2:
+          doc: |
+            Doc for value1
+    open_enum_no_docs:
+      doc: |
+        This is a closed enumeration without any docstrings for the individual items.
+      enumeration: [value0, value1, value2]
+        # \@open: True
+    open_enum_with_docs:
+      doc: |
+        This is a closed enumeration, with each item havin a docstring.
+      enumeration:
+        # \@open: True
+        value0:
+          doc: |
+            Doc for value0
+        value1:
+          doc: |
+            Doc for value1
+        value2:
+          doc: |
+            Doc for value2
