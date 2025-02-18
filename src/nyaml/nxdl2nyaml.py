@@ -690,24 +690,31 @@ class Nxdl2yaml:
         #   dim child nodes with index, value pairs
         #   in this case having a short-hand numpy notation saves much typing work
 
-        # it is proposed, in summary, yaml syntax,
-        # i.e. NXDL creates either short-hand or dictionary nest
+        # for the handling of dimensionsType nodes three possible cases are supported
+        # a shorthand notation (that covers the majority of cases):
         # array_shorthand(NX_DATA_TYPE class):
         #   dim: (1, symbol_a, symbol_b)
-        # and alternative envisioned to be used only for those cases where
-        # the short-hand notation is insufficient
+        # a full notation with two cases (one to assure backwards compatibility)
         # array_full(NX_DATA_TYPE class):
-        #   dim:
+        #   dimensions:
         #     doc: mydocstring
         #     rank: myrank also dealing
+        #     # either
         #     1:
         #       # flat list of key, value pairs, named according to
         #       # elements possible of dim childs for XSD complexType dimensionsType e.g.
         #       value: 1
+        #       # the possibility to support still already deprecated attributes
         #       ref: group_index
         #       required: false
         #       incr: notusedbyanybodyanymore?
         #       refindex: notusedbyanybodyanymore?
+        #     2:
+        #       value: symbol_a
+        #     3:
+        #       value: symbol_b
+        #     # or equivalent (in case no deprecated attributes are used)
+        #     dim: (1, symbol_a, symbol_b)
         # suggestion to remove dictionary nyaml keyword dimensions
         # in favour for dim throughout
         # it is proposed, in summary, for nxdl, i.e. for yaml2nxdl
