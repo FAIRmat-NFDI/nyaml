@@ -1,0 +1,52 @@
+category: application
+doc: |
+  This is a test for processing the dimensionsType.
+type: group
+NXdimensions(NXobject):
+  (NXentry):
+    shorthand_terse_(NX_NUMBER):
+      doc: |
+        The most terse way to define dimensionsType that uses
+        numpy style notation and sets rank based on the number
+        of entries in dim.
+      # will set rank automatically!
+      dimensions:
+        dim: (1, symbol_a, symbol_b)
+    shorthand_explicit_rank_new(NX_NUMBER):
+      doc: |
+        Shorthand where the rank can be set explicitly.
+        For testing purposes the rank is here intentionally
+        set to a value that is different to the number of entries
+        in dim.
+      dimensions:
+        rank: 2
+        dim: (1, symbol_a, symbol_b)
+    shorthand_explicit_rank_old(NX_NUMBER):
+      doc: |
+        A version of shorthand_explicit_rank_new that supports
+        legacy formatting (double edge brackets) still left before
+        the yaml and nxdl files where reprocessed while integrating
+        changes of the NIAC Autumn 2024 meeting done Febr, 2025.
+      dimensions:
+        rank: 2
+        dim: [[1, symbol_a, symbol_b]]
+    full_syntax(NX_NUMBER):
+      doc: |
+        The full syntax that also supports keywords from older
+        NIAC classes that are deprecated.
+      dimensions:
+        doc: mydocstring
+        rank: 3
+        # flat list of key, value pairs, named according to
+        # elements possible of dim childs for XSD complexType dimensionsType e.g.
+        1:
+          value: 1
+          # the possibility to support still already deprecated attributes
+          ref: group_index
+          required: false
+          incr: notusedbyanybodyanymore?
+          refindex: notusedbyanybodyanymore?
+        2:
+          value: symbol_a
+        3:
+          value: symbol_b
