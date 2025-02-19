@@ -49,9 +49,9 @@ def check_and_replace_latest_copyright(nxdl_file):
     """
     content = nxdl_file.read_text()
     generated_copyright = re.findall(LATEST_COPYRIGHT, content, re.DOTALL)
-    assert (
-        len(generated_copyright) == 1
-    ), f"No copyright or not correct copyright year found in {nxdl_file}"
+    assert len(generated_copyright) == 1, (
+        f"No copyright or not correct copyright year found in {nxdl_file}"
+    )
     content = re.sub(LATEST_COPYRIGHT, COPYRIGHT_REPLACEMENT, content)
     nxdl_file.write_text(content)
 
@@ -91,9 +91,9 @@ def find_matches(xml_file, desired_matches):
                 found_matches.append(desired_match)
     # ascertain that all the desired matches were found in file
     found_matches_clean = delete_duplicates(found_matches)
-    assert len(found_matches_clean) == len(
-        desired_matches
-    ), "some desired_matches were \nnot found in file"
+    assert len(found_matches_clean) == len(desired_matches), (
+        "some desired_matches were \nnot found in file"
+    )
     return [lines, lines_index]
 
 
@@ -171,8 +171,10 @@ def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     check_file_fresh_baked(test_yml_file)
 
     result = filecmp.cmp(ref_yml_file, test_yml_file, shallow=False)
-    assert result, "Ref YML and parsed YML\
+    assert result, (
+        "Ref YML and parsed YML\
 has not the same structure!!"
+    )
     os.remove(test_yml_file)
     sys.stdout.write("Test on xml -> yml doc formatting okay.\n")
 
@@ -312,7 +314,7 @@ def test_enumerations():
         "</doc>",
     ]
     compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
-    os.remove("tests/data/NXmytests.nxdl.xml")
+    os.remove("tests/data/enumerations.nxdl.xml")
     sys.stdout.write("Test on open/closed enumerations okay.\n")
 
 
@@ -337,8 +339,10 @@ def test_xml_parsing():
     ref_tree = ET.parse(ref_xml_file)
     ref_tree_flattened = {i.tag.split("}", 1)[1] for i in ref_tree.iter()}
 
-    assert test_tree_flattened == ref_tree_flattened, "Ref XML and parsed XML\
+    assert test_tree_flattened == ref_tree_flattened, (
+        "Ref XML and parsed XML\
 has not the same tree structure!!"
+    )
     os.remove(test_xml_file)
     os.remove(test_yml_file)
     sys.stdout.write("Test on xml -> yml -> xml okay.\n")
@@ -362,8 +366,10 @@ def test_yml_parsing():
 
     ref_yml_tree = nyaml2nxdl_forward_tools.yml_reader(ref_yml_file)
 
-    assert list(test_yml_tree) == list(ref_yml_tree), "Ref YML and parsed YML \
+    assert list(test_yml_tree) == list(ref_yml_tree), (
+        "Ref YML and parsed YML \
 has not the same root entries!!"
+    )
     os.remove("tests/data/Ref_NXellipsometry_parsed.yaml")
     os.remove("tests/data/Ref_NXellipsometry.nxdl.xml")
     sys.stdout.write("Test on yml -> xml -> yml okay.\n")
@@ -381,7 +387,7 @@ def test_yml_consistency_comment_parsing():
         nyaml2nxdl.launch_tool, ["--check-consistency", ref_yml_file]
     )
     assert result.exit_code == 0, (
-        f"Exception: {result.exception}, \nExecution Info:" "{result.exc_info}"
+        f"Exception: {result.exception}, \nExecution Info:{{result.exc_info}}"
     )
     with open(ref_yml_file, "r", encoding="utf-8") as ref_yml:
         loader = LineLoader(ref_yml)
@@ -418,13 +424,13 @@ def test_yml2xml_comment_parsing():
 
     def recursive_compare(ref_root, test_root):
         assert ref_root.attrib.items() == test_root.attrib.items(), (
-            "Got different xml element" "Attribute."
+            "Got different xml elementAttribute."
         )
         if ref_root.text and test_root.text:
             print(ref_root.text, test_root.text)
-            assert (
-                ref_root.text.strip() == test_root.text.strip()
-            ), "Got different element text."
+            assert ref_root.text.strip() == test_root.text.strip(), (
+                "Got different element text."
+            )
         if len(ref_root) > 0 and len(test_root) > 0:
             for x, y in zip(ref_root, test_root):
                 recursive_compare(x, y)
@@ -484,9 +490,9 @@ def test_yaml2nxdl_doc():
             remove_namespace_from_tag(parent1.tag) == "doc"
             and remove_namespace_from_tag(parent2.tag) == "doc"
         ):
-            assert (
-                parent1.text == parent2.text
-            ), f"DOCS ARE NOT SAME: node {parent1}, node {parent2}"
+            assert parent1.text == parent2.text, (
+                f"DOCS ARE NOT SAME: node {parent1}, node {parent2}"
+            )
 
     compare_nxdl_doc(ref_nxdl, out_nxdl)
 
@@ -592,9 +598,9 @@ def test_yaml2nxdl_no_tabs(tmp_path):
             remove_namespace_from_tag(parent1.tag) == "doc"
             and remove_namespace_from_tag(parent2.tag) == "doc"
         ):
-            assert (
-                parent1.text == parent2.text
-            ), f"DOCS ARE NOT SAME: node {parent1}, node {parent2}"
+            assert parent1.text == parent2.text, (
+                f"DOCS ARE NOT SAME: node {parent1}, node {parent2}"
+            )
 
     compare_nxdl_doc(ref_nxdl, out_nxdl)
 
@@ -610,9 +616,9 @@ def test_copyright_license_new_yaml(tmp_path):
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool, [str(input_file), "--output-file", str(output)]
     )
-    assert (
-        result.exit_code == 0
-    ), f"Error in converter execution input file {input_file}."
+    assert result.exit_code == 0, (
+        f"Error in converter execution input file {input_file}."
+    )
     # Check if the latest copyright year is written
     check_and_replace_latest_copyright(output)
 
@@ -628,9 +634,9 @@ def test_check_copyright_license_in_full_modification_yaml_cycle(tmp_path):
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool, [str(nxdl_file), "--output-file", str(yaml_file)]
     )
-    assert (
-        result.exit_code == 0
-    ), f"Error in converter execution input file {nxdl_file}."
+    assert result.exit_code == 0, (
+        f"Error in converter execution input file {nxdl_file}."
+    )
     content = yaml_file.read_text()
     find_pattern = r"my nice doc string in root level, line 2."
     replace_pattern = "my nice doc string in root level, line 2. Modified."
@@ -673,9 +679,9 @@ def test_check_copyright_license_in_modified_yaml(tmp_path):
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool, [str(modified_yaml), "--output-file", str(output)]
     )
-    assert (
-        result.exit_code == 0
-    ), f"Error in converter execution input file {modified_yaml}."
+    assert result.exit_code == 0, (
+        f"Error in converter execution input file {modified_yaml}."
+    )
 
     expected_text = (
         r"Copyright \(C\) 2010-2020 NeXus International Advisory Committee \(NIAC\)"

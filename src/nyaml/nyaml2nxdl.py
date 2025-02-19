@@ -657,6 +657,17 @@ bear at least an argument !"
             itm = ET.SubElement(enum, "item")
             itm.set("value", str(element))
     if isinstance(value, dict) and value != {}:
+        if "open_enum" in value:
+            enum.set("open", str(value["open_enum"]))
+            del value["open_enum"]
+
+        if "items" in value:
+            if isinstance(value["items"], list):
+                for element in value["items"]:
+                    itm = ET.SubElement(enum, "item")
+                    itm.set("value", str(element))
+            return
+
         for element in value.keys():
             if "__line__" not in element:
                 itm = ET.SubElement(enum, "item")
