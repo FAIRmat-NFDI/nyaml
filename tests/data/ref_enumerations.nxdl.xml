@@ -31,6 +31,7 @@
                 This is a closed enumeration without any docstrings for the individual items.
                 The items are stored in a flat list.
             </doc>
+            <!--comment 0-->
             <enumeration>
                 <item value="value0"/>
                 <item value="value1"/>
@@ -43,6 +44,7 @@
                 The items are stored in a dict with the items keyword.
             </doc>
             <enumeration>
+                <!--comment 1-->
                 <item value="value0"/>
                 <item value="value1"/>
                 <item value="value2"/>
@@ -74,7 +76,9 @@
                 This is a closed enumeration, with each item having a docstring.
             </doc>
             <enumeration>
+                <!--comment 2-->
                 <item value="value0">
+                    <!--comment 3-->
                     <doc>
                         Doc for value0
                     </doc>
@@ -96,6 +100,7 @@
                 This is an open enumeration without any docstrings for the individual items.
             </doc>
             <enumeration open="True">
+                <!--comment 4-->
                 <item value="value0"/>
                 <item value="value1"/>
                 <item value="value2"/>
@@ -106,7 +111,9 @@
                 This is a closed enumeration, with each item havin a docstring.
             </doc>
             <enumeration open="True">
+                <!--comment 5-->
                 <item value="value0">
+                    <!--comment 6-->
                     <doc>
                         Doc for value0
                     </doc>

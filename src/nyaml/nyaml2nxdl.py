@@ -663,22 +663,35 @@ bear at least an argument !"
             itm.set("value", str(element))
     if isinstance(value, dict) and value != {}:
         if "open_enum" in value:
+            line_number = f"__line__{'open_enum'}"
+            line_loc = value[line_number]
+            xml_handle_comment(enum, line_number, line_loc)
             enum.set("open", str(value["open_enum"]))
+
             del value["open_enum"]
 
         if "items" in value:
+            line_number = f"__line__{'items'}"
+            line_loc = value[line_number]
+            xml_handle_comment(enum, line_number, line_loc)
+
             if isinstance(value["items"], list):
                 for element in value["items"]:
                     itm = ET.SubElement(enum, "item")
                     itm.set("value", str(element))
             return
 
-        for element in value.keys():
+        for element, elmnt_value in value.items():
             if "__line__" not in element:
                 itm = ET.SubElement(enum, "item")
                 itm.set("value", str(element))
-                if isinstance(value[element], dict):
-                    recursive_build(itm, value[element], verbose)
+
+                line_number = f"__line__{element}"
+                line_loc = value[line_number]
+
+                xml_handle_comment(enum, line_number, line_loc, itm)
+                if isinstance(elmnt_value, dict):
+                    recursive_build(itm, elmnt_value, verbose)
 
 
 # pylint: disable=unused-argument
