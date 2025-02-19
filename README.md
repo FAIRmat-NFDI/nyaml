@@ -483,6 +483,20 @@ mode:
 
 Here, the valid value for NeXus field `mode` are `Single Bunch` and `Multi Bunch`.
 
+**Enumeration for lists in YAML**
+
+It is possible to implement a list of lists for fields/attributes that expect a list of values.
+The convention for doing so is
+
+```yaml
+  \@vector(NX_NUMBER):
+    doc: |
+      This is an enumeration for a vector, where the individual items are lists themselves.
+    enumeration: [[1, 0, 0], [0, 1, 0], [0, 0, -1]]
+```
+
+Note that each element in the individual enumeration items is an integer, in line with the defined NeXus data types `NX_NUMBER` of `\@vector`.
+
 **Open enumeration in YAML**
 
 NeXus also allows open enumerations. These are for cases where the enumeration list is not
