@@ -227,7 +227,7 @@ def check_for_skipped_attributes(component, value, allowed_attr=None, verbose=Fa
                 raise ValueError(
                     f"An attribute '{attr}' in part '{component}' has been found"
                     f". Please check around line '{value[line_number]}. At this "
-                    f"time, the allowed attrbutes are {allowed_attr}."
+                    f"time, the allowed attributes are {allowed_attr}."
                 )
 
 
@@ -602,7 +602,7 @@ def xml_handle_dim_from_dimension_dict(
                 else:
                     if kkkey in deprecated_dim_attrs:
                         dep_text = (
-                            f"Attrbute {kkkey} is deprecated. "
+                            f"Attribute {kkkey} is deprecated. "
                             f"Check attributes after line {cmnt_loc}"
                         )
                         warnings.warn(dep_text, DeprecationWarning)
@@ -897,7 +897,7 @@ def validate_field_attribute_and_value(v_attr, vval, allowed_attribute, value):
     if not isinstance(vval, dict) and not str(vval):  # check for empty value
         line_number = f"__line__{v_attr}"
         raise ValueError(
-            f"In a field a valid attrbute ('{v_attr}') found that is not stored."
+            f"In a field a valid attribute ('{v_attr}') found that is not stored."
             f" Please check around line {value[line_number]}"
         )
 
