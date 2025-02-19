@@ -440,15 +440,81 @@ dimensions:
 ```
 
 ### Keyword `enumeration`
-Python-like list of strings which are considered as recommended items for the fields or attributes.
+
+Enumerations are used in NeXus to define the allowed values for fields or attributes.
 
 **Enumeration in YAML**
+
+There are multiple ways of implementing enumerations the `YAML` representation.
+
+The simplest possible solution is to use a Python-like list of strings:
+
 ```yaml
 definition:
   \@version:
   enumeration: [NXmpes]
 ```
-In the example the valid value for NeXus field `definition` is `NXmpes`.
+
+Here, the valid value for NeXus field `definition` is `NXmpes`.
+
+Note that the same can be achieved by writing
+
+```yaml
+definition:
+  \@version:
+  enumeration: 
+    items: [NXmpes]
+```
+
+Another possibility is to add documentation for each enumeration item:
+
+```yaml
+mode:
+    doc: |
+      source operating mode
+    enumeration:
+      Single Bunch:
+        doc: |
+          for storage rings
+      Multi Bunch:
+        doc: |
+          for storage rings
+```
+
+Here, the valid value for NeXus field `mode` are `Single Bunch` and `Multi Bunch`.
+
+**Open enumeration in YAML**
+
+NeXus also allows open enumerations. These are for cases where the enumeration list is not
+exhaustive, but also other items than those are recommended are allowed. In the `YAML` representation, this can be achieved by using the boolean `open_enum` keyword:
+
+```yaml
+mode:
+    doc: |
+      source operating mode
+    enumeration:
+      open_enum: True
+      items: [Single Bunch, Multi Bunch]
+```
+
+Or in the case that each enumeration item has a docstring:
+
+```yaml
+mode:
+    doc: |
+      source operating mode
+    enumeration:
+      open_enum: True
+      Single Bunch:
+        doc: |
+          for storage rings
+      Multi Bunch:
+        doc: |
+          for storage rings
+```
+
+
+
 
 ### Keyword `xref`
 The `xref` keyword (which can only inside the keyword `doc`) is used to refer any other ontology or any other standard such `ISO`. The `xref` in the example `doc` will reflect the information inside the XML `doc`. Note that the `xref` keyword is only available in the `YAML` representation and will be transformed into its textual representation inside the `doc` text in `XML`.
