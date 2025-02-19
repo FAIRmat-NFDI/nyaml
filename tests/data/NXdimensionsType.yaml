@@ -2,6 +2,15 @@ category: application
 doc: |
   This is a test for processing the dimensionsType.
 type: group
+# https://manual.nexusformat.org/nxdl_desc.html#nxdl-data-type-dimensionstype
+# for examples of non-trivial use cases of dimensionsType in the wild see
+# https://github.com/FAIRmat-NFDI/nexus_definitions/commit/f7ba53f4fb409b03fde6af6ccf29146392a2c142
+# applications/NXmx, use of required
+# applications/NXstxm, use docstring for dimensions node
+# base_classes/NXfresnel_zone_plate, use of rank only
+# base_classes/NXmonitor, use of rank only and index, ref pairs
+# base_classes/NXdetector_group, use of index, ref pairs
+# base_classes/NXsensor, use of index, value and index, ref pairs respectively
 NXdimensions(NXobject):
   (NXentry):
     # provided a proper escape sign is used also an even more compact way could be possible

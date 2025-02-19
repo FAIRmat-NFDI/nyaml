@@ -406,7 +406,7 @@ def xml_handle_exists(dct, obj, keyword, value):
             obj.set("minOccurs", "0")
 
 
-def xml_handle_dim(dct, obj, keyword, value):
+def handle_dimensions(dct, obj, keyword, value):
     """
     Create dimensionsType element instance, its childs, and append to an existing element.
 
@@ -440,9 +440,9 @@ def xml_handle_dim(dct, obj, keyword, value):
                 if dim_key != "doc" and isinstance(dim_obj, dict):
                     dim = ET.SubElement(dims, "dim")
                     dim.set("index", str(dim_key))
-                    for k, v in dim_obj.items():
-                        if not k.startswith("__line__"):
-                            dim.set(f"{k}", f"{v}")
+                    for key, val in dim_obj.items():
+                        if not key.startswith("__line__"):
+                            dim.set(f"{key}", val)
         elif "dim" in value and not isinstance(value["dim"], list):
             # one of the short variants
             if re.match("^\\([A-Za-z0-9_, ]+\\)$", value["dim"]) is not None:
@@ -885,7 +885,7 @@ def xml_handle_fields_or_group(
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
                 rm_key_list.append(attr)
             elif attr in ["dimensions", "dims"] and ele_type == "field":
-                xml_handle_dim(dct=value, obj=elemt_obj, keyword=attr, value=vval)
+                handle_dimensions(dct=value, obj=elemt_obj, keyword=attr, value=vval)
                 rm_key_list.append(attr)
             elif attr in allowed_attr and not isinstance(vval, dict) and vval:
                 validate_field_attribute_and_value(attr, vval, allowed_attr, value)
@@ -1006,7 +1006,7 @@ def recursive_build(obj, dct, verbose):
         elif keyword == "enumeration":
             xml_handle_enumeration(dct, obj, keyword, value, verbose)
         elif keyword in ["dimensions", "dims"]:
-            xml_handle_dim(dct, obj, keyword, value)
+            handle_dimensions(dct, obj, keyword, value)
         elif keyword == "exists":
             xml_handle_exists(dct, obj, keyword, value)
         # Handles fileds e.g. AXISNAME
@@ -1028,7 +1028,7 @@ def recursive_build(obj, dct, verbose):
             )
         if isinstance(value, dict):
             if "dimensions" in value:
-                xml_handle_dim(dct, obj, keyword, value)
+                handle_dimensions(dct, obj, keyword, value)
 
 
 def extend_doc_type(doc_type, new_component, comment=False):
