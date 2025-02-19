@@ -813,10 +813,6 @@ class Nxdl2yaml:
         - If enumeration items contain a <doc> field, they will be stored as child fields.
         - If no docs are provided, items will be stored in a list format.
         - If the enumeration is open, an 'open_enum' key will be included.
-
-        - If enumeration items contain a <doc> field, they will be stored as child fields.
-        - If no docs are provided, items will be stored in a list format.
-        - If the enumeration is open, an 'open_enum' key will be included.
         """
         indent = depth * DEPTH_SIZE
         tag = remove_namespace_from_tag(node.tag)
