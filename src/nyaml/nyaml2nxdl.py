@@ -636,9 +636,14 @@ def xml_handle_dim_from_dimension_dict(
 def xml_handle_enumeration(dct, obj, keyword, value, verbose):
     """This function creates an 'enumeration' element instance.
 
-    Two cases are handled:
-    1) the items are in a list
-    2) the items are dictionaries and may contain a nested doc
+    Different cases are handled:
+    1) The items are in a flat list directly under "enumeration".
+    2) The items are in a dicitionary under the "items" key.
+    3) The items are dictionaries and may contain a nested doc.
+    4) The enumeration is open. The input is a dict with keywords "open_enum"
+       and "items" (which is  a flat list of all enum items without docs).
+    5) The enumeration is open. The input is a nested dict with keyword "open_enum"
+       and each items is a dict itself (with docs for each item).
     """
     line_number = f"__line__{keyword}"
     line_loc = dct[line_number]
