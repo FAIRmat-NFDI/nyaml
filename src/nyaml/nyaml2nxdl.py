@@ -408,13 +408,9 @@ def xml_handle_exists(dct, obj, keyword, value):
 
 def xml_handle_dim(dct, obj, keyword, value):
     """
-    This function creates an 'dimensions' element instance, and appends it to an existing element.
-    Allows for handling numpy tensor notation of dimensions. That is,
-    dimensions:
-      rank: 1
-      dim: (1, 3)
-    can be replaced by
-    dim: (3,)
+    Create dimensionsType element instance, its childs, and append to an existing element.
+
+    tests/data/NXdimensionsType.yaml documents the syntax supported
     """
     line_number = f"__line__{keyword}"
     line_loc = dct[line_number]
@@ -466,15 +462,16 @@ def xml_handle_dim(dct, obj, keyword, value):
                     dims.set("rank", f"{rank}")
         elif "dim" in value and isinstance(value["dim"], list) and "rank" in value:
             # shorthand_explicit_rank_old
-            raise NotImplementedError()
-            """
             dims = ET.SubElement(obj, "dimensions")
             dims.set("rank", f"{value['rank']}")
-            for idx, val in enumerate(value["dim"][2:-2].replace(" ", "").split(",")):
+            flattened = []
+            for entry in value["dim"]:
+                flattened.extend(entry)
+            for idx, val in enumerate(flattened):
                 dim = ET.SubElement(dims, "dim")
                 dim.set("index", f"{idx + 1}")
                 dim.set("value", f"{val}")
-            """
+
     elif isinstance(value, str):
         if re.match("^\\([A-Za-z0-9_, ]+\\)$", value):
             valid_dims = []
