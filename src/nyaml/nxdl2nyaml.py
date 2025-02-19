@@ -860,6 +860,7 @@ class Nxdl2yaml:
                     self.handle_comment(indent + DEPTH_SIZE, child, file_out)
 
             if open_enum:
+                file_out.write(f"\n{indent + DEPTH_SIZE}open_enum: True")
                 file_out.write(
                     f"\n{indent + DEPTH_SIZE}{'items'}: [{', '.join(enum_list)}]\n"
                 )
