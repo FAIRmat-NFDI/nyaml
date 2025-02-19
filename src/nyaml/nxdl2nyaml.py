@@ -662,7 +662,24 @@ class Nxdl2yaml:
 
         tests/data/NXdimensionsType.yaml documents the choices
         """
+        # analyze first the entire sub-graph behind the dimensionsType element
         yml_dim_dct = {}
+        # dimensionsType, rank if present
+        for attr, val in node.attrib.items():
+            if not isinstance(val, dict):
+                if attr in ["rank"]:
+                    # indent = (depth + 1) * DEPTH_SIZE
+                    yml_dim_dct["rank"] = val
+                    break
+                # rank is the only allowed attribute of a dimensionsType node
+                # see https://manual.nexusformat.org/nxdl_desc.html#dimensionstype
+                # for why doc needs to be defined as an XML element instead of an
+                # attribute, i.e. using this
+                # <dimensions rank="someint" doc="somedocstring"/> is invalid
+                # instead, refactor that NeXus class to
+                # <dimensions>
+                #   <doc>somedocstring</doc>
+
         # dimensionsType, docstring, if present
         for child in list(node):
             tag = remove_namespace_from_tag(child.tag)
@@ -671,14 +688,6 @@ class Nxdl2yaml:
                     depth + 1, child.text, "doc", None
                 )
                 break  # dimensionsType can have only one top-level docstring
-
-        # dimensionsType, rank if present
-        for attr, val in node.attrib.items():
-            if not isinstance(val, dict):
-                if attr in ["rank"]:
-                    # indent = (depth + 1) * DEPTH_SIZE
-                    yml_dim_dct["rank"] = val
-                    break  # rank is the only allowed attribute of a dimensionsType node
 
         # individual dimensionsType dim elements - the individual dimensions - if present
         for child in list(node):
@@ -712,6 +721,8 @@ class Nxdl2yaml:
                     #     if ctag == "doc" and dim_child.text != "":
                     #         yml_dim_dct["dim"][idx_val]["doc"] = dim_child.text.strip()
                     #         break  # only one docstring for each index
+
+        # perform I/O based on the cases analyzed
         yml_dim_dct_keys = list(yml_dim_dct)
         indent = depth * DEPTH_SIZE
         if yml_dim_dct_keys == ["rank"] or yml_dim_dct_keys == ["doc", "rank"]:
@@ -731,7 +742,7 @@ class Nxdl2yaml:
                 file_out.write(f"{indent}dimensions:\n")
                 dim_index_value = []
                 for key, obj in yml_dim_dct.items():
-                    if key in ["doc", "rank"]:
+                    if key == "rank":  # "doc"
                         if isinstance(obj, str):
                             file_out.write(f"{indent}{' ' * 2}{key}: {obj}\n")
                     else:
@@ -749,7 +760,7 @@ class Nxdl2yaml:
             else:  # full syntax
                 file_out.write(f"{indent}dimensions:\n")
                 for key, obj in yml_dim_dct.items():
-                    if key in ["doc", "rank"]:
+                    if key == "rank":  # "doc"
                         if isinstance(obj, str):
                             file_out.write(f"{indent}{' ' * 2}{key}: {obj}\n")
                 # two loops to assure that doc and rank are written before

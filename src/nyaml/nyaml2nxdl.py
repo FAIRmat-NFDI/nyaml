@@ -435,31 +435,44 @@ def handle_dimensions(dct, obj, keyword, value):
             if "rank" in value:
                 dims.set("rank", f"{value['rank']}")
             if "doc" in value:  # is this branch ever visited?
-                dims.set("doc", f"{value['doc']}")
+                docs = ET.SubElement(dims, "doc")
+                docs.text = f"{value['doc']}"
             for dim_key, dim_obj in value.items():
                 if dim_key != "doc" and isinstance(dim_obj, dict):
                     dim = ET.SubElement(dims, "dim")
                     dim.set("index", str(dim_key))
                     for key, val in dim_obj.items():
                         if not key.startswith("__line__"):
-                            dim.set(f"{key}", val)
+                            if isinstance(val, bool):
+                                # boolean representations in yaml should not become
+                                # Python bool representations as otherwise roundtrips
+                                # otherwise yaml2nxdl false > False but nxdl2yaml will
+                                # keep it is as False > False
+                                if val is True:
+                                    dim.set(f"{key}", "true")
+                                else:
+                                    dim.set(f"{key}", "false")
+                            elif isinstance(val, int):
+                                dim.set(f"{key}", f"{val}")
+                            else:
+                                dim.set(f"{key}", val)
         elif "dim" in value and not isinstance(value["dim"], list):
             # one of the short variants
             if re.match("^\\([A-Za-z0-9_, ]+\\)$", value["dim"]) is not None:
                 # common for cases shorthand_terse and shorthand_explicit_rank_new
                 dims = ET.SubElement(obj, "dimensions")
-                rank = 0
+                # rank = 0
                 for idx, val in enumerate(
                     value["dim"][1:-1].replace(" ", "").split(",")
                 ):
                     dim = ET.SubElement(dims, "dim")
                     dim.set("index", f"{idx + 1}")
                     dim.set("value", f"{val}")
-                    rank += 1
+                    # rank += 1
                 if "rank" in value:  # shorthand_explicit_rank_new
                     dims.set("rank", f"{value['rank']}")
-                else:  # shorthand_terse
-                    dims.set("rank", f"{rank}")
+                # else:  # shorthand_terse, automatic setting of rank switched off
+                #     dims.set("rank", f"{rank}")
         elif "dim" in value and isinstance(value["dim"], list) and "rank" in value:
             # shorthand_explicit_rank_old
             dims = ET.SubElement(obj, "dimensions")

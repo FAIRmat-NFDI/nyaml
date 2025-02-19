@@ -21,9 +21,7 @@ NXdimensions(NXobject):
         rank: symbol_a
     shorthand_terse(NX_NUMBER):
       doc: |
-        A compact way to define dimensionsType using numpy style
-        notation with an automatism to set rank based on the number
-        of entries in dim.
+        A compact way to define dimensionsType using numpy style notation.
       dimensions:
         dim: (1, symbol_a, symbol_b)
     shorthand_explicit_rank_new(NX_NUMBER):
