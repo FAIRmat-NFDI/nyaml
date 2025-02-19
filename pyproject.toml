@@ -34,7 +34,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "mypy",
-    "ruff",
+    "ruff>=0.9.6",
     "pytest",
     "types-lxml",
     "pip-tools",
