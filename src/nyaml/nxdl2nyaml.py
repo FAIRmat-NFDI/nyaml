@@ -808,70 +808,68 @@ class Nxdl2yaml:
 
     def handle_enumeration(self, depth, node, file_out):
         """
-            Handle the enumeration field parsed from the xml file.
+        Handle the enumeration field parsed from the XML file.
 
-        If the enumeration items contain a doc field, the yaml file will contain items as child
-        fields of the enumeration field.
+        - If enumeration items contain a <doc> field, they will be stored as child fields.
+        - If no docs are provided, items will be stored in a list format.
+        - If the enumeration is open, an 'open_enum' key will be included.
 
-        If no doc are inherited in the enumeration items, a list of the items is given for the
-        enumeration list.
-
+        - If enumeration items contain a <doc> field, they will be stored as child fields.
+        - If no docs are provided, items will be stored in a list format.
+        - If the enumeration is open, an 'open_enum' key will be included.
         """
-
-        check_doc = False
+        indent = depth * DEPTH_SIZE
+        tag = remove_namespace_from_tag(node.tag)
+        attributes = node.attrib
+        open_enum = attributes.get("open", "false").lower() == "true"
         node_children = list(node)
-        for child in node_children:
-            if list(child):
-                check_doc = True
-                break
-        # pylint: disable=too-many-nested-blocks
+
+        check_doc = any(list(child) for child in node_children)
+
+        file_out.write(f"{indent}{tag}:")
+
         if check_doc:
-            indent = depth * DEPTH_SIZE
-            tag = remove_namespace_from_tag(node.tag)
-            file_out.write(f"{indent}{tag}:\n")
+            file_out.write("\n")
+            if open_enum:
+                file_out.write(f"{indent + DEPTH_SIZE}open_enum: True\n")
             for child in node_children:
-                tag = remove_namespace_from_tag(child.tag)
-                itm_depth = depth + 1
-                if tag == "item":
-                    indent = itm_depth * DEPTH_SIZE
+                child_tag = remove_namespace_from_tag(child.tag)
+                if child_tag == "item":
+                    item_indent = indent + DEPTH_SIZE
                     value = child.attrib["value"]
-                    file_out.write(f"{indent}{value}:\n")
-                    child_children = list(child)
-                    if child_children:
-                        for item_doc in child_children:
-                            if remove_namespace_from_tag(item_doc.tag) == "doc":
-                                item_doc_depth = itm_depth + 1
-                                self.handle_not_root_level_doc(
-                                    item_doc_depth,
-                                    item_doc.text,
-                                    item_doc.tag,
-                                    file_out,
-                                )
-                            if (
-                                remove_namespace_from_tag(item_doc.tag) == CMNT_TAG
-                                and self.include_comment
-                            ):
-                                self.handle_comment(itm_depth + 1, item_doc, file_out)
-                if tag == CMNT_TAG and self.include_comment:
-                    self.handle_comment(itm_depth + 1, child, file_out)
+                    if value.startswith("[") and value.endswith("]"):
+                        value = f'"{value}"'
+                    file_out.write(f"{item_indent}{value}:\n")
+
+                    doc_depth = depth + 2
+                    for item_doc in list(child):
+                        if remove_namespace_from_tag(item_doc.tag) == "doc":
+                            self.handle_not_root_level_doc(
+                                doc_depth, item_doc.text, item_doc.tag, file_out
+                            )
+                        if (
+                            remove_namespace_from_tag(item_doc.tag) == CMNT_TAG
+                            and self.include_comment
+                        ):
+                            self.handle_comment(doc_depth, item_doc, file_out)
+                elif child_tag == CMNT_TAG and self.include_comment:
+                    self.handle_comment(indent + DEPTH_SIZE, child, file_out)
         else:
             enum_list = []
-            remove_nodes = []
-            for item_child in node_children:
-                tag = remove_namespace_from_tag(item_child.tag)
-                if tag == "item":
-                    value = item_child.attrib["value"]
-                    enum_list.append(value)
-                if tag == CMNT_TAG and self.include_comment:
-                    self.handle_comment(depth, item_child, file_out)
-                    remove_nodes.append(item_child)
-            for ch_node in remove_nodes:
-                node.remove(ch_node)
+            for child in node_children:
+                child_tag = remove_namespace_from_tag(child.tag)
+                if child_tag == "item":
+                    enum_list.append(child.attrib["value"])
+                elif child_tag == CMNT_TAG and self.include_comment:
+                    self.handle_comment(indent + DEPTH_SIZE, child, file_out)
 
-            indent = depth * DEPTH_SIZE
-            tag = remove_namespace_from_tag(node.tag)
-            enum_list = ", ".join(enum_list)
-            file_out.write(f"{indent}{tag}: [{enum_list}]\n")
+            if open_enum:
+                file_out.write(
+                    f"\n{indent + DEPTH_SIZE}{'items'}: [{', '.join(enum_list)}]\n"
+                )
+
+            else:
+                file_out.write(f" [{', '.join(enum_list)}]\n")
 
     def handle_attributes(self, depth, node, file_out):
         """Handle the attributes parsed from the xml file"""
