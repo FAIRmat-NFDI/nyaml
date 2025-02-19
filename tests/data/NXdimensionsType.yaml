@@ -54,7 +54,10 @@ NXdimensions(NXobject):
         The full syntax that is the only way to use old deprecated elements
         of the dimensionsType attributes.
       dimensions:
-        doc: mydocstring
+        doc: |
+          My multiline
+          
+          docstring
         rank: 3
         1:
           value: 1

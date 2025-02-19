@@ -745,6 +745,9 @@ class Nxdl2yaml:
                     if key == "rank":  # "doc"
                         if isinstance(obj, str):
                             file_out.write(f"{indent}{' ' * 2}{key}: {obj}\n")
+                    elif key == "doc":
+                        if isinstance(obj, str):
+                            file_out.write(f"{obj}")
                     else:
                         if isinstance(obj, dict):  # inside an individual dimension
                             for attr_key, attr_val in obj.items():
@@ -763,6 +766,9 @@ class Nxdl2yaml:
                     if key == "rank":  # "doc"
                         if isinstance(obj, str):
                             file_out.write(f"{indent}{' ' * 2}{key}: {obj}\n")
+                    elif key == "doc":
+                        if isinstance(obj, str):
+                            file_out.write(f"{obj}")
                 # two loops to assure that doc and rank are written before
                 # the individual explicit dimension dicts
                 for key, obj in sorted(yml_dim_dct.items()):
@@ -992,6 +998,8 @@ class Nxdl2yaml:
                 print(f"Node tag: {remove_namespace_from_tag(node.tag)}\n")
                 print(f"Attributes: {node.attrib}\n")
         with open(output_yml, "a", encoding="utf-8") as file_out:
+            # too much file I/O, this with statement is in the recursion build
+            # the entire yaml dictionary nest in main memory and dump thereafter
             tag = remove_namespace_from_tag(node.tag)
             if tag == "definition":
                 self.found_definition = True
@@ -1029,24 +1037,37 @@ class Nxdl2yaml:
                         depth, text=node.text, tag=node.tag, file_out=file_out
                     )
 
+            recurse_again = True
             if self.found_definition is True and self.root_level_doc:
                 self.print_root_level_info(depth, file_out)
             # End of print root-level definitions in file
             if tag in ("field", "group") and depth != 0:
                 self.handle_group_or_field(depth, node, file_out)
-            if tag == ("enumeration"):
-                self.handle_enumeration(depth, node, file_out)
             if tag == ("attribute"):
                 self.handle_attributes(depth, node, file_out)
+            # swopped the attribute and enumeration branch as all the above-mentioned
+            # demand additional recursion while for all the others XML branches we
+            # should aim at machining these XSD complexType blocks off in one go
+            # an example is provided for dimensionsType in handle_dimensions
+            # the key point is that these complexTypes are defined strictly via
+            # XSD to allow the implementation of all possible cases and hence there
+            # is not point to just blindly recurse again while in the processing of the
+            # nodes, its attributes and childs of e.g. an instance of dimensionsType
+            if tag == ("enumeration"):
+                self.handle_enumeration(depth, node, file_out)
+                recurse_again = False
             if tag == ("dimensions"):
                 # self.handle_dimension(depth, node, file_out)
                 self.handle_dimensions(depth, node, file_out)
+                recurse_again = False
             if tag == ("link"):
                 self.handle_link(depth, node, file_out)
             if tag == ("choice"):
                 self.handle_choice(depth, node, file_out)
             if tag == CMNT_TAG and self.include_comment:
                 self.handle_comment(depth, node, file_out)
-        depth += 1
-        # Write nested nodes
-        self.recursion_in_xml_tree(depth, xml_tree, output_yml, verbose)
+
+        if recurse_again is True:
+            depth += 1
+            # Write nested nodes
+            self.recursion_in_xml_tree(depth, xml_tree, output_yml, verbose)
