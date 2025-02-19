@@ -325,9 +325,9 @@ def test_nxdl2yaml_enumerations():
     Check the correct handling of enumerations (closed and open ones) for the direction
     nxdl->nyaml.
     """
-    ref_xml_file = "tests/data/enumerations.nxdl.xml"
+    ref_xml_file = "tests/data/enumerations_nxdl2yaml.nxdl.xml"
     ref_yml_file = "tests/data/ref_enumerations.yaml"
-    test_yml_file = "tests/data/enumerations_parsed.yaml"
+    test_yml_file = "tests/data/enumerations_nxdl2yaml_parsed.yaml"
 
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
     assert result.exit_code == 0
