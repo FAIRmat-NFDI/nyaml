@@ -298,9 +298,10 @@ def test_symbols_and_enum_docs():
     sys.stdout.write("Test on docs in enumeration and symbols okay.\n")
 
 
-def test_enumerations():
+def test_enumerations_nyaml2nxdl():
     """
-    Check the correct handling of enumerations (closed and open ones).
+    Check the correct handling of enumerations (closed and open ones) for the direction
+    nyaml->nxdl.
     """
     ref_xml_file = "tests/data/ref_enumerations.nxdl.xml"
     test_yml_file = "tests/data/enumerations.yaml"
@@ -312,10 +313,31 @@ def test_enumerations():
         "</item>",
         "<doc>",
         "</doc>",
+        "<!--",
     ]
     compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
     os.remove("tests/data/enumerations.nxdl.xml")
     sys.stdout.write("Test on open/closed enumerations okay.\n")
+
+
+def test_nxdl2yaml_enumerations():
+    """
+    Check the correct handling of enumerations (closed and open ones) for the direction
+    nxdl->nyaml.
+    """
+    ref_xml_file = "tests/data/enumerations.nxdl.xml"
+    ref_yml_file = "tests/data/ref_enumerations.yaml"
+    test_yml_file = "tests/data/enumerations_parsed.yaml"
+
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
+    assert result.exit_code == 0
+    check_file_fresh_baked(test_yml_file)
+
+    result = filecmp.cmp(ref_yml_file, test_yml_file, shallow=False)
+
+    assert result, "Ref YML and parsed YML don't have the same structure!"
+    os.remove(test_yml_file)
+    sys.stdout.write("Test on xml -> yml doc formatting okay.\n")
 
 
 def test_xml_parsing():

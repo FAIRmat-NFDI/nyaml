@@ -849,7 +849,7 @@ class Nxdl2yaml:
                         ):
                             self.handle_comment(doc_depth, item_doc, file_out)
                 elif child_tag == CMNT_TAG and self.include_comment:
-                    self.handle_comment(indent + DEPTH_SIZE, child, file_out)
+                    self.handle_comment(depth + 1, child, file_out)
         else:
             enum_list = []
             for child in node_children:
@@ -857,7 +857,7 @@ class Nxdl2yaml:
                 if child_tag == "item":
                     enum_list.append(child.attrib["value"])
                 elif child_tag == CMNT_TAG and self.include_comment:
-                    self.handle_comment(indent + DEPTH_SIZE, child, file_out)
+                    self.handle_comment(depth + 1, child, file_out)
 
             if open_enum:
                 file_out.write(f"\n{indent + DEPTH_SIZE}open_enum: True")
