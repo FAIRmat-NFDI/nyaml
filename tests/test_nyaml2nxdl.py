@@ -302,15 +302,14 @@ def test_enumerations():
     """
     ref_xml_file = "tests/data/ref_enumerations.nxdl.xml"
     test_yml_file = "tests/data/enumerations.yaml"
-    test_xml_file = "tests/data/ref_enumerations.nxdl.xml"
+    test_xml_file = "tests/data/enumerations.nxdl.xml"
     desired_matches = [
         "<enumeration",
-        "</enumeration>" "<doc>",
+        "</enumeration>",
+        "<item",
+        "</item>",
+        "<doc>",
         "</doc>",
-        "<field",
-        "</field>",
-        "<group",
-        "</group>",
     ]
     compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
     os.remove("tests/data/NXmytests.nxdl.xml")

@@ -2,15 +2,22 @@ category: base
 doc: |
   This is a test for enumerations.
 type: group
-NXtest_with_enums(NXobject):
+NXenums(NXobject):
   (NXentry):
-    closed_enum_no_docs:
+    closed_enum_no_docs_list:
       doc: |
         This is a closed enumeration without any docstrings for the individual items.
+        The items are stored in a flat list.
       enumeration: [value0, value1, value2]
+    closed_enum_no_docs_dict:
+      doc: |
+        This is a closed enumeration without any docstrings for the individual items.
+        The items are stored in a dict with the items keyword.
+      enumeration:
+        items: [value0, value1, value2]
     closed_enum_with_docs:
       doc: |
-        This is a closed enumeration, with each item havin a docstring.
+        This is a closed enumeration, with each item having a docstring.
       enumeration:
         value0:
           doc: |
@@ -23,14 +30,15 @@ NXtest_with_enums(NXobject):
             Doc for value1
     open_enum_no_docs:
       doc: |
-        This is a closed enumeration without any docstrings for the individual items.
-      enumeration: [value0, value1, value2]
-        # \@open: True
+        This is an open enumeration without any docstrings for the individual items.
+      enumeration:
+        open_enum: True
+        items: [value0, value1, value2]
     open_enum_with_docs:
       doc: |
         This is a closed enumeration, with each item havin a docstring.
       enumeration:
-        # \@open: True
+        open_enum: True
         value0:
           doc: |
             Doc for value0

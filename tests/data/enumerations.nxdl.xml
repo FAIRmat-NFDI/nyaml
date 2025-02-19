@@ -21,14 +21,15 @@
 #
 # For further information, see http://www.nexusformat.org
 -->
-<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="base" type="group" name="NXtest_with_enums" extends="NXobject" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="base" type="group" name="NXenums" extends="NXobject" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
     <doc>
         This is a test for enumerations.
     </doc>
     <group type="NXentry">
-        <field name="closed_enum_no_docs">
+        <field name="closed_enum_no_docs_list">
             <doc>
                 This is a closed enumeration without any docstrings for the individual items.
+                The items are stored in a flat list.
             </doc>
             <enumeration>
                 <item value="value0"/>
@@ -36,12 +37,20 @@
                 <item value="value2"/>
             </enumeration>
         </field>
-        <field name="closed_enum_with_docs">
+        <field name="closed_enum_no_docs_dict">
             <doc>
-                This is a closed enumeration, with each item havin a docstring.
+                This is a closed enumeration without any docstrings for the individual items.
+                The items are stored in a dict with the items keyword.
             </doc>
             <enumeration>
-                <item value="\@open"/>
+                <item value="items"/>
+            </enumeration>
+        </field>
+        <field name="closed_enum_with_docs">
+            <doc>
+                This is a closed enumeration, with each item having a docstring.
+            </doc>
+            <enumeration>
                 <item value="value0">
                     <doc>
                         Doc for value0
@@ -61,19 +70,19 @@
         </field>
         <field name="open_enum_no_docs">
             <doc>
-                This is a closed enumeration without any docstrings for the individual items.
+                This is an open enumeration without any docstrings for the individual items.
             </doc>
-            <enumeration open="True">
-                <item value="value0"/>
-                <item value="value1"/>
-                <item value="value2"/>
+            <enumeration>
+                <item value="open_enum"/>
+                <item value="items"/>
             </enumeration>
         </field>
         <field name="open_enum_with_docs">
             <doc>
                 This is a closed enumeration, with each item havin a docstring.
             </doc>
-            <enumeration open="True">
+            <enumeration>
+                <item value="open_enum"/>
                 <item value="value0">
                     <doc>
                         Doc for value0
