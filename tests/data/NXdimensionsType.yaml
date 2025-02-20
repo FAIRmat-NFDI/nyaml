@@ -24,11 +24,17 @@ NXdimensions(NXobject):
         A compact way to define dimensionsType using numpy style notation.
       dimensions:
         dim: (1, symbol_a, symbol_b)
-    shorthand_terse_with_numpy_comma(NX_NUMBER):
+    shorthand_terse_with_numpy_comma_value(NX_NUMBER):
       doc: |
         A compact way to define dimensionsType using numpy style notation.
       dimensions:
         dim: (3,)
+    shorthand_terse_with_numpy_comma_symbol(NX_NUMBER):
+      doc: |
+        A compact way to define dimensionsType using numpy style notation.
+      dimensions:
+        rank: 1
+        dim: (n_transmission_function,)
     shorthand_explicit_rank_new(NX_NUMBER):
       doc: |
         Shorthand where the rank can be set explicitly. For testing purposes

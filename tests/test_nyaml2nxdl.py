@@ -808,6 +808,7 @@ def test_handle_xref(test_input, output, is_valid):
         ("NXcomment_yaml2nxdl"),
         ("NXellipsometry-docCheck"),
         ("NXfit"),
+        ("NXdimensionsType"),
     ],
 )
 def test_files(test_input):

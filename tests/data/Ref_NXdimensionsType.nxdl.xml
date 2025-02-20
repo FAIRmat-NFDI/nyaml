@@ -53,12 +53,20 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
                 <dim index="3" value="symbol_b"/>
             </dimensions>
         </field>
-        <field name="shorthand_terse_with_numpy_comma" type="NX_NUMBER">
+        <field name="shorthand_terse_with_numpy_comma_value" type="NX_NUMBER">
             <doc>
                 A compact way to define dimensionsType using numpy style notation.
             </doc>
             <dimensions>
                 <dim index="1" value="3"/>
+            </dimensions>
+        </field>
+        <field name="shorthand_terse_with_numpy_comma_symbol" type="NX_NUMBER">
+            <doc>
+                A compact way to define dimensionsType using numpy style notation.
+            </doc>
+            <dimensions rank="1">
+                <dim index="1" value="n_transmission_function"/>
             </dimensions>
         </field>
         <field name="shorthand_explicit_rank_new" type="NX_NUMBER">
