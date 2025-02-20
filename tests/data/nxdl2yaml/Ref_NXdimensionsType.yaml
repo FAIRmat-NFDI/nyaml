@@ -16,11 +16,14 @@ NXdimensions(NXobject):
   (NXentry):
     
     # provided a proper escape sign is used also an even more compact way could be possible
-    rank_only(NX_NUMBER):
+    minimal(NX_NUMBER):
       doc: |
-        Shorthand for cases that specify only the rank.
+        Most compact way to write simple dimensions definitions as fast as possible.
+        Rank is set automatically as the length of the dim definition:
+        Examples are (1, symbol_a, symbol_b) will get rank 3, (3,) will get rank 1.
       dimensions:
-        rank: symbol_a
+        rank: 3
+        dim: (1, symbol_a, symbol_b)
     shorthand_terse(NX_NUMBER):
       doc: |
         A compact way to define dimensionsType using numpy style notation.
@@ -68,21 +71,17 @@ NXdimensions(NXobject):
         of the dimensionsType attributes.
       dimensions:
         rank: 3
-        doc: |
+        doc:         doc: |
           My multiline
-        1:
-          value: 1
-          ref: group_index
-          required: false
-          incr: notusedbyanybodyanymore?
-          refindex: notusedbyanybodyanymore?
-        2:
-          value: symbol_a
-        3:
-          value: symbol_b
+
+    rank_only(NX_NUMBER):
+      doc: |
+        Shorthand for cases that specify only the rank.
+      dimensions:
+        rank: symbol_a
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# b986a657aba1daaa823c4ebf1562e13bc82e41889e60ceeb579a5fb6cd9400ae
+# 8383959f2fe75ee255e0ee5348cb2a439ccf8196397d99010082eaf8c439078c
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--
@@ -122,11 +121,17 @@ NXdimensions(NXobject):
 #     </doc>
 #     <group type="NXentry">
 #         <!--provided a proper escape sign is used also an even more compact way could be possible-->
-#         <field name="rank_only" type="NX_NUMBER">
+#         <field name="minimal" type="NX_NUMBER">
 #             <doc>
-#                 Shorthand for cases that specify only the rank.
+#                 Most compact way to write simple dimensions definitions as fast as possible.
+#                 Rank is set automatically as the length of the dim definition:
+#                 Examples are (1, symbol_a, symbol_b) will get rank 3, (3,) will get rank 1.
 #             </doc>
-#             <dimensions rank="symbol_a"/>
+#             <dimensions rank="3">
+#                 <dim index="1" value="1"/>
+#                 <dim index="2" value="symbol_a"/>
+#                 <dim index="3" value="symbol_b"/>
+#             </dimensions>
 #         </field>
 #         <field name="shorthand_terse" type="NX_NUMBER">
 #             <doc>
@@ -193,12 +198,16 @@ NXdimensions(NXobject):
 #                 of the dimensionsType attributes.
 #             </doc>
 #             <dimensions rank="3">
-#                 <doc>My multiline
+#                 <doc>
+#                     My multiline
 #                 </doc>
-#                 <dim index="1" value="1" ref="group_index" required="false" incr="notusedbyanybodyanymore?" refindex="notusedbyanybodyanymore?"/>
-#                 <dim index="2" value="symbol_a"/>
-#                 <dim index="3" value="symbol_b"/>
 #             </dimensions>
+#         </field>
+#         <field name="rank_only" type="NX_NUMBER">
+#             <doc>
+#                 Shorthand for cases that specify only the rank.
+#             </doc>
+#             <dimensions rank="symbol_a"/>
 #         </field>
 #     </group>
 # </definition>

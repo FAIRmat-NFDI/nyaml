@@ -500,6 +500,7 @@ def xml_handle_dimensions(dct, obj, keyword, value):
                     valid_dims.append(entry)
             if len(valid_dims) > 0:
                 dims = ET.SubElement(obj, "dimensions")
+                dims.set("rank", f"{len(valid_dims)}")
                 for dim_idx, dim_name in enumerate(valid_dims):
                     if dim_idx != "" and dim_name != "":
                         dim = ET.SubElement(dims, "dim")
@@ -939,7 +940,7 @@ def xml_handle_fields_or_group(
                 xml_handle_units(elemt_obj, vval)
                 xml_handle_comment(obj, line_number, line_loc, elemt_obj)
                 rm_key_list.append(attr)
-            elif attr == "dimensions" and ele_type == "field":
+            elif attr in ("dimensions", "dim") and ele_type == "field":
                 xml_handle_dimensions(
                     dct=value, obj=elemt_obj, keyword=attr, value=vval
                 )
@@ -1054,7 +1055,7 @@ def recursive_build(obj, dct, verbose):
             xml_handle_units(obj, value)
         elif keyword == "enumeration":
             xml_handle_enumeration(dct, obj, keyword, value, verbose)
-        elif keyword == "dimensions":
+        elif keyword in ("dimensions", "dim"):
             xml_handle_dimensions(dct, obj, keyword, value)
         elif keyword == "exists":
             xml_handle_exists(dct, obj, keyword, value)
@@ -1076,7 +1077,7 @@ def recursive_build(obj, dct, verbose):
                 f"not be able to be resolved. Check around line {dct[line_number]}"
             )
         if isinstance(value, dict):
-            if "dimensions" in value:
+            if value in ("dimensions", "dim"):
                 xml_handle_dimensions(dct, obj, keyword, value)
 
 

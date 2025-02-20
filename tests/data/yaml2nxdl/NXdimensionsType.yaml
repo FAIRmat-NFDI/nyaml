@@ -14,11 +14,12 @@ type: group
 NXdimensions(NXobject):
   (NXentry):
     # provided a proper escape sign is used also an even more compact way could be possible
-    rank_only(NX_NUMBER):
+    minimal(NX_NUMBER):
       doc: |
-        Shorthand for cases that specify only the rank.
-      dimensions:
-        rank: symbol_a
+        Most compact way to write simple dimensions definitions as fast as possible.
+        Rank is set automatically as the length of the dim definition:
+        Examples are (1, symbol_a, symbol_b) will get rank 3, (3,) will get rank 1.
+      dim: (1, symbol_a, symbol_b,)
     shorthand_terse(NX_NUMBER):
       doc: |
         A compact way to define dimensionsType using numpy style notation.
@@ -78,3 +79,8 @@ NXdimensions(NXobject):
           value: symbol_a
         3:
           value: symbol_b
+    rank_only(NX_NUMBER):
+      doc: |
+        Shorthand for cases that specify only the rank.
+      dimensions:
+        rank: symbol_a

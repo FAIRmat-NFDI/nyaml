@@ -37,11 +37,17 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
     </doc>
     <group type="NXentry">
         <!--provided a proper escape sign is used also an even more compact way could be possible-->
-        <field name="rank_only" type="NX_NUMBER">
+        <field name="minimal" type="NX_NUMBER">
             <doc>
-                Shorthand for cases that specify only the rank.
+                Most compact way to write simple dimensions definitions as fast as possible.
+                Rank is set automatically as the length of the dim definition:
+                Examples are (1, symbol_a, symbol_b) will get rank 3, (3,) will get rank 1.
             </doc>
-            <dimensions rank="symbol_a"/>
+            <dimensions rank="3">
+                <dim index="1" value="1"/>
+                <dim index="2" value="symbol_a"/>
+                <dim index="3" value="symbol_b"/>
+            </dimensions>
         </field>
         <field name="shorthand_terse" type="NX_NUMBER">
             <doc>
@@ -108,12 +114,16 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
                 of the dimensionsType attributes.
             </doc>
             <dimensions rank="3">
-                <doc>My multiline
+                <doc>
+                    My multiline
                 </doc>
-                <dim index="1" value="1" ref="group_index" required="false" incr="notusedbyanybodyanymore?" refindex="notusedbyanybodyanymore?"/>
-                <dim index="2" value="symbol_a"/>
-                <dim index="3" value="symbol_b"/>
             </dimensions>
+        </field>
+        <field name="rank_only" type="NX_NUMBER">
+            <doc>
+                Shorthand for cases that specify only the rank.
+            </doc>
+            <dimensions rank="symbol_a"/>
         </field>
     </group>
 </definition>
