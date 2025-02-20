@@ -34,8 +34,3 @@ NXellipsometry_base_draft(my_test_extends):
         Calibration is performed on a reference surface (usually silicon wafer with well
         defined oxide layer) at a number of angles, then in a straight through mode
         (transmission in air).
-      dimensions:
-        rank: 3
-        dim: [[3, N_calibration_angles+1], [2, N_variables], [1, N_calibration_wavelength]]
-        dim_parameters:
-          required: ['true', 'true', 'true']

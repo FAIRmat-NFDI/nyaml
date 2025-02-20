@@ -1,0 +1,46 @@
+category: base
+doc: |
+  NXnametype test
+type: group
+NXnametype(NXobject):
+  # Using IDgroup, groupID, IDfield, fieldID, IDattribute, attributeID is incorrect notation
+  # in a yaml file if not annotated by an attribute nameType: partial
+  IDgroup(NXobject):
+  groupID(NXobject):
+  GROUP(NXobject):
+  # Using mixed upper/lower case like gROUp is incorrect notation in a yaml
+  # if not annotated by an attribute nameType: specified
+  gROUp(NXobject):
+  grOUp(NXobject):
+    nameType: specified
+  group(NXobject):
+    IDfield(NX_CHAR):
+    fieldID(NX_CHAR):
+    FIELD(NX_CHAR):
+    fIELd(NX_CHAR):
+    fiELd(NX_CHAR):
+      nameType: specified
+    field(NX_CHAR):
+      \@IDattribute(NX_CHAR):
+      \@attributeID(NX_CHAR):
+      \@ATTRIBUTE(NX_CHAR):
+      \@attrIBUte(NX_CHAR):
+      \@attriBUte(NX_CHAR):
+        nameType: specified
+      \@attribute(NX_CHAR):
+      \@ANYATTRIBUTE(NX_CHAR):
+        nameType: any
+      \@attribute_with_PARTIALNAME(NX_CHAR):
+        nameType: partial
+  # nameType distinctions for links not yet proposed to the NIAC
+  LInk(link):
+    target: field
+  liNK(link):
+    target: field
+  LINK(link):
+    target: field
+  lINk(link):
+    target: field
+    nameType: specified
+  link(link):
+    target: field

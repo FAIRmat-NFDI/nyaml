@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
+<!--
+# NeXus - Neutron and X-ray Common Data Format
+#
+# Copyright (C) 2025-2025 NeXus International Advisory Committee (NIAC)
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# For further information, see http://www.nexusformat.org
+-->
+<!--
+https://manual.nexusformat.org/nxdl_desc.html#nxdl-data-type-dimensionstype
+for examples of non-trivial use cases of dimensionsType in the wild see
+https://github.com/FAIRmat-NFDI/nexus_definitions/commit/f7ba53f4fb409b03fde6af6ccf29146392a2c142
+applications/NXmx, use of required
+applications/NXstxm, use docstring for dimensions node
+base_classes/NXfresnel_zone_plate, use of rank only
+base_classes/NXmonitor, use of rank only and index, ref pairs
+base_classes/NXdetector_group, use of index, ref pairs
+base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="application" type="group" name="NXdimensions" extends="NXobject" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+    <doc>
+        This is a test for processing the dimensionsType.
+    </doc>
+    <group type="NXentry">
+        <!--provided a proper escape sign is used also an even more compact way could be possible-->
+        <field name="minimal" type="NX_NUMBER">
+            <doc>
+                Most compact way to write simple dimensions definitions as fast as possible.
+                Rank is set automatically as the length of the dim definition:
+                Examples are (1, symbol_a, symbol_b) will get rank 3, (3,) will get rank 1.
+            </doc>
+            <dimensions rank="3">
+                <dim index="1" value="1"/>
+                <dim index="2" value="symbol_a"/>
+                <dim index="3" value="symbol_b"/>
+            </dimensions>
+        </field>
+        <field name="shorthand_terse" type="NX_NUMBER">
+            <doc>
+                A compact way to define dimensionsType using numpy style notation.
+            </doc>
+            <dimensions>
+                <dim index="1" value="1"/>
+                <dim index="2" value="symbol_a"/>
+                <dim index="3" value="symbol_b"/>
+            </dimensions>
+        </field>
+        <field name="shorthand_terse_with_numpy_comma_value" type="NX_NUMBER">
+            <doc>
+                A compact way to define dimensionsType using numpy style notation.
+            </doc>
+            <dimensions>
+                <dim index="1" value="3"/>
+            </dimensions>
+        </field>
+        <field name="shorthand_terse_with_numpy_comma_symbol" type="NX_NUMBER">
+            <doc>
+                A compact way to define dimensionsType using numpy style notation.
+            </doc>
+            <dimensions rank="1">
+                <dim index="1" value="n_transmission_function"/>
+            </dimensions>
+        </field>
+        <field name="shorthand_explicit_rank_new" type="NX_NUMBER">
+            <doc>
+                Shorthand where the rank can be set explicitly. For testing purposes
+                the rank is here intentionally set to a value that is different to the number
+                of entries in dim.
+                
+                Authors and designers of NeXus classes should preferentially use
+                the shorthand notation unless the full_syntax is required as
+                using rank_only is insufficient.
+                
+                This is the default to which nxdl2yaml converts unless
+                the XML content substantiates that either using
+                rank_only suffices or that full_syntax is required.
+            </doc>
+            <dimensions rank="2">
+                <dim index="1" value="1"/>
+                <dim index="2" value="symbol_a"/>
+                <dim index="3" value="symbol_b"/>
+            </dimensions>
+        </field>
+        <field name="shorthand_explicit_rank_old" type="NX_NUMBER">
+            <doc>
+                A version of shorthand_explicit_rank_new that supports
+                legacy formatting (double edge brackets) still left before
+                the yaml and nxdl files where reprocessed while integrating
+                changes of the NIAC Autumn 2024 meeting done Febr, 2025.
+            </doc>
+            <dimensions rank="3">
+                <dim index="1" value="1"/>
+                <dim index="2" value="symbol_a"/>
+                <dim index="3" value="symbol_b"/>
+            </dimensions>
+        </field>
+        <field name="full_syntax" type="NX_NUMBER">
+            <doc>
+                The full syntax that is the only way to use old deprecated elements
+                of the dimensionsType attributes.
+            </doc>
+            <dimensions rank="3">
+                <doc>
+                    My multiline
+                </doc>
+            </dimensions>
+        </field>
+        <field name="rank_only" type="NX_NUMBER">
+            <doc>
+                Shorthand for cases that specify only the rank.
+            </doc>
+            <dimensions rank="symbol_a"/>
+        </field>
+    </group>
+</definition>

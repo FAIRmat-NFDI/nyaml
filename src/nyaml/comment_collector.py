@@ -482,8 +482,8 @@ class YAMLComment(Comment):
         a yaml file dictonary in another dictionary.
         """
         for line_key, line_n in yaml_dict.items():
-            if "__line__" in line_key:
-                line_info_dict[line_n] = line_key
+            if "__line__" in str(line_key):
+                line_info_dict[line_n] = str(line_key)
 
         for _, val in yaml_dict.items():
             if isinstance(val, dict):
