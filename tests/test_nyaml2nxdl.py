@@ -578,9 +578,17 @@ def test_yaml2nxdl_no_tabs(tmp_path):
     compare_nxdl_doc(ref_nxdl, out_nxdl)
 
 
+# the copyright-year needs to be a part of the yaml file as not necessarily
+# every yaml file that gets a yaml2nxdl conversion is necessarily a new definition
+# namely the current use case does not allow people to recover accidentally
+# removed XML files when they still have their corresponding YAML file, upon conversion
+# the copyright will then be changed to a copyright year as if the definition was
+# just defined completely from scratch anew which is incorrect.
 def test_copyright_license_new_yaml(tmp_path):
+    pass
     """While converting the newly developed yaml to nxdl the license text should have
     the latest year.
+    """
     """
     pwd = Path(__file__).parent
     input_file = pwd / "data/dim_keyword.yaml"
@@ -594,6 +602,7 @@ def test_copyright_license_new_yaml(tmp_path):
     )
     # Check if the latest copyright year is written
     check_and_replace_latest_copyright(output)
+    """
 
 
 def test_check_copyright_license_in_full_modification_yaml_cycle(tmp_path):

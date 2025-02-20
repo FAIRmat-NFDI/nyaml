@@ -16,11 +16,21 @@ NXdimensions(NXobject):
   (NXentry):
     
     # provided a proper escape sign is used also an even more compact way could be possible
+    rank_only(NX_NUMBER):
+      doc: |
+        Shorthand for cases that specify only the rank.
+      dimensions:
+        rank: symbol_a
     shorthand_terse(NX_NUMBER):
       doc: |
         A compact way to define dimensionsType using numpy style notation.
       dimensions:
         dim: (1, symbol_a, symbol_b)
+    shorthand_terse_with_numpy_comma(NX_NUMBER):
+      doc: |
+        A compact way to define dimensionsType using numpy style notation.
+      dimensions:
+        dim: (3,)
     shorthand_explicit_rank_new(NX_NUMBER):
       doc: |
         Shorthand where the rank can be set explicitly. For testing purposes
@@ -44,7 +54,7 @@ NXdimensions(NXobject):
         the yaml and nxdl files where reprocessed while integrating
         changes of the NIAC Autumn 2024 meeting done Febr, 2025.
       dimensions:
-        rank: 2
+        rank: 3
         dim: (1, symbol_a, symbol_b)
     full_syntax(NX_NUMBER):
       doc: |
@@ -54,8 +64,8 @@ NXdimensions(NXobject):
         rank: 3
         doc: |
           My multiline
-          
-          docstring
+                    
+                    docstring
         1:
           value: 1
           ref: group_index
@@ -66,14 +76,9 @@ NXdimensions(NXobject):
           value: symbol_a
         3:
           value: symbol_b
-    rank_only(NX_NUMBER):
-      doc: |
-        Shorthand for cases that specify only the rank.
-      dimensions:
-        rank: symbol_a
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 5da93c06cd726ae4d03a45a1c320c6a22b6b641dbac81c8820b3c8604a678b95
+# 0511ec6ecf43d1009b44b57336b755aace63468abfe0b795c346724c0ae2d58a
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--
@@ -113,6 +118,12 @@ NXdimensions(NXobject):
 #     </doc>
 #     <group type="NXentry">
 #         <!--provided a proper escape sign is used also an even more compact way could be possible-->
+#         <field name="rank_only" type="NX_NUMBER">
+#             <doc>
+#                 Shorthand for cases that specify only the rank.
+#             </doc>
+#             <dimensions rank="symbol_a"/>
+#         </field>
 #         <field name="shorthand_terse" type="NX_NUMBER">
 #             <doc>
 #                 A compact way to define dimensionsType using numpy style notation.
@@ -121,6 +132,14 @@ NXdimensions(NXobject):
 #                 <dim index="1" value="1"/>
 #                 <dim index="2" value="symbol_a"/>
 #                 <dim index="3" value="symbol_b"/>
+#             </dimensions>
+#         </field>
+#         <field name="shorthand_terse_with_numpy_comma" type="NX_NUMBER">
+#             <doc>
+#                 A compact way to define dimensionsType using numpy style notation.
+#             </doc>
+#             <dimensions>
+#                 <dim index="1" value="3"/>
 #             </dimensions>
 #         </field>
 #         <field name="shorthand_explicit_rank_new" type="NX_NUMBER">
@@ -150,7 +169,7 @@ NXdimensions(NXobject):
 #                 the yaml and nxdl files where reprocessed while integrating
 #                 changes of the NIAC Autumn 2024 meeting done Febr, 2025.
 #             </doc>
-#             <dimensions rank="2">
+#             <dimensions rank="3">
 #                 <dim index="1" value="1"/>
 #                 <dim index="2" value="symbol_a"/>
 #                 <dim index="3" value="symbol_b"/>
@@ -162,21 +181,14 @@ NXdimensions(NXobject):
 #                 of the dimensionsType attributes.
 #             </doc>
 #             <dimensions rank="3">
-#                 <doc>
-#                   My multiline
-#                   
-#                   docstring
+#                 <doc>My multiline
+#                     
+#                     docstring
 #                 </doc>
 #                 <dim index="1" value="1" ref="group_index" required="false" incr="notusedbyanybodyanymore?" refindex="notusedbyanybodyanymore?"/>
 #                 <dim index="2" value="symbol_a"/>
 #                 <dim index="3" value="symbol_b"/>
 #             </dimensions>
-#         </field>
-#         <field name="rank_only" type="NX_NUMBER">
-#             <doc>
-#                 Shorthand for cases that specify only the rank.
-#             </doc>
-#             <dimensions rank="symbol_a"/>
 #         </field>
 #     </group>
 # </definition>

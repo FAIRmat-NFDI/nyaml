@@ -37,6 +37,12 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
     </doc>
     <group type="NXentry">
         <!--provided a proper escape sign is used also an even more compact way could be possible-->
+        <field name="rank_only" type="NX_NUMBER">
+            <doc>
+                Shorthand for cases that specify only the rank.
+            </doc>
+            <dimensions rank="symbol_a"/>
+        </field>
         <field name="shorthand_terse" type="NX_NUMBER">
             <doc>
                 A compact way to define dimensionsType using numpy style notation.
@@ -45,6 +51,14 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
                 <dim index="1" value="1"/>
                 <dim index="2" value="symbol_a"/>
                 <dim index="3" value="symbol_b"/>
+            </dimensions>
+        </field>
+        <field name="shorthand_terse_with_numpy_comma" type="NX_NUMBER">
+            <doc>
+                A compact way to define dimensionsType using numpy style notation.
+            </doc>
+            <dimensions>
+                <dim index="1" value="3"/>
             </dimensions>
         </field>
         <field name="shorthand_explicit_rank_new" type="NX_NUMBER">
@@ -74,7 +88,7 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
                 the yaml and nxdl files where reprocessed while integrating
                 changes of the NIAC Autumn 2024 meeting done Febr, 2025.
             </doc>
-            <dimensions rank="2">
+            <dimensions rank="3">
                 <dim index="1" value="1"/>
                 <dim index="2" value="symbol_a"/>
                 <dim index="3" value="symbol_b"/>
@@ -86,21 +100,14 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
                 of the dimensionsType attributes.
             </doc>
             <dimensions rank="3">
-                <doc>
-                  My multiline
-                  
-                  docstring
+                <doc>My multiline
+                    
+                    docstring
                 </doc>
                 <dim index="1" value="1" ref="group_index" required="false" incr="notusedbyanybodyanymore?" refindex="notusedbyanybodyanymore?"/>
                 <dim index="2" value="symbol_a"/>
                 <dim index="3" value="symbol_b"/>
             </dimensions>
-        </field>
-        <field name="rank_only" type="NX_NUMBER">
-            <doc>
-                Shorthand for cases that specify only the rank.
-            </doc>
-            <dimensions rank="symbol_a"/>
         </field>
     </group>
 </definition>

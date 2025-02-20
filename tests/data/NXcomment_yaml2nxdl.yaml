@@ -55,14 +55,14 @@ NXmpes:
 
         dimensions:
           # 18: rank comments: comments
-          rank: 1
+          rank: 3
           # 19: dim comments:
-          dim: [[1, 2]]
+          dim: [[1, 1], [1, symbol_a], [2, symbol_b]]
 
-  # 20: File endgin comments
   # 20: File ending comments
   # 20: File ending comments
+  # 20: File ending comments
 
-  # 21: File endgin comments
+  # 21: File ending comments
   # 21: File ending comments
   # 21: File ending comments

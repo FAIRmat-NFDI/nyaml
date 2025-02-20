@@ -33,7 +33,8 @@ NXmpes:
       doc: "Datetime of the start of the measurement."
       # 11: dim comments:
       #  dim comments:
-      dim: (1, 2, 6)
+      dimensions:
+        dim: (1, 2, 6)
     definition:
       # 12: version_attribute: comments hrere
       \@version:
@@ -56,17 +57,15 @@ NXmpes:
         doc: |
           origin of rectangular region selected for readout
         # 17: dimensions comments:
-
         # 18: rank comments: comments
         dimensions:
           rank: 1
-          # 19: dim comments:
           dim: [[1, 2]]
 
-  # 22: File endgin comments
+  # 22: File ending comments
   # 22: File ending comments
   # 22: File ending comments
 
-  # 23: File endgin comments
+  # 23: File ending comments
   # 23: File ending comments
   # 23: File ending comments
