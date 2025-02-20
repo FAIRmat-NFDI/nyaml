@@ -12,10 +12,16 @@
             "program": "../.py3.11.11/bin/nyaml2nxdl",  //might need to change me
             "args": [//"tests/data/NXdimensionsType.yaml",
                      //"tests/data/NXdimensionsType.nxdl.xml",
-                     "tests/data/RNXdimensionsType.yaml",
+                     //"tests/data/RNXdimensionsType.yaml",
+                     //"tests/NXattribute.yaml",
+                     //"tests/NXattribute.nxdl.xml",
+                     "tests/RNXattribute.yaml",
                      //"--output-file=tests/data/NXdimensionsType.nxdl.xml",
                      //"--output-file=tests/data/RNXdimensionsType.yaml",
-                     "--output-file=tests/data/RNXdimensionsType.nxdl.xml"
+                     //"--output-file=tests/data/RNXdimensionsType.nxdl.xml"
+                     //"--output-file=tests/NXattribute.nxdl.xml",
+                     //"--output-file=tests/RNXattribute.yaml",
+                     "--output-file=tests/RNXattribute.nxdl.xml"
                     ]
         }
     ]

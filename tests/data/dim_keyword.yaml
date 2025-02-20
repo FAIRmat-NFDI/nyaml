@@ -1,6 +1,7 @@
 category: application
 doc: |
   This is a test for the dimension keywords.
+# replaced by NXdimensionsType
 type: group
 NXarchive(NXobject):
   (NXentry):
@@ -19,10 +20,11 @@ NXarchive(NXobject):
         dim: (10,)
     my_dim_with_numpy_3d(NX_NUMBER):
       dim: (2, 4, 5)
-    my_dim_with_doc_and_dim_attr(NX_NUMBER):
-      dimensions:
-        doc: |
-          Test with doc and dim attribute
-        dim: [[1, 2], [3, 4]]
-        dim_parameters:
-          ref: ['s', 'm']
+    # this syntax is no longer supported
+    # my_dim_with_doc_and_dim_attr(NX_NUMBER):
+    #   dimensions:
+    #     doc: |
+    #       Test with doc and dim attribute
+    #     dim: [[1, 2], [3, 4]]
+    #     dim_parameters:
+    #       ref: ['s', 'm']
