@@ -420,21 +420,24 @@ def xml_handle_dimensions(dct, obj, keyword, value):
         n_idx_dicts = len(
             [key for key in value if re.match("^[0-9]+$", f"{key}") is not None]
         )
-        n_line_cmts = 0
+        non_line_comment_keys = []
         for key in value:
             if isinstance(key, str):
-                if key.startswith("__line__"):
-                    n_line_cmts += 1
-        if (len(value) - n_line_cmts) == 1 and "rank" in value:
+                if not key.startswith("__line__"):
+                    non_line_comment_keys.append(key)
+        if set(non_line_comment_keys) in [{"rank"}, {"rank", "doc"}]:
             # only rank
             dims = ET.SubElement(obj, "dimensions")
             dims.set("rank", f"{value['rank']}")
+            if "doc" in value:
+                docs = ET.SubElement(dims, "doc")
+                docs.text = f"\n{value['doc']}"
         elif n_idx_dicts > 0:
             # full_syntax
             dims = ET.SubElement(obj, "dimensions")
             if "rank" in value:
                 dims.set("rank", f"{value['rank']}")
-            if "doc" in value:  # is this branch ever visited?
+            if "doc" in value:
                 docs = ET.SubElement(dims, "doc")
                 docs.text = f"{value['doc']}"
             for dim_key, dim_obj in value.items():

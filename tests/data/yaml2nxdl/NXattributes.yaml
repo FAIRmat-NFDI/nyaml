@@ -34,15 +34,3 @@ NXellipsometry_base_draft(my_test_extends):
         Calibration is performed on a reference surface (usually silicon wafer with well
         defined oxide layer) at a number of angles, then in a straight through mode
         (transmission in air).
-      # syntax with dimensions: and dim_parameters as dict child is no longer supported!
-      # use full_syntax instead and see NXdimensionsType.yaml test
-      # and the line dim line with entries [[3, N... were incorrect
-      # https://manual.nexusformat.org/nxdl_desc.html#dimensionstype
-      # @index
-      # Number or symbol indicating which axis (subscript) is being described, ranging from 1 up to rank
-      # (rank of the data structure). For example, given an array A[i,j,k], index="1" would refer to the i axis (subscript).
-      # dimensions:
-      #   rank: 3
-      #   dim: [[3, N_calibration_angles+1], [2, N_variables], [1, N_calibration_wavelength]]
-      #   dim_parameters:
-      #     required: ['true', 'true', 'true']

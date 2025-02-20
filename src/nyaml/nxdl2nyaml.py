@@ -714,18 +714,11 @@ class Nxdl2yaml:
                         raise ValueError(
                             f"Found incorrect dim child that has no index attribute !"
                         )
-                    # individual dim childs cannot have a dim docstring
-                    # see https://github.com/nexusformat/definitions/blob/main/nxdl.xsd
-                    # for dim_child in list(child):
-                    #     ctag = dim_child.tag
-                    #     if ctag == "doc" and dim_child.text != "":
-                    #         yml_dim_dct["dim"][idx_val]["doc"] = dim_child.text.strip()
-                    #         break  # only one docstring for each index
 
         # perform I/O based on the cases analyzed
         yml_dim_dct_keys = list(yml_dim_dct)
         indent = depth * DEPTH_SIZE
-        if yml_dim_dct_keys == ["rank"] or yml_dim_dct_keys == ["doc", "rank"]:
+        if set(yml_dim_dct_keys) in [{"rank"}, {"doc", "rank"}]:
             # rank only notation
             file_out.write(f"{indent}dimensions:\n")
             for key, val in yml_dim_dct.items():
@@ -1040,14 +1033,6 @@ class Nxdl2yaml:
                 self.handle_group_or_field(depth, node, file_out)
             if tag == ("attribute"):
                 self.handle_attributes(depth, node, file_out)
-            # swopped the attribute and enumeration branch as all the above-mentioned
-            # demand additional recursion while for all the others XML branches we
-            # should aim at machining these XSD complexType blocks off in one go
-            # an example is provided for dimensionsType in handle_dimensions
-            # the key point is that these complexTypes are defined strictly via
-            # XSD to allow the implementation of all possible cases and hence there
-            # is not point to just blindly recurse again while in the processing of the
-            # nodes, its attributes and childs of e.g. an instance of dimensionsType
             if tag == ("enumeration"):
                 self.handle_enumeration(depth, node, file_out)
                 recurse_again = False
