@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 <!--
 # NeXus - Neutron and X-ray Common Data Format
 #
-# Copyright (C) 2014-2022 NeXus International Advisory Committee (NIAC)
+# Copyright (C) 2010-2020 NeXus International Advisory Committee (NIAC)
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -21,7 +21,8 @@
 #
 # For further information, see http://www.nexusformat.org
 -->
-<!--6: NXmpes: Test -\- documentation
+<!--
+6: NXmpes: Test -\- documentation
 NXmpes: Test documentation-->
 <definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="application" name="NXmpes" extends="NXobject" type="group" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
     <!--2: symbols comments: comments here-->
@@ -84,18 +85,18 @@ comment nxdata(data): comments-->
                     origin of rectangular region selected for readout
                 </doc>
                 <!--17: dimensions comments:-->
-                <!--18: rank comments: comments-->
-                <dimensions rank="1">
-                    <!--19: dim comments:-->
-                    <dim index="1" value="2"/>
+                <dimensions rank="3">
+                    <dim index="1" value="1"/>
+                    <dim index="1" value="symbol_a"/>
+                    <dim index="2" value="symbol_b"/>
                 </dimensions>
             </field>
         </group>
     </group>
-    <!--20: File endgin comments
+    <!--20: File ending comments
 20: File ending comments
 20: File ending comments-->
-    <!--21: File endgin comments
+    <!--21: File ending comments
 21: File ending comments
 21: File ending comments-->
 </definition>

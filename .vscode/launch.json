@@ -10,41 +10,24 @@
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "program": "../.py3.11.11/bin/nyaml2nxdl",  //might need to change me
-            "args": [//"tests/data/dimensions.nxdl.xml",
-                     //"tests/data/NXnametype.yaml",
-                     //"tests/data/NXnametype.nxdl.xml",
-                     //"tests/NXfresnel_zone_plate.nxdl.xml",
-                     "tests/NXfresnel_zone_plate.yaml",
-                     //"tests/NXdetector_group.nxdl.xml",
-                     //"tests/NXdetector_group.yaml",
-                     //"tests/NXsensor.nxdl.xml",
-                     //"tests/NXsensor.yaml",
-                     //"tests/NXmx.nxdl.xml",
-                     //"tests/NXmx.yaml",
-                     //"tests/NXstxm.nxdl.xml",
-                     //"tests/NXstxm.yaml",
-                     //"tests/BKNXmonitor.nxdl.xml",
-                     //"--output-file=tests/BKNXmonitor.yaml"]
-                     //"tests/NXcanSAS.nxdl.xml",
-                     //"tests/NXcanSAS.yaml",
-                     //"tests/NXdetector_group.yaml",
-                     //"--verbose",
-                     //"--output-file=tests/data/dimensions_parsed.yaml"]
-                     //"--output-file=tests/data/NXnametype.nxdl.xml"]
-                     //"--output-file=tests/data/BKNXnametype.yaml"]
-                     //"--output-file=tests/NXtest.nxdl.xml"]
-                     //"--output-file=tests/NXfresnel_zone_plate.yaml"]
-                     "--output-file=tests/BKNXfresnel_zone_plate.nxdl.xml"]
-                     //"--output-file=tests/NXdetector_group.yaml"]
-                     //"--output-file=tests/BKNXdetector_group.nxdl.xml"]
-                     //"--output-file=tests/NXsensor.yaml"]
-                     //"--output-file=tests/BKNXsensor.nxdl.xml"]
-                     //"--output-file=tests/NXmx.yaml"]
-                     //"--output-file=tests/BKNXmx.nxdl.xml"]
-                     //"--output-file=tests/NXstxm.yaml"]
-                     //"--output-file=tests/BKNXstxm.nxdl.xml"]
-                     //"--output-file=tests/NXmonitor.yaml"]
-                     //"--output-file=tests/BKNXmonitor.nxdl.xml"]
+            "args": [//"tests/data/NXdimensionsType.yaml",
+                     //"tests/data/NXdimensionsType.nxdl.xml",
+                     //"tests/data/RNXdimensionsType.yaml",
+                     "tests/data/Ref_NXcomment.yaml",
+                     "--check-consistency",
+                     //"tests/NXattribute.yaml",
+                     //"tests/NXattribute.nxdl.xml",
+                     //"tests/RNXattribute.yaml",
+                     //"tests/data/NXcomment_yaml2nxdl.yaml",
+                     "--output-file=Ref_NXcomment.nxdl.xml",
+                     //"--output-file=tests/data/NXdimensionsType.nxdl.xml",
+                     //"--output-file=tests/data/RNXdimensionsType.yaml",
+                     //"--output-file=tests/data/RNXdimensionsType.nxdl.xml"
+                     //"--output-file=tests/NXattribute.nxdl.xml",
+                     //"--output-file=tests/RNXattribute.yaml",
+                     //"--output-file=tests/RNXattribute.nxdl.xml"
+                     //"--output-file=tests/data/NXcomment_yaml2nxdl.nxdl.xml"
+                    ]
         }
     ]
 }

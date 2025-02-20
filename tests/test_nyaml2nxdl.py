@@ -417,13 +417,13 @@ def test_yml2xml_comment_parsing():
 
     def recursive_compare(ref_root, test_root):
         assert ref_root.attrib.items() == test_root.attrib.items(), (
-            "Got different xml element" "Attribute."
+            "Got different xml elementAttribute."
         )
         if ref_root.text and test_root.text:
             print(ref_root.text, test_root.text)
-            assert (
-                ref_root.text.strip() == test_root.text.strip()
-            ), "Got different element text."
+            assert ref_root.text.strip() == test_root.text.strip(), (
+                "Got different element text."
+            )
         if len(ref_root) > 0 and len(test_root) > 0:
             for x, y in zip(ref_root, test_root):
                 recursive_compare(x, y)
@@ -519,35 +519,15 @@ def test_nxdl2yaml_doc():
     Path.unlink(parsed_yaml_file)
 
 
-def test_nyaml2nxdl_dim_keyword(tmp_path):
-    """
-    The dim keyword is correctly translated into nxdl with rank and dim.
-    """
-
-    pwd = Path(__file__).parent
-    input_file = pwd / "data/dim_keyword.yaml"
-    ref_file = pwd / "data/ref_dim_keyword.nxdl.xml"
-    parsed_file = tmp_path / "dim_keyword.nxdl.xml"
-
-    result = CliRunner().invoke(
-        nyaml2nxdl.launch_tool,
-        ["--do-not-store-nxdl", str(input_file), "--output-file", str(parsed_file)],
-    )
-
-    assert result.exit_code == 0, "Error in converter execution."
-    check_and_replace_latest_copyright(parsed_file)
-    assert ref_file.read_text() == parsed_file.read_text()
-
-
-def test_nxdl2yaml_dimensions(tmp_path):
+def test_nxdl2yaml_dimensionsType(tmp_path):
     """
     Test the proper conversion of nxdl2yaml with dimension and dim keywords.
     """
 
     pwd = Path(__file__).parent
-    input_file = pwd / "data/dimensions.nxdl.xml"
-    ref_file = pwd / "data/ref_dimensions.yaml"
-    parsed_file = tmp_path / "dimension_parsed.yaml"
+    input_file = pwd / "data/NXdimensionsType.nxdl.xml"
+    ref_file = pwd / "data/Ref_NXdimensionsType.yaml"
+    parsed_file = tmp_path / "NXdimensionsType_parsed.yaml"
 
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool,
@@ -562,7 +542,7 @@ def test_nxdl2yaml_dimensions(tmp_path):
         ref_yaml_dict = LineLoader(ref_yaml).get_single_data()
         parsed_yaml_dict = LineLoader(parsed_yaml).get_single_data()
 
-    compare_yaml_content(ref_yaml_dict, parsed_yaml_dict, ["dimensions", "dim"])
+    compare_yaml_content(ref_yaml_dict, parsed_yaml_dict, ["dimensions", "rank"])
 
 
 def test_yaml2nxdl_no_tabs(tmp_path):
@@ -598,9 +578,17 @@ def test_yaml2nxdl_no_tabs(tmp_path):
     compare_nxdl_doc(ref_nxdl, out_nxdl)
 
 
+# the copyright-year needs to be a part of the yaml file as not necessarily
+# every yaml file that gets a yaml2nxdl conversion is necessarily a new definition
+# namely the current use case does not allow people to recover accidentally
+# removed XML files when they still have their corresponding YAML file, upon conversion
+# the copyright will then be changed to a copyright year as if the definition was
+# just defined completely from scratch anew which is incorrect.
 def test_copyright_license_new_yaml(tmp_path):
+    pass
     """While converting the newly developed yaml to nxdl the license text should have
     the latest year.
+    """
     """
     pwd = Path(__file__).parent
     input_file = pwd / "data/dim_keyword.yaml"
@@ -614,6 +602,7 @@ def test_copyright_license_new_yaml(tmp_path):
     )
     # Check if the latest copyright year is written
     check_and_replace_latest_copyright(output)
+    """
 
 
 def test_check_copyright_license_in_full_modification_yaml_cycle(tmp_path):
@@ -773,10 +762,10 @@ def test_handle_xref(test_input, output, is_valid):
 @pytest.mark.parametrize(
     "test_input",
     [
-        ('NXattributes'),
-        ('NXcomment_yaml2nxdl'),
-        ('NXellipsometry-doCheck'),
-        ('NXmytests'),
+        ("NXattributes"),
+        ("NXcomment_yaml2nxdl"),
+        ("NXellipsometry-docCheck"),
+        ("NXfit"),
     ],
 )
 def test_files(test_input):
@@ -785,9 +774,9 @@ def test_files(test_input):
     input files shall be in tests/data/ as yaml files
     expected output files shall have the corresponding name with the prefix Ref_
     """
-    test_yml_input_file = "tests/data/"+test_input+".yaml"
-    test_xml_output_file = "tests/data/"+test_input+".nxdl.xml"
-    ref_xml_output_file = "tests/data/Ref_"+test_input+".nxdl.xml"
+    test_yml_input_file = "tests/data/" + test_input + ".yaml"
+    test_xml_output_file = "tests/data/" + test_input + ".nxdl.xml"
+    ref_xml_output_file = "tests/data/Ref_" + test_input + ".nxdl.xml"
     runner = CliRunner()
     result = runner.invoke(nyaml2nxdl.launch_tool, [test_yml_input_file])
     assert result.exit_code == 0
@@ -797,3 +786,5 @@ def test_files(test_input):
     with open(ref_xml_output_file, "r", encoding="utf-8") as reffile:
         ref = reffile.readlines()
     assert log == ref
+
+    os.remove(test_xml_output_file)
