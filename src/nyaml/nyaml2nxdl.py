@@ -25,6 +25,7 @@ import os
 import pathlib
 import re
 import textwrap
+import warnings
 from typing import Optional, Union
 from urllib.parse import unquote
 
@@ -741,8 +742,6 @@ def xml_handle_nametype(keyword, keyword_name, dct, obj):
                 obj.set("nameType", name_type)
             else:
                 raise ValueError(f"nameType for {keyword} is not in {supported}")
-        else:
-            obj.set("nameType", "any")
         return
     # Mixed-case names: Check if an explicit nameType hint is provided.
     if dct.get(keyword) and "nameType" in dct[keyword]:
@@ -751,13 +750,20 @@ def xml_handle_nametype(keyword, keyword_name, dct, obj):
         if name_type in supported:
             obj.set("nameType", name_type)
             return
+        else:
+            warnings.warn(
+                f"Mixed case concept_name with an unsupported nameType {name_type}",
+                SyntaxWarning,
+            )
 
     # Determine if the name follows a variable-like pattern.
     variable_prefix_match = re.search("^[A-Z]*[a-z0-9_.]*$", concept_name)
     variable_suffix_match = re.search("^[a-z0-9_.]*[A-Z]*$", concept_name)
     if variable_prefix_match or variable_suffix_match:
-        # nameType="partial"
-        obj.set("nameType", "partial")
+        warnings.warn(
+            "Concept matching a partial nametype detected that lacks nameType=partial",
+            SyntaxWarning,
+        )
         return
     # Default case: NeXus assumes "specified" as the default, so no need to set it explicitly.
     # NXcanSAS dQw suggests it is specified, or is this an error in that appdef?
@@ -1011,16 +1017,8 @@ def recursive_build(obj, dct, verbose):
         line_number = f"__line__{keyword}"
         line_loc = dct[line_number]
         keyword_name, keyword_type = nx_name_type_resolving(keyword)
-        # keyword's like nameType are problematic take this example
-        # group(NXobject):
-        #   nameType:  # convenience rule NX_CHAR does not need to be mentioned
-        #   nameType(NX_CHAR):
-        #     nameType: specified  # required, because concept group/nameType has at least
-        #     one letter
-        #   Q:
-        #     nameType: specified  # required, as all upper Q that is by default NX_CHAR
-        #   dQw:
-        #     nameType: specified  # required definition of nameType for mixed case dQw
+        # keyword's like nameType need proper escape character in the future
+        # to simplify their distinction from NX_CHAR fields and attributes
         if 0 < sum(1 for char in keyword if char.isupper()) < len(keyword):
             if isinstance(value, str):
                 continue
