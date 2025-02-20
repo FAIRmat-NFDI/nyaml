@@ -66,7 +66,6 @@ NXDL_FIELD_ATTRIBUTES = (
     "required",
     "deprecated",
     "units",
-    "nameType",
 )
 
 NXDL_ATTRIBUTES_ATTRIBUTES = (
