@@ -1,0 +1,80 @@
+category: base
+doc: |
+  This is a test for enumerations.
+type: group
+NXenums(NXobject):
+  (NXentry):
+    closed_enum_no_docs_list:
+      doc: |
+        This is a closed enumeration without any docstrings for the individual items.
+        The items are stored in a flat list.
+      # comment 0
+      enumeration: [value0, value1, value2]
+    closed_enum_no_docs_dict:
+      doc: |
+        This is a closed enumeration without any docstrings for the individual items.
+        The items are stored in a dict with the items keyword.
+      enumeration:
+        # comment 1
+        items: [value0, value1, value2]
+    closed_enum_with_numbers(NX_NUMBER):
+      doc: |
+        This is a closed enumeration without NX_NUMBER items.
+      enumeration: [0, 1, 2]
+    closed_enum_with_list_of_lists(NX_NUMBER):
+      doc: |
+        This is a closed enumeration without any docstrings for the individual items.
+        The individual items are lists themselves.
+      enumeration: [[1, 0, 0], [0, 1, 0], [0, 0, -1]]
+    closed_enum_with_docs:
+      doc: |
+        This is a closed enumeration, with each item having a docstring.
+      enumeration:
+        # comment 2
+        value0:
+          # comment 3
+          doc: |
+            Doc for value0
+        value1:
+          doc: |
+            Doc for value1
+        value2:
+          doc: |
+            Doc for value1
+    open_enum_no_docs:
+      doc: |
+        This is an open enumeration without any docstrings for the individual items.
+      enumeration:
+        # comment 4
+        open_enum: True
+        items: [value0, value1, value2]
+    open_enum_with_docs:
+      doc: |
+        This is a closed enumeration, with each item havin a docstring.
+      enumeration:
+        # comment 5
+        open_enum: True
+        value0:
+          # comment 6
+          doc: |
+            Doc for value0
+        value1:
+          doc: |
+            Doc for value1
+        value2:
+          doc: |
+            Doc for value2
+    open_enum_with_list_of_lists_and_docs(NX_NUMBER):
+      doc: |
+        This is a closed enumeration without any docstrings for the individual items.
+        The individual items are lists themselves.
+      enumeration:
+        "[1, 0, 0]":
+          doc: |
+            Doc for [1, 0, 0]
+        "[0, 1, 0]":
+          doc: |
+            Doc for [0, 1, 0]
+        "[0, 0, -1]":
+          doc: |
+            Doc for [0, 1, 0]

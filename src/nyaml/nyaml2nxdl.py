@@ -224,7 +224,7 @@ def check_for_skipped_attributes(component, value, allowed_attr=None, verbose=Fa
                 raise ValueError(
                     f"An attribute '{attr}' in part '{component}' has been found"
                     f". Please check around line '{value[line_number]}. At this "
-                    f"time, the allowed attrbutes are {allowed_attr}."
+                    f"time, the allowed attributes are {allowed_attr}."
                 )
 
 
@@ -509,9 +509,14 @@ def xml_handle_dimensions(dct, obj, keyword, value):
 def xml_handle_enumeration(dct, obj, keyword, value, verbose):
     """This function creates an 'enumeration' element instance.
 
-    Two cases are handled:
-    1) the items are in a list
-    2) the items are dictionaries and may contain a nested doc
+    Different cases are handled:
+    1) The items are in a flat list directly under "enumeration".
+    2) The items are in a dicitionary under the "items" key.
+    3) The items are dictionaries and may contain a nested doc.
+    4) The enumeration is open. The input is a dict with keywords "open_enum"
+       and "items" (which is  a flat list of all enum items without docs).
+    5) The enumeration is open. The input is a nested dict with keyword "open_enum"
+       and each items is a dict itself (with docs for each item).
     """
     line_number = f"__line__{keyword}"
     line_loc = dct[line_number]
@@ -530,12 +535,36 @@ bear at least an argument !"
             itm = ET.SubElement(enum, "item")
             itm.set("value", str(element))
     if isinstance(value, dict) and value != {}:
-        for element in value.keys():
+        if "open_enum" in value:
+            line_number = f"__line__{'open_enum'}"
+            line_loc = value[line_number]
+            xml_handle_comment(enum, line_number, line_loc)
+            enum.set("open", str(value["open_enum"]))
+
+            del value["open_enum"]
+
+        if "items" in value:
+            line_number = f"__line__{'items'}"
+            line_loc = value[line_number]
+            xml_handle_comment(enum, line_number, line_loc)
+
+            if isinstance(value["items"], list):
+                for element in value["items"]:
+                    itm = ET.SubElement(enum, "item")
+                    itm.set("value", str(element))
+            return
+
+        for element, elmnt_value in value.items():
             if "__line__" not in element:
                 itm = ET.SubElement(enum, "item")
                 itm.set("value", str(element))
-                if isinstance(value[element], dict):
-                    recursive_build(itm, value[element], verbose)
+
+                line_number = f"__line__{element}"
+                line_loc = value[line_number]
+
+                xml_handle_comment(enum, line_number, line_loc, itm)
+                if isinstance(elmnt_value, dict):
+                    recursive_build(itm, elmnt_value, verbose)
 
 
 # pylint: disable=unused-argument
@@ -804,7 +833,7 @@ def validate_field_attribute_and_value(v_attr, vval, allowed_attribute, value):
     if not isinstance(vval, dict) and not str(vval):  # check for empty value
         line_number = f"__line__{v_attr}"
         raise ValueError(
-            f"In a field a valid attrbute ('{v_attr}') found that is not stored."
+            f"In a field a valid attribute ('{v_attr}') found that is not stored."
             f" Please check around line {value[line_number]}"
         )
 

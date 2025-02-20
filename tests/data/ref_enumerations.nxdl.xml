@@ -1,0 +1,157 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
+<!--
+# NeXus - Neutron and X-ray Common Data Format
+#
+# Copyright (C) 2025-2025 NeXus International Advisory Committee (NIAC)
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# For further information, see http://www.nexusformat.org
+-->
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="base" type="group" name="NXenums" extends="NXobject" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+    <doc>
+        This is a test for enumerations.
+    </doc>
+    <group type="NXentry">
+        <field name="closed_enum_no_docs_list">
+            <doc>
+                This is a closed enumeration without any docstrings for the individual items.
+                The items are stored in a flat list.
+            </doc>
+            <!--comment 0-->
+            <enumeration>
+                <item value="value0"/>
+                <item value="value1"/>
+                <item value="value2"/>
+            </enumeration>
+        </field>
+        <field name="closed_enum_no_docs_dict">
+            <doc>
+                This is a closed enumeration without any docstrings for the individual items.
+                The items are stored in a dict with the items keyword.
+            </doc>
+            <enumeration>
+                <!--comment 1-->
+                <item value="value0"/>
+                <item value="value1"/>
+                <item value="value2"/>
+            </enumeration>
+        </field>
+        <field name="closed_enum_with_numbers" type="NX_NUMBER">
+            <doc>
+                This is a closed enumeration without NX_NUMBER items.
+            </doc>
+            <enumeration>
+                <item value="0"/>
+                <item value="1"/>
+                <item value="2"/>
+            </enumeration>
+        </field>
+        <field name="closed_enum_with_list_of_lists" type="NX_NUMBER">
+            <doc>
+                This is a closed enumeration without any docstrings for the individual items.
+                The individual items are lists themselves.
+            </doc>
+            <enumeration>
+                <item value="[1, 0, 0]"/>
+                <item value="[0, 1, 0]"/>
+                <item value="[0, 0, -1]"/>
+            </enumeration>
+        </field>
+        <field name="closed_enum_with_docs">
+            <doc>
+                This is a closed enumeration, with each item having a docstring.
+            </doc>
+            <enumeration>
+                <!--comment 2-->
+                <item value="value0">
+                    <!--comment 3-->
+                    <doc>
+                        Doc for value0
+                    </doc>
+                </item>
+                <item value="value1">
+                    <doc>
+                        Doc for value1
+                    </doc>
+                </item>
+                <item value="value2">
+                    <doc>
+                        Doc for value1
+                    </doc>
+                </item>
+            </enumeration>
+        </field>
+        <field name="open_enum_no_docs">
+            <doc>
+                This is an open enumeration without any docstrings for the individual items.
+            </doc>
+            <enumeration open="True">
+                <!--comment 4-->
+                <item value="value0"/>
+                <item value="value1"/>
+                <item value="value2"/>
+            </enumeration>
+        </field>
+        <field name="open_enum_with_docs">
+            <doc>
+                This is a closed enumeration, with each item havin a docstring.
+            </doc>
+            <enumeration open="True">
+                <!--comment 5-->
+                <item value="value0">
+                    <!--comment 6-->
+                    <doc>
+                        Doc for value0
+                    </doc>
+                </item>
+                <item value="value1">
+                    <doc>
+                        Doc for value1
+                    </doc>
+                </item>
+                <item value="value2">
+                    <doc>
+                        Doc for value2
+                    </doc>
+                </item>
+            </enumeration>
+        </field>
+        <field name="open_enum_with_list_of_lists_and_docs" type="NX_NUMBER">
+            <doc>
+                This is a closed enumeration without any docstrings for the individual items.
+                The individual items are lists themselves.
+            </doc>
+            <enumeration>
+                <item value="[1, 0, 0]">
+                    <doc>
+                        Doc for [1, 0, 0]
+                    </doc>
+                </item>
+                <item value="[0, 1, 0]">
+                    <doc>
+                        Doc for [0, 1, 0]
+                    </doc>
+                </item>
+                <item value="[0, 0, -1]">
+                    <doc>
+                        Doc for [0, 1, 0]
+                    </doc>
+                </item>
+            </enumeration>
+        </field>
+    </group>
+</definition>

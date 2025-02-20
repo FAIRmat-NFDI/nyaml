@@ -64,7 +64,7 @@ pyyaml==6.0.2
     # via
     #   nyaml (pyproject.toml)
     #   pre-commit
-ruff==0.9.4
+ruff==0.9.6
     # via nyaml (pyproject.toml)
 setuptools==75.8.0
     # via pip-tools
@@ -80,7 +80,7 @@ typing-extensions==4.12.2
     # via
     #   mypy
     #   types-lxml
-uv==0.6.1
+uv==0.6.2
     # via nyaml (pyproject.toml)
 virtualenv==20.29.2
     # via
