@@ -47,6 +47,13 @@ NXentry(NXobject):
   entry_identifier:
     doc: |
       Trailing line doc stringy. Trailing lines are removed
+  test_field:
+    \@vector(NX_NUMBER):
+      doc: |
+        Attribute with specific datatype within a field.
+  \@vector(NX_NUMBER):
+    doc: |
+      Attribute with specific datatype within a group.
   (NXuser):
   (NXsample):
   (NXinstrument):
@@ -57,7 +64,7 @@ NXentry(NXobject):
   (NXsubentry):
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 6e5f16c6d106f3b59aa4df6a9f254e1ba2041ed235e1f4377d7788adcb8f01a9
+# 995e38abead5a1e2ac7291d32653ac80d9d533e66f9ab05f3d416b5877315c14
 # <?xml version="1.0" encoding="UTF-8"?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl" ?>
 # <!--
@@ -145,6 +152,18 @@ NXentry(NXobject):
 #             Trailing line doc stringy. Trailing lines are removed
 #         </doc>
 #     </field>
+#     <field name="test_field">
+#         <attribute name="vector" type="NX_NUMBER">
+#             <doc>
+#                 Attribute with specific datatype within a field.
+#             </doc>
+#         </attribute>
+#     </field>
+#     <attribute name="vector" type="NX_NUMBER">
+#         <doc>
+#             Attribute with specific datatype within a group.
+#         </doc>
+#     </attribute>
 #     <group type="NXuser" />
 #     <group type="NXsample" />
 #     <group type="NXinstrument" />

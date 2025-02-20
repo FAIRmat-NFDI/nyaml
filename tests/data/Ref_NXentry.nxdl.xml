@@ -85,6 +85,18 @@
             Trailing line doc stringy. Trailing lines are removed
         </doc>
     </field>
+    <field name="test_field">
+        <attribute name="vector" type="NX_NUMBER">
+            <doc>
+                Attribute with specific datatype within a field.
+            </doc>
+        </attribute>
+    </field>
+    <attribute name="vector" type="NX_NUMBER">
+        <doc>
+            Attribute with specific datatype within a group.
+        </doc>
+    </attribute>
     <group type="NXuser" />
     <group type="NXsample" />
     <group type="NXinstrument" />
