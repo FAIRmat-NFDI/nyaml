@@ -33,13 +33,10 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-    "virtualenv>=20.26.6",
     "mypy",
     "ruff>=0.9.6",
     "pytest",
     "types-lxml",
-    "isort>=5.10",
-    "black>=24.3.0",
     "pip-tools",
     "pre-commit",
     "types-pyyaml",

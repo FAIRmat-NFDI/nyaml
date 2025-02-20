@@ -10,7 +10,7 @@
             "request": "launch",
             "cwd": "${workspaceFolder}",
             "program": "../.py3.11.11/bin/nyaml2nxdl",  //might need to change me
-            "args": [//"tests/data/NXdimensionsType.yaml",
+            "args": ["tests/data/NXdimensionsType.yaml",
                      //"tests/data/NXdimensionsType.nxdl.xml",
                      //"--check-consistency",
                      "--output-file=tests/data/NXdimensionsType.nxdl.xml",
