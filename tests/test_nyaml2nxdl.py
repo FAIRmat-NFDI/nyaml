@@ -764,8 +764,8 @@ def test_handle_xref(test_input, output, is_valid):
     [
         ("NXattributes"),
         ("NXcomment_yaml2nxdl"),
-        ("NXellipsometry-doCheck"),
-        ("NXmytests"),
+        ("NXellipsometry-docCheck"),
+        ("NXfit"),
     ],
 )
 def test_files(test_input):
@@ -786,3 +786,5 @@ def test_files(test_input):
     with open(ref_xml_output_file, "r", encoding="utf-8") as reffile:
         ref = reffile.readlines()
     assert log == ref
+
+    os.remove(test_xml_output_file)
