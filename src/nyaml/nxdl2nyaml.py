@@ -829,21 +829,28 @@ class Nxdl2yaml:
                 elif child_tag == CMNT_TAG and self.include_comment:
                     self.handle_comment(depth + 1, child, file_out)
         else:
+            enum_with_comment = False
             enum_list = []
             for child in node_children:
                 child_tag = remove_namespace_from_tag(child.tag)
                 if child_tag == "item":
                     enum_list.append(child.attrib["value"])
                 elif child_tag == CMNT_TAG and self.include_comment:
+                    file_out.write("\n")
                     self.handle_comment(depth + 1, child, file_out)
+                    # If there is a comment, we need to use the long notation with "items:"
+                    enum_with_comment = True
 
             if open_enum:
-                file_out.write(f"\n{indent + DEPTH_SIZE}open_enum: True")
+                file_out.write(f"{indent + DEPTH_SIZE}open_enum: True\n")
+
+            if open_enum or enum_with_comment:
                 file_out.write(
-                    f"\n{indent + DEPTH_SIZE}{'items'}: [{', '.join(enum_list)}]\n"
+                    f"{indent + DEPTH_SIZE}{'items'}: [{', '.join(enum_list)}]\n"
                 )
 
             else:
+                # Short notation as list if there is no comment or open enum
                 file_out.write(f" [{', '.join(enum_list)}]\n")
 
     def handle_attributes(self, depth, node, file_out):
