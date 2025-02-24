@@ -856,7 +856,6 @@ class Nxdl2yaml:
 
         indent = depth * DEPTH_SIZE
         escapesymbol = r"\@"
-        file_out.write(f"{indent}{escapesymbol}{name}:\n")
 
         tmp_dict = {}
         exists_dict = {}
@@ -875,6 +874,16 @@ class Nxdl2yaml:
                 tmp_dict["unit"] = val
             else:
                 tmp_dict[key] = val
+
+        datatype = tmp_dict.get("type")
+
+        if datatype:
+            name_txt = f"{indent}{escapesymbol}{name}({datatype}):\n"
+            del tmp_dict["type"]
+        else:
+            name_txt = f"{indent}{escapesymbol}{name}:\n"
+
+        file_out.write(name_txt)
 
         has_min_max = False
         has_opt_reco_requ = False
