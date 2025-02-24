@@ -71,9 +71,8 @@ NXdimensions(NXobject):
         of the dimensionsType attributes.
       dimensions:
         rank: 3
-        doc:         doc: |
+        doc: |
           My multiline
-
     rank_only(NX_NUMBER):
       doc: |
         Shorthand for cases that specify only the rank.
@@ -81,7 +80,7 @@ NXdimensions(NXobject):
         rank: symbol_a
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 8383959f2fe75ee255e0ee5348cb2a439ccf8196397d99010082eaf8c439078c
+# c76e51cfd7fbeb8b97bb2c46dd961a36ed803eb4660b89d0af33c7f198f4170c
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--

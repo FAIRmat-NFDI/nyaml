@@ -722,7 +722,10 @@ class Nxdl2yaml:
             # rank only notation
             file_out.write(f"{indent}dimensions:\n")
             for key, val in yml_dim_dct.items():
-                file_out.write(f"{indent}{' ' * 2}{key}: {val}\n")
+                if key == "doc":
+                    file_out.write(f"{val}")
+                    continue
+                file_out.write(f"{indent}{DEPTH_SIZE}{key}: {val}\n")
         else:
             use_shorthand_notation = True  # try to falsify this default assumption
             for key, obj in yml_dim_dct.items():
