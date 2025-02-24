@@ -25,24 +25,16 @@
     <doc>
         This is a test for enumerations.
     </doc>
+    <!-- comment0 -->
     <group type="NXentry">
         <field name="closed_enum_no_docs_list">
             <doc>
                 This is a closed enumeration without any docstrings for the individual items.
                 The items are stored in a flat list.
             </doc>
+            <!-- comment0 -->
             <enumeration>
-                <item value="value0"/>
-                <item value="value1"/>
-                <item value="value2"/>
-            </enumeration>
-        </field>
-        <field name="closed_enum_no_docs_dict">
-            <doc>
-                This is a closed enumeration without any docstrings for the individual items.
-                The items are stored in a dict with the items keyword.
-            </doc>
-            <enumeration>
+                <!-- comment1 -->
                 <item value="value0"/>
                 <item value="value1"/>
                 <item value="value2"/>
@@ -74,7 +66,9 @@
                 This is a closed enumeration, with each item having a docstring.
             </doc>
             <enumeration>
+                <!-- comment2 -->
                 <item value="value0">
+                    <!-- comment3 -->
                     <doc>
                         Doc for value0
                     </doc>
@@ -96,6 +90,7 @@
                 This is an open enumeration without any docstrings for the individual items.
             </doc>
             <enumeration open="True">
+                <!-- comment4 -->
                 <item value="value0"/>
                 <item value="value1"/>
                 <item value="value2"/>
@@ -106,7 +101,9 @@
                 This is a closed enumeration, with each item havin a docstring.
             </doc>
             <enumeration open="True">
+                <!-- comment5 -->
                 <item value="value0">
+                    <!-- comment6 --> 
                     <doc>
                         Doc for value0
                     </doc>
