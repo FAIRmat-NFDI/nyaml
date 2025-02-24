@@ -681,13 +681,13 @@ class Nxdl2yaml:
                 #   <doc>somedocstring</doc>
 
         # dimensionsType, docstring, if present
-        # for child in list(node):
-        #     tag = remove_namespace_from_tag(child.tag)
-        #     if tag == "doc":
-        #         yml_dim_dct["doc"] = self.handle_not_root_level_doc(
-        #             depth + 1, child.text, "doc", None
-        #         )
-        #         break  # dimensionsType can have only one top-level docstring
+        for child in list(node):
+            tag = remove_namespace_from_tag(child.tag)
+            if tag == "doc":
+                yml_dim_dct["doc"] = self.handle_not_root_level_doc(
+                    depth + 1, child.text, "doc", None
+                )
+                break  # dimensionsType can have only one top-level docstring
 
         # individual dimensionsType dim elements - the individual dimensions - if present
         for child in list(node):
@@ -718,11 +718,14 @@ class Nxdl2yaml:
         # perform I/O based on the cases analyzed
         yml_dim_dct_keys = list(yml_dim_dct)
         indent = depth * DEPTH_SIZE
-        if set(yml_dim_dct_keys) in [{"rank"}, {"doc", "rank"}, {"doc"}]:
+        if set(yml_dim_dct_keys) in [{"rank"}, {"doc", "rank"}]:
             # rank only notation
             file_out.write(f"{indent}dimensions:\n")
             for key, val in yml_dim_dct.items():
-                file_out.write(f"{indent}{' ' * 2}{key}: {val}\n")
+                if key == "doc":
+                    file_out.write(f"{val}")
+                    continue
+                file_out.write(f"{indent}{DEPTH_SIZE}{key}: {val}\n")
         else:
             use_shorthand_notation = True  # try to falsify this default assumption
             for key, obj in yml_dim_dct.items():
