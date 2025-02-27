@@ -39,6 +39,7 @@ from nyaml.helper import (
     get_yaml_escape_char_dict,
     is_copyright_comment,
     remove_namespace_from_tag,
+    check_for_proper_nameType,
 )
 
 DEPTH_SIZE = 2 * " "
@@ -595,6 +596,10 @@ class Nxdl2yaml:
         indent = depth * DEPTH_SIZE
         file_out.write(f"{indent}{name_type}:\n")
 
+        name = node_attr.get("name")
+        nameType = node_attr.get("nameType")
+        check_for_proper_nameType(name, nameType, name)
+
         for key in rm_key_list:
             del node_attr[key]
 
@@ -862,6 +867,7 @@ class Nxdl2yaml:
         name = ""
         nm_attr = "name"
         node_attr = node.attrib
+
         # Maintain order: name and type in form name(type) or (type)name that come first
         name = node_attr.pop(nm_attr, "")
         if not name:
@@ -872,6 +878,10 @@ class Nxdl2yaml:
 
         tmp_dict = {}
         exists_dict = {}
+
+        nameType = node_attr.get("nameType")
+        check_for_proper_nameType(name, nameType, name)
+
         for key, val in node_attr.items():
             if key not in NXDL_ATTRIBUTES_ATTRIBUTES:
                 raise ValueError(
@@ -934,6 +944,9 @@ class Nxdl2yaml:
         if name:
             indent = depth * DEPTH_SIZE
             file_out.write(f"{indent}{name}(link):\n")
+
+        nameType = node_attr.get("nameType")
+        check_for_proper_nameType(name, nameType, name)
 
         depth_ = depth + 1
         # Handle general cases

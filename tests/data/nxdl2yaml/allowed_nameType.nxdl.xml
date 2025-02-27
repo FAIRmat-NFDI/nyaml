@@ -140,7 +140,7 @@
                         middle.
                     </doc>
                 </attribute>
-                <link name="linkLINKlink" nameType="specified" target="field">
+                <link name="linkLINKlink" target="field" nameType="partial">
                     <doc>
                         A partially-renameable link with nameType="partial". Variadic part in the
                         middle.
@@ -148,46 +148,46 @@
                 </link>
             </field>
         </group>
-        <group name="OBJECTobject" type="NXobject" nameType="specified">
+        <group name="OBJECTobject" type="NXobject" nameType="partial">
             <doc>
                 A partially-renameable group with nameType="partial". Variadic part at the
                 start.
             </doc>
-            <field name="FIELDfield" nameType="specified">
+            <field name="FIELDfield" nameType="partial">
                 <doc>
                     A partially-renameable field with nameType="partial". Variadic part at the
                     start.
                 </doc>
-                <attribute name="ATTRIBUTEattribute" nameType="specified">
+                <attribute name="ATTRIBUTEattribute" nameType="partial">
                     <doc>
                         A partially-renameable attribute with nameType="partial". Variadic part at the
                         start.
                     </doc>
                 </attribute>
-                <link name="LINKlink" nameType="specified" target="field">
+                <link name="LINKlink" target="field" nameType="partial">
                     <doc>
                         A partially-renameable link with nameType="partial". Variadic part at the start.
                     </doc>
                 </link>
             </field>
         </group>
-        <group name="OBJECTobjectOBJECTobject" type="NXobject" nameType="partial">
+        <group name="OBJECTobjectOBJECTobject" type="NXobject" nameType="specified">
             <doc>
                 A partially-renameable group with nameType="partial". Multiple variadic and non-
                 variadic parts.
             </doc>
-            <field name="FIELDfieldFIELDfield" nameType="partial">
+            <field name="FIELDfieldFIELDfield" nameType="specified">
                 <doc>
                     A partially-renameable field with nameType="partial". Multiple variadic and non-
                     variadic parts.
                 </doc>
-                <attribute name="ATTRIBUTEattributeATTRIBUTEattribute" nameType="partial">
+                <attribute name="ATTRIBUTEattributeATTRIBUTEattribute" nameType="specified">
                     <doc>
                         A partially-renameable attribute with nameType="partial". Multiple variadic and
                         non-variadic parts.
                     </doc>
                 </attribute>
-                <link name="LINKlinkLINKlink" nameType="partial" target="field">
+                <link name="LINKlinkLINKlink" target="field" nameType="specified">
                     <doc>
                         A partially-renameable link with nameType="partial". Multiple variadic and non-
                         variadic parts.

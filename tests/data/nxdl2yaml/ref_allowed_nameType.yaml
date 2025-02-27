@@ -1,0 +1,345 @@
+category: base
+doc: |
+  NXnametype test
+type: group
+NXallowed_name_type(NXobject):
+  lower_case_group_no_nametype(NXobject):
+    doc: |
+      An all lower case group with no nameType.
+    lower_case_field_no_nametype:
+      doc: |
+        An all lower case field with no nameType.
+      \@lower_case_attribute_no_nametype:
+        doc: |
+          An all lower case attribute with no nameType.
+    lower_case_link_no_nametype(link):
+      target: field
+      doc: |
+        An all lower case link with no nameType.
+  lower_case_group_specified(NXobject):
+    nameType: specified
+    doc: |
+      An all lower case group with nameType="specified".
+    lower_case_field_specified:
+      nameType: specified
+      doc: |
+        An all lower case field with nameType="specified".
+      \@lower_case_attribute_specified:
+        nameType: specified
+        doc: |
+          An all lower case attribute with nameType="specified".
+      lower_case_link_specified(link):
+        target: field
+        doc: |
+          An all lower case link with no nameType.
+    (NXobject):
+      doc: |
+        An unnamed group with no nameType. Interpretead as nameType="any".
+      FIELD:
+        doc: |
+          An unnamed field with no nameType. Interpretead as nameType="any".
+        \@ATTRIBUTE:
+          doc: |
+            An unnamed attribute no nameType. Interpretead as nameType="any".
+        LINK(link):
+          target: field
+          doc: |
+            An unnamed link with no nameType. Interpretead as nameType="any".
+    (NXdata):
+      nameType: any
+      doc: |
+        An unnamed group with nameType="any".
+      FIELD:
+        nameType: any
+        doc: |
+          An unnamed field with nameType="any".
+        \@ATTRIBUTE:
+          nameType: any
+          doc: |
+            An unnamed attribute with nameType="any".
+        LINK(link):
+          nameType: any
+          target: field
+          doc: |
+            An unnamed link with nameType="any".
+    objectOBJECT(NXobject):
+      nameType: partial
+      doc: |
+        A partially-renameable group with nameType="partial". Variadic part at the end.
+      fieldFIELD:
+        nameType: partial
+        doc: |
+          A partially-renameable field with nameType="partial". Variadic part at the end.
+        \@attributeATTRIBUTE:
+          nameType: partial
+          doc: |
+            A partially-renameable attribute nameType="partial". Variadic part at the end.
+        linkLINK(link):
+          nameType: partial
+          target: field
+          doc: |
+            A partially-renameable link nameType="partial". Variadic part at the end.
+    objectOBJECTobject(NXobject):
+      nameType: specified
+      doc: |
+        A partially-renameable group with nameType="partial". Variadic part in the
+        middle.
+      fieldFIELDfield:
+        nameType: specified
+        doc: |
+          A partially-renameable field with nameType="partial". Variadic part in the
+          middle.
+        \@attributeATTRIBUTEattribute:
+          nameType: specified
+          doc: |
+            A partially-renameable attribute with nameType="partial". Variadic part in the
+            middle.
+        linkLINKlink(link):
+          target: field
+          nameType: partial
+          doc: |
+            A partially-renameable link with nameType="partial". Variadic part in the
+            middle.
+    OBJECTobject(NXobject):
+      nameType: partial
+      doc: |
+        A partially-renameable group with nameType="partial". Variadic part at the
+        start.
+      FIELDfield:
+        nameType: partial
+        doc: |
+          A partially-renameable field with nameType="partial". Variadic part at the
+          start.
+        \@ATTRIBUTEattribute:
+          nameType: partial
+          doc: |
+            A partially-renameable attribute with nameType="partial". Variadic part at the
+            start.
+        LINKlink(link):
+          target: field
+          nameType: partial
+          doc: |
+            A partially-renameable link with nameType="partial". Variadic part at the start.
+    OBJECTobjectOBJECTobject(NXobject):
+      nameType: specified
+      doc: |
+        A partially-renameable group with nameType="partial". Multiple variadic and non-
+        variadic parts.
+      FIELDfieldFIELDfield:
+        nameType: specified
+        doc: |
+          A partially-renameable field with nameType="partial". Multiple variadic and non-
+          variadic parts.
+        \@ATTRIBUTEattributeATTRIBUTEattribute:
+          nameType: specified
+          doc: |
+            A partially-renameable attribute with nameType="partial". Multiple variadic and
+            non-variadic parts.
+        LINKlinkLINKlink(link):
+          target: field
+          nameType: specified
+          doc: |
+            A partially-renameable link with nameType="partial". Multiple variadic and non-
+            variadic parts.
+
+# ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
+# 41badfbc71e26dfa487feee3574c1a002dd8dda03da498fa6aba060e126a4648
+# <?xml version='1.0' encoding='UTF-8'?>
+# <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
+# <!--
+# # NeXus - Neutron and X-ray Common Data Format
+# #
+# # Copyright (C) 2025-2025 NeXus International Advisory Committee (NIAC)
+# #
+# # This library is free software; you can redistribute it and/or
+# # modify it under the terms of the GNU Lesser General Public
+# # License as published by the Free Software Foundation; either
+# # version 3 of the License, or (at your option) any later version.
+# #
+# # This library is distributed in the hope that it will be useful,
+# # but WITHOUT ANY WARRANTY; without even the implied warranty of
+# # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# # Lesser General Public License for more details.
+# #
+# # You should have received a copy of the GNU Lesser General Public
+# # License along with this library; if not, write to the Free Software
+# # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# #
+# # For further information, see http://www.nexusformat.org
+# -->
+# <definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="base" type="group" name="NXallowed_name_type" extends="NXobject" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+#     <doc>
+#         NXnametype test
+#     </doc>
+#     <group name="lower_case_group_no_nametype" type="NXobject">
+#         <doc>
+#             An all lower case group with no nameType.
+#         </doc>
+#         <field name="lower_case_field_no_nametype">
+#             <doc>
+#                 An all lower case field with no nameType.
+#             </doc>
+#             <attribute name="lower_case_attribute_no_nametype">
+#                 <doc>
+#                     An all lower case attribute with no nameType.
+#                 </doc>
+#             </attribute>
+#         </field>
+#         <link name="lower_case_link_no_nametype" target="field">
+#             <doc>
+#                 An all lower case link with no nameType.
+#             </doc>
+#         </link>
+#     </group>
+#     <group name="lower_case_group_specified" type="NXobject" nameType="specified">
+#         <doc>
+#             An all lower case group with nameType="specified".
+#         </doc>
+#         <field name="lower_case_field_specified" nameType="specified">
+#             <doc>
+#                 An all lower case field with nameType="specified".
+#             </doc>
+#             <attribute name="lower_case_attribute_specified" nameType="specified">
+#                 <doc>
+#                     An all lower case attribute with nameType="specified".
+#                 </doc>
+#             </attribute>
+#             <link name="lower_case_link_specified" target="field">
+#                 <doc>
+#                     An all lower case link with no nameType.
+#                 </doc>
+#             </link>
+#         </field>
+#         <group type="NXobject">
+#             <doc>
+#                 An unnamed group with no nameType. Interpretead as nameType="any".
+#             </doc>
+#             <field name="FIELD">
+#                 <doc>
+#                     An unnamed field with no nameType. Interpretead as nameType="any".
+#                 </doc>
+#                 <attribute name="ATTRIBUTE">
+#                     <doc>
+#                         An unnamed attribute no nameType. Interpretead as nameType="any".
+#                     </doc>
+#                 </attribute>
+#                 <link name="LINK" target="field">
+#                     <doc>
+#                         An unnamed link with no nameType. Interpretead as nameType="any".
+#                     </doc>
+#                 </link>
+#             </field>
+#         </group>
+#         <group type="NXdata" nameType="any">
+#             <doc>
+#                 An unnamed group with nameType="any".
+#             </doc>
+#             <field name="FIELD" nameType="any">
+#                 <doc>
+#                     An unnamed field with nameType="any".
+#                 </doc>
+#                 <attribute name="ATTRIBUTE" nameType="any">
+#                     <doc>
+#                         An unnamed attribute with nameType="any".
+#                     </doc>
+#                 </attribute>
+#                 <link name="LINK" nameType="any" target="field">
+#                     <doc>
+#                         An unnamed link with nameType="any".
+#                     </doc>
+#                 </link>
+#             </field>
+#         </group>
+#         <group name="objectOBJECT" type="NXobject" nameType="partial">
+#             <doc>
+#                 A partially-renameable group with nameType="partial". Variadic part at the end.
+#             </doc>
+#             <field name="fieldFIELD" nameType="partial">
+#                 <doc>
+#                     A partially-renameable field with nameType="partial". Variadic part at the end.
+#                 </doc>
+#                 <attribute name="attributeATTRIBUTE" nameType="partial">
+#                     <doc>
+#                         A partially-renameable attribute nameType="partial". Variadic part at the end.
+#                     </doc>
+#                 </attribute>
+#                 <link name="linkLINK" nameType="partial" target="field">
+#                     <doc>
+#                         A partially-renameable link nameType="partial". Variadic part at the end.
+#                     </doc>
+#                 </link>
+#             </field>
+#         </group>
+#         <group name="objectOBJECTobject" type="NXobject" nameType="specified">
+#             <doc>
+#                 A partially-renameable group with nameType="partial". Variadic part in the
+#                 middle.
+#             </doc>
+#             <field name="fieldFIELDfield" nameType="specified">
+#                 <doc>
+#                     A partially-renameable field with nameType="partial". Variadic part in the
+#                     middle.
+#                 </doc>
+#                 <attribute name="attributeATTRIBUTEattribute" nameType="specified">
+#                     <doc>
+#                         A partially-renameable attribute with nameType="partial". Variadic part in the
+#                         middle.
+#                     </doc>
+#                 </attribute>
+#                 <link name="linkLINKlink" target="field" nameType="partial">
+#                     <doc>
+#                         A partially-renameable link with nameType="partial". Variadic part in the
+#                         middle.
+#                     </doc>
+#                 </link>
+#             </field>
+#         </group>
+#         <group name="OBJECTobject" type="NXobject" nameType="partial">
+#             <doc>
+#                 A partially-renameable group with nameType="partial". Variadic part at the
+#                 start.
+#             </doc>
+#             <field name="FIELDfield" nameType="partial">
+#                 <doc>
+#                     A partially-renameable field with nameType="partial". Variadic part at the
+#                     start.
+#                 </doc>
+#                 <attribute name="ATTRIBUTEattribute" nameType="partial">
+#                     <doc>
+#                         A partially-renameable attribute with nameType="partial". Variadic part at the
+#                         start.
+#                     </doc>
+#                 </attribute>
+#                 <link name="LINKlink" target="field" nameType="partial">
+#                     <doc>
+#                         A partially-renameable link with nameType="partial". Variadic part at the start.
+#                     </doc>
+#                 </link>
+#             </field>
+#         </group>
+#         <group name="OBJECTobjectOBJECTobject" type="NXobject" nameType="specified">
+#             <doc>
+#                 A partially-renameable group with nameType="partial". Multiple variadic and non-
+#                 variadic parts.
+#             </doc>
+#             <field name="FIELDfieldFIELDfield" nameType="specified">
+#                 <doc>
+#                     A partially-renameable field with nameType="partial". Multiple variadic and non-
+#                     variadic parts.
+#                 </doc>
+#                 <attribute name="ATTRIBUTEattributeATTRIBUTEattribute" nameType="specified">
+#                     <doc>
+#                         A partially-renameable attribute with nameType="partial". Multiple variadic and
+#                         non-variadic parts.
+#                     </doc>
+#                 </attribute>
+#                 <link name="LINKlinkLINKlink" target="field" nameType="specified">
+#                     <doc>
+#                         A partially-renameable link with nameType="partial". Multiple variadic and non-
+#                         variadic parts.
+#                     </doc>
+#                 </link>
+#             </field>
+#         </group>
+#     </group>
+# </definition>

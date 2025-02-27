@@ -316,17 +316,36 @@ def test_nyaml2nxdl_prohibited_nameType(
     assert expected_error in (str(result.output) + str(result.exception))
 
 
-# def test_nametypes():
-#     """In this test an xml file in converted to yml and then back to xml.
-#     The xml trees of the two files are then compared.
-#     """
-#     ref_xml_file = "tests/data/Ref_NXnametype.nxdl.xml"
-#     test_yml_file = "tests/data/NXnametype.yaml"
-#     test_xml_file = "tests/data/NXnametype.nxdl.xml"
+def test_nxdl2yaml_nameType():
+    """
+    Check the correct handling of the nameType attribute for the direction
+    nxdl->nyaml.
+    """
+    ref_xml_file = "tests/data/nxdl2yaml/allowed_nameType.nxdl.xml"
+    ref_yml_file = "tests/data/nxdl2yaml/ref_allowed_nameType.yaml"
+    test_yml_file = "tests/data/nxdl2yaml/allowed_nameType_parsed.yaml"
 
-#     compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
-#     os.remove("tests/data/NXnametype.nxdl.xml")
-#     sys.stdout.write("Test on nametypes okay.\n")
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
+    assert result.exit_code == 0
+    check_file_fresh_baked(test_yml_file)
+
+    result = filecmp.cmp(ref_yml_file, test_yml_file, shallow=False)
+
+    assert result, "Ref YML and parsed YML don't have the same structure!"
+    os.remove(test_yml_file)
+    sys.stdout.write("Test on xml -> yml nameType okay.\n")
+
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
+    assert result.exit_code == 0
+    check_file_fresh_baked(test_yml_file)
+
+    result = filecmp.cmp(ref_yml_file, test_yml_file, shallow=False)
+    assert result, (
+        "Ref YML and parsed YML\
+has not the same structure!!"
+    )
+    os.remove(test_yml_file)
+    sys.stdout.write("Test on xml -> yml doc formatting okay.\n")
 
 
 def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
