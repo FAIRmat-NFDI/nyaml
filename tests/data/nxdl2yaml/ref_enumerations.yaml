@@ -91,7 +91,7 @@ NXenums(NXobject):
             Doc for [0, 1, 0]
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 51461f14519577e50600705c70198ca954b9a17c2829b5f8bdf329554c30e1c0
+# 68e10a065a01b87643a4ea73b2f85ba6bff06f96e90545a377e6da38522a8ae1
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--
@@ -227,7 +227,7 @@ NXenums(NXobject):
 #                 This is a closed enumeration without any docstrings for the individual items.
 #                 The individual items are lists themselves.
 #             </doc>
-#             <enumeration>
+#             <enumeration open="true">
 #                 <item value="[1, 0, 0]">
 #                     <doc>
 #                         Doc for [1, 0, 0]
