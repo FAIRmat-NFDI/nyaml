@@ -507,7 +507,7 @@ mode:
     doc: |
       source operating mode
     enumeration:
-      open_enum: True
+      open_enum: true
       items: [Single Bunch, Multi Bunch]
 ```
 
@@ -518,7 +518,7 @@ mode:
     doc: |
       source operating mode
     enumeration:
-      open_enum: True
+      open_enum: true
       Single Bunch:
         doc: |
           for storage rings

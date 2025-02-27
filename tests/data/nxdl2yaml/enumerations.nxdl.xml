@@ -89,18 +89,26 @@
             <doc>
                 This is an open enumeration without any docstrings for the individual items.
             </doc>
-            <enumeration open="True">
+            <enumeration open="true">
                 <!-- comment4 -->
                 <item value="value0"/>
                 <item value="value1"/>
                 <item value="value2"/>
             </enumeration>
         </field>
+        <field name="open_enum_no_docs_no_comments">
+            <doc>name for measured signal</doc>
+            <enumeration open="true">
+                <item value="value0" />
+                <item value="value1" />
+                <item value="value2" />
+            </enumeration>
+        </field>
         <field name="open_enum_with_docs">
             <doc>
                 This is a closed enumeration, with each item havin a docstring.
             </doc>
-            <enumeration open="True">
+            <enumeration open="true">
                 <!-- comment5 -->
                 <item value="value0">
                     <!-- comment6 --> 
@@ -125,7 +133,7 @@
                 This is a closed enumeration without any docstrings for the individual items.
                 The individual items are lists themselves.
             </doc>
-            <enumeration>
+            <enumeration open="true">
                 <item value="[1, 0, 0]">
                     <doc>
                         Doc for [1, 0, 0]

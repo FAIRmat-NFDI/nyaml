@@ -48,13 +48,19 @@ NXenums(NXobject):
       enumeration:
         
         # comment4
-        open_enum: True
+        open_enum: true
+        items: [value0, value1, value2]
+    open_enum_no_docs_no_comments:
+      doc: |
+        name for measured signal
+      enumeration:
+        open_enum: true
         items: [value0, value1, value2]
     open_enum_with_docs:
       doc: |
         This is a closed enumeration, with each item havin a docstring.
       enumeration:
-        open_enum: True
+        open_enum: true
         
         # comment5
         value0:
@@ -73,6 +79,7 @@ NXenums(NXobject):
         This is a closed enumeration without any docstrings for the individual items.
         The individual items are lists themselves.
       enumeration:
+        open_enum: true
         "[1, 0, 0]":
           doc: |
             Doc for [1, 0, 0]
@@ -84,7 +91,7 @@ NXenums(NXobject):
             Doc for [0, 1, 0]
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 5d14528066ca9b9398a9955c6a4d67be48baa5b5e34d44e99911f17e185818b9
+# 51461f14519577e50600705c70198ca954b9a17c2829b5f8bdf329554c30e1c0
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--
@@ -176,18 +183,26 @@ NXenums(NXobject):
 #             <doc>
 #                 This is an open enumeration without any docstrings for the individual items.
 #             </doc>
-#             <enumeration open="True">
+#             <enumeration open="true">
 #                 <!-- comment4 -->
 #                 <item value="value0"/>
 #                 <item value="value1"/>
 #                 <item value="value2"/>
 #             </enumeration>
 #         </field>
+#         <field name="open_enum_no_docs_no_comments">
+#             <doc>name for measured signal</doc>
+#             <enumeration open="true">
+#                 <item value="value0" />
+#                 <item value="value1" />
+#                 <item value="value2" />
+#             </enumeration>
+#         </field>
 #         <field name="open_enum_with_docs">
 #             <doc>
 #                 This is a closed enumeration, with each item havin a docstring.
 #             </doc>
-#             <enumeration open="True">
+#             <enumeration open="true">
 #                 <!-- comment5 -->
 #                 <item value="value0">
 #                     <!-- comment6 --> 
