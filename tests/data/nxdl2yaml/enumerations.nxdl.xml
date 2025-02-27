@@ -131,7 +131,7 @@
         </field>
         <field name="open_enum_with_docs">
             <doc>
-                This is a closed enumeration, with each item having a docstring.
+                This is an open enumeration, with each item having a docstring.
             </doc>
             <enumeration open="true">
                 <!-- comment5 -->

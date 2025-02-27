@@ -284,7 +284,9 @@ def test_nxdl2yaml_enumerations():
     ref_yml_file = "tests/data/nxdl2yaml/ref_enumerations.yaml"
     test_yml_file = "tests/data/nxdl2yaml/enumerations_parsed.yaml"
 
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", str(ref_xml_file)]
+    )
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
 
