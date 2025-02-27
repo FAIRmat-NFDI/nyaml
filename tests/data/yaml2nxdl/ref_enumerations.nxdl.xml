@@ -118,12 +118,23 @@
                 </item>
             </enumeration>
         </field>
-        <field name="open_enum_no_docs">
+        <field name="open_enum_no_docs_no_comments">
             <doc>
                 This is an open enumeration without any docstrings for the individual items.
             </doc>
             <enumeration open="true">
-                <!--comment 4-->
+                <item value="value0"/>
+                <item value="value1"/>
+                <item value="value2"/>
+            </enumeration>
+        </field>
+        <field name="open_enum_no_docs_with_comments">
+            <doc>
+                This is an open enumeration without any docstrings for the individual items.
+                There is a comment in the enumeration.
+            </doc>
+            <enumeration open="true">
+                <!--comment4-->
                 <item value="value0"/>
                 <item value="value1"/>
                 <item value="value2"/>

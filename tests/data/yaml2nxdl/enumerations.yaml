@@ -55,11 +55,18 @@ NXenums(NXobject):
         "[0, 0, -1]":
           doc: |
             Doc for [0, 1, 0]
-    open_enum_no_docs:
+    open_enum_no_docs_no_comments:
       doc: |
         This is an open enumeration without any docstrings for the individual items.
       enumeration:
-        # comment 4
+        open_enum: true
+        items: [value0, value1, value2]
+    open_enum_no_docs_with_comments:
+      doc: |
+        This is an open enumeration without any docstrings for the individual items.
+        There is a comment in the enumeration.
+      enumeration:
+        # comment4
         open_enum: true
         items: [value0, value1, value2]
     open_enum_with_docs:

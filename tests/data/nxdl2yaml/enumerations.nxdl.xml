@@ -25,7 +25,6 @@
     <doc>
         This is a test for enumerations.
     </doc>
-    <!-- comment0 -->
     <group type="NXentry">
         <field name="closed_enum_no_docs_list">
             <doc>
@@ -42,7 +41,7 @@
         </field>
         <field name="closed_enum_with_numbers" type="NX_NUMBER">
             <doc>
-                This is a closed enumeration without NX_NUMBER items.
+                This is a closed enumeration with NX_NUMBER items.
             </doc>
             <enumeration>
                 <item value="0"/>
@@ -52,7 +51,7 @@
         </field>
         <field name="closed_enum_with_list_of_lists" type="NX_NUMBER">
             <doc>
-                This is a closed enumeration without any docstrings for the individual items.
+                This is a closed enumeration with docstrings for the individual items.
                 The individual items are lists themselves.
             </doc>
             <enumeration>
@@ -85,9 +84,43 @@
                 </item>
             </enumeration>
         </field>
-        <field name="open_enum_no_docs">
+        <field name="closed_enum_with_list_of_lists_and_docs" type="NX_NUMBER">
+            <doc>
+                This is a closed enumeration without any docstrings for the individual items.
+                The individual items are lists themselves.
+            </doc>
+            <enumeration>
+                <item value="[1, 0, 0]">
+                    <doc>
+                        Doc for [1, 0, 0]
+                    </doc>
+                </item>
+                <item value="[0, 1, 0]">
+                    <doc>
+                        Doc for [0, 1, 0]
+                    </doc>
+                </item>
+                <item value="[0, 0, -1]">
+                    <doc>
+                        Doc for [0, 1, 0]
+                    </doc>
+                </item>
+            </enumeration>
+        </field>
+        <field name="open_enum_no_docs_no_comments">
             <doc>
                 This is an open enumeration without any docstrings for the individual items.
+            </doc>
+            <enumeration open="true">
+                <item value="value0"/>
+                <item value="value1"/>
+                <item value="value2"/>
+            </enumeration>
+        </field>
+        <field name="open_enum_no_docs_with_comments">
+            <doc>
+                This is an open enumeration without any docstrings for the individual items.
+                There is a comment in the enumeration.
             </doc>
             <enumeration open="true">
                 <!-- comment4 -->
@@ -96,17 +129,9 @@
                 <item value="value2"/>
             </enumeration>
         </field>
-        <field name="open_enum_no_docs_no_comments">
-            <doc>name for measured signal</doc>
-            <enumeration open="true">
-                <item value="value0" />
-                <item value="value1" />
-                <item value="value2" />
-            </enumeration>
-        </field>
         <field name="open_enum_with_docs">
             <doc>
-                This is a closed enumeration, with each item havin a docstring.
+                This is a closed enumeration, with each item having a docstring.
             </doc>
             <enumeration open="true">
                 <!-- comment5 -->
@@ -130,7 +155,7 @@
         </field>
         <field name="open_enum_with_list_of_lists_and_docs" type="NX_NUMBER">
             <doc>
-                This is a closed enumeration without any docstrings for the individual items.
+                This is an open enumeration with docstrings for the individual items.
                 The individual items are lists themselves.
             </doc>
             <enumeration open="true">
