@@ -282,7 +282,7 @@ class Nxdl2yaml:
     def clean_and_organise_text(self, text, depth):
         """Reconstruct text from doc and comment.
 
-        Cleaninig up unintentional and accidental empty lines and spaces.
+        Cleaning up unintentional and accidental empty lines and spaces.
         """
         # Handling empty doc
         if not text:
@@ -314,7 +314,7 @@ class Nxdl2yaml:
             # for indent_diff -ve all lines will move left by the same amount
             # for indent_diff +ve all lines will move right by the same amount
             indent_diff = yaml_indent_n - first_line_indent_n
-            # CHeck for first line empty if not keep first line empty
+            # Check if first line empty if not keep first line empty
 
             for line in text:
                 line_indent_n = 0
@@ -575,25 +575,26 @@ class Nxdl2yaml:
     # pylint: disable=too-many-branches
     def handle_group_or_field(self, depth, node, file_out):
         """Handle all the possible attributes that come along a field or group"""
-
-        name_type = ""
         node_attr = node.attrib
         rm_key_list = []
-        # Maintain order: name and type in form name(type) or (type)name that come first
-        for key, val in node_attr.items():
-            if key == "name":
-                name_type = name_type + val
-                rm_key_list.append(key)
-            elif key == "type":
-                name_type = f"{name_type}({val})"
-                rm_key_list.append(key)
-        if not name_type:
+        # Order: name and type in form name(type)
+        name = node_attr.get("name", "")
+        if name:
+            rm_key_list.append("name")
+        nx_type = node_attr.get("type", "")
+        if nx_type:
+            rm_key_list.append("type")
+            nx_type = f"({nx_type})"
+
+        name_and_type = f"{name}{nx_type}"
+
+        if not name_and_type:
             raise ValueError(
                 f"No 'name' or 'type' has been found. But, 'group' or 'field' "
                 f"must have at least a name.We have attributes:  {node_attr}"
             )
         indent = depth * DEPTH_SIZE
-        file_out.write(f"{indent}{name_type}:\n")
+        file_out.write(f"{indent}{name_and_type}:\n")
 
         for key in rm_key_list:
             del node_attr[key]

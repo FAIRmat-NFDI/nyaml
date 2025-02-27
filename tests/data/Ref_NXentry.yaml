@@ -31,7 +31,7 @@ NXentry(NXobject):
   experiment_description:
     doc: |
       My single line doc string.
-  (NXnote)experiment_documentation:
+  experiment_documentation(NXnote):
     doc: |
       My single line doc string, with doc tags in different lines
   collection_identifier:
@@ -64,7 +64,7 @@ NXentry(NXobject):
   (NXsubentry):
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 995e38abead5a1e2ac7291d32653ac80d9d533e66f9ab05f3d416b5877315c14
+# 8d8156cf685e453b5484635835e30c6a8fa7dbe6b16c0c64afae82c6e444de14
 # <?xml version="1.0" encoding="UTF-8"?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl" ?>
 # <!--
