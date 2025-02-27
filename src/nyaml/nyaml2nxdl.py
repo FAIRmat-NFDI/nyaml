@@ -45,6 +45,7 @@ from nyaml.helper import (
     is_copyright_comment,
     nx_name_type_resolving,
     remove_namespace_from_tag,
+    check_for_proper_nameType,
 )
 
 DOM_COMMENT = (
@@ -577,13 +578,14 @@ def xml_handle_link(dct, obj, keyword, value, verbose):
     """
     If we have an NXDL link we decode the name attribute from <optional string>(link)[:-6]
     """
-
     line_number = f"__line__{keyword}"
     line_loc = dct[line_number]
     xml_handle_comment(obj, line_number, line_loc)
     name = keyword[:-6]
     link_obj = ET.SubElement(obj, "link")
     link_obj.set("name", str(name))
+
+    xml_handle_nametype(keyword, keyword, dct, obj)
 
     if value:
         rm_key_list = []
@@ -722,53 +724,14 @@ def xml_handle_nametype(keyword, keyword_name, dct, obj):
     """
     Identify NeXus nameType attribute for field, group, attribute use hint if required.
     """
-    concept_name = keyword_name[2:] if keyword_name.startswith("\\@") else keyword_name
-    if concept_name == "":
-        # no explicit name given as e.g. in group type="NXobject"
-        # obj.set("nameType", "any")
-        # cannot be specified because having no/empty concept name is not allowed
-        # cannot be partial because if no hint is given why should it be partial
-        return
-    if concept_name.islower():
-        # obj.set("nameType", "specified")  # is the NeXus default, no need to add
-        return
-    if concept_name.isupper():
-        # nameType="any" correct for almost all cases except for those where an
-        # explicit nameType hint is made in the yaml file
-        # this is relevant for e.g. NXcanSAS ENTRY/DATA/Q which is specified
-        if dct.get(keyword) and "nameType" in dct[keyword]:
-            supported = ["specified", "any", "partial"]
-            name_type = dct[keyword]["nameType"]
-            if name_type in supported:
-                obj.set("nameType", name_type)
-            else:
-                raise ValueError(f"nameType for {keyword} is not in {supported}")
-        return
-    # Mixed-case names: Check if an explicit nameType hint is provided.
-    if dct.get(keyword) and "nameType" in dct[keyword]:
-        supported = ["specified", "any", "partial"]
-        name_type = dct[keyword]["nameType"]
-        if name_type in supported:
-            obj.set("nameType", name_type)
-            return
-        else:
-            warnings.warn(
-                f"Mixed case concept_name with an unsupported nameType {name_type}",
-                SyntaxWarning,
-            )
 
-    # Determine if the name follows a variable-like pattern.
-    variable_prefix_match = re.search("^[A-Z]*[a-z0-9_.]*$", concept_name)
-    variable_suffix_match = re.search("^[a-z0-9_.]*[A-Z]*$", concept_name)
-    if variable_prefix_match or variable_suffix_match:
-        warnings.warn(
-            "Concept matching a partial nametype detected that lacks nameType=partial",
-            SyntaxWarning,
-        )
-        return
-    # Default case: NeXus assumes "specified" as the default, so no need to set it explicitly.
-    # NXcanSAS dQw suggests it is specified, or is this an error in that appdef?
-    # raise ValueError(f"nameType for {concept_name} undefined")
+    concept_name = keyword_name.replace("\\@", "").replace("(link)", "")
+    name_type = dct[keyword].get("nameType")
+
+    check_for_proper_nameType(concept_name, name_type, keyword_name)
+
+    if name_type:
+        obj.set("nameType", name_type)
 
 
 def xml_handle_attributes(dct, obj, keyword, value, verbose):

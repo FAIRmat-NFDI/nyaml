@@ -1,0 +1,105 @@
+category: base
+doc: "Test for prohibited nameType attributes"
+NXprohibited_name_type:
+  # No names (only for groups)
+  (NXobject):
+    nameType: specified
+    doc: An unnamed group with nameType="specified". Raises an error.
+  (NXobject2):
+    nameType: partial
+    doc: An unnamed group with nameType="partial". Raises an error.
+
+  # Lower case names
+
+  lower_case_group_any(NXobject):
+    nameType: any
+    doc: An all lower case group with nameType="any". Raises a warning.
+    lower_case_field_any:
+      nameType: any
+      doc: An all lower case field with nameType="any". Raises a warning.
+      \@lower_case_attribute_any:
+        nameType: any
+        doc: An all lower case attribute with nameType="any". Raises a warning.
+      lower_case_link_any:
+        nameType: any
+        doc: An all lower case link with nameType="any". Raises a warning.
+  lower_case_group_partial(NXobject):
+    nameType: partial
+    doc: An all lower case group with nameType="partial". Raises an error. 
+    lower_case_field_partial:
+      nameType: partial
+      doc: An all lower case field with nameType="partial". Raises an error. 
+      \@lower_case_attribute_partial:
+        nameType: partial
+        doc: An all lower case attribute with nameType="partial". Raises an error.
+      lower_case_link_any:
+        nameType: partial
+        doc: An all lower case link with nameType="partial". Raises a warning.
+
+  # Upper case names
+
+  # OBJECT(NXobject):
+  #   nameType: specified
+  #   doc: A renameable group with nameType="specified". Does not raise.
+  #   FIELD:
+  #     nameType: specified
+  #     doc: A renameable field with nameType="specified". Does not raise.
+  #     \@ATTRIBUTE:
+  #       nameType: specified
+  #       doc: A renameable field with nameType="partial". Does not raise.
+  #     LINK(link):
+  #       nameType: specified
+  #       target: field
+  #       doc: An unnamed link with nameType="partial".
+  OBJECT(NXobject):
+    nameType: partial
+    doc: A renameable group with nameType="partial". Raises an error.
+    FIELD:
+      nameType: partial
+      doc: A renameable field with nameType="partial". Raises an error.
+      \@ATTRIBUTE:
+        nameType: partial
+        doc: A renameable field with nameType="partial". Raises an error.
+      LINK(link):
+        target: field
+        doc: A renameable link with nameType="partial".
+
+  # Mixed lower and upper case names
+
+  objectOBJECTobjectOBJECT(NXobject):
+    doc: A partially-renameable group with no nameType. Raises a warning.
+    fieldFIELDfieldFIELD:
+      doc: A partially-renameable field with no nameType. Raises a warning.
+      \@attributeATTRIBUTEattributeATTRIBUTE:
+        doc: A partially-renameable attribute with no nameType. Raises a warning.
+      linkLINKlinkLINK(link):
+        target: field
+        doc: A partially-renameable link with no nameType. Raises a warning.
+
+  # objectOBJECTobjectOBJECT(NXobject):
+  #   nameType: specified
+  #   doc: A partially-renameable with nameType="specified". Does not raise.
+  #   fieldFIELDfieldFIELD:
+  #     nameType: specified
+  #     doc: A partially-renameable field with nameType="specified". Does not raise.
+  #     \@attributeATTRIBUTEattributeATTRIBUTE:
+  #       nameType: specified
+  #       doc: A partially-renameable attribute with nameType="specified". Does not raise.
+  #     linkLINKlinkLINK(link):
+  #       nameType: specified
+  #       target: field
+  #       doc: A partially-renameable link with nameType="specified". Does not raise.
+
+  objectOBJECTobjectOBJECT(NXobject):
+    nameType: any
+    doc: A partially-renameable with nameType="any". Raises a warning.
+    fieldFIELDfieldFIELD:
+      nameType: any
+      doc: A partially-renameable field with nameType="any". Raises a warning.
+      \@attributeATTRIBUTEattributeATTRIBUTE:
+        nameType: any
+        doc: A partially-renameable attribute with nameType="any". Raises a warning.
+      linkLINKlinkLINK(link):
+        nameType: any
+        target: field
+        doc: A partially-renameable link with nameType="any". Raises a warning.
