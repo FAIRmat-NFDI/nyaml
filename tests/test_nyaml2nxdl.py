@@ -258,9 +258,9 @@ def test_enumerations_nyaml2nxdl():
     Check the correct handling of enumerations (closed and open ones) for the direction
     nyaml->nxdl.
     """
-    ref_xml_file = "tests/data/ref_enumerations.nxdl.xml"
-    test_yml_file = "tests/data/enumerations.yaml"
-    test_xml_file = "tests/data/enumerations.nxdl.xml"
+    ref_xml_file = "tests/data/yaml2nxdl/ref_enumerations.nxdl.xml"
+    test_yml_file = "tests/data/yaml2nxdl/enumerations.yaml"
+    test_xml_file = "tests/data/yaml2nxdl/enumerations.nxdl.xml"
     desired_matches = [
         "<enumeration",
         "</enumeration>",
@@ -271,7 +271,7 @@ def test_enumerations_nyaml2nxdl():
         "<!--",
     ]
     compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
-    os.remove("tests/data/enumerations.nxdl.xml")
+    os.remove(test_xml_file)
     sys.stdout.write("Test on open/closed enumerations okay.\n")
 
 
@@ -280,11 +280,13 @@ def test_nxdl2yaml_enumerations():
     Check the correct handling of enumerations (closed and open ones) for the direction
     nxdl->nyaml.
     """
-    ref_xml_file = "tests/data/enumerations_nxdl2yaml.nxdl.xml"
-    ref_yml_file = "tests/data/ref_enumerations.yaml"
-    test_yml_file = "tests/data/enumerations_nxdl2yaml_parsed.yaml"
+    ref_xml_file = "tests/data/nxdl2yaml/enumerations.nxdl.xml"
+    ref_yml_file = "tests/data/nxdl2yaml/ref_enumerations.yaml"
+    test_yml_file = "tests/data/nxdl2yaml/enumerations_parsed.yaml"
 
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", str(ref_xml_file)]
+    )
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
 

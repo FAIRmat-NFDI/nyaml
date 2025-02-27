@@ -1,0 +1,101 @@
+category: base
+doc: |
+  This is a test for enumerations.
+type: group
+NXenums(NXobject):
+  (NXentry):
+    closed_enum_no_docs_list:
+      doc: |
+        This is a closed enumeration without any docstrings for the individual items.
+        The items are stored in a flat list.
+      # comment 0
+      enumeration: [value0, value1, value2]
+    closed_enum_no_docs_dict:
+      doc: |
+        This is a closed enumeration without any docstrings for the individual items.
+        The items are stored in a dict with the items keyword.
+      enumeration:
+        # comment 1
+        items: [value0, value1, value2]
+    closed_enum_with_numbers(NX_NUMBER):
+      doc: |
+        This is a closed enumeration with NX_NUMBER items.
+      enumeration: [0, 1, 2]
+    closed_enum_with_list_of_lists(NX_NUMBER):
+      doc: |
+        This is a closed enumeration, where the individual items are lists themselves.
+      enumeration: [[1, 0, 0], [0, 1, 0], [0, 0, -1]]
+    closed_enum_with_docs:
+      doc: |
+        This is a closed enumeration, with each item having a docstring.
+      enumeration:
+        # comment 2
+        value0:
+          # comment 3
+          doc: |
+            Doc for value0
+        value1:
+          doc: |
+            Doc for value1
+        value2:
+          doc: |
+            Doc for value1
+    closed_enum_with_list_of_lists_and_docs(NX_NUMBER):
+      doc: |
+        This is a closed enumeration with any docstrings for the individual items.
+        The individual items are lists themselves.
+      enumeration:
+        "[1, 0, 0]":
+          doc: |
+            Doc for [1, 0, 0]
+        "[0, 1, 0]":
+          doc: |
+            Doc for [0, 1, 0]
+        "[0, 0, -1]":
+          doc: |
+            Doc for [0, 1, 0]
+    open_enum_no_docs_no_comments:
+      doc: |
+        This is an open enumeration without any docstrings for the individual items.
+      enumeration:
+        open_enum: true
+        items: [value0, value1, value2]
+    open_enum_no_docs_with_comments:
+      doc: |
+        This is an open enumeration without any docstrings for the individual items.
+        There is a comment in the enumeration.
+      enumeration:
+        # comment4
+        open_enum: true
+        items: [value0, value1, value2]
+    open_enum_with_docs:
+      doc: |
+        This is a open enumeration, with each item having a docstring.
+      enumeration:
+        # comment 5
+        open_enum: true
+        value0:
+          # comment 6
+          doc: |
+            Doc for value0
+        value1:
+          doc: |
+            Doc for value1
+        value2:
+          doc: |
+            Doc for value2
+    open_enum_with_list_of_lists_and_docs(NX_NUMBER):
+      doc: |
+        This is an open enumeration with docstrings for the individual items.
+        The individual items are lists themselves.
+      enumeration:
+        open_enum: true
+        "[1, 0, 0]":
+          doc: |
+            Doc for [1, 0, 0]
+        "[0, 1, 0]":
+          doc: |
+            Doc for [0, 1, 0]
+        "[0, 0, -1]":
+          doc: |
+            Doc for [0, 1, 0]

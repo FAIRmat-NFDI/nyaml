@@ -805,7 +805,7 @@ class Nxdl2yaml:
         if check_doc:
             file_out.write("\n")
             if open_enum:
-                file_out.write(f"{indent + DEPTH_SIZE}open_enum: True\n")
+                file_out.write(f"{indent + DEPTH_SIZE}open_enum: true\n")
             for child in node_children:
                 child_tag = remove_namespace_from_tag(child.tag)
                 if child_tag == "item":
@@ -842,11 +842,14 @@ class Nxdl2yaml:
                     enum_with_comment = True
 
             if open_enum:
-                file_out.write(f"{indent + DEPTH_SIZE}open_enum: True\n")
+                if not enum_with_comment:
+                    file_out.write(f"\n{indent + DEPTH_SIZE}open_enum: true\n")
+                else:
+                    file_out.write(f"{indent + DEPTH_SIZE}open_enum: true\n")
 
             if open_enum or enum_with_comment:
                 file_out.write(
-                    f"{indent + DEPTH_SIZE}{'items'}: [{', '.join(enum_list)}]\n"
+                    f"{indent + DEPTH_SIZE}items: [{', '.join(enum_list)}]\n"
                 )
 
             else:

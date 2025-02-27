@@ -31,20 +31,9 @@
                 This is a closed enumeration without any docstrings for the individual items.
                 The items are stored in a flat list.
             </doc>
-            <!--comment 0-->
+            <!-- comment0 -->
             <enumeration>
-                <item value="value0"/>
-                <item value="value1"/>
-                <item value="value2"/>
-            </enumeration>
-        </field>
-        <field name="closed_enum_no_docs_dict">
-            <doc>
-                This is a closed enumeration without any docstrings for the individual items.
-                The items are stored in a dict with the items keyword.
-            </doc>
-            <enumeration>
-                <!--comment 1-->
+                <!-- comment1 -->
                 <item value="value0"/>
                 <item value="value1"/>
                 <item value="value2"/>
@@ -52,7 +41,7 @@
         </field>
         <field name="closed_enum_with_numbers" type="NX_NUMBER">
             <doc>
-                This is a closed enumeration without NX_NUMBER items.
+                This is a closed enumeration with NX_NUMBER items.
             </doc>
             <enumeration>
                 <item value="0"/>
@@ -62,7 +51,7 @@
         </field>
         <field name="closed_enum_with_list_of_lists" type="NX_NUMBER">
             <doc>
-                This is a closed enumeration without any docstrings for the individual items.
+                This is a closed enumeration with docstrings for the individual items.
                 The individual items are lists themselves.
             </doc>
             <enumeration>
@@ -76,9 +65,9 @@
                 This is a closed enumeration, with each item having a docstring.
             </doc>
             <enumeration>
-                <!--comment 2-->
+                <!-- comment2 -->
                 <item value="value0">
-                    <!--comment 3-->
+                    <!-- comment3 -->
                     <doc>
                         Doc for value0
                     </doc>
@@ -95,12 +84,46 @@
                 </item>
             </enumeration>
         </field>
-        <field name="open_enum_no_docs">
+        <field name="closed_enum_with_list_of_lists_and_docs" type="NX_NUMBER">
+            <doc>
+                This is a closed enumeration without any docstrings for the individual items.
+                The individual items are lists themselves.
+            </doc>
+            <enumeration>
+                <item value="[1, 0, 0]">
+                    <doc>
+                        Doc for [1, 0, 0]
+                    </doc>
+                </item>
+                <item value="[0, 1, 0]">
+                    <doc>
+                        Doc for [0, 1, 0]
+                    </doc>
+                </item>
+                <item value="[0, 0, -1]">
+                    <doc>
+                        Doc for [0, 1, 0]
+                    </doc>
+                </item>
+            </enumeration>
+        </field>
+        <field name="open_enum_no_docs_no_comments">
             <doc>
                 This is an open enumeration without any docstrings for the individual items.
             </doc>
-            <enumeration open="True">
-                <!--comment 4-->
+            <enumeration open="true">
+                <item value="value0"/>
+                <item value="value1"/>
+                <item value="value2"/>
+            </enumeration>
+        </field>
+        <field name="open_enum_no_docs_with_comments">
+            <doc>
+                This is an open enumeration without any docstrings for the individual items.
+                There is a comment in the enumeration.
+            </doc>
+            <enumeration open="true">
+                <!-- comment4 -->
                 <item value="value0"/>
                 <item value="value1"/>
                 <item value="value2"/>
@@ -108,12 +131,12 @@
         </field>
         <field name="open_enum_with_docs">
             <doc>
-                This is a closed enumeration, with each item havin a docstring.
+                This is an open enumeration, with each item having a docstring.
             </doc>
-            <enumeration open="True">
-                <!--comment 5-->
+            <enumeration open="true">
+                <!-- comment5 -->
                 <item value="value0">
-                    <!--comment 6-->
+                    <!-- comment6 --> 
                     <doc>
                         Doc for value0
                     </doc>
@@ -132,10 +155,10 @@
         </field>
         <field name="open_enum_with_list_of_lists_and_docs" type="NX_NUMBER">
             <doc>
-                This is a closed enumeration without any docstrings for the individual items.
+                This is an open enumeration with docstrings for the individual items.
                 The individual items are lists themselves.
             </doc>
-            <enumeration>
+            <enumeration open="true">
                 <item value="[1, 0, 0]">
                     <doc>
                         Doc for [1, 0, 0]

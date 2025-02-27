@@ -544,7 +544,7 @@ bear at least an argument !"
             line_number = f"__line__{'open_enum'}"
             line_loc = value[line_number]
             xml_handle_comment(enum, line_number, line_loc)
-            enum.set("open", str(value["open_enum"]))
+            enum.set("open", check_for_mapping_char_other(str(value["open_enum"])))
 
             del value["open_enum"]
 
