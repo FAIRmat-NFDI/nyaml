@@ -79,11 +79,11 @@ NXenums(NXobject):
           doc: |
             Doc for value2
     open_enum_with_list_of_lists_and_docs(NX_NUMBER):
-      open_enum: true
       doc: |
         This is an open enumeration with docstrings for the individual items.
         The individual items are lists themselves.
       enumeration:
+        open_enum: true
         "[1, 0, 0]":
           doc: |
             Doc for [1, 0, 0]
