@@ -62,8 +62,7 @@
         </field>
         <field name="closed_enum_with_list_of_lists" type="NX_NUMBER">
             <doc>
-                This is a closed enumeration with docstrings for the individual items.
-                The individual items are lists themselves.
+                This is a closed enumeration, where the individual items are lists themselves.
             </doc>
             <enumeration>
                 <item value="[1, 0, 0]"/>
@@ -97,7 +96,7 @@
         </field>
         <field name="closed_enum_with_list_of_lists_and_docs" type="NX_NUMBER">
             <doc>
-                This is a closed enumeration without any docstrings for the individual items.
+                This is a closed enumeration with any docstrings for the individual items.
                 The individual items are lists themselves.
             </doc>
             <enumeration>
@@ -142,7 +141,7 @@
         </field>
         <field name="open_enum_with_docs">
             <doc>
-                This is a closed enumeration, with each item havin a docstring.
+                This is a open enumeration, with each item having a docstring.
             </doc>
             <enumeration open="true">
                 <!--comment 5-->

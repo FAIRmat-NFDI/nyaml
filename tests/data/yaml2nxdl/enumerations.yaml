@@ -23,8 +23,7 @@ NXenums(NXobject):
       enumeration: [0, 1, 2]
     closed_enum_with_list_of_lists(NX_NUMBER):
       doc: |
-        This is a closed enumeration with docstrings for the individual items.
-        The individual items are lists themselves.
+        This is a closed enumeration, where the individual items are lists themselves.
       enumeration: [[1, 0, 0], [0, 1, 0], [0, 0, -1]]
     closed_enum_with_docs:
       doc: |
@@ -43,7 +42,7 @@ NXenums(NXobject):
             Doc for value1
     closed_enum_with_list_of_lists_and_docs(NX_NUMBER):
       doc: |
-        This is a closed enumeration without any docstrings for the individual items.
+        This is a closed enumeration with any docstrings for the individual items.
         The individual items are lists themselves.
       enumeration:
         "[1, 0, 0]":
@@ -71,7 +70,7 @@ NXenums(NXobject):
         items: [value0, value1, value2]
     open_enum_with_docs:
       doc: |
-        This is a closed enumeration, with each item havin a docstring.
+        This is a open enumeration, with each item having a docstring.
       enumeration:
         # comment 5
         open_enum: true
