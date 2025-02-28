@@ -22,9 +22,11 @@ Tests for nyaml2nxdl tool
 import filecmp
 import os
 import re
+import yaml
 import sys
 from datetime import datetime
 from pathlib import Path
+from collections import OrderedDict
 
 import lxml.etree as ET
 import pytest
@@ -143,17 +145,228 @@ def test_links():
     sys.stdout.write("Test on links okay.\n")
 
 
-def test_nametypes():
-    """In this test an xml file in converted to yml and then back to xml.
-    The xml trees of the two files are then compared.
+def test_nametypes_nyaml2nxdl():
     """
-    ref_xml_file = "tests/data/Ref_NXnametype.nxdl.xml"
-    test_yml_file = "tests/data/NXnametype.yaml"
-    test_xml_file = "tests/data/NXnametype.nxdl.xml"
+    Check the correct handling of the nameType attribute for the direction
+    nyaml->nxdl.
+    """
+    ref_xml_file = "tests/data/yaml2nxdl/ref_allowed_nameType.nxdl.xml"
+    test_yml_file = "tests/data/yaml2nxdl/allowed_nameType.yaml"
+    test_xml_file = "tests/data/yaml2nxdl/allowed_nameType.nxdl.xml"
     desired_matches = ["partial", "specified", "any"]
+
     compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
-    os.remove("tests/data/NXnametype.nxdl.xml")
-    sys.stdout.write("Test on nametypes okay.\n")
+    os.remove(test_xml_file)
+    sys.stdout.write("Test on open/closed enumerations okay.\n")
+
+
+@pytest.mark.parametrize(
+    "input_tuple, exit_code, expected_error",
+    [
+        # Wrong name type
+        (
+            ("groupGROUP(NXobject)", "my_name_type"),
+            1,
+            'Name "groupGROUP" has nameType="my_name_type", but only one of ("specified", "any", "partial") is allowed.',
+        ),
+        (
+            ("my_field", "my_name_type"),
+            1,
+            'Name "my_field" has nameType="my_name_type", but only one of ("specified", "any", "partial") is allowed.',
+        ),
+        (
+            (r"\@MYattribute", "my_name_type"),
+            1,
+            r'Name "\@MYattribute" has nameType="my_name_type", but only one of ("specified", "any", "partial") is allowed.',
+        ),
+        (
+            ("link(link)", "my_name_type"),
+            1,
+            'Name "link(link)" has nameType="my_name_type", but only one of ("specified", "any", "partial") is allowed.',
+        ),
+        # Unnamed groups
+        (
+            ("(NXobject)", "specified"),
+            1,
+            'Unnamed group should have either no nameType or nameType="any". Found nameType="specified".',
+        ),
+        (
+            ("(NXobject)", "partial"),
+            1,
+            'Unnamed group should have either no nameType or nameType="any". Found nameType="partial".',
+        ),
+        # Lower case names
+        (
+            ("lower_case_group_any(NXobject)", "any"),
+            0,
+            'Warning: Name "lower_case_group_any" (all lowercase) has nameType="any", which makes it fully renameable. Is that intentional?',
+        ),
+        (
+            ("lower_case_field_any", "any"),
+            0,
+            'Warning: Name "lower_case_field_any" (all lowercase) has nameType="any", which makes it fully renameable. Is that intentional?',
+        ),
+        (
+            (r"\@lower_case_attribute_any", "any"),
+            0,
+            r'Warning: Name "\@lower_case_attribute_any" (all lowercase) has nameType="any", which makes it fully renameable. Is that intentional?',
+        ),
+        (
+            ("lower_case_link_any(link)", "any"),
+            0,
+            'Warning: Name "lower_case_link_any(link)" (all lowercase) has nameType="any", which makes it fully renameable. Is that intentional?',
+        ),
+        (
+            ("lower_case_group_partial(NXobject)", "partial"),
+            0,
+            'Error: Name "lower_case_group_partial" (all lowercase) has nameType="partial", but nothing can be replaced. Consider introducing upper case letters or dropping nameType="partial".',
+        ),
+        (
+            ("lower_case_field_partial", "partial"),
+            0,
+            'Error: Name "lower_case_field_partial" (all lowercase) has nameType="partial", but nothing can be replaced. Consider introducing upper case letters or dropping nameType="partial".',
+        ),
+        (
+            (r"\@lower_case_attribute_partial:", "partial"),
+            0,
+            r'Error: Name "\@lower_case_attribute_partial:" (all lowercase) has nameType="partial", but nothing can be replaced. Consider introducing upper case letters or dropping nameType="partial".',
+        ),
+        (
+            ("lower_case_link_any(link)", "partial"),
+            0,
+            'Error: Name "lower_case_link_any(link)" (all lowercase) has nameType="partial", but nothing can be replaced. Consider introducing upper case letters or dropping nameType="partial".',
+        ),
+        # Upper case names
+        (
+            ("OBJECT(NXobject)", "partial"),
+            0,
+            'Warning: Name "OBJECT" (all uppercase) has nameType="partial". Since the name only has uppercase letters, there is no difference to nameType="any".',
+        ),
+        (
+            ("FIELD", "partial"),
+            0,
+            'Warning: Name "FIELD" (all uppercase) has nameType="partial". Since the name only has uppercase letters, there is no difference to nameType="any".',
+        ),
+        (
+            (r"\@ATTRIBUTE", "partial"),
+            0,
+            r'Warning: Name "\@ATTRIBUTE" (all uppercase) has nameType="partial". Since the name only has uppercase letters, there is no difference to nameType="any".',
+        ),
+        (
+            ("LINK(link)", "partial"),
+            0,
+            'Warning: Name "LINK(link)" (all uppercase) has nameType="partial". Since the name only has uppercase letters, there is no difference to nameType="any".',
+        ),
+        # Mixed upper and lower case names
+        (
+            ("objectOBJECTobjectOBJECT", ""),
+            0,
+            'Name "objectOBJECTobjectOBJECT" (mixed upper and lower case) has no nameType, assuming "specified".',
+        ),
+        (
+            ("fieldFIELDfieldFIELD", ""),
+            0,
+            'Name "fieldFIELDfieldFIELD" (mixed upper and lower case) has no nameType, assuming "specified".',
+        ),
+        (
+            (r"\@attributeATTRIBUTEattributeATTRIBUTE", ""),
+            0,
+            r'Name "\@attributeATTRIBUTEattributeATTRIBUTE" (mixed upper and lower case) has no nameType, assuming "specified".',
+        ),
+        (
+            ("linkLINKlinkLINK(link)", ""),
+            0,
+            'Name "linkLINKlinkLINK(link)" (mixed upper and lower case) has no nameType, assuming "specified".',
+        ),
+        (
+            ("objectOBJECTobjectOBJECT", "any"),
+            0,
+            'Warning: Name "objectOBJECTobjectOBJECT" (mixed upper and lower case) has nameType="any", which makes it fully renameable. Is that intentional?',
+        ),
+        (
+            ("fieldFIELDfieldFIELD", "any"),
+            0,
+            'Warning: Name "fieldFIELDfieldFIELD" (mixed upper and lower case) has nameType="any", which makes it fully renameable. Is that intentional?',
+        ),
+        (
+            (r"\@attributeATTRIBUTEattributeATTRIBUTE", "any"),
+            0,
+            r'Warning: Name "\@attributeATTRIBUTEattributeATTRIBUTE" (mixed upper and lower case) has nameType="any", which makes it fully renameable. Is that intentional?',
+        ),
+        (
+            ("linkLINKlinkLINK", "any"),
+            0,
+            'Warning: Name "linkLINKlinkLINK" (mixed upper and lower case) has nameType="any", which makes it fully renameable. Is that intentional?',
+        ),
+    ],
+)
+def test_nyaml2nxdl_prohibited_nameType(
+    tmp_path, input_tuple, exit_code, expected_error
+):
+    """Run nyaml2nxdl on individual incorrect elements and check errors."""
+
+    def ordered_dict_representer(dumper, value):
+        return dumper.represent_mapping("tag:yaml.org,2002:map", value.items())
+
+    yaml.add_representer(OrderedDict, ordered_dict_representer)
+
+    key, name_type_value = input_tuple
+
+    # Create the structure with the tuple data
+    yaml_data = OrderedDict(
+        {
+            "category": "base",
+            "doc": "Test",
+            "NXtest": OrderedDict({key: {"nameType": name_type_value}}),
+        }
+    )
+
+    # Write the YAML to a file
+    test_file = Path(tmp_path) / "test.yaml"
+    with open(test_file, "w") as file:
+        yaml.dump(yaml_data, file, default_flow_style=False, allow_unicode=True)
+
+    runner = CliRunner()
+    result = runner.invoke(
+        nyaml2nxdl.launch_tool,
+        [str(test_file), "--output-file", str(Path(tmp_path) / "out.nxdl.xml")],
+    )
+
+    # Assert that we encounter the expected error message
+    assert result.exit_code == exit_code
+    assert expected_error in (str(result.output) + str(result.exception))
+
+
+def test_nxdl2yaml_nameType():
+    """
+    Check the correct handling of the nameType attribute for the direction
+    nxdl->nyaml.
+    """
+    ref_xml_file = "tests/data/nxdl2yaml/allowed_nameType.nxdl.xml"
+    ref_yml_file = "tests/data/nxdl2yaml/ref_allowed_nameType.yaml"
+    test_yml_file = "tests/data/nxdl2yaml/allowed_nameType_parsed.yaml"
+
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
+    assert result.exit_code == 0
+    check_file_fresh_baked(test_yml_file)
+
+    result = filecmp.cmp(ref_yml_file, test_yml_file, shallow=False)
+
+    assert result, "Ref YML and parsed YML don't have the same structure!"
+    os.remove(test_yml_file)
+    sys.stdout.write("Test on xml -> yml nameType okay.\n")
+
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
+    assert result.exit_code == 0
+    check_file_fresh_baked(test_yml_file)
+
+    result = filecmp.cmp(ref_yml_file, test_yml_file, shallow=False)
+    assert result, (
+        "Ref YML and parsed YML\
+has not the same structure!!"
+    )
+    os.remove(test_yml_file)
+    sys.stdout.write("Test on xml -> yml doc formatting okay.\n")
 
 
 def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():

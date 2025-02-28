@@ -101,6 +101,86 @@ def remove_namespace_from_tag(tag):
     return tag.split("}")[-1]
 
 
+def check_for_proper_nameType(name, nameType, keyword_name):
+    """Check for proper nameType for a given name.
+
+    Rules:
+    - If nameType is present, it must be one of ("specified", "any", "partial")
+
+    - Name not given (only for groups):
+      - Should have no nameType.
+      - nameType="any" does not raise.
+      - nameType in ("specified", "partial") raises an error.
+
+    - Name with all lower case letters:
+      - Should have no nameType (i.e., default to "specified") or nameType="specified".
+      - If nameType="any", print a warning (fully renameable in this case).
+      - If nameType="partial", print an error.
+
+    - Name with all upper case letters:
+      - Should have nameType in ("any", "specified").
+      - If no nameType, NeXus assumption is nameType="specified".
+      - If nameType="partial", print a warning (fully renameable in this case).
+
+    - Name with upper case and lower case letters:
+      - Should have nameType="partial".
+      - If nameType="specified", do not raise or warn.
+      - If no nameType, NeXus assumption is nameType="specified". Print an information.
+      - If nameType="any", print an a warning (fully renameable in this case).
+    """
+    allowed_name_types = ("specified", "any", "partial")
+
+    if nameType:
+        if nameType not in allowed_name_types:
+            raise ValueError(
+                f'Name "{keyword_name}" has nameType="{nameType}", but only one of '
+                f'("specified", "any", "partial") is allowed.'
+            )
+
+    if not name:  # Unnamed group case
+        if not nameType or nameType == "any":
+            return
+        raise ValueError(
+            f'Unnamed group should have either no nameType or nameType="any". '
+            f'Found nameType="{nameType}".'
+        )
+
+    if name.islower():  # All lower cases
+        if not nameType or nameType == "specified":
+            return
+        if nameType == "any":
+            print(
+                f'Warning: Name "{keyword_name}" (all lowercase) has nameType="any", which makes it fully renameable. '
+                "Is that intentional?"
+            )
+        elif nameType == "partial":
+            print(
+                f'Error: Name "{keyword_name}" (all lowercase) has nameType="partial", but nothing can be replaced. '
+                'Consider introducing upper case letters or dropping nameType="partial".'
+            )
+
+    elif name.isupper():  # All upper cases
+        if not nameType:
+            return  # Default assumption is "specified"
+        if nameType not in ("any", "specified"):
+            print(
+                f'Warning: Name "{keyword_name}" (all uppercase) has nameType="partial".'
+                ' Since the name only has uppercase letters, there is no difference to nameType="any".'
+            )
+
+    else:  # Mixed upper and lower case
+        if not nameType:
+            print(
+                f'Info: Name "{keyword_name}" (mixed upper and lower case) has no nameType, assuming "specified".'
+            )
+            return
+        if nameType == "any":
+            print(
+                f'Warning: Name "{keyword_name}" (mixed upper and lower case) has nameType="any", which makes it fully renameable. '
+                "Is that intentional?"
+            )
+
+
 class LineLoader(Loader):  # pylint: disable=too-many-ancestors
     """Class to load yaml file with extra non yaml items.
 
