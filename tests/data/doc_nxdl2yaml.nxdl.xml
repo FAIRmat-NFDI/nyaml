@@ -58,6 +58,13 @@
            .. _term: url
       </doc>
     </field>
+    <field name="only_iso_string" type="NX_CHAR">
+        <doc>
+            This concept is related to term `1.1`_ of the ISO 18115-1:2023 standard.
+            
+            .. _1.1: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:1.1
+        </doc>
+    </field>
     <field name="double_iso_string" type="NX_CHAR">
       <doc>
          Way of scanning the energy axis (fixed or sweep).

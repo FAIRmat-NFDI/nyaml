@@ -413,6 +413,7 @@ class Nxdl2yaml:
                 )
                 xref_in_doc = xref_in_doc or xref_present
                 modified_docs.append(mod_doc)
+
         # Note on doc example:
         # doc:
         #  - |
@@ -422,7 +423,10 @@ class Nxdl2yaml:
         #       spec:
         #       term:
         if len(modified_docs) == 1:
-            doc_str = f"{indent}{tag}: |{modified_docs[0]}\n"
+            if xref_in_doc:
+                doc_str = f"{indent}{tag}: |\n{modified_docs[0]}\n"
+            else:
+                doc_str = f"{indent}{tag}: |{modified_docs[0]}\n"
         elif len(modified_docs) > 1 and xref_in_doc:
             doc_str = f"{indent}{tag}:\n"
             for mod_doc in modified_docs:
