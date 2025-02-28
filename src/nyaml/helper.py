@@ -105,27 +105,38 @@ def check_for_proper_nameType(name, nameType, keyword_name):
     """Check for proper nameType for a given name.
 
     Rules:
+    - If nameType is present, it must be one of ("specified", "any", "partial")
+
     - Name not given (only for groups):
       - Should have no nameType.
       - nameType="any" does not raise.
-      - nameType in ("specified","partial") raises an error.
+      - nameType in ("specified", "partial") raises an error.
 
     - Name with all lower case letters:
       - Should have no nameType (i.e., default to "specified") or nameType="specified".
-      - If nameType="any", raise a warning (fully renameable in this case).
-      - If nameType="partial", raise an error.
+      - If nameType="any", print a warning (fully renameable in this case).
+      - If nameType="partial", print an error.
 
     - Name with all upper case letters:
-      - Should have nameType ("any", "specified").
+      - Should have nameType in ("any", "specified").
       - If no nameType, NeXus assumption is nameType="specified".
-      - If nameType="partial", raise an error.
+      - If nameType="partial", print a warning (fully renameable in this case).
 
     - Name with upper case and lower case letters:
       - Should have nameType="partial".
-      - If nameType="specified", do not raise.
-      - If no nameType, NeXus assumption is nameType="specified". Raise a warning.
-      - If nameType="any", raise a warning (fully renameable in this case).
+      - If nameType="specified", do not raise or warn.
+      - If no nameType, NeXus assumption is nameType="specified". Print an information.
+      - If nameType="any", print an a warning (fully renameable in this case).
     """
+    allowed_name_types = ("specified", "any", "partial")
+
+    if nameType:
+        if nameType not in allowed_name_types:
+            raise ValueError(
+                f'Name "{keyword_name}" has nameType="{nameType}", but only one of '
+                f'("specified", "any", "partial") is allowed.'
+            )
+
     if not name:  # Unnamed group case
         if not nameType or nameType == "any":
             return
@@ -134,37 +145,39 @@ def check_for_proper_nameType(name, nameType, keyword_name):
             f'Found nameType="{nameType}".'
         )
 
-    if name.islower():
+    if name.islower():  # All lower cases
         if not nameType or nameType == "specified":
             return
         if nameType == "any":
             print(
-                f'Warning: Name "{keyword_name}" (lowercase) has nameType="any", which makes it fully renameable.'
+                f'Warning: Name "{keyword_name}" (all lowercase) has nameType="any", which makes it fully renameable. '
+                "Is that intentional?"
             )
         elif nameType == "partial":
-            raise ValueError(
-                f'Name "{keyword_name}" (lowercase) should not have nameType="partial".'
+            print(
+                f'Error: Name "{keyword_name}" (all lowercase) has nameType="partial", but nothing can be replaced. '
+                'Consider introducing upper case letters or dropping nameType="partial".'
             )
 
-    elif name.isupper():
+    elif name.isupper():  # All upper cases
         if not nameType:
             return  # Default assumption is "specified"
         if nameType not in ("any", "specified"):
-            raise ValueError(
-                f'Name "{keyword_name}" (uppercase) should have nameType="any" or "specified", '
-                f'but found "{nameType}".'
+            print(
+                f'Warning: Name "{keyword_name}" (all uppercase) has nameType="partial".'
+                ' Since the name only has uppercase letters, there is no difference to nameType="any".'
             )
 
-    else:  # Mixed case
+    else:  # Mixed upper and lower case
         if not nameType:
             print(
-                f'Name "{keyword_name}" (mixed case) has no nameType, assuming "specified".'
+                f'Info: Name "{keyword_name}" (mixed upper and lower case) has no nameType, assuming "specified".'
             )
             return
-        if nameType not in ("specified", "partial"):
-            raise ValueError(
-                f'Name "{keyword_name}" (mixed case) should have nameType="specified" or "partial", '
-                f'but found "{nameType}".'
+        if nameType == "any":
+            print(
+                f'Warning: Name "{keyword_name}" (mixed upper and lower case) has nameType="any", which makes it fully renameable. '
+                "Is that intentional?"
             )
 
 

@@ -163,6 +163,27 @@ def test_nametypes_nyaml2nxdl():
 @pytest.mark.parametrize(
     "input_tuple, exit_code, expected_error",
     [
+        # Wrong name type
+        (
+            ("groupGROUP(NXobject)", "my_name_type"),
+            1,
+            'Name "groupGROUP" has nameType="my_name_type", but only one of ("specified", "any", "partial") is allowed.',
+        ),
+        (
+            ("my_field", "my_name_type"),
+            1,
+            'Name "my_field" has nameType="my_name_type", but only one of ("specified", "any", "partial") is allowed.',
+        ),
+        (
+            (r"\@MYattribute", "my_name_type"),
+            1,
+            r'Name "\@MYattribute" has nameType="my_name_type", but only one of ("specified", "any", "partial") is allowed.',
+        ),
+        (
+            ("link(link)", "my_name_type"),
+            1,
+            'Name "link(link)" has nameType="my_name_type", but only one of ("specified", "any", "partial") is allowed.',
+        ),
         # Unnamed groups
         (
             ("(NXobject)", "specified"),
@@ -178,104 +199,104 @@ def test_nametypes_nyaml2nxdl():
         (
             ("lower_case_group_any(NXobject)", "any"),
             0,
-            'Warning: Name "lower_case_group_any" (lowercase) has nameType="any", which makes it fully renameable.',
+            'Warning: Name "lower_case_group_any" (all lowercase) has nameType="any", which makes it fully renameable. Is that intentional?',
         ),
         (
             ("lower_case_field_any", "any"),
             0,
-            'Warning: Name "lower_case_field_any" (lowercase) has nameType="any", which makes it fully renameable.',
+            'Warning: Name "lower_case_field_any" (all lowercase) has nameType="any", which makes it fully renameable. Is that intentional?',
         ),
         (
             (r"\@lower_case_attribute_any", "any"),
             0,
-            r'Warning: Name "\@lower_case_attribute_any" (lowercase) has nameType="any", which makes it fully renameable.',
+            r'Warning: Name "\@lower_case_attribute_any" (all lowercase) has nameType="any", which makes it fully renameable. Is that intentional?',
         ),
         (
             ("lower_case_link_any(link)", "any"),
             0,
-            'Warning: Name "lower_case_link_any(link)" (lowercase) has nameType="any", which makes it fully renameable.',
+            'Warning: Name "lower_case_link_any(link)" (all lowercase) has nameType="any", which makes it fully renameable. Is that intentional?',
         ),
         (
             ("lower_case_group_partial(NXobject)", "partial"),
-            1,
-            'Name "lower_case_group_partial" (lowercase) should not have nameType="partial".',
+            0,
+            'Error: Name "lower_case_group_partial" (all lowercase) has nameType="partial", but nothing can be replaced. Consider introducing upper case letters or dropping nameType="partial".',
         ),
         (
             ("lower_case_field_partial", "partial"),
-            1,
-            'Name "lower_case_field_partial" (lowercase) should not have nameType="partial".',
+            0,
+            'Error: Name "lower_case_field_partial" (all lowercase) has nameType="partial", but nothing can be replaced. Consider introducing upper case letters or dropping nameType="partial".',
         ),
         (
             (r"\@lower_case_attribute_partial:", "partial"),
-            1,
-            r'Name "\@lower_case_attribute_partial:" (lowercase) should not have nameType="partial".',
+            0,
+            r'Error: Name "\@lower_case_attribute_partial:" (all lowercase) has nameType="partial", but nothing can be replaced. Consider introducing upper case letters or dropping nameType="partial".',
         ),
         (
             ("lower_case_link_any(link)", "partial"),
-            1,
-            'Name "lower_case_link_any(link)" (lowercase) should not have nameType="partial".',
+            0,
+            'Error: Name "lower_case_link_any(link)" (all lowercase) has nameType="partial", but nothing can be replaced. Consider introducing upper case letters or dropping nameType="partial".',
         ),
         # Upper case names
         (
             ("OBJECT(NXobject)", "partial"),
-            1,
-            'Name "OBJECT" (uppercase) should have nameType="any" or "specified", but found "partial".',
+            0,
+            'Warning: Name "OBJECT" (all uppercase) has nameType="partial". Since the name only has uppercase letters, there is no difference to nameType="any".',
         ),
         (
             ("FIELD", "partial"),
-            1,
-            'Name "FIELD" (uppercase) should have nameType="any" or "specified", but found "partial".',
+            0,
+            'Warning: Name "FIELD" (all uppercase) has nameType="partial". Since the name only has uppercase letters, there is no difference to nameType="any".',
         ),
         (
             (r"\@ATTRIBUTE", "partial"),
-            1,
-            r'Name "\@ATTRIBUTE" (uppercase) should have nameType="any" or "specified", but found "partial".',
+            0,
+            r'Warning: Name "\@ATTRIBUTE" (all uppercase) has nameType="partial". Since the name only has uppercase letters, there is no difference to nameType="any".',
         ),
         (
             ("LINK(link)", "partial"),
-            1,
-            'Name "LINK(link)" (uppercase) should have nameType="any" or "specified", but found "partial".',
+            0,
+            'Warning: Name "LINK(link)" (all uppercase) has nameType="partial". Since the name only has uppercase letters, there is no difference to nameType="any".',
         ),
-        # Mixed case names
+        # Mixed upper and lower case names
         (
             ("objectOBJECTobjectOBJECT", ""),
             0,
-            'Name "objectOBJECTobjectOBJECT" (mixed case) has no nameType, assuming "specified".',
+            'Name "objectOBJECTobjectOBJECT" (mixed upper and lower case) has no nameType, assuming "specified".',
         ),
         (
             ("fieldFIELDfieldFIELD", ""),
             0,
-            'Name "fieldFIELDfieldFIELD" (mixed case) has no nameType, assuming "specified".',
+            'Name "fieldFIELDfieldFIELD" (mixed upper and lower case) has no nameType, assuming "specified".',
         ),
         (
             (r"\@attributeATTRIBUTEattributeATTRIBUTE", ""),
             0,
-            r'Name "\@attributeATTRIBUTEattributeATTRIBUTE" (mixed case) has no nameType, assuming "specified".',
+            r'Name "\@attributeATTRIBUTEattributeATTRIBUTE" (mixed upper and lower case) has no nameType, assuming "specified".',
         ),
         (
             ("linkLINKlinkLINK(link)", ""),
             0,
-            'Name "linkLINKlinkLINK(link)" (mixed case) has no nameType, assuming "specified".',
+            'Name "linkLINKlinkLINK(link)" (mixed upper and lower case) has no nameType, assuming "specified".',
         ),
         (
             ("objectOBJECTobjectOBJECT", "any"),
-            1,
-            'Name "objectOBJECTobjectOBJECT" (mixed case) should have nameType="specified" or "partial", but found "any".',
+            0,
+            'Warning: Name "objectOBJECTobjectOBJECT" (mixed upper and lower case) has nameType="any", which makes it fully renameable. Is that intentional?',
         ),
         (
             ("fieldFIELDfieldFIELD", "any"),
-            1,
-            'Name "fieldFIELDfieldFIELD" (mixed case) should have nameType="specified" or "partial", but found "any".',
+            0,
+            'Warning: Name "fieldFIELDfieldFIELD" (mixed upper and lower case) has nameType="any", which makes it fully renameable. Is that intentional?',
         ),
         (
             (r"\@attributeATTRIBUTEattributeATTRIBUTE", "any"),
-            1,
-            r'Name "\@attributeATTRIBUTEattributeATTRIBUTE" (mixed case) should have nameType="specified" or "partial", but found "any".',
+            0,
+            r'Warning: Name "\@attributeATTRIBUTEattributeATTRIBUTE" (mixed upper and lower case) has nameType="any", which makes it fully renameable. Is that intentional?',
         ),
         (
             ("linkLINKlinkLINK", "any"),
-            1,
-            'Name "linkLINKlinkLINK" (mixed case) should have nameType="specified" or "partial", but found "any".',
+            0,
+            'Warning: Name "linkLINKlinkLINK" (mixed upper and lower case) has nameType="any", which makes it fully renameable. Is that intentional?',
         ),
     ],
 )
