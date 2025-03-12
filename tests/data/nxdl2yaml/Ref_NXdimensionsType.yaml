@@ -56,6 +56,14 @@ NXdimensions(NXobject):
       dimensions:
         rank: 2
         dim: (1, symbol_a, symbol_b)
+    shorthand_explicit_rank_new_with_docs(NX_NUMBER):
+      doc: |
+        The same as shorthand_explicit_rank_new, but with docs for the dimensions tag.
+      dimensions:
+        rank: 2
+        doc: |
+          Some docs.
+        dim: (1, symbol_a, symbol_b)
     shorthand_explicit_rank_old(NX_NUMBER):
       doc: |
         A version of shorthand_explicit_rank_new that supports
@@ -80,7 +88,7 @@ NXdimensions(NXobject):
         rank: symbol_a
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# c76e51cfd7fbeb8b97bb2c46dd961a36ed803eb4660b89d0af33c7f198f4170c
+# 9888392b68a498412b7a59e8fb375787f801d119b287ec72388c634ee4d7d762
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--
@@ -173,6 +181,19 @@ NXdimensions(NXobject):
 #                 rank_only suffices or that full_syntax is required.
 #             </doc>
 #             <dimensions rank="2">
+#                 <dim index="1" value="1"/>
+#                 <dim index="2" value="symbol_a"/>
+#                 <dim index="3" value="symbol_b"/>
+#             </dimensions>
+#         </field>
+#         <field name="shorthand_explicit_rank_new_with_docs" type="NX_NUMBER">
+#             <doc>
+#                 The same as shorthand_explicit_rank_new, but with docs for the dimensions tag.
+#             </doc>
+#             <dimensions rank="2">
+#                 <doc>
+#                     Some docs.
+#                 </doc>
 #                 <dim index="1" value="1"/>
 #                 <dim index="2" value="symbol_a"/>
 #                 <dim index="3" value="symbol_b"/>
