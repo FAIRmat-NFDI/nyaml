@@ -441,7 +441,7 @@ def xml_handle_dimensions(dct, obj, keyword, value):
                 dims.set("rank", f"{value['rank']}")
             if "doc" in value:
                 docs = ET.SubElement(dims, "doc")
-                docs.text = f"{value['doc']}"
+                docs.text = f"\n{value['doc']}"
             for dim_key, dim_obj in value.items():
                 if dim_key != "doc" and isinstance(dim_obj, dict):
                     dim = ET.SubElement(dims, "dim")
@@ -467,6 +467,9 @@ def xml_handle_dimensions(dct, obj, keyword, value):
                 # common for cases shorthand_terse and shorthand_explicit_rank_new
                 dims = ET.SubElement(obj, "dimensions")
                 # rank = 0
+                if "doc" in value:
+                    docs = ET.SubElement(dims, "doc")
+                    docs.text = f"\n{value['doc']}"
                 for idx, val in enumerate(
                     value["dim"][1:-1].replace(" ", "").split(",")
                 ):
@@ -483,6 +486,9 @@ def xml_handle_dimensions(dct, obj, keyword, value):
             # shorthand_explicit_rank_old
             dims = ET.SubElement(obj, "dimensions")
             dims.set("rank", f"{value['rank']}")
+            if "doc" in value:
+                docs = ET.SubElement(dims, "doc")
+                docs.text = f"\n{value['doc']}"
             for entry in value["dim"]:
                 if len(entry) == 2 and all(val != "" for val in entry):
                     dim = ET.SubElement(dims, "dim")
