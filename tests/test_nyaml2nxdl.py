@@ -904,6 +904,7 @@ def test_handle_xref(test_input, output, is_valid):
     [
         ("NXattributes"),
         ("NXcomment"),
+        ("NXdimensionsType"),
         ("NXellipsometry-docCheck"),
         ("NXfit"),
     ],

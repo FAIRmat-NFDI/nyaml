@@ -95,6 +95,19 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
                 <dim index="3" value="symbol_b"/>
             </dimensions>
         </field>
+        <field name="shorthand_explicit_rank_new_with_docs" type="NX_NUMBER">
+            <doc>
+                The same as shorthand_explicit_rank_new, but with ocs for the dimensions tag.
+            </doc>
+            <dimensions rank="2">
+                <doc>
+                    Some docs.
+                </doc>
+                <dim index="1" value="1"/>
+                <dim index="2" value="symbol_a"/>
+                <dim index="3" value="symbol_b"/>
+            </dimensions>
+        </field>
         <field name="shorthand_explicit_rank_old" type="NX_NUMBER">
             <doc>
                 A version of shorthand_explicit_rank_new that supports
