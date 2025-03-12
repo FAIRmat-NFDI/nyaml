@@ -54,7 +54,7 @@ NXdimensions(NXobject):
         dim: (1, symbol_a, symbol_b)
     shorthand_explicit_rank_new_with_docs(NX_NUMBER):
       doc: |
-        The same as shorthand_explicit_rank_new, but with ocs for the dimensions tag.
+        The same as shorthand_explicit_rank_new, but with docs for the dimensions tag.
       dimensions:
         doc: |
           Some docs.

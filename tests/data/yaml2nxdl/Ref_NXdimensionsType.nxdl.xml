@@ -97,7 +97,7 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
         </field>
         <field name="shorthand_explicit_rank_new_with_docs" type="NX_NUMBER">
             <doc>
-                The same as shorthand_explicit_rank_new, but with ocs for the dimensions tag.
+                The same as shorthand_explicit_rank_new, but with docs for the dimensions tag.
             </doc>
             <dimensions rank="2">
                 <doc>
