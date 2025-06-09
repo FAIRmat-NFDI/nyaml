@@ -1070,7 +1070,7 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
     built-in libraries and preceding XML processing instruction
     """
     # Handle DOM as doc_type
-    doc_type = '<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>'
+    doc_type = f"""<?xml version="1.0" encoding="UTF-8"?>\n<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>"""
 
     if DOM_COMMENT:
         doc_type = extend_doc_type(doc_type, DOM_COMMENT, comment=True)
@@ -1084,7 +1084,7 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
         xml_root,
         pretty_print=True,
         encoding="UTF-8",
-        xml_declaration=True,
+        xml_declaration=False,
         doctype=doc_type,
     )
     with open(tmp_xml, "wb") as file_tmp:
