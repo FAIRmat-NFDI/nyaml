@@ -35,6 +35,14 @@ bibliography: paper.bib
 # NYAML to NXDL
 # NXDL to NYAML
 # Evaluation from NAIC
+
+The NeXus International Advisory Committee (NIAC) is the governing body responsible for overseeing the development and maintenance of the NeXus data standard. A core responsibility of NIAC is the stewardship of the NeXus Definition Language (NXDL), the XML-based schema that defines the hierarchical structure and semantics of NeXus data files [1]. As part of its mission to facilitate standardisation while supporting usability and accessibility, NIAC has recently reviewed and formally accepted NYAML which simplifies the editing and creation of NeXus standard definitions, because NYAML offers a human-friendly YAML-based syntax that directly maps onto NXDL, enabling both new contributors and experienced developers to write and review NeXus definitions with improved clarity and reduced error rates. Following a successful evaluation, NIAC has approved NYAML and endorsed it as the recommended tool for preparing NeXus definition proposals. In support of this decision, the official NeXus definition repository was updated to integrate NYAML into its workflow through the addition of two makefile targets: 'make nyaml', which converts existing definitions from the canonical NXDL.xml format into NYAML, and 'make nxdl', which detects modified or newly added NYAML files and converts them back into valid NXDL for submission and version control. This integration ensures that contributions made in NYAML are compatible with the existing XML-based infrastructure, while promoting a more approachable interface for the scientific community. The adoption of NYAML by NIAC reflects an ongoing commitment to fostering community engagement and modernising the technical tools underpinning the NeXus standard [2].
+
+References:
+
+[1] Könnecke, M., et al. (2015). The NeXus data format. Journal of Applied Crystallography, 48(1), 301–305. https://doi.org/10.1107/S1600576714027575
+[2] NIAC and NeXus Documentation. https://www.nexusformat.org
+
 # Citations
 
 NOTE! The following is example of citation
