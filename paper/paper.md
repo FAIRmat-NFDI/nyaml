@@ -32,8 +32,12 @@ bibliography: paper.bib
 ---
 # Summary
 # Statement of need
+# NYAML to NXDL
+# NXDL to NYAML
+# Evaluation from NAIC
 # Citations
 
+NOTE! The following is example of citation
 Citations to entries in paper.bib should be in
 [rMarkdown](http://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html)
 format.
@@ -47,7 +51,7 @@ For a quick reference, the following citation commands can be used:
 - `[@author1:2001; @author2:2001]` -> "(Author1 et al., 2001; Author2 et al., 2002)"
 
 # Figures
-
+Note! The follwoing is example figure
 Figures can be included like this:
 ![Caption for example figure.\label{fig:example}](figure.png)
 and referenced from text using \autoref{fig:example}.
@@ -56,9 +60,6 @@ Figure sizes can be customized by adding an optional second parameter:
 ![Caption for example figure.](figure.png){ width=20% }
 
 # Acknowledgements
-
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
 
 # References
 
