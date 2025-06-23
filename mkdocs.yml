@@ -18,6 +18,7 @@ markdown_extensions:
   - pymdownx.snippets
   - admonition
   - pymdownx.details
+  - md_in_html
   - pymdownx.superfences:  # conflict with mermaid2
       custom_fences:
         - name: mermaid
@@ -40,20 +41,6 @@ theme:
   icon:
     admonition:
       note: octicons/tag-16
-
-  palette:
-    - scheme: default
-      toggle:
-        icon: material/toggle-switch-off-outline
-        name: Switch to dark mode
-      primary: #2196F3  # Header, text, links, the sidebars and several other components
-      accent: #2196F3  # hovered links, buttons and scrollbars
-    - scheme: slate
-      toggle:
-        icon: material/toggle-switch
-        name: Switch to light mode
-      primary: teal
-      accent: teal
 
 extra_css:
   - stylesheets/extra.css
