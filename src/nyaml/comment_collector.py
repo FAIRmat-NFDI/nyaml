@@ -55,7 +55,7 @@ class CommentCollector:
                 self.comment = XMLComment
             elif self.file.split(".")[-1] == "yaml":
                 self.comment = YAMLComment
-                with open(self.file, "r", encoding="utf-8") as plain_text_yaml:
+                with open(self.file, encoding="utf-8") as plain_text_yaml:
                     loader = LineLoader(plain_text_yaml)
                     self.comment.__yaml_dict__ = loader.get_single_data()
             else:
@@ -80,7 +80,7 @@ class CommentCollector:
         """
         id_ = 0
         single_comment = self.comment(comment_id=id_)
-        with open(self.file, mode="r", encoding="UTF-8") as enc_f:
+        with open(self.file, encoding="UTF-8") as enc_f:
             lines = enc_f.readlines()
             # Make an empty line for last comment if no empty lines in original file
             if lines[-1] != "":
@@ -200,7 +200,7 @@ class Comment:
         self._comnt: str = ""
         # If Multiple comments for one element or entity
         self._comnt_list: List[str] = []
-        self.last_comment: "Comment" = last_comment if last_comment else None
+        self.last_comment: Comment = last_comment if last_comment else None
         if comment_id >= 0 and last_comment:
             self.cid = comment_id
             self.last_comment = last_comment
@@ -350,6 +350,9 @@ class YAMLComment(Comment):
      1. Do not delete any element from yaml dictionary (for loaded_obj. check: Comment_collector
      class. because this loaded file has been exploited in nyaml2nxdl forward tools.)
     """
+
+    # Make this class unhashable (needed since we are overwriting __eq__)
+    __hash__ = None
 
     # Class level variable. The main reason behind that to follow structure of
     # abstract class 'Comment'
