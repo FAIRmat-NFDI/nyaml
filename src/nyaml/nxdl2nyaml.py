@@ -34,12 +34,12 @@ from nyaml.helper import (
     NXDL_FIELD_ATTRIBUTES,
     NXDL_GROUP_ATTRIBUTES,
     NXDL_LINK_ATTRIBUTES,
+    check_for_proper_nameType,
     clean_empty_lines,
     get_node_parent_info,
     get_yaml_escape_char_dict,
     is_copyright_comment,
     remove_namespace_from_tag,
-    check_for_proper_nameType,
 )
 
 DEPTH_SIZE = 2 * " "
@@ -60,7 +60,7 @@ def separate_pi_comments(input_file):
     comments_list = []
     comment = []
 
-    with open(input_file, "r", encoding="utf-8") as file:
+    with open(input_file, encoding="utf-8") as file:
         lines = file.readlines()
         def_tag = "<definition"
         for line in lines:

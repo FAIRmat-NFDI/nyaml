@@ -326,7 +326,7 @@ def extend_yamlfile_by_nxdl_as_comment(
             for line in top_lines_list:
                 f1_obj.write(line)
 
-        with open(file_to_be_appended, mode="r", encoding="utf-8") as f2_obj:
+        with open(file_to_be_appended, encoding="utf-8") as f2_obj:
             for line in f2_obj:
                 f1_obj.write(f"# {line}")
 
@@ -344,7 +344,7 @@ def separate_hash_yaml_and_nxdl(yaml_file, sep_yaml, sep_xml):
                     <nxdl part>
     """
     sha_hash = ""
-    with open(yaml_file, "r", encoding="utf-8") as inp_file:
+    with open(yaml_file, encoding="utf-8") as inp_file:
         lines = inp_file.readlines()
         # file to write yaml part
         with open(sep_yaml, "w", encoding="utf-8") as yml_f_ob, open(

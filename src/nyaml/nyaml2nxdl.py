@@ -40,12 +40,12 @@ from nyaml.helper import (
     YAML_GROUP_ATTRIBUTES,
     YAML_LINK_ATTRIBUTES,
     LineLoader,
+    check_for_proper_nameType,
     clean_empty_lines,
     get_yaml_escape_char_reverter_dict,
     is_copyright_comment,
     nx_name_type_resolving,
     remove_namespace_from_tag,
-    check_for_proper_nameType,
 )
 
 DOM_COMMENT = (
@@ -84,7 +84,7 @@ def get_nxdl_copyright_license(nxdl_file):
     is_comment_end = False
 
     if os.path.isfile(nxdl_file):
-        with open(nxdl_file, "r", encoding="utf-8") as nxdl_file_obj:
+        with open(nxdl_file, encoding="utf-8") as nxdl_file_obj:
             nxdl_lines = nxdl_file_obj.readlines()
             comment = ""
             for line in nxdl_lines:
@@ -128,7 +128,7 @@ def yml_reader(inputfile):
     It parses the yaml in a dict and extends it with line tag keys for each key of the dict.
     """
     global COMMENT_BLOCKS
-    with open(inputfile, "r", encoding="utf-8") as plain_text_yaml:
+    with open(inputfile, encoding="utf-8") as plain_text_yaml:
         loader = LineLoader(plain_text_yaml)
         loaded_yaml = loader.get_single_data()
     COMMENT_BLOCKS = CommentCollector(inputfile, loaded_yaml)
@@ -196,7 +196,7 @@ def yml_reader_nolinetag(inputfile):
     """
     pyyaml based parsing of yaml file in python dict
     """
-    with open(inputfile, "r", encoding="utf-8") as stream:
+    with open(inputfile, encoding="utf-8") as stream:
         parsed_yaml = yaml.safe_load(stream)
     return parsed_yaml
 
@@ -770,7 +770,7 @@ def xml_handle_attributes(dct, obj, keyword, value, verbose):
                 attr_val, dict
             ):
                 if attr == "unit":
-                    elemt_obj.set(f"{attr}s", str(value[attr]))
+                    elemt_obj.set(f"{attr}s", str(attr_val))
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
                     xml_handle_comment(obj, line_number, line_loc, elemt_obj)
@@ -1090,7 +1090,7 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
     with open(tmp_xml, "wb") as file_tmp:
         file_tmp.write(xml_string)
     flag = False
-    with open(tmp_xml, "r", encoding="utf-8") as file_out:
+    with open(tmp_xml, encoding="utf-8") as file_out:
         with open(output_xml, "w", encoding="utf-8") as file_out_mod:
             for i in file_out.readlines():
                 i = unquote(i)
