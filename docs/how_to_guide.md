@@ -20,7 +20,7 @@ $ pre-commit install
 ```
 
 ## How to Use the nyaml Tool
-The `nyaml` works as a command line tool to convert NeXus application definition or base class from `yaml` file format into the `nxdl.xml` file format and vice-versa. The converter can be called by the command
+`nyaml` works as a command line tool to convert NeXus application definitions or base classes from `yaml` file format into the `nxdl.xml` file format and vice-versa. The converter can be called by the command
 
 ```bash
 $ nyaml2nxdl [OPTIONS] [INPUT_FILE]
