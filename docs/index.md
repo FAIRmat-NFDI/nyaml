@@ -39,14 +39,17 @@ An introduction to NeXus and its design principles.
 
 </div>
 <div markdown="block">
-### Reference
-Relavent references that supported to develop this tool:
+### References
+
 - [NYAML GitHub repository](https://github.com/FAIRmat-NFDI/nyaml)
 - [FAIRmat-NeXus website](https://fairmat-experimental.github.io/nexus-fairmat-proposal/)
 - [FAIRmat-NeXus GitHub repository](https://github.com/FAIRmat-NFDI/nexus_definitions)
-- [Official werbsite for NeXus](https://manual.nexusformat.org/index.html)
+- [Official NeXus website](https://manual.nexusformat.org/index.html)
+</div>
+</div>
 
-- [NYAML developed under project FAIRmat-NFDI](https://github.com/FAIRmat-NFDI)
-- [National Research Data Infrastructure (NFDI) funded FAIRmat-NFDI](https://www.nfdi.de/?lang=en)
-</div>
-</div>
+<h2>Project and community</h2>
+
+Any questions or suggestions? [Get in touch!](https://www.fair-di.eu/fairmat/about-fairmat/team-fairmat)
+
+[The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 460197019 (FAIRmat).](https://gepris.dfg.de/gepris/projekt/460197019?language=en)
