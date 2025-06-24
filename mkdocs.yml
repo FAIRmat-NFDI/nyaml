@@ -1,6 +1,6 @@
 site_name: NYAML Docs
 site_description:
-  The documentation for NYAML tools that is a converter tools to transcode  NeXus schema from YAML format to the XML format (.nxdl.xml).
+  The documentation for the NYAML tool which is a converter tool to transcode NeXus schema from YAML to XML (.nxdl.xml).
 site_author: "The FAIRmat authors"
 nav:
   - Home: index.md
