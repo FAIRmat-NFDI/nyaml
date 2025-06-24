@@ -1,5 +1,5 @@
 # FAIRmat NYAML documentation
-The NeXus data format, described by the NeXus Definition Language (NXDL), represents a concerted effort aimed at facilitating data exchange within scientific communities, particularly among those engaged in neutron, X-ray, and muon research [J. Appl. Cryst. (2015). 48, 301-305](https://doi.org/10.1107/S1600576714027575). The data format is also being used by the material science community under the project [NeXus-FAIRmat](https://fairmat-nfdi.github.io/nexus_definitions/) supporting FAIR (Findable, Accessible, Interoperable and Reuseable) data principle. It serves as a standardized framework for both data exchange and storage. At its core, the NeXus Definition Language (NXDL) functions as the cornerstone through which scientists delineate the nomenclature and organizational structure of information within NeXus data files, tailored to specific scientific techniques.
+The NeXus data format, described by the NeXus Definition Language (NXDL), represents a concerted effort aimed at facilitating data exchange within scientific communities, particularly among those engaged in neutron, X-ray, and muon research [J. Appl. Cryst. (2015). 48, 301-305](https://doi.org/10.1107/S1600576714027575). The data format is also being used by the material science community under the project [NeXus-FAIRmat](https://fairmat-nfdi.github.io/nexus_definitions/) supporting FAIR (Findable, Accessible, Interoperable and Reuseable) data principles. It serves as a standardized framework for both data exchange and storage. At its core, the NeXus Definition Language (NXDL) functions as the cornerstone through which scientists delineate the nomenclature and organizational structure of information within NeXus data files, tailored to specific scientific techniques.
 
 NXDL is used to define general data storage objects (base classes) and the base classes are the building blocks for defining measurement-specific or even instrument-specific or software-specific data storage objects (application definitions). In this process, members and definitions of individual base classes can be used as is or customized. In essence, the process of schema development, whether for a base class or an application definition, entails crafting an NXDL schema definition file with the extension 'nxdl.xml', utilizing the Extensible Markup Language, [XML](https://www.w3.org/TR/REC-xml/REC-xml-20081126.xml).
 
@@ -14,7 +14,7 @@ The `YAML` format, while not yet an official version of NeXus application defini
 
 Tutorials to write different parts and a full NeXus application or base class
 
-- [Tutorials to write NeXus definition in YAML](tutorials.md)
+- [Tutorials for writing NeXus definition in YAML](tutorials.md)
 
 </div>
 <div markdown="block">
@@ -34,19 +34,22 @@ How-to install and use the nyaml tool
 An introduction to NeXus and its design principles.
 
 - [An introduction to NeXus](https://manual.nexusformat.org/index.html)
-- [Motivation for NYAML tool](explanations.md)
+- [Explanation of the nyaml tool](explanations.md)
 
 
 </div>
 <div markdown="block">
-### Reference
-Relavent references that supported to develop this tool:
+### References
+
 - [NYAML GitHub repository](https://github.com/FAIRmat-NFDI/nyaml)
 - [FAIRmat-NeXus website](https://fairmat-experimental.github.io/nexus-fairmat-proposal/)
 - [FAIRmat-NeXus GitHub repository](https://github.com/FAIRmat-NFDI/nexus_definitions)
-- [Official werbsite for NeXus](https://manual.nexusformat.org/index.html)
+- [Official NeXus website](https://manual.nexusformat.org/index.html)
+</div>
+</div>
 
-- [NYAML developed under project FAIRmat-NFDI](https://github.com/FAIRmat-NFDI)
-- [National Research Data Infrastructure (NFDI) funded FAIRmat-NFDI](https://www.nfdi.de/?lang=en)
-</div>
-</div>
+<h2>Project and community</h2>
+
+Any questions or suggestions? [Get in touch!](https://www.fair-di.eu/fairmat/about-fairmat/team-fairmat)
+
+[The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 460197019 (FAIRmat).](https://gepris.dfg.de/gepris/projekt/460197019?language=en)
