@@ -7,7 +7,7 @@ The tool is published to `PyPI` and available for pip install
 $ pip install nyaml
 ```
 
-To contribute to the tool or to install it in development mode
+To contribute to the tool or to install it in development mode, you should run
 ```bash
 $ git clone https://github.com/FAIRmat-NFDI/nyaml.git
 $ cd nyaml
