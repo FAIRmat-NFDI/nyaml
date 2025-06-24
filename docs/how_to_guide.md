@@ -23,7 +23,13 @@ $ pre-commit install
 `nyaml` works as a command line tool to convert NeXus application definitions or base classes from `yaml` file format into the `nxdl.xml` file format and vice-versa. The converter can be called by the command
 
 ```bash
-$ nyaml2nxdl [OPTIONS] [INPUT_FILE]
+::: mkdocs-click
+    :module: nyaml.cli
+    :command: launch_tool
+    :prog_name: nyaml2nxdl
+    :depth: 2
+    :style: table
+    :list_subcommands: True
 ```
 with the available options:
 ```output

@@ -46,7 +46,8 @@ dev = [
     "mkdocs",
     "mkdocs-mermaid2-plugin",
     "mkdocstrings",
-    "mkdocs-material"
+    "mkdocs-click",
+    "mkdocs-material",
 
 ]
 
