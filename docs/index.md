@@ -34,7 +34,7 @@ How-to install and use the nyaml tool
 An introduction to NeXus and its design principles.
 
 - [An introduction to NeXus](https://manual.nexusformat.org/index.html)
-- [Motivation for NYAML tool](explanations.md)
+- [Explanation of the nyaml tool](explanations.md)
 
 
 </div>
