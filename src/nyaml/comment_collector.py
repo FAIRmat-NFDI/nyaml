@@ -509,4 +509,3 @@ class YAMLComment(Comment):  # noqa: PLW1641
                 if left_line.strip() != right_line.strip():
                     return False
         return True
-
