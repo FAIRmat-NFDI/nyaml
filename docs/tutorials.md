@@ -1,5 +1,5 @@
 # Tutorials
-This tutorial will explain different keywords, terms, and rules from the perspective of YAML format of the NeXus schema. Therefore it provides a overall grasp on how to write a NeXus schema thosse syntactical components.
+This explanatory tutorial will explain different keywords, terms, and rules from the perspective of YAML format of the NeXus schema. Therefore it provides a overall grasp on how to write a NeXus schema those syntactical components.
 
 ## Design of NeXus Ontology and Terms in YAML
 
@@ -85,7 +85,7 @@ reference_measurement(link):
 
 In the above YAML example, `reference_measurement` is defined as a link refering the `NXentry` group with its target specified as `/entry`. This structure ensures that the concept referencing the data is effectively linked to the designated target, thereby reducing redundancy and maintaining data integrity within the NeXus framework.
 
-### NeXus Choice
+<!-- ### NeXus Choice
 NeXus `choice` concept is designed to choose a concept from a number of concepts of the same kind (e.g., a NeXus field). The `choice` options allows for defining a scientific concept in several modes for different situations (e.g., for different instrument configurations or measurement modes).
 
 **NeXus choice in YAML format**
@@ -101,7 +101,7 @@ pixel_shape(choice):
       are of uniform shape and require being described by cylinders.
 ```
 
-In this `choice` example, `pixel_shape` could be any of the groups `(NXoff_geometry)` and `(NXcylindrical_geometry)`, depending on the geometry of the pixels.
+In this `choice` example, `pixel_shape` could be any of the groups `(NXoff_geometry)` and `(NXcylindrical_geometry)`, depending on the geometry of the pixels. -->
 
 ## Special Keywords in YAML
 To explain the context of NeXus, certain keywords hold significance beyond their literal interpretations. These special keywords are utilized to elucidate and denote various NeXus terms like attributes, fields, links, and groups, thereby enhancing the clarity and specificity of the data representation.
