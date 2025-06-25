@@ -30,8 +30,17 @@ affiliations:
 date: 13 August 2017
 bibliography: paper.bib
 ---
+
 # Summary
+
+The NeXus scientific data format [@Koennecke:2015] is a widely adopted standard for organizing and sharing scientific data, particularly in the field of materials characterization. NeXus definitions specify the hierarchical structure and semantics of valid NeXus files and are written in XML using the NeXus Definition Language (NXDL), which itself is specified using XSD.
+nyaml is a Python-based tool with both a command-line interface and an importable API that facilitates the conversion between NXDL XML and a simplified YAML representation. YAML’s indentation-based syntax enhances human readability and simplifies manual editing. By providing a reliable, lossless round-trip conversion between XML and YAML, nyaml enables developers to edit NeXus definitions more efficiently without sacrificing structural or semantic fidelity.
+
+
 # Statement of need
+
+The NeXus data format standard has in recent years seen a significant enhancement across diverse scientific domains. The growth of both the standard and the number of NeXus definition developers makes it all the more important to ensure that the development process is both user-friendly and resilient to errors. While the existing representation in XML through the NeXus Definition Language (NXDL) provides a rigorous and well-defined structure for NeXus definitions, it is verbose and difficult to edit by hand. Writing and maintaining NXDL files often involves dealing with deeply nested elements and strict syntax, which can be error-prone and time-consuming—especially for users who are not familiar with XML development. nyaml addresses these challenges by enabling the development of NeXus definitions in a cleaner, YAML-based format while preserving the full structure and semantics of the original XML.
+
 # NYAML to NXDL
 # NXDL to NYAML
 # Evaluation from NAIC
