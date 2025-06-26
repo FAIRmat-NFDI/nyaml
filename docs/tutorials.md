@@ -160,7 +160,7 @@ dimensions:
 ```
 
 ### Keyword `enumeration`
-Python-like list of strings which are considered as recommended items for the fields or attributes.
+List of strings which are considered as a set of predefined values for fields or attributes.
 
 **Enumeration in YAML**
 ```yaml
