@@ -14,7 +14,7 @@ The `YAML` format, while not yet an official version of NeXus application defini
 
 Tutorials to write different parts and a full NeXus application or base class
 
-- [Tutorials for writing NeXus definition in YAML](tutorials.md)
+- [Writing a NeXus definition in YAML](tutorials.md)
 
 </div>
 <div markdown="block">
