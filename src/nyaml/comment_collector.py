@@ -342,7 +342,7 @@ class XMLComment(Comment):
         return self._comnt_list
 
 
-class YAMLComment(Comment):
+class YAMLComment(Comment):  # noqa: PLW1641
     """
     This class for storing comment text as well as location of the comment e.g. line
     number of other in the file.

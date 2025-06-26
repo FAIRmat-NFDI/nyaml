@@ -1,0 +1,45 @@
+site_name: NYAML Docs
+site_description:
+  The documentation for the NYAML tool which is a converter tool to transcode NeXus schema from YAML to XML (.nxdl.xml).
+site_author: "The FAIRmat authors"
+nav:
+  - Home: index.md
+  - Tutorial: tutorials.md
+  - How-To-Guide : how_to_guide.md
+  - Explanation: explanations.md
+  - Reference: references.md
+plugins:
+  - mkdocstrings
+  - mermaid2
+  - search
+markdown_extensions:
+  - abbr
+  - attr_list
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.details
+  - md_in_html
+  - mkdocs-click
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+theme:
+  name: "material"
+  feature:
+  - navigation.tabs
+  - navigation.sections
+  - navigation.top
+  - navigation.bottom
+  - toc.integrate
+  - search.suggest
+  - search.highlight
+  - content.tabs.link
+  - content.tabs.copy
+  - content.code.annotation
+  icon:
+    admonition:
+      note: octicons/tag-16
+extra_css:
+  - stylesheets/extra.css
