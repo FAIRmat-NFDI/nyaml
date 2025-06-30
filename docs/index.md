@@ -20,7 +20,7 @@ Tutorials to write different parts and a full NeXus application or base class
 
 How-to install and use the nyaml tool
 
-- [Use of `nyaml` tool](howto.md)
+- [Installation and use of the `nyaml` tool](howtos/howto.md)
 
 </div>
 
@@ -31,8 +31,8 @@ How-to install and use the nyaml tool
 An introduction to NeXus and its use in the light of `YAML` format using the `nyaml` tool.
 
 - [An introduction to NeXus](https://manual.nexusformat.org/index.html)
-- [Motivation behind the nyaml tool](explanations.md)
-- [Workflow of the nyaml tool with examples](workflow.md)
+- [Motivation behind the nyaml tool](explanations/explanations.md)
+- [Workflow of the nyaml tool with examples](workflows/workflow.md)
 
 
 </div>
@@ -40,7 +40,7 @@ An introduction to NeXus and its use in the light of `YAML` format using the `ny
 ### References
 The list of references used in this documentation
 
-- [References](./references.md)
+- [References](references/references.md)
 </div>
 
 </div>
