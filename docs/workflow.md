@@ -1,5 +1,5 @@
 ## nyaml Workflow
-For a given input file, the `nyaml` converter checks for the correct file type and call appropriate converter. For an XML file, the `nxdl2yaml` converter parses the `XML` file, by means of [lxml](https://lxml.de/) python library, into an `XML` tree object. Adhering to the NXDL rules, the converter writes the application definition or the base class object to a `yaml` file that matches the `nyaml` syntax. If the input file is a `yaml` file, the `yaml2nxdl` converter collects the comments in a `Comments` object and parses the `yaml` file into a python `dictionary` object. Later, the application definition or base classes will be converted into an `XML` file by combining the `Comments` and the python `dictionary` object.
+The `nyaml` implements a specific workflow for converting between YAML and XML formats. The `nyaml` converter checks for the correct file type and calls the appropriate converter. For an XML file, the `nxdl2yaml` converter parses the `XML` file, by means of [lxml](https://lxml.de/) python library, into an `XML` tree object. Adhering to the NXDL rules, the converter writes the application definition or the base class object to a `yaml` file that matches the `nyaml` syntax. If the input file is a `yaml` file, the `yaml2nxdl` converter collects the comments in a `Comments` object and parses the `yaml` file into a python `dictionary` object. Later, the application definition or base classes will be converted into an `XML` file by combining the `Comments` and the python `dictionary` object.
 
 Like every scientific software, the `nyaml` tool also follows a specific workflow.
 
@@ -56,7 +56,6 @@ __NOTE__: For indetailed explanation with examples please follow the [Tutorials 
         Number of data points in the transmission function.
     NXmpes(NXobject):
       (NXentry):
-        exsits: required
         definition:
           \@version:
           enumeration: [NXmpes]

@@ -5,7 +5,7 @@ site_author: "The FAIRmat authors"
 nav:
   - Home: index.md
   - Tutorial: tutorials.md
-  - How-To-Guide : how_to_guide.md
+  - How-To-Guide : howto.md
   - Explanation: explanations.md
   - Reference: references.md
 plugins:
