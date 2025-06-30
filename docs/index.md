@@ -1,8 +1,8 @@
 # FAIRmat nyaml documentation
 
-The `nyaml` tool is designed to be user-friendly, with a command line interface that allows users to easily inter-convert between `YAML` and `XML` formats written in terms of NXDL (NeXus Definition Language). This toolset is particularly beneficial for scientists and developers who are familiar with the NeXus format and wish to leverage the advantages of `YAML` for schema development. The tool supports the conversion of both application definitions and base classes.
+The `nyaml` tool offers a user-friendly command-line interface for converting between `YAML` and `XML` representations of NeXus definitions written in the NeXus Definition Language (NXDL). While the official NeXus definitions are maintained in `XML,` authoring them in `YAML` provides a more concise and readable alternative. `nyaml` bridges this gap, allowing developers to work in `YAML` while ensuring compatibility with the official `XML` format.
 
-The tool can be installed via pip, and it provides comprehensive documentation and tutorials to assist users in writing NeXus definitions in `YAML`.
+The tool supports both application definitions and base classes. It can be installed via `pip` and includes comprehensive documentation and tutorials to assist users in writing NeXus definitions using `YAML`.
 
 <div markdown="block" class="home-grid">
 <div markdown="block">
@@ -28,7 +28,7 @@ How-to install and use the nyaml tool
 
 ### Learn
 
-An introduction to NeXus and its design principles.
+An introduction to NeXus and its use in the light of `YAML` format using the `nyaml` tool.
 
 - [An introduction to NeXus](https://manual.nexusformat.org/index.html)
 - [Motivation behind the nyaml tool](explanations.md)
@@ -50,4 +50,3 @@ The list of references used in this documentation
 Any questions or suggestions? [Get in touch!](https://www.fair-di.eu/fairmat/about-fairmat/team-fairmat)
 
 [The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 460197019 (FAIRmat).](https://gepris.dfg.de/gepris/projekt/460197019?language=en)
-git cofdfdfdf

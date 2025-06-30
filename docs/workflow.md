@@ -1,5 +1,7 @@
 ## nyaml Workflow
-The `nyaml` implements a specific workflow for converting between YAML and XML formats. The `nyaml` converter checks for the correct file type and calls the appropriate converter. For an XML file, the `nxdl2yaml` converter parses the `XML` file, by means of [lxml](https://lxml.de/) python library, into an `XML` tree object. Adhering to the NXDL rules, the converter writes the application definition or the base class object to a `yaml` file that matches the `nyaml` syntax. If the input file is a `yaml` file, the `yaml2nxdl` converter collects the comments in a `Comments` object and parses the `yaml` file into a python `dictionary` object. Later, the application definition or base classes will be converted into an `XML` file by combining the `Comments` and the python `dictionary` object.
+The `nyaml` implements a specific workflow for converting between YAML and XML formats. The `nyaml` converter checks for the correct file type and calls the appropriate converter. For an XML file, the `nxdl2yaml` converter parses the `XML` file, by means of [lxml](https://lxml.de/) python library, into an `XML` tree object. Adhering to the NXDL rules, the converter writes the application definition or the base class object to a `YAML` file that matches the `nyaml` syntax. If the input file is a `YAML` file, the `yaml2nxdl` converter collects the comments in a `Comments` object and parses the `YAML` file into a python `dictionary` object. Later, the application definitions or base classes will be converted into an `XML` file by combining the `Comments` and the python `dictionary` object.
+
+After the conversion from `XML` format to `YAML` format, the `nyaml` tool stores the `XML` contents at the end of the file under a hash created by Secure Hash Algorithm sha256 from `YAML` contents generated in this conversion process. This benefits on the backward compatibility of the `YAML` file, so that the `YAML` file can be converted back to `XML` file without any modification of structure like whitespaces or newlines.
 
 Like every scientific software, the `nyaml` tool also follows a specific workflow.
 
@@ -34,9 +36,12 @@ graph TD;
 ```
 
 ## Conversion from YAML to XML and vice versa
-Presented below is a concise and trimmed example of the `NXmpes` application definition (for discussion purpose) in `YAML` format, alongside its corresponding encoding into `XML` format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of the basic structure of NXDL, readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html).
+Presented below is a concise and trimmed example of the `NXmpes` application definition (for discussion purpose) in `YAML` format, alongside its corresponding encoding into `XML` format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of the basic structure of NXDL, readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html). As an example, we give an application definition for multidimensional photoelectron spectroscopy (MPES) in `YAML` and `XML` formats.
 
-__NOTE__: For indetailed explanation with examples please follow the [Tutorials for writing NeXus definition in YAML](tutorials.md).
+!!! note
+    For indetailed explanation with examples please follow the [Tutorials for writing NeXus definition in YAML](tutorials.md).
+
+<!-- To do, add warning saying that the application definitions is not mendatorily should the update mpes application. -->
 
 **NXmpes application definition in YAML and XML format**
 

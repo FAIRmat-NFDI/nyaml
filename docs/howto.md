@@ -1,5 +1,5 @@
 # nyaml Installation and Command
-`nyaml` is a Python package [published on PyPI](https://pypi.org/project/nyaml/).
+`nyaml` is a Python package that is [published on PyPI](https://pypi.org/project/nyaml/).
 
 ## How to Install nyaml
 The tool is published to `PyPI` and available for pip install
