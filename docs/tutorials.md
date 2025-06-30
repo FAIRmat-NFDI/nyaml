@@ -7,22 +7,51 @@ Within the YAML format, the root section denotes the top-level description of th
 
 **A typical root section for the application definition `NXmpes` outlined**
 
-```yaml
-category: application
-type: group
-doc: |
-  This is the most general application definition for multidimensional photoelectron spectroscopy.
+=== "YAML"
 
-  .. _ISO 18115-1:2023: https://www.iso.org/standard/74811.html
-  .. _IUPAC Recommendations 2020: https://doi.org/10.1515/pac-2019-0404
-symbols:
-  doc: |
-    The symbols used in the schema to specify e.g. dimensions of arrays
-  n_transmission_function: |
-    Number of data points in the transmission function.
-NXmpes(NXobject):
-```
+    ```yaml
+    category: application
+    type: group
+    doc: |
+      This is the most general application definition for multidimensional photoelectron spectroscopy.
 
+      .. _ISO 18115-1:2023: https://www.iso.org/standard/74811.html
+      .. _IUPAC Recommendations 2020: https://doi.org/10.1515/pac-2019-0404
+    symbols:
+      doc: |
+        The symbols used in the schema to specify e.g. dimensions of arrays
+      n_transmission_function: |
+        Number of data points in the transmission function.
+    NXmpes(NXobject):
+    ```
+
+=== "XML"
+
+    ```xml
+    <definition xmlns="http://definition.nexusformat.org/nxdl/3.1"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                category="application"
+                type="group"
+                name="NXmpes(NXobject)"
+                extends="NXobject"
+                xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+      <doc>
+        This is the most general application definition for multidimensional photoelectron spectroscopy.
+        .. _ISO 18115-1:2023: https://www.iso.org/standard/74811.html
+        .. _IUPAC Recommendations 2020: https://doi.org/10.1515/pac-2019-0404
+      </doc>
+      <symbols>
+        <doc>
+          The symbols used in the schema to specify e.g. dimensions of arrays
+        </doc>
+        <symbol name="n_transmission_function">
+          <doc>
+            Number of data points in the transmission function.
+          </doc>
+        </symbol>
+      </symbols>
+    </definition>
+    ```
 ### NeXus Group
 [NeXus groups](https://manual.nexusformat.org/design.html#design-groups), as instances of NeXus base classes, embody the compositional structure of application definitions. Depending on the value of keyword `nameType`, these groups can be initialized dynamically or statically, each approach offering distinct advantages. The keyword `nameType` can hold three district values: `specified`, `any`, and `partial` (for details see the table in `nameType` keyword).
 
@@ -33,38 +62,75 @@ Descriptive information about NeXus groups is encapsulated within the `doc` chil
 Furthermore, for `nameType`=`partial` (see keyword `nameType`), the uppercase part of the group's name can be dynamically overwritten, allowing for the instantiation of multiple instances. For example, `source_electric` and `source_magnetic` can coexist from `NXsource`. The same upper case rules for multiple instances are also applicable for NeXus fields and attributes.
 
 **NeXus Groups in YAML format**
-```yaml
-# NeXus groups in YAML format
-source_TYPE(NXsource):
-  exists: recommended
-  nameType: partial
-  doc: |
-    A source used to generate a beam.
-(NXmanipulator):
-  exists: optional
-  nameType: any # default
-  doc: |
-    Manipulator for positioning of the sample.
-  value_log(NXlog):
-    exists: optional
-```
+<!-- make a mktabbed for contend of yaml and xml as above -->
+
+=== "YAML"
+    ```yaml
+    # NeXus groups in YAML format
+    source_TYPE(NXsource):
+      exists: recommended
+      nameType: partial
+      doc: |
+        A source used to generate a beam.
+    (NXmanipulator):
+      exists: optional
+      nameType: any # default
+      doc: |
+        Manipulator for positioning of the sample.
+      value_log(NXlog):
+        exists: optional
+    ```
+
+=== "XML"
+    ```xml
+    <group name="source_TYPE" type="NXsource" recommended="true">
+      <doc>
+        A source used to generate a beam.
+      </doc>
+    </group>
+    <group type="NXmanipulator" optional="true">
+      <doc>
+        Manipulator for positioning of the sample.
+      </doc>
+      <group name="value_log" type="NXlog" optional="true"/>
+    </group>
+    ```
 
 A NeXus group may contain NeXus `fields`, NeXus `attributes`, and other NeXus `groups`. A `field`, which is written as a string without a preceding `NX`, and an attribute, preceded by `\@`, must have a [NeXus type](https://manual.nexusformat.org/nxdl-types.html#index-0) (e.g.`NX_FLOAT`, `NX_CHAR`). The NeXus type type must be denoted inside parenthesis (e.g. `end_time(NX_DATE_TIME)`; if it is ommited, the NeXus `field` or `attribute` has the type `NX_CHAR` by default, unless explicitly specified within parentheses (e.g., `end_time(NX_DATE_TIME)`). Other XML attributes of the NeXus `field`/`attribute` can be defined using one of a set of special key ords below the `field`/`attribute` by indentation (the special keywords will be discussed in the next section). The explanatory documentation text of the NeXus `field`/`attribute` is given within the `doc` child.
 
 **NeXus field and attribute in YAML format**
-```yaml
-(NXentry):
-  exists: required
-  definition:  # Field type: NX_CHAR
-    \@version:  # Attribute type: NX_CHAR
-    enumeration: [NXmpes]
-  title:
-  start_time(NX_DATE_TIME):  # Field type: NX_DATE_TIME
-    doc: Datetime of the start of the measurement.
-  end_time(NX_DATE_TIME):  # Field type: NX_DATE_TIME
-    exists: recommended
-    doc: Datetime of the end of the measurement.
-```
+
+=== "YAML"
+    ```yaml
+    (NXentry):
+      definition:  # Field type: NX_CHAR
+        \@version:  # Attribute type: NX_CHAR
+        enumeration: [NXmpes]
+      title:
+      start_time(NX_DATE_TIME):  # Field type: NX_DATE_TIME
+        doc: Datetime of the start of the measurement.
+      end_time(NX_DATE_TIME):  # Field type: NX_DATE_TIME
+        exists: recommended
+        doc: Datetime of the end of the measurement.
+    ```
+=== "XML"
+    ```xml
+    <group type="NXentry">
+      <field name="definition" type="NX_CHAR">
+        <attribute name="\@version"/>
+        <enumeration>
+          <item value="NXmpes"/>
+        </enumeration>
+      </field>
+      <field name="title"/>
+      <field name="start_time" type="NX_DATE_TIME">
+        <doc>Datetime of the start of the measurement.</doc>
+      </field>
+      <field name="end_time" type="NX_DATE_TIME" recommended="true">
+        <doc>Datetime of the end of the measurement.</doc>
+      </field>
+    </group>
+    ```
 
 ### NeXus Link
 The NeXus `link` reduces data duplication since several concepts of the same kind (e.g., NeXus `group`, `field`, or `attribute`) can refer to a single copy of a data element. In YAML format, NeXus `link` is defined denoting the link in parenthesis. At the same time, the concept containing the data must be mentioned under the `target` child.
@@ -72,11 +138,19 @@ The NeXus `link` reduces data duplication since several concepts of the same kin
 
 
 **NeXus link in YAML format**
-```yaml
-reference_measurement(link):
-  target: /entry
-  doc: A link to a full data collection.
-```
+
+=== "YAML"
+    ```yaml
+    reference_measurement(link):
+      target: /entry
+      doc: A link to a full data collection.
+    ```
+=== "XML"
+    ```xml
+    <link type="NXentry" target="/entry">
+      <doc>A link to a full data collection.</doc>
+    </link>
+    ```
 
 In the YAML example above, `reference_measurement` is defined as a link refering to the `NXentry` group with its target specified as `/entry`. This structure ensures that the concept referencing the data is effectively linked to the designated target, thereby reducing redundancy and maintaining data integrity within the NeXus framework.
 
@@ -129,12 +203,21 @@ Currently, the accepted values for the `exists` keyword encompass:
 
 **`exists` in YAML**
 
-```yaml
-transmission_correction(NXcalibration):
-  exists: optional
-  doc: |
-    This calibration procedure is used to account for the different transmission efficiencies.
-```
+=== "YAML"
+    ```yaml
+    transmission_correction(NXcalibration):
+      exists: optional
+      doc: |
+        This calibration procedure is used to account for the different transmission efficiencies.
+    ```
+=== "XML"
+    ```xml
+    <group type="NXcalibration" optional="true">
+      <doc>
+        This calibration procedure is used to account for the different transmission efficiencies.
+      </doc>
+    </group>
+    ```
 
 In the above example the group `transmission_correction` is an optional group.
 
@@ -143,12 +226,20 @@ The `unit` keyword is used to define the NeXus-compliant unit categories (which 
 
 **`unit` in YAML**
 
-```yaml
-detector_voltage(NX_FLOAT):
-  unit: NX_VOLTAGE
-  doc: |
-    Voltage applied to detector.
-```
+=== "YAML"
+    ```yaml
+    detector_voltage(NX_FLOAT):
+      unit: NX_VOLTAGE
+      doc: |
+        Voltage applied to detector.
+    ```
+=== "XML"
+    ```xml
+    <field name="detector_voltage" type="NX_FLOAT">
+      <unit>NX_VOLTAGE</unit>
+      <doc>Voltage applied to detector.</doc>
+    </field>
+    ```
 
 ### Keyword `dimensions`
 
@@ -156,33 +247,69 @@ The `dimensions` term  describes the multidimensional nature of the data, specif
 
 
 **`dimensions` in YAML**
-```yaml
-# 2D particle motion
-dimensions:
-   rank: 2
-   dim: [[0, nx], [1, ny]]
-   dim_parameters:
-      doc: ["Position of particle on x-axis.","Position of particle on y-axis."]
-```
-The `dimensions` can also be written in shorter form
-**Dimensions in YAML (shorter form)**
-```yaml
-# 2D particle motion
-dimensions:
-   rank: 2
-   dim: (nx, ny)
-```
+
+=== "YAML"
+    ```yaml
+    # 2D particle motion
+    dimensions:
+      rank: 2
+      dim: [[0, nx], [1, ny]]
+      dim_parameters:
+          doc: ["Position of particle on x-axis.","Position of particle on y-axis."]
+    ```
+    The `dimensions` can also be written in shorter form
+    **Dimensions in YAML (shorter form)**
+=== "YAML (shorter form)"
+    ```yaml
+    # 2D particle motion
+    dimensions:
+      rank: 2
+      dim: (nx, ny)
+    ```
+=== "XML"
+    ```xml
+    <dimensions rank="2">
+      <dim index="0" value="nx">
+        <doc>Position of particle on x-axis.</doc>
+      </dim>
+      <dim index="1" value="ny">
+        <doc>Position of particle on y-axis.</doc>
+      </dim>
+    </dimensions>
+    ```
+=== "XML (shorter form)"
+    ```xml
+    <dimensions rank="2">
+      <dim index="0" value="nx"/>
+      <dim index="1" value="ny"/>
+    </dimensions>
+    ```
 
 ### Keyword `enumeration`
 List of strings which are considered as a set of predefined values for fields or attributes.
 
 
 **Enumeration in YAML**
-```yaml
-definition:
-  \@version:
+
+=== "YAML"
+    ```yaml
+    definition:
+      \@version:  # Attribute type: NX_CHAR
+        enumeration: [NXmpes]
+    ```
+=== "XML"
+    ```xml
+    <field name="definition" >
+      <attribute name="version">
+        <enumeration>
+          <item value="NXmpes"/>
+        </enumeration>
+      </attribute>
+    </field>
+    ```
+
+
 In the example, the only valid value for NeXus field `definition` is `NXmpes`.
-```
 In the example, the only valid value for NeXus field `definition` is `NXmpes`.
 The `xref` keyword (which can only be used inside the keyword `doc`) is used to refer any other ontology or any other standard such `ISO`. The `xref` in the example `doc` will reflect the information inside the XML `doc`.
 
@@ -190,14 +317,29 @@ The `xref` keyword (which can only be used inside the keyword `doc`) is used to 
 The `xref` keyword (which can only be used inside the keyword `doc`) is used to refer any other ontology or any other standard (such as `ISO`). The `xref` in the example `doc` will reflect the information inside the XML `doc`. Note that the `xref` keyword is only available in the `YAML` representation and will be transformed into its textual representation inside the `doc` text in `XML`.
 
 **`xref` in YAML**
-```yaml
-(NXinstrument):
-  doc:
-  - |
-    Description of the MPES spectrometer and its individual parts.
-  - |
-    xref:
-      spec: ISO 18115-1:2023
-      term: 12.58
-      url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
-```
+
+=== "YAML"
+    ```yaml
+    (NXinstrument):
+      doc:
+      - |
+        Description of the MPES spectrometer and its individual parts.
+      - |
+        xref:
+          spec: ISO 18115-1:2023
+          term: 12.58
+          url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
+    ```
+=== "XML"
+    ```xml
+    <group type="NXinstrument">
+      <doc>
+        Description of the MPES spectrometer and its individual parts.
+
+        This concept is related to term `12.58`_ of the ISO 18115-1:2023 standard.
+
+        .. _12.58: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
+
+      </doc>
+    </group>
+    ```

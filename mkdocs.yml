@@ -13,6 +13,7 @@ plugins:
   - mermaid2
   - search
 markdown_extensions:
+  - tables
   - abbr
   - attr_list
   - pymdownx.snippets
@@ -20,6 +21,9 @@ markdown_extensions:
   - pymdownx.details
   - md_in_html
   - mkdocs-click
+  - admonition
+  - pymdownx.tabbed:
+      alternate_style: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
