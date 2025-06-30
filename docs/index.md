@@ -11,7 +11,7 @@ The tool supports both application definitions and base classes. It can be insta
 
 Tutorials to write different parts and a full NeXus application or base class
 
-- [Writing a NeXus definition in YAML](tutorials.md)
+- [Writing a NeXus definition in YAML](tutorials/tutorials.md)
 
 </div>
 <div markdown="block">
