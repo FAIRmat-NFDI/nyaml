@@ -30,9 +30,9 @@ NXmpes(NXobject):
 
 Dynamic initialization allows the instantiation of groups while implementing the NeXus definition to store data (in HDF5 file format called NeXus file). This method provides flexibility for multiple instances at the same level within the NeXus file. For instance, the group `(NXmanipulator)` (with `nameType`=`any`) can initialize multiple groups such as `manipulator1` and `manipulator2` of the base class `NXmanipulator` during data writing.
 
-Descriptive information about NeXus groups is encapsulated within the `doc` child of the respective group. It is important to note that the group annotation of `source_TYPE(NXsource)` or `(NXsource)source_TYPE` signifies the encapsulation of the group's `name` as `source_TYPE` and its type as `NXsource` base class. Notably, the order between `name` and `type` within the XML element will be inverted for two different syntaxs.
+Descriptive information about NeXus groups is encapsulated within the `doc` child of the respective group. It is important to note that the group annotation of `source_TYPE(NXsource)` signifies the encapsulation of the group's `name` as `source_TYPE` and its type as `NXsource` base class.
 
-Furthermore, for `nameType`=`partial`, the uppercase part of the group's name can be dynamically overwritten, allowing for the instantiation of multiple instances. For example, `source_electric` and `source_magnetic` can coexist from `NXsource`. The same upper case rules for multiple instances are also applicable for NeXus fields and attributes.
+Furthermore, for `nameType`=`partial` (see keyword `nameType`), the uppercase part of the group's name can be dynamically overwritten, allowing for the instantiation of multiple instances. For example, `source_electric` and `source_magnetic` can coexist from `NXsource`. The same upper case rules for multiple instances are also applicable for NeXus fields and attributes.
 
 **NeXus Groups in YAML format**
 ```yaml
@@ -105,6 +105,16 @@ In this `choice` example, `pixel_shape` could be any of the groups `(NXoff_geome
 
 In the YAML schema the tool uses, certain keywords hold significance beyond their literal interpretations. These special keywords are utilized to elucidate and denote various NeXus terms like `attributes`, `fields`, `links`, and `groups`, thereby enhancing the clarity and specificity of the data representation.
 
+### Keyword `nameType`
+To initialize a NeXus `group`, `field` or `attribute` the keyword `nameType` carries very significant information on the initialized name depending on all characters upper case, lower case or combination of upper-lower case.
+
+
+|      `nameType`     |        `specified`         |             `any`            |          `partial`          |   default value       |
+|---------------------|----------------------------|------------------------------|-----------------------------|-----------------------|
+| All Upper Case      | &#10003;                   |   &#10003;                   | &#10003; (with warning msg) | `specified`           |
+| All Lower Case      | &#10003;                   |   &#10003; (with warning msg)| &#10003; (with error);      | `specified`           |
+| Upper and Lower Case| &#10003;                   |   &#10003; (with warning msg)| &#10003;                    | `specified`           |
+| Anonymous Group Name| &#10003; (with error)      |   &#10003;                   | &#10003; (with error)       | `any`                 |
 
 ### Keyword `exists`
 
@@ -193,15 +203,3 @@ The `xref` keyword (which can only be used inside the keyword `doc`) is used to 
       term: 12.58
       url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
 ```
-
-### Keyword `nameType`
-To initialize a NeXus `group`, `field` or `attribute` the keyword `nameType` carries very significant information on the initialized name depending on all characters upper case, lower case or combination of upper-lower case.
-
-
-|      `nameType`     |        `specified`         |             `any`            |          `partial`          |   default value       |
-|---------------------|----------------------------|------------------------------|-----------------------------|-----------------------|
-| All Upper Case      | &#10003;                   |   &#10003;                   | &#10003; (with warning msg) | `specified`           |
-| All Lower Case      | &#10003;                   |   &#10003; (with warning msg)| &#10003; (with error);      | `specified`           |
-| Upper and Lower Case| &#10003;                   |   &#10003; (with warning msg)| &#10003;                    | `specified`           |
-| Anonymous Group Name| &#10003; (with error)      |   &#10003;                   | &#10003; (with error)       | `any`                 |
-
