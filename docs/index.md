@@ -20,7 +20,7 @@ Tutorials to write different parts and a full NeXus application or base class
 
 How-to install and use the nyaml tool
 
-- [Use of `nyaml` tool](how_to_guide.md)
+- [Use of `nyaml` tool](howto.md)
 
 </div>
 
