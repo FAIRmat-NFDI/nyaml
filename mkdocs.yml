@@ -5,10 +5,10 @@ site_author: "The FAIRmat authors"
 repo_url: https://github.com/FAIRmat-NFDI/nyaml
 nav:
   - Home: index.md
-  - Tutorial: tutorials.md
-  - How-To-Guide : howto.md
-  - Explanation: explanations.md
-  - Reference: references.md
+  - Tutorial: tutorials/tutorials.md
+  - How-To-Guide : howtos/howto.md
+  - Explanation: learn/explanations.md
+  - Reference: references/references.md
 plugins:
   - mkdocstrings
   - mermaid2
@@ -54,7 +54,7 @@ theme:
 
 extra:
   generator: false
-  # homepage: https://fairmat-nfdi.github.io/pynxtools/
+  # homepage: https://fairmat-nfdi.github.io/nyaml/
 
 use_directory_urls: false
 extra_css:
