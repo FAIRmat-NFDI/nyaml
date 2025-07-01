@@ -40,6 +40,16 @@ nyaml is a Python-based tool with both a command-line interface and an importabl
 # Statement of need
 
 The NeXus data format standard, which was originally introduced for neutron, X-ray, and muon science, has in recent years seen a significant enhancement across diverse scientific domains. The growth of both the standard and the number of NeXus definition developers makes it all the more important to ensure that the development process is both user-friendly and resilient to errors. The existing representation of NeXus definitions in XML offers structural rigor through the NeXus Definition Language (NXDL) and a well-defined hierarchy for metadata and data types. However, it is verbose and can be difficult to edit by hand. Writing and maintaining NXDL files often involves dealing with deeply nested elements and strict syntax, which can be error-prone and time-consuming, especially for users who are not familiar with XML development. nyaml addresses these challenges by enabling the development of NeXus definitions in a cleaner, YAML-based format while preserving the full structure, semantics, and developer comments of the original XML.
+# NYAML to NXDL
+# NXDL to NYAML
+# Evaluation from NAIC
+
+The NeXus International Advisory Committee (NIAC) is the governing body responsible for overseeing the development and maintenance of the NeXus data standard. A core responsibility of the NIAC is the stewardship of the NeXus Definition Language (NXDL), the XML-based schema that defines the hierarchical structure and semantics of NeXus data files [1]. As part of its mission to facilitate the standardization of NeXus definitions in NXDL, NIAC has recently reviewed and formally accepted \verb|nyaml|. Following a successful evaluation, NIAC has approved \verb|nyaml| and endorsed it as the recommended tool for preparing NeXus definition proposals. In support of this decision, the official NeXus definition repository was updated to integrate \verb|nyaml| into its workflow through the addition of two makefile targets: 'make nyaml', which converts existing definitions from the canonical nxdl.xml format into .nyaml, and 'make nxdl', which detects modified or newly added .nyaml files and converts them back into valid nxdl.xml format for submission and version control. This integration ensures that contributions made in .nyaml are compatible with the existing XML-based infrastructure. The adoption of \verb|nyaml| by NIAC reflects an ongoing commitment to fostering community engagement and modernising the technical tools underpinning the NeXus standard [2].
+
+References:
+
+[1] Könnecke, M., et al. (2015). The NeXus data format. Journal of Applied Crystallography, 48(1), 301–305. https://doi.org/10.1107/S1600576714027575
+[2] NIAC and NeXus Documentation. https://www.nexusformat.org
 
 # Citations
 
