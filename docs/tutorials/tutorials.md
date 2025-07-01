@@ -172,11 +172,11 @@ pixel_shape(choice):
 
 In this `choice` example, `pixel_shape` could be any of the groups `(NXoff_geometry)` and `(NXcylindrical_geometry)`, depending on the geometry of the pixels. -->
 
-## Special Keywords in YAML
+### Special Keywords in YAML
 
 In the YAML schema certain keywords hold self significance beyond their literal interpretations. These special keywords are utilized to elucidate and denote various NeXus terms like `attributes`, `fields`, `links`, and `groups`, thereby enhancing the clarity and specificity of the data representation.
 
-### Keyword `nameType`
+#### Keyword `nameType`
 To initialize a NeXus `group`, `field` or `attribute` the keyword `nameType` carries very significant information on the initialized name depending whether all characters are upper case, lower case or combination of upper-lower case.
 
 
@@ -187,7 +187,7 @@ To initialize a NeXus `group`, `field` or `attribute` the keyword `nameType` car
 | Upper and Lower Case| &#10003;                   |   &#10003; (with warning msg)| &#10003;                    | `specified`           |
 | Anonymous Group Name| &#10003; (with error)      |   &#10003;                   | &#10003; (with error)       | `any`                 |
 
-### Keyword `exists`
+#### Keyword `exists`
 
 The `exists` keyword plays a pivotal role in defining the optionality of NeXus concepts `attribute`, `field`, `link`, and `group`. It provides crucial insights for the expected presence or absence of these concepts within the NeXus data structure when implementing the NeXus definitions in NeXus files. By default, all the concepts of a base class are optional, while in an application definition, all concepts are required.
 
@@ -220,7 +220,7 @@ Currently, the accepted values for the `exists` keyword encompass:
 
 In the above example the group `transmission_correction` is an optional group.
 
-### Keyword `unit`
+#### Keyword `unit`
 The `unit` keyword is used to define the NeXus-compliant unit categories.
 
 **`unit` in YAML**
@@ -241,7 +241,7 @@ The `unit` keyword is used to define the NeXus-compliant unit categories.
     ```
 In the above example, the `detector_voltage` field is defined as a `NX_FLOAT` type with a unit of `NX_VOLTAGE`, indicating that the values stored in this field are measured in volts or millivolts or other voltage units.
 
-### Keyword `dimensions`
+#### Keyword `dimensions`
 
 The `dimensions` term  describes the multidimensional nature of the data, specifying its rank, dimensional indices, and corresponding length of the rank. The attribute `rank` defines the dimension of the data set. To elucidate each dimension, we use two other keywords: `dim` and `dim_parameters`. The `dim` keyword comprises an array of arrays, the nested array encapsulates values for `index` and `value` (NeXus keywords) pairs. Each array within the `dim` array corresponds to a specific dimension of the multidimensional data. For example, for 2D particle motion, the `dim` array may be represented as `[[0, nx], [1, ny]]`, each member indicating the axis index and axis name. The keyword `dim_parameters` contains further information of each dimension such as `doc`, `ref`, etc. It is important to note that each array corresponds to a keyword within `dim_parameters` must have the same length as the value of the `rank` keyword.
 
@@ -285,7 +285,7 @@ The `dimensions` term  describes the multidimensional nature of the data, specif
     </dimensions>
     ```
 
-### Keyword `enumeration`
+#### Keyword `enumeration`
 List of strings which are considered as a set of predefined values for fields or attributes. Individual items of the enumeration may also hold a `doc` keyword to provide a description of the item.
 
 **`enumeration` in YAML**
@@ -350,7 +350,7 @@ List of strings which are considered as a set of predefined values for fields or
 
 `open_enum` says along with the listed items other items are also valid while initializing the NeXus object.
 
-### Keyword `xref`
+#### Keyword `xref`
 The `xref` keyword (which can only be used inside the keyword `doc`) is used to refer any other ontology or any other standard (such as `ISO`). The `xref` in the example `doc` will reflect the information inside the XML `doc`. Note that the `xref` keyword is only available in the `YAML` representation and will be transformed into its textual representation inside the `doc` text in `XML`.
 
 **`xref` in YAML**

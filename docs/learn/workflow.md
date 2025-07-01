@@ -36,10 +36,12 @@ graph TD;
 ```
 
 ## Conversion from YAML to XML and vice versa
-Presented below is a concise and trimmed example of the `NXmpes` application definition (for discussion purpose) in `YAML` format, alongside its corresponding encoding into `XML` format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of the basic structure of NXDL, readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html). As an example, we give an application definition for multidimensional photoelectron spectroscopy (MPES) in `YAML` and `XML` formats.
+Presented below is a concise and trimmed example of the `NXmpes` application definition (for discussion purpose) in `YAML` format, alongside its corresponding encoding into `XML` format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of the basic structure of NXDL, readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html).
 
 !!! note
     For indetailed explanation with examples please follow the [Tutorials for writing NeXus definition in YAML](../tutorials/tutorials.md).
+!!! note
+    The `NXmpes` application is an old and trimmed version which does not serve any scientific purpose, but only is used to illustrate the results of the conversion process.
 
 <!-- To do, add warning saying that the application definitions is not mendatorily should the update mpes application. -->
 
