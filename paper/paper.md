@@ -100,6 +100,8 @@ and referenced from text using \autoref{fig:example}.
 Figure sizes can be customized by adding an optional second parameter:
 ![Caption for example figure.](figure.png){ width=20% } -->
 
+![Caption for example figure.\label{fig:example}](diagram-1.svg){ width=50% }
+
 # Acknowledgements
 
 # References

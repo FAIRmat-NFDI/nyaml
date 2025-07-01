@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE article PUBLIC "-//NLM//DTD JATS (Z39.96) Journal Publishing DTD v1.2 20190208//EN"
+                  "JATS-publishing1.dtd">
+<article xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:xlink="http://www.w3.org/1999/xlink" dtd-version="1.2" article-type="other">
+<front>
+<journal-meta>
+<journal-id></journal-id>
+<journal-title-group>
+<journal-title>Journal of Open Source Software</journal-title>
+<abbrev-journal-title>JOSS</abbrev-journal-title>
+</journal-title-group>
+<issn publication-format="electronic">2475-9066</issn>
+<publisher>
+<publisher-name>Open Journals</publisher-name>
+</publisher>
+</journal-meta>
+<article-meta>
+<article-id pub-id-type="publisher-id">0</article-id>
+<article-id pub-id-type="doi">N/A</article-id>
+<title-group>
+<article-title>nyaml: A Format Converter for NeXus Data
+Model.</article-title>
+</title-group>
+<contrib-group>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0009-0007-5926-6646</contrib-id>
+<string-name>Rubel</string-name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0001-9361-8333</contrib-id>
+<string-name>Lukas</string-name>
+<xref ref-type="aff" rid="aff-1"/>
+<xref ref-type="aff" rid="aff-3"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0001-9280-7431</contrib-id>
+<string-name>Andrea</string-name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0003-1987-6224</contrib-id>
+<string-name>Florian</string-name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-7117-5196</contrib-id>
+<string-name>Markus</string-name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0009-0008-6635-4465</contrib-id>
+<string-name>Sherjeel</string-name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-3984-1523</contrib-id>
+<string-name>Christoph</string-name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-6403-9022</contrib-id>
+<string-name>Heiko B.</string-name>
+<xref ref-type="aff" rid="aff-2"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-8173-2566</contrib-id>
+<string-name>José Antonio</string-name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0003-3523-6657</contrib-id>
+<string-name>Claudia</string-name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<contrib contrib-type="author">
+<contrib-id contrib-id-type="orcid">https://orcid.org/0000-0002-9700-4803</contrib-id>
+<string-name>Sandor</string-name>
+<xref ref-type="aff" rid="aff-1"/>
+</contrib>
+<aff id="aff-1">
+<institution-wrap>
+<institution>Physics Department and CSMB, Humboldt-Universität zu
+Berlin, Berlin, Germany</institution>
+</institution-wrap>
+</aff>
+<aff id="aff-2">
+<institution-wrap>
+<institution>Lehrstuhl für Angewandte Physik,
+Friedrich-Alexander-Universität Erlangen-Nürnberg, Erlangen,
+Germany</institution>
+</institution-wrap>
+</aff>
+<aff id="aff-3">
+<institution-wrap>
+<institution>Department Heterogeneous Reactions, Max Planck Institute
+for Chemical Energy Conversion, Mülheim an der Ruhr,
+Germany</institution>
+</institution-wrap>
+</aff>
+</contrib-group>
+<pub-date date-type="pub" publication-format="electronic" iso-8601-date="2025-07-01">
+<day>1</day>
+<month>7</month>
+<year>2025</year>
+</pub-date>
+<volume>¿VOL?</volume>
+<issue>¿ISSUE?</issue>
+<fpage>¿PAGE?</fpage>
+<permissions>
+<copyright-statement>Authors of papers retain copyright and release the
+work under a Creative Commons Attribution 4.0 International License (CC
+BY 4.0)</copyright-statement>
+<copyright-year>1970</copyright-year>
+<copyright-holder>The article authors</copyright-holder>
+<license license-type="open-access" xlink:href="https://creativecommons.org/licenses/by/4.0/">
+<license-p>Authors of papers retain copyright and release the work under
+a Creative Commons Attribution 4.0 International License (CC BY
+4.0)</license-p>
+</license>
+</permissions>
+<kwd-group kwd-group-type="author">
+<kwd>Python</kwd>
+<kwd>NeXus</kwd>
+<kwd>NXDL</kwd>
+<kwd>YAML</kwd>
+<kwd>XML</kwd>
+</kwd-group>
+</article-meta>
+</front>
+<body>
+<sec id="summary">
+  <title>Summary</title>
+  <p>The NeXus scientific data format
+  (<xref alt="Könnecke et al., 2015" rid="ref-KoenneckeU003A2015" ref-type="bibr">Könnecke
+  et al., 2015</xref>) is a widely adopted standard for organizing and
+  sharing scientific data, particularly in the field of materials
+  characterization. NeXus definitions specify the hierarchical structure
+  and semantics of valid NeXus files and are written in XML using the
+  NeXus Definition Language (NXDL), which itself is specified using XSD
+  (XML Schema Definition).</p>
+  <p>nyaml is a Python-based tool with both a command-line interface and
+  an importable API that facilitates the conversion between NXDL XML and
+  a simplified YAML representation. YAML’s indentation-based syntax
+  enhances human readability and simplifies manual editing. By providing
+  a reliable, lossless round-trip conversion between XML and YAML, nyaml
+  enables developers to edit NeXus definitions more efficiently without
+  sacrificing structural or semantic fidelity.</p>
+</sec>
+<sec id="statement-of-need">
+  <title>Statement of need</title>
+  <p>The NeXus data format standard, which was originally introduced for
+  neutron, X-ray, and muon science, has in recent years seen a
+  significant enhancement across diverse scientific domains. The growth
+  of both the standard and the number of NeXus definition developers
+  makes it all the more important to ensure that the development process
+  is both user-friendly and resilient to errors. The existing
+  representation of NeXus definitions in XML offers structural rigor
+  through the NeXus Definition Language (NXDL) and a well-defined
+  hierarchy for metadata and data types. However, it is verbose and can
+  be difficult to edit by hand. Writing and maintaining NXDL files often
+  involves dealing with deeply nested elements and strict syntax, which
+  can be error-prone and time-consuming, especially for users who are
+  not familiar with XML development. nyaml addresses these challenges by
+  enabling the development of NeXus definitions in a cleaner, YAML-based
+  format while preserving the full structure, semantics, and developer
+  comments of the original XML.</p>
+</sec>
+<sec id="nyaml-converter">
+  <title>nyaml Converter</title>
+  <p>The <bold>nyaml</bold> tool is a Python package, containing the
+  several modules, that provides a command line interface for converting
+  NeXus application definitions or base classes from YAML file format
+  (<bold>.yaml</bold> extension) into the XML file format
+  (<bold>.nxdl.xml</bold> extension) and vice-versa. To write the NeXus
+  application defintions or base classes in YAML format, the
+  <bold>nyaml</bold> package introduces a set of the keywords and
+  syntactic rules (see full (Documentation)[]) that are specific to the
+  NXDL (NeXus Definition Language) in the YAML format. The
+  <bold>nyaml</bold> package is designed to be used as a command line
+  tool, but it can also be imported as a Python module for programmatic
+  use.</p>
+  <p>The converter from the command line is invoked by the
+  <bold>nyaml2nxdl</bold> registered in the <bold>nyaml.cli</bold>
+  module. In that module, the function <bold>launch_tool</bold> decides
+  upon the input file type which what conversion (either from YAML to
+  XML or XML to YAML) will be invoked.</p>
+  <p><bold>YAML to XML</bold>: The <bold>nyaml.nyaml2nxdl</bold>
+  contains the necessary functions, classes, and methods to implement
+  the algorithm for converting the NXDL schema from YAML to XML. The
+  function <bold>nyaml2nxdl</bold> is the main entry point for executing
+  the conversion from YAML to XML with the execution of three steps: 1.
+  properly collects and tracks comments in YAML file, 2. parses the YAML
+  file into a Python dictionary object, and finally 3. writes the XML
+  tree in a file in accordance with the NXDL concepts including the
+  comments from the first step. The conversion algorithm uses the
+  keywords and syntactic rules to read the NXDL in the YAML format to
+  transcode from the YAML to the XML representation. Taking leverage of
+  the NeXus NXDL rules, the conversion detect the possible
+  inconveniences in the YAML file and raises an error if the NXDL rules
+  are not properly followed.</p>
+  <p><bold>XML to YAML</bold>: The <bold>nyaml.nxdl2yaml</bold> module
+  contains the necessary functions, classes, and methods to implement
+  the algorithm for converting the NXDL schema from XML to YAML. The
+  class <bold>Nxdl2yaml</bold> is the main entry point containing
+  methods and global variables for implementing the conversion algorithm
+  from XML to YAML with the execution of three steps: 1. parsing the XML
+  file into an XML tree object, 2. writing the YAML file in accordance
+  with the NXDL concepts, and 3. creates a hash from the YAML content
+  using the SHA256 algorithm and extend the YAML file including the hash
+  and original xml content as comment respectively. Attaching the XML
+  content with a hash at the end of the YAML file allows for a lossless
+  round-trip conversion if no modifications are made in the YAML content
+  (as SHA256 creates the same hash from the same YAML content). Such
+  caching mechanism offers clean and efficient comparison of the XML
+  content in version control systems like Git upon the conversion from
+  YAML to XML.</p>
+</sec>
+<sec id="evaluation-from-naic">
+  <title>Evaluation from NAIC</title>
+  <p>The NeXus International Advisory Committee (NIAC) is the governing
+  body responsible for overseeing the development and maintenance of the
+  NeXus data standard. A core responsibility of the NIAC is the
+  stewardship of the NeXus Definition Language (NXDL), the XML-based
+  schema that defines the hierarchical structure and semantics of NeXus
+  data files [Koennecke:2015]. As part of its mission to facilitate the
+  standardization of NeXus definitions in NXDL, NIAC has recently
+  reviewed and formally accepted <monospace>nyaml</monospace>. Following
+  a successful evaluation, NIAC has approved
+  <monospace>nyaml</monospace> and endorsed it as the recommended tool
+  for preparing NeXus definition proposals. In support of this decision,
+  the official NeXus definition repository was updated to integrate
+  <monospace>nyaml</monospace> into its workflow through the addition of
+  two makefile targets: ‘make nyaml’, which converts existing
+  definitions from the canonical nxdl.xml format into .nyaml, and ‘make
+  nxdl’, which detects modified or newly added .nyaml files and converts
+  them back into valid nxdl.xml format for submission and version
+  control. This integration ensures that contributions made in .nyaml
+  are compatible with the existing XML-based infrastructure. The
+  adoption of <monospace>nyaml</monospace> by NIAC reflects an ongoing
+  commitment to fostering community engagement and modernising the
+  technical tools underpinning the NeXus standard
+  (<xref alt="Committee, 2025" rid="ref-NIACU003A2025" ref-type="bibr">Committee,
+  2025</xref>).</p>
+</sec>
+<sec id="figures">
+  <title>Figures</title>
+  <fig>
+    <caption><p>Caption for example
+    figure.<styled-content id="figU003Aexample"></styled-content></p></caption>
+    <graphic mimetype="image" mime-subtype="svg+xml" xlink:href="diagram-1.svg" />
+  </fig>
+</sec>
+</body>
+<back>
+<ref-list>
+  <title>Acknowledgements</title>
+  <ref id="ref-KoenneckeU003A2015">
+    <element-citation publication-type="article-journal">
+      <person-group person-group-type="author">
+        <name><surname>Könnecke</surname><given-names>Mark</given-names></name>
+        <name><surname>Akeroyd</surname><given-names>Frederick A</given-names></name>
+        <name><surname>Bernstein</surname><given-names>Herbert J</given-names></name>
+        <name><surname>Brewster</surname><given-names>Aaron S</given-names></name>
+        <name><surname>Campbell</surname><given-names>Stuart I</given-names></name>
+        <name><surname>Clausen</surname><given-names>Björn</given-names></name>
+        <name><surname>Cottrell</surname><given-names>Stephen</given-names></name>
+        <name><surname>Hoffmann</surname><given-names>Jens Uwe</given-names></name>
+        <name><surname>Jemian</surname><given-names>Pete R</given-names></name>
+        <name><surname>Männicke</surname><given-names>David</given-names></name>
+        <name><surname>others</surname></name>
+      </person-group>
+      <article-title>The NeXus data format. Journal of applied crystallography</article-title>
+      <source>Applied Crystallography</source>
+      <publisher-name>International Union of Crystallography</publisher-name>
+      <year iso-8601-date="2015">2015</year>
+      <volume>48</volume>
+      <issue>1</issue>
+      <pub-id pub-id-type="doi">https://doi.org/10.1107/S1600576714027575</pub-id>
+      <fpage>301</fpage>
+      <lpage>305</lpage>
+    </element-citation>
+  </ref>
+  <ref id="ref-NIACU003A2025">
+    <element-citation>
+      <person-group person-group-type="author">
+        <name><surname>Committee</surname><given-names>NeXus International Advisory</given-names></name>
+      </person-group>
+      <article-title>NIAC and NeXus documentation</article-title>
+      <year iso-8601-date="2025-08">2025</year><month>08</month>
+      <uri>https://www.nexusformat.org</uri>
+    </element-citation>
+  </ref>
+</ref-list>
+</back>
+</article>
