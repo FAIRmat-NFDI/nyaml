@@ -58,6 +58,7 @@ authors:
     surname: Brockhauser
     orcid: https://orcid.org/0000-0002-9700-4803
     affiliation: 1
+    equal-contrib: true
 
 affiliations:
   - name: Physics Department and CSMB, Humboldt-Universität zu Berlin, Berlin, Germany
