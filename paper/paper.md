@@ -1,5 +1,5 @@
 ---
-title: 'nyaml: A Format Converter for NeXus Data Model.'
+title: 'nyaml: Format Converter for the NeXus Data Model.'
 tags:
     - Python
     - NeXus
@@ -16,6 +16,10 @@ authors:
     family-names: Pielsticker
     orcid: https://orcid.org/0000-0001-9361-8333
     affiliation: "1,3"
+  - given-names: Markus
+    family-names: Kühbach
+    orcid: https://orcid.org/0000-0002-7117-5196
+    affiliation: 1
   - given-names: Andrea
     family-names: Albino
     orcid: https://orcid.org/0000-0001-9280-7431
@@ -23,10 +27,6 @@ authors:
   - given-names: Florian
     family-names: Dobener
     orcid: https://orcid.org/0000-0003-1987-6224
-    affiliation: 1
-  - given-names: Markus
-    family-names: Kühbach
-    orcid: https://orcid.org/0000-0002-7117-5196
     affiliation: 1
   - given-names: Sherjeel
     family-names: Shabih
@@ -80,18 +80,19 @@ The __nyaml__ tool is a Python package, containing the several modules, that pro
 
 The converter from the command line is invoked by the __nyaml2nxdl__ registered in the __nyaml.cli__ module. In that module, the function __launch_tool__ decides upon the input file type which what conversion (either from YAML to XML or XML to YAML) will be invoked.
 
-__YAML to XML__: The __nyaml.nyaml2nxdl__ contains the necessary functions, classes, and methods to implement the algorithm for converting the NXDL schema from YAML to XML. The function __nyaml2nxdl__ is the main entry point for executing the conversion from YAML to XML with the execution of three steps: 1. properly collects and tracks comments in YAML file, 2. parses the YAML file into a Python dictionary object, and finally 3. writes the XML tree in a file in accordance with the NXDL concepts including the comments from the first step. The conversion algorithm uses the keywords and syntactic rules to read the NXDL in the YAML format to transcode from the YAML to the XML representation. Taking leverage of the NeXus NXDL rules, the conversion detect the possible inconveniences in the YAML file and raises an error if the NXDL rules are not properly followed.
+![Caption for example figure.\label{fig:example}](assets/diagram-1.pdf){ width=50% }
 
-__XML to YAML__: The __nyaml.nxdl2yaml__ module contains the necessary functions, classes, and methods to implement the algorithm for converting the NXDL schema from XML to YAML. The class __Nxdl2yaml__ is the main entry point containing methods and global variables for implementing the conversion algorithm from XML to YAML with the execution of three steps: 1. parsing the XML file into an XML tree object, 2. writing the YAML file in accordance with the NXDL concepts, and 3. creates a hash from the YAML content using the SHA256 algorithm and extend the YAML file including the hash and original xml content as comment respectively. Attaching the XML content with a hash at the end of the YAML file allows for a lossless round-trip conversion if no modifications are made in the YAML content (as SHA256 creates the same hash from the same YAML content). Such caching mechanism offers clean and efficient comparison of the XML content in version control systems like Git upon the conversion from YAML to XML.
+## YAML to XML
+ The __nyaml.nyaml2nxdl__ contains the necessary functions, classes, and methods to implement the algorithm for converting the NXDL schema from YAML to XML. The function __nyaml2nxdl__ is the main entry point for executing the conversion from YAML to XML with the execution of three steps: 1. properly collects and tracks comments in YAML file, 2. parses the YAML file into a Python dictionary object, and finally 3. writes the XML tree in a file in accordance with the NXDL concepts including the comments from the first step. The conversion algorithm uses the keywords and syntactic rules to read the NXDL in the YAML format to transcode from the YAML to the XML representation. Taking leverage of the NeXus NXDL rules, the conversion detect the possible inconveniences in the YAML file and raises an error if the NXDL rules are not properly followed.
+
+## XML to YAML
+ The __nyaml.nxdl2yaml__ module contains the necessary functions, classes, and methods to implement the algorithm for converting the NXDL schema from XML to YAML. The class __Nxdl2yaml__ is the main entry point containing methods and global variables for implementing the conversion algorithm from XML to YAML with the execution of three steps: 1. parsing the XML file into an XML tree object, 2. writing the YAML file in accordance with the NXDL concepts, and 3. creates a hash from the YAML content using the SHA256 algorithm and extend the YAML file including the hash and original xml content as comment respectively. Attaching the XML content with a hash at the end of the YAML file allows for a lossless round-trip conversion if no modifications are made in the YAML content (as SHA256 creates the same hash from the same YAML content). Such caching mechanism offers clean and efficient comparison of the XML content in version control systems like Git upon the conversion from YAML to XML.
 
 # Evaluation from NAIC
 
 The NeXus International Advisory Committee (NIAC) is the governing body responsible for overseeing the development and maintenance of the NeXus data standard. A core responsibility of the NIAC is the stewardship of the NeXus Definition Language (NXDL), the XML-based schema that defines the hierarchical structure and semantics of NeXus data files [Koennecke:2015]. As part of its mission to facilitate the standardization of NeXus definitions in NXDL, NIAC has recently reviewed and formally accepted \verb|nyaml|. Following a successful evaluation, NIAC has approved \verb|nyaml| and endorsed it as the recommended tool for preparing NeXus definition proposals. In support of this decision, the official NeXus definition repository was updated to integrate \verb|nyaml| into its workflow through the addition of two makefile targets: 'make nyaml', which converts existing definitions from the canonical nxdl.xml format into .nyaml, and 'make nxdl', which detects modified or newly added .nyaml files and converts them back into valid nxdl.xml format for submission and version control. This integration ensures that contributions made in .nyaml are compatible with the existing XML-based infrastructure. The adoption of \verb|nyaml| by NIAC reflects an ongoing commitment to fostering community engagement and modernising the technical tools underpinning the NeXus standard [@NIAC:2025].
 
-
-
-
-# Figures
+<!-- # Figures
 <!-- Note! The follwoing is example figure
 Figures can be included like this:
 ![Caption for example figure.\label{fig:example}](figure.png)
@@ -100,9 +101,8 @@ and referenced from text using \autoref{fig:example}.
 Figure sizes can be customized by adding an optional second parameter:
 ![Caption for example figure.](figure.png){ width=20% } -->
 
-![Caption for example figure.\label{fig:example}](diagram-1.svg){ width=50% }
+![Caption for example figure.\label{fig:example}](diagram-1.svg){ width=50% } -->
 
 # Acknowledgements
 
 # References
-
