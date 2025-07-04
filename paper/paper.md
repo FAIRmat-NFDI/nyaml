@@ -1,5 +1,5 @@
 ---
-title: "nyaml: Format Converter for the NeXus Data Model."
+title: "nyaml: Format Converter for the NeXus Data Model"
 tags:
   - Python
   - NeXus
@@ -12,26 +12,32 @@ authors:
     surname: Mozumder
     orcid: https://orcid.org/0009-0007-5926-6646
     affiliation: 1
+    equal-contrib: true
   - given-names: Lukas
     surname: Pielsticker
     orcid: https://orcid.org/0000-0001-9361-8333
     affiliation: "1,3"
+    equal-contrib: true
   - given-names: Markus
     surname: Kühbach
     orcid: https://orcid.org/0000-0002-7117-5196
     affiliation: 1
+    equal-contrib: true
   - given-names: Andrea
     surname: Albino
     orcid: https://orcid.org/0000-0001-9280-7431
     affiliation: 1
+    equal-contrib: true
   - given-names: Florian
     surname: Dobener
     orcid: https://orcid.org/0000-0003-1987-6224
     affiliation: 1
+    equal-contrib: true
   - given-names: Sherjeel
     surname: Shabih
     orcid: https://orcid.org/0009-0008-6635-4465
     affiliation: 1
+    equal-contrib: true
   - given-names: Christoph
     surname: Koch
     orcid: https://orcid.org/0000-0002-3984-1523
@@ -84,26 +90,28 @@ The __nyaml__ tool is a Python package, containing the several modules, that pro
 ![Converter workflow for nyaml tool, XML to YAML and vice-versa \label{fig:nyaml_workflow}](assets/workflow-1.pdf){ width=75% }
 
 ## YAML to XML
+
 The __nyaml.nyaml2nxdl__ contains the necessary functions, classes, and methods to implement the algorithm for converting the NXDL schema from YAML to XML. The function __nyaml2nxdl__ is the main entry point for executing the conversion from YAML to XML with the execution in three sequential tasks:
 
-1. using __PyYAML__ [@PyYAML:2024] collects and tracks comments in YAML file,
-2. parses the YAML file into a Python dictionary object, and finally,
-3. writes the XML tree in a file in accordance with the NXDL concepts including the comments from the first step.
+1. Using __PyYAML__ [@PyYAML:2024] it collects and tracks comments in YAML file,
+2. It parses the YAML file into a Python dictionary object, and finally,
+3. It writes the XML tree in a file in accordance with the NXDL concepts including the comments from the first step.
 
 The conversion algorithm interprets the keywords and syntactic rules to read the NXDL in the YAML format to transcode from the YAML to the XML representation. Taking leverage of the NeXus NXDL rules, the conversion detect the possible inconveniences in the YAML file and raises an error or warning if the NXDL rules are not properly followed in YAML.
 
 ## XML to YAML
-The __nyaml.nxdl2yaml__ module contains the necessary functions, classes, and methods to implement the algorithm for converting the NXDL schema from XML format to YAML format. The class __Nxdl2yaml__ is the main entry point containing methods and global variables for implementing the conversion algorithm from XML to YAML with the execution of three tasks:
-1. using __lxml__ [@lxml:2024] parses the XML file into an XML tree object,
-2. writes the YAML file from the XML tree in accordance with the YAML specific keywords and rules, and
-3. creates a hash from the generated YAML content from task 2 using the SHA256 algorithm and extends the final YAML file concatenating the hash and original xml content as comment respectively at the end.
 
-Attaching the XML content with a hash at the end of the YAML file allows for a lossless round-trip conversion if no modifications are made in the YAML content (as SHA256 creates the same hash from the same YAML content). Such caching mechanism offers clean and efficient conversion XML -> YAML -> XML and thus cleaner comparison of the XML content in version control systems like Git.
+The __nyaml.nxdl2yaml__ module provides the core functionality for converting NXDL schemas from XML to YAML format. The main component, the __Nxdl2yaml__ class, orchestrates the conversion process through several key steps:
+
+1. It uses the __lxml__ library [@lxml:2024] to parse the XML file and build an XML tree structure.
+2. It generates a YAML file from this XML tree, applying YAML-specific keywords and formatting rules.
+3. It computes a SHA256 hash of the generated YAML content and appends both the hash and the original XML content as comments at the end of the YAML file.
+
+By attaching the XML content and its hash to the YAML output, the tool enables lossless round-trip conversions, provided the YAML content remains unchanged (since the SHA256 hash will match). This caching approach streamlines the XML → YAML → XML workflow and facilitates straightforward comparisons of XML files in version control systems such as Git.
 
 # Evaluation from NAIC
 
 The NeXus International Advisory Committee (NIAC) is the governing body responsible for overseeing the development and maintenance of the NeXus data standard. A core responsibility of the NIAC is the stewardship of the NeXus Definition Language (NXDL), the XML-based schema that defines the hierarchical structure and semantics of NeXus data files [Koennecke:2015]. As part of its mission to facilitate the standardization of NeXus definitions in NXDL, NIAC has recently reviewed and formally accepted \verb|nyaml|. Following a successful evaluation, NIAC has approved \verb|nyaml| and endorsed it as the recommended tool for preparing NeXus definition proposals. In support of this decision, the official NeXus definition repository was updated to integrate \verb|nyaml| into its workflow through the addition of two makefile targets: 'make nyaml', which converts existing definitions from the canonical nxdl.xml format into .nyaml, and 'make nxdl', which detects modified or newly added .nyaml files and converts them back into valid nxdl.xml format for submission and version control. This integration ensures that contributions made in .nyaml are compatible with the existing XML-based infrastructure. The adoption of \verb|nyaml| by NIAC reflects an ongoing commitment to fostering community engagement and modernising the technical tools underpinning the NeXus standard [@NIAC:2025].
-
 
 # Acknowledgements
 The __nyaml__ software development is funded by the German National Research Data Infrastructure
