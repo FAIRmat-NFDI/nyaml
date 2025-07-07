@@ -84,35 +84,35 @@ The NeXus data format standard, which was originally introduced for neutron, X-r
 
 # nyaml Converter
 
-The __nyaml__ tool is a Python package, containing the several modules, that provides a command line interface for converting NeXus application definitions or base classes from YAML format (file with an __.yaml__ extension) into the XML format (file with an __.nxdl.xml__ extension) and vice-versa. To write a NeXus application defintion or base class in YAML format, the __nyaml__ package introduces a set of the keywords and syntactic rules (see [Documentation](https://fairmat-nfdi.github.io/nyaml)) that are specific to the NXDL (NeXus Definition Language) in the YAML format.
+The __nyaml__ tool is a Python package, containing the several modules, that provides a command line interface for converting NeXus application definitions or base classes from YAML format (file with a __.yaml__ extension) into the XML format (file with a __.nxdl.xml__ extension) and vice-versa. To write a NeXus application defintion or a base class in YAML format, the __nyaml__ package introduces a set of the keywords and syntactic rules (see [Documentation](https://fairmat-nfdi.github.io/nyaml)) that are specific to the NXDL (NeXus Definition Language) in the YAML format.
 
- The __nyaml__ package is designed to be used as a command line tool, but it can also be utilised as a Python module for programmatic use. The package in published in PyPI and therefore can be installed using python package manager. The converter command is invoked by the __nyaml2nxdl__ registered in the __nyaml.cli__ module [@Click:2025]. In that module, the function __launch_tool__ decides upon the input file type which what conversion (either from YAML to XML or XML to YAML) will be invoked and execute the corresponding pipline of the workflow (\autoref{fig:nyaml_workflow}).
+ The __nyaml__ package is designed to be used as a command line tool, but it can also be utilised as a Python module for programmatic use. The package in published in PyPI and therefore can be installed using python package manager __pip__. The converter command is invoked by the __nyaml2nxdl__ registered in the __nyaml.cli__ module [@Click:2025]. In that module, the function __launch_tool__ decides upon the input file type which conversion (either from YAML to XML or XML to YAML) will be invoked and execute the corresponding pipline of the data workflow (\autoref{fig:nyaml_workflow}).
 
 ![Converter workflow for nyaml tool, XML to YAML and vice-versa \label{fig:nyaml_workflow}](assets/workflow-1.pdf){ width=75% }
 
 ## YAML to XML
 
-The __nyaml.nyaml2nxdl__ contains the necessary functions, classes, and methods to implement the algorithm for converting the NXDL schema from YAML to XML. The function __nyaml2nxdl__ is the main entry point for executing the conversion from YAML to XML with the execution in three sequential tasks:
+The module __nyaml.nyaml2nxdl__ contains the necessary functions, classes, and methods to implement the algorithm for converting the NXDL schema from YAML to XML. The function __nyaml2nxdl__ is the main entry point for executing the conversion from YAML to XML with the execution in three sequential tasks:
 
 1. Using __PyYAML__ [@PyYAML:2024] it collects and tracks comments in YAML file,
 2. It parses the YAML file into a Python dictionary object, and finally,
 3. It writes the XML tree in a file in accordance with the NXDL concepts including the comments from the first step.
 
-The conversion algorithm interprets the keywords and syntactic rules to read the NXDL in the YAML format to transcode from the YAML to the XML representation. Taking leverage of the NeXus NXDL rules, the conversion detect the possible inconveniences in the YAML file and raises an error or warning if the NXDL rules are not properly followed in YAML.
+The conversion algorithm interprets the specific keywords and syntactic rules to read the NXDL in the YAML format to transcode from the YAML to the XML representation. Taking leverage of the NeXus NXDL rules, the conversion detect the possible inconveniences in the YAML content and raises an error or warning if the NXDL rules are not properly followed in YAML.
 
 ## XML to YAML
 
 The __nyaml.nxdl2yaml__ module provides the core functionality for converting NXDL schemas from XML to YAML format. The main component, the __Nxdl2yaml__ class, orchestrates the conversion process through several key steps:
 
-1. It uses the __lxml__ library [@lxml:2024] to parse the XML file and build an XML tree structure.
+1. It uses the __lxml__ library [@lxml:2025] to parse the XML file and build an XML tree structure.
 2. It generates a YAML file from this XML tree, applying YAML-specific keywords and formatting rules.
 3. It computes a SHA256 hash of the generated YAML content and appends both the hash and the original XML content as comments at the end of the YAML file.
 
 By attaching the XML content and its hash to the YAML output, the tool enables lossless round-trip conversions, provided the YAML content remains unchanged (since the SHA256 hash will match). This caching approach streamlines the XML → YAML → XML workflow and facilitates straightforward comparisons of XML files in version control systems such as Git.
 
-# Evaluation from NeXus International Advisory Committee (NIAC)
+# Evaluation from NIAC
 
-The NeXus International Advisory Committee (NIAC) is the governing body responsible for overseeing the development and maintenance of the NeXus data standard. A core responsibility of the NIAC is the stewardship of the NeXus Definition Language (NXDL), the XML-based schema that defines the hierarchical structure and semantics of NeXus data files [Koennecke:2015]. As part of its mission to facilitate the standardization of NeXus definitions in NXDL, NIAC has recently reviewed and formally accepted \verb|nyaml|. Following a successful evaluation, NIAC has approved \verb|nyaml| and endorsed it as the recommended tool for preparing NeXus definition proposals. In support of this decision, the official NeXus definition repository was updated to integrate \verb|nyaml| into its workflow through the addition of two makefile targets: 'make nyaml', which converts existing definitions from the canonical nxdl.xml format into .nyaml, and 'make nxdl', which detects modified or newly added .nyaml files and converts them back into valid nxdl.xml format for submission and version control. This integration ensures that contributions made in .nyaml are compatible with the existing XML-based infrastructure. The adoption of \verb|nyaml| by NIAC reflects an ongoing commitment to fostering community engagement and modernising the technical tools underpinning the NeXus standard [@NIAC:2025].
+The NeXus International Advisory Committee (NIAC) is the governing body responsible for overseeing the development and maintenance of the NeXus data standard. A core responsibility of the NIAC is the stewardship of the NeXus Definition Language (NXDL), the XML-based schema that defines the hierarchical structure and semantics of NeXus data files [Koennecke:2015]. As part of its mission to facilitate the standardization of NeXus definitions in NXDL, NIAC has recently reviewed and formally accepted the __nyaml__ tool. Following a successful evaluation, NIAC has approved __nyaml__ and endorsed it as the recommended tool for preparing NeXus definition proposals. In support of this decision, the official NeXus definition repository was updated to integrate __nyaml__ into its workflow through the addition of two makefile targets: 'make nyaml', which converts existing definitions from the canonical nxdl.xml format into .yaml, and 'make nxdl', which detects modified or newly added .yaml files and converts them back into valid nxdl.xml format for submission and version control. This integration ensures that contributions made in .nyaml are compatible with the existing XML-based infrastructure. The adoption of __nyaml__ by NIAC reflects an ongoing commitment to fostering community engagement and modernising the technical tools underpinning the NeXus standard [@NIAC:2025].
 
 # Acknowledgements
 The __nyaml__ software development is funded by the German National Research Data Infrastructure
