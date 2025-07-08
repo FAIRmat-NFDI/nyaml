@@ -1,0 +1,82 @@
+{
+  "@context": "https://raw.githubusercontent.com/codemeta/codemeta/master/codemeta.jsonld",
+  "@type": "Code",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Rubel",
+      "familyName": "Mozumder",
+      "orcid": "https://orcid.org/0009-0007-5926-6646"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Lukas",
+      "familyName": "Pielsticker",
+      "orcid": "https://orcid.org/0000-0001-9361-8333"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Markus",
+      "familyName": "Kühbach",
+      "orcid": "https://orcid.org/0000-0002-7117-5196"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Andrea",
+      "familyName": "Albino",
+      "orcid": "https://orcid.org/0000-0001-9280-7431"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Florian",
+      "familyName": "Dobener",
+      "orcid": "https://orcid.org/0000-0003-1987-6224"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Sherjeel",
+      "familyName": "Shabih",
+      "orcid": "https://orcid.org/0009-0008-6635-4465"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Christoph",
+      "familyName": "Koch",
+      "orcid": "https://orcid.org/0000-0002-3984-1523"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Heiko B.",
+      "familyName": "Weber",
+      "orcid": "https://orcid.org/0000-0002-6403-9022"
+    },
+    {
+      "@type": "Person",
+      "givenName": "José Antonio",
+      "familyName": "Márquez Prieto",
+      "orcid": "https://orcid.org/0000-0002-8173-2566"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Claudia",
+      "familyName": "Draxl",
+      "orcid": "https://orcid.org/0000-0003-3523-6657"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Sandor",
+      "familyName": "Brockhauser",
+      "orcid": "https://orcid.org/0000-0002-9700-4803"
+    }
+  ],
+  "identifier": "",
+  "codeRepository": "https://github.com/FAIRmat-NFDI/nyaml",
+  "datePublished": "2025-07-08",
+  "dateModified": "2025-07-08",
+  "dateCreated": "2025-07-08",
+  "description": "nyaml: Format Converter for the NeXus Data Model",
+  "keywords": "Python, NeXus, NXDL, XML, YAML",
+  "license": "Apache 2.0",
+  "title": "nyaml",
+  "version": "v0.2.2"
+}
