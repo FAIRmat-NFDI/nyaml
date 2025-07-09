@@ -12,32 +12,26 @@ authors:
     surname: Mozumder
     orcid: https://orcid.org/0009-0007-5926-6646
     affiliation: 1
-    equal-contrib: true
   - given-names: Lukas
     surname: Pielsticker
     orcid: https://orcid.org/0000-0001-9361-8333
     affiliation: "1,3"
-    equal-contrib: true
   - given-names: Markus
     surname: Kühbach
     orcid: https://orcid.org/0000-0002-7117-5196
     affiliation: 1
-    equal-contrib: true
   - given-names: Andrea
     surname: Albino
     orcid: https://orcid.org/0000-0001-9280-7431
     affiliation: 1
-    equal-contrib: true
   - given-names: Florian
     surname: Dobener
     orcid: https://orcid.org/0000-0003-1987-6224
     affiliation: 1
-    equal-contrib: true
   - given-names: Sherjeel
     surname: Shabih
     orcid: https://orcid.org/0009-0008-6635-4465
     affiliation: 1
-    equal-contrib: true
   - given-names: Christoph
     surname: Koch
     orcid: https://orcid.org/0000-0002-3984-1523
@@ -58,7 +52,6 @@ authors:
     surname: Brockhauser
     orcid: https://orcid.org/0000-0002-9700-4803
     affiliation: 1
-    equal-contrib: true
 
 affiliations:
   - name: Physics Department and CSMB, Humboldt-Universität zu Berlin, Berlin, Germany
