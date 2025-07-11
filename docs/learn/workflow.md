@@ -39,11 +39,11 @@ graph TD;
 Presented below is a concise and trimmed example of the `NXmpes` application definition (for discussion purpose) in `YAML` format, alongside its corresponding encoding into `XML` format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of the basic structure of NXDL, readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html).
 
 !!! note
-    For indetailed explanation with examples please follow the [Tutorials for writing NeXus definition in YAML](../tutorials/tutorials.md).
+    For in detailed explanation with examples please follow the [Tutorials for writing NeXus definition in YAML](../tutorials/tutorials.md).
 !!! note
     The `NXmpes` application is an old and trimmed version which does not serve any scientific purpose, but only is used to illustrate the results of the conversion process.
 
-<!-- To do, add warning saying that the application definitions is not mendatorily should the update mpes application. -->
+<!-- To do, add warning saying that the application definitions is not mandatory should the update NXmpes application. -->
 
 **NXmpes application definition in YAML and XML format**
 
@@ -105,11 +105,11 @@ Presented below is a concise and trimmed example of the `NXmpes` application def
           transmission_correction(NXcalibration):
             exists: optional
             doc: |
-              This calibration procedure is used to account for the different tranmsission efficiencies.
+              This calibration procedure is used to account for the different transmission efficiencies.
             transmission_function(NXdata):
               exists: recommended
               doc: |
-                Transmission function of the electron analyser.
+                Transmission function of the electron analyzer.
               \@axes:
                 enumeration: [kinetic_energy]
               kinetic_energy(NX_FLOAT):
@@ -194,12 +194,12 @@ Presented below is a concise and trimmed example of the `NXmpes` application def
                   </doc>
                   <group name="transmission_correction" type="NXcalibration" optional="true">
                       <doc>
-                          This calibration procedure is used to account for the different tranmsission
+                          This calibration procedure is used to account for the different transmission
                           efficiencies.
                       </doc>
                       <group name="transmission_function" type="NXdata" recommended="true">
                           <doc>
-                              Transmission function of the electron analyser.
+                              Transmission function of the electron analyzer.
                           </doc>
                           <attribute name="axes">
                               <enumeration>

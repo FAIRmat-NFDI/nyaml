@@ -14,7 +14,7 @@ $ cd nyaml
 $ pip install -e ".[dev]"
 ```
 
-There is also a [pre-commit hook](https://pre-commit.com/#intro) available which formats the code and checks the linting before actually commiting. It can be installed with
+There is also a [pre-commit hook](https://pre-commit.com/#intro) available which formats the code and checks the linting before actually committing. It can be installed with
 ```bash
 $ pre-commit install
 ```

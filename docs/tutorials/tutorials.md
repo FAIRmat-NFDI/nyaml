@@ -3,7 +3,7 @@ This tutorial will explain different keywords, terms, and rules from the perspec
 
 ## Design of NeXus Ontology and Terms in YAML
 
-Within the YAML format, the root section denotes the top-level description of the application definition or base class schema, comprising the `category`, `type`, `doc`, `symbols` block, and the name of the schema (e.g. `NXmpes(NXobject)`). Correspondingly, the root section refers to the XML element `definition`, encompassing the first `doc` child of the `definition` and `symbols`. The definition element encapsulates essential XML attributes such as the schema's `name` (and xml attribute), the object it `extends` (an xml attribute), and the schema `type` (an xml attribute), with additional XML attributes (i.e. `xmlns:xsi`) handled by the nyaml converter. The accurate designation of category as either `base` or `application` distinguishes between a `base class` and an `application definition` respectively. The schema name (i.e. `NXmpes(NXobject)`) with paranthesis indicates the extension of the current application definition `NXmpes` from base class `NXobject`, an application definition may extend either `NXobject` or other application definitions. Schemas may incorporate one or multiple symbols, each imbued with specialized physical meanings beyond their literal interpretation, which are utilised over the application definition.
+Within the YAML format, the root section denotes the top-level description of the application definition or base class schema, comprising the `category`, `type`, `doc`, `symbols` block, and the name of the schema (e.g. `NXmpes(NXobject)`). Correspondingly, the root section refers to the XML element `definition`, encompassing the first `doc` child of the `definition` and `symbols`. The definition element encapsulates essential XML attributes such as the schema's `name` (and xml attribute), the object it `extends` (an xml attribute), and the schema `type` (an xml attribute), with additional XML attributes (i.e. `xmlns:xsi`) handled by the nyaml converter. The accurate designation of category as either `base` or `application` distinguishes between a `base class` and an `application definition` respectively. The schema name (i.e. `NXmpes(NXobject)`) with parenthesis indicates the extension of the current application definition `NXmpes` from base class `NXobject`, an application definition may extend either `NXobject` or other application definitions. Schemas may incorporate one or multiple symbols, each imbued with specialized physical meanings beyond their literal interpretation, which are utilized over the application definition.
 
 **A typical root section for the application definition `NXmpes` outlined**
 
@@ -95,7 +95,7 @@ Furthermore, for `nameType`=`partial` (see keyword `nameType`), the uppercase pa
     </group>
     ```
 #### NeXus Field and Attribute
-A NeXus `group` may contain NeXus `fields`, NeXus `attributes`, and other NeXus `groups`. A `field`, which is written as a string without a preceding `NX`, and an `attribute`, preceded by `\@`, must have a [NeXus type](https://manual.nexusformat.org/nxdl-types.html#index-0) (e.g.`NX_FLOAT`, `NX_CHAR`). The NeXus type type must be denoted inside parenthesis (e.g. `end_time(NX_DATE_TIME)`); if the type is ommited, the NeXus `field` or `attribute` has a implicit type `NX_CHAR` by default. Other XML attributes or properties of the NeXus `field`/`attribute`/`group`/`doc` can be defined using one of the special keywords (see `Special Keywords in YAML` below). The descriptive text for NeXus `field`/`attribute`/`group`/`link` is given within the `doc` child.
+A NeXus `group` may contain NeXus `fields`, NeXus `attributes`, and other NeXus `groups`. A `field`, which is written as a string without a preceding `NX`, and an `attribute`, preceded by `\@`, must have a [NeXus type](https://manual.nexusformat.org/nxdl-types.html#index-0) (e.g.`NX_FLOAT`, `NX_CHAR`). The NeXus type type must be denoted inside parenthesis (e.g. `end_time(NX_DATE_TIME)`); if the type is omitted, the NeXus `field` or `attribute` has a implicit type `NX_CHAR` by default. Other XML attributes or properties of the NeXus `field`/`attribute`/`group`/`doc` can be defined using one of the special keywords (see `Special Keywords in YAML` below). The descriptive text for NeXus `field`/`attribute`/`group`/`link` is given within the `doc` child.
 
 **NeXus field and attribute in YAML and XML format**
 
@@ -151,7 +151,7 @@ The NeXus `link` reduces data duplication since several concepts of the same kin
     </link>
     ```
 
-In the YAML example above, `reference_measurement` is defined as a link refering to an instance of the `NXentry` group with its `target` attribute denoting a value `/entry`. This structure ensures that the concept referencing the data is effectively linked to the designated target, thereby reducing the redundancy and maintaining data integrity within the NeXus framework.
+In the YAML example above, `reference_measurement` is defined as a link referring to an instance of the `NXentry` group with its `target` attribute denoting a value `/entry`. This structure ensures that the concept referencing the data is effectively linked to the designated target, thereby reducing the redundancy and maintaining data integrity within the NeXus framework.
 
 
 <!-- ### NeXus Choice
