@@ -6,7 +6,9 @@
 
 .md-header, .md-header__inner {
   background-color: #fff;
-  color: #2A4CDF;
+  color: #2a88dfff;
+    /*nomad color #2a4cdfff */
+    /*nyaml color #2a88dfff */
 }
 
 .md-header[data-md-state=shadow] {

@@ -4,4 +4,4 @@
 # nyaml Tool for NeXus
 The `nyaml` tool is a Python package that provides a command line interface for converting NeXus application definitions or base classes from `yaml` file format into the `nxdl.xml` file format and vice-versa. The converter can be called by the command `nyaml2nxdl`.
 
-Check full documentation of the tool in [gh] https://fairmat-nfdi.github.io/nyaml/
+You can find the full documentation of the tool [here](https://fairmat-nfdi.github.io/nyaml/)

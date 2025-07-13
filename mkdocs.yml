@@ -1,6 +1,6 @@
 site_name: NYAML Documentation
-site_description:
-  The documentation for the NYAML tool which is a converter tool to transcode NeXus schema from YAML to XML (.nxdl.xml).
+site_description: |
+  The documentation for NYAML: A converter tool to transcode NeXus schema from YAML to XML and vice-versa.
 site_author: "The FAIRmat authors"
 repo_url: https://github.com/FAIRmat-NFDI/nyaml
 nav:
@@ -46,7 +46,7 @@ theme:
     accent: "#008A67"
   font:
     text: "Titillium Web"
-  logo: assets/nomad-plugin-logo.png
+  logo: assets/NeXus-FAIRmat-nyaml1.png
   favicon: assets/favicon.png
   features:
     - navigation.path
