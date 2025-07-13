@@ -5,10 +5,15 @@ site_author: "The FAIRmat authors"
 repo_url: https://github.com/FAIRmat-NFDI/nyaml
 nav:
   - Home: index.md
-  - Tutorial: tutorials/tutorials.md
-  - How-To-Guide : howtos/howto.md
-  - Explanation: learn/explanations.md
-  - Reference: references/references.md
+  - Tutorial:
+      - Tutorials for NXDL in YAML format: tutorials/tutorials.md
+  - How-To-Guide :
+      - nyaml Installation and Command: howtos/howto.md
+  - Explanation:
+      - NeXus Definition Language (NXDL), XML, and YAML: learn/explanations.md
+      - nyaml Workflow: learn/workflow.md
+  - Reference:
+      - Used Resources: references/references.md
 plugins:
   - mkdocstrings
   - mermaid2
