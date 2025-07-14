@@ -1,7 +1,7 @@
 name: build_and_deploy_docs
 on:
   push:
-    branches: [MkDoc]
+    branches: [MyDoc]
 permissions:
   contents: write
 jobs:
