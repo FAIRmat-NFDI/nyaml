@@ -6,14 +6,15 @@ repo_url: https://github.com/FAIRmat-NFDI/nyaml
 nav:
   - Home: index.md
   - Tutorial:
-      - Tutorials for NXDL in YAML format: tutorials/tutorials.md
+      - Writing a NeXus definition in YAML: tutorials/tutorials.md
   - How-To-Guide :
-      - nyaml Installation and Command: howtos/howto.md
+      - Installation and use of the nyaml tool: howtos/howto.md
   - Explanation:
-      - NeXus Definition Language (NXDL), XML, and YAML: learn/explanations.md
-      - nyaml Workflow: learn/workflow.md
+      - Introduction to NeXus: https://manual.nexusformat.org/index.html
+      - Motivation behind the nyaml tool: learn/explanations.md
+      - Workflow of the nyaml tool with examples: learn/workflow.md
   - Reference:
-      - Used Resources: references/references.md
+      - References: references/references.md
 plugins:
   - mkdocstrings
   - mermaid2
