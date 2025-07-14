@@ -1,7 +1,7 @@
 # Tutorials for NXDL in YAML format
 This tutorial will explain different keywords, terms, and rules from the perspective of YAML format of the NeXus schema. It provides a overall grasp on how to write a NeXus schema (base classes and application definitions) in YAML format using those syntactical components.
 
-## Design of NeXus Ontology and Terms in YAML
+## Design of NeXus Semantics and Terms in YAML
 
 Within the YAML format, the root section denotes the top-level description of the application definition or base class schema, comprising the `category`, `type`, `doc`, `symbols` block, and the name of the schema (e.g. `NXmpes(NXobject)`). Correspondingly, the root section refers to the XML element `definition`, encompassing the first `doc` child of the `definition` and `symbols`. The definition element encapsulates essential XML attributes such as the schema's `name` (and xml attribute), the object it `extends` (an xml attribute), and the schema `type` (an xml attribute), with additional XML attributes (i.e. `xmlns:xsi`) handled by the nyaml converter. The accurate designation of category as either `base` or `application` distinguishes between a `base class` and an `application definition` respectively. The schema name (i.e. `NXmpes(NXobject)`) with parenthesis indicates the extension of the current application definition `NXmpes` from base class `NXobject`, an application definition may extend either `NXobject` or other application definitions. Schemas may incorporate one or multiple symbols, each imbued with specialized physical meanings beyond their literal interpretation, which are utilized over the application definition.
 
@@ -53,7 +53,7 @@ Within the YAML format, the root section denotes the top-level description of th
     ```
 ### NeXus Group, Field, Attribute, and Link
 #### NeXus Group
-[NeXus groups](https://manual.nexusformat.org/design.html#design-groups), as instances of NeXus base classes, embody the compositional structure of application definitions. Depending on the value of keyword `nameType`, these groups can be initialized dynamically or statically and each approach offers distinct advantages. The keyword `nameType` can hold three district values: `specified`, `any`, and `partial` (for details see the table in `nameType` keyword).
+[NeXus groups](https://manual.nexusformat.org/design.html#design-groups), as instances of NeXus base classes, embody the compositional structure of application definitions. Depending on the value of keyword `nameType`, these groups can be initialized dynamically or statically and each approach offers distinct advantages. The keyword `nameType` can hold one of the three district values: `specified`, `any`, and `partial` (for details see the table in `nameType` keyword).
 
 Dynamic initialization allows the instantiation of groups while implementing the NeXus definition to store data (in HDF5 file format called NeXus file). This method provides flexibility for multiple instances at the same level within the NeXus file. For instance, the `group` `(NXmanipulator)` (with `nameType`=`any`) can initialize multiple groups such as `manipulator1` and `manipulator2` initializing base class `NXmanipulator` during data writing.
 
@@ -82,7 +82,7 @@ Furthermore, for `nameType`=`partial` (see keyword `nameType`), the uppercase pa
 
 === "XML"
     ```xml
-    <group name="source_TYPE" type="NXsource" recommended="true">
+    <group name="source_TYPE" type="NXsource" recommended="true" nameType="partial">
       <doc>
         A source used to generate a beam.
       </doc>
@@ -132,7 +132,7 @@ A NeXus `group` may contain NeXus `fields`, NeXus `attributes`, and other NeXus 
     ```
 
 #### NeXus Link
-The NeXus `link` reduces data duplication since several concepts of the same kind (e.g., NeXus `group`, `field`, or `attribute`) can refer to a single copy of a data element. In YAML format, NeXus `link` is defined denoting the link inside parenthesis. At the same time, the target concept containing the data must be mentioned under the `target` child.
+The NeXus `link` reduces data duplication since several concepts of the same kind (e.g., NeXus `group`, `field`, or `attribute`) can refer to a single copy of a data element. In YAML format, NeXus `link` is denoted by the `link` keyword inside parenthesis. At the same time, the target concept containing the data must be mentioned under the `target` child.
 
 
 
@@ -174,7 +174,7 @@ In this `choice` example, `pixel_shape` could be any of the groups `(NXoff_geome
 
 ### Special Keywords in YAML
 
-In the YAML schema certain keywords hold self significance beyond their literal interpretations. These special keywords are utilized to elucidate and denote various NeXus terms like `attributes`, `fields`, `links`, and `groups`, thereby enhancing the clarity and specificity of the data representation.
+In the YAML schema, certain keywords hold self significance beyond their literal representational meanings. These special keywords are utilized to elucidate and denote various NeXus terms like `attributes`, `fields`, `links`, and `groups`, thereby improves the clarity and specificity of the data representation.
 
 #### Keyword `nameType`
 To initialize a NeXus `group`, `field` or `attribute` the keyword `nameType` carries very significant information on the initialized name depending whether all characters are upper case, lower case or combination of upper-lower case.
@@ -208,6 +208,8 @@ Currently, the accepted values for the `exists` keyword encompass:
       exists: optional
       doc: |
         This calibration procedure is used to account for the different transmission efficiencies.
+      calibrationDATA(NXdata):
+        exists: [min, 3, max, infty]
     ```
 === "XML"
     ```xml
@@ -215,6 +217,7 @@ Currently, the accepted values for the `exists` keyword encompass:
       <doc>
         This calibration procedure is used to account for the different transmission efficiencies.
       </doc>
+      <group name="calibrationDATA" type="NXdata" minOccurrences="3" maxOccurrences="unbounded"/>
     </group>
     ```
 
@@ -243,7 +246,7 @@ In the above example, the `detector_voltage` field is defined as a `NX_FLOAT` ty
 
 #### Keyword `dimensions`
 
-The `dimensions` term  describes the multidimensional nature of the data, specifying its rank, dimensional indices, and corresponding length of the rank. The attribute `rank` defines the dimension of the data set. To elucidate each dimension, we use two other keywords: `dim` and `dim_parameters`. The `dim` keyword comprises an array of arrays, the nested array encapsulates values for `index` and `value` (NeXus keywords) pairs. Each array within the `dim` array corresponds to a specific dimension of the multidimensional data. For example, for 2D particle motion, the `dim` array may be represented as `[[0, nx], [1, ny]]`, each member indicating the axis index and axis name. The keyword `dim_parameters` contains further information of each dimension such as `doc`, `ref`, etc. It is important to note that each array corresponds to a keyword within `dim_parameters` must have the same length as the value of the `rank` keyword.
+The `dimensions` term  describes the multidimensional nature of the data, specifying its rank, dimensional indices, and corresponding length of the rank. The attribute `rank` defines the number of physical dimension of the data array. To elucidate each dimension, we use two other keywords: `dim` and `dim_parameters`. The `dim` keyword comprises an array of arrays, the nested array encapsulates values for `index` and `value` (NeXus keywords) pairs. Each array element of the `dim` array corresponds to a specific dimension of the multidimensional data. For example, for 2D particle motion, the `dim` array may be represented as `[[0, nx], [1, ny]]`, each element indicating the axis index and axis name. The keyword `dim_parameters` contains further information of each dimension such as `doc`, `ref`, etc. It is important to note that each array corresponds to a keyword within `dim_parameters` must have the same length as the value of the `rank` keyword.
 
 
 **`dimensions` in YAML**
@@ -348,7 +351,7 @@ List of strings which are considered as a set of predefined values for fields or
     </field>
     ```
 
-`open_enum` says along with the listed items other items are also valid while initializing the NeXus object.
+`open_enum` defines that along with the listed items other items are also valid while initializing the NeXus object.
 
 #### Keyword `xref`
 The `xref` keyword (which can only be used inside the keyword `doc`) is used to refer any other ontology or any other standard (such as `ISO`). The `xref` in the example `doc` will reflect the information inside the XML `doc`. Note that the `xref` keyword is only available in the `YAML` representation and will be transformed into its textual representation inside the `doc` text in `XML`.
