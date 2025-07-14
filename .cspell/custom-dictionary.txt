@@ -1,0 +1,15 @@
+# Skip spelling check for the following words
+
+
+# Doc related words
+mkdocs
+Könnecke
+NXmpes
+IUPAC
+nxdlformat
+MPES
+infty
+nyaml
+NXDL
+lxml
+Forschungsgemeinschaft
