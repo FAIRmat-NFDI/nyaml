@@ -1,38 +1,69 @@
 # nyaml Workflow
-The `nyaml` implements a specific workflow for converting between YAML and XML formats. The `nyaml` converter checks for the correct file type and calls the appropriate converter. For an XML file, the `nxdl2yaml` converter parses the `XML` file, by means of [lxml](https://lxml.de/) python library, into an `XML` tree object. Adhering to the NXDL rules, the converter writes the application definition or the base class object to a `YAML` file that matches the `nyaml` syntax. If the input file is a `YAML` file, the `yaml2nxdl` converter collects the comments in a `Comments` object and parses the `YAML` file into a python `dictionary` object. Later, the application definitions or base classes will be converted into an `XML` file by combining the `Comments` and the python `dictionary` object.
+`nyaml` implements a specific workflow for converting between YAML and XML formats. The `nyaml` converter checks for the correct file type and calls the appropriate converter.
 
-After the conversion from `XML` format to `YAML` format, the `nyaml` tool stores the `XML` contents at the end of the file under a hash created by Secure Hash Algorithm sha256 from `YAML` contents generated in this conversion process. This benefits on the backward compatibility of the `YAML` file, so that the `YAML` file can be converted back to `XML` file without any modification of structure like whitespaces or newlines.
+Conversion from YAML to XML follows specific workflow steps (depicted in workflow diagram below) according to NXDL rules and syntax specific to the YAML format. Starting from a given input YAML file (see workflow diagram below), the workflow performs the following steps:
+
+1. The `nyaml` invokes `nyaml2nxdl` converter which collects the input `.yaml` file.
+
+2. Using [PyYAML](https://github.com/yaml/pyyaml), the converter collects and tracks comments in the YAML file.
+
+3. The converter parses the YAML file into a nested hashed map—a Python dictionary object.
+
+4. The converter writes the hashed map and comments into an output XML file in accordance with NXDL concepts.
+
+
+The conversion algorithm interprets the specific keywords and syntactic rules to transcode the NXDL from YAML into XML. Leveraging the NXDL rules, the conversion process detects possible inconsistencies in the YAML content and raises errors or warnings if the rules are not properly followed.
+
+
+The XML to YAML conversion also follows a well-defined data workflow (depicted in workflow diagram below) that converts a given input XML file into a YAML file. The workflow begins with the XML input and proceeds as follows:
+
+
+1. The `nyaml` calls `nxdl2nyaml` converter that takes over the `.nxdl.xml` file.
+
+2. Using [lxml](https://lxml.de/), the converter parses the XML file and builds an XML tree structure.
+
+3. Applying YAML-specific keywords and formatting rules, the converter generates a YAML file from the XML tree.
+
+4. The converter computes a SHA256 hash of the generated YAML content.
+
+5. The converter writes the YAML file and appends both the hash and the original XML content as comments at the end of the YAML file.
+
+
+By attaching the hash and the original XML content to the YAML output (.yaml file), the tool enables lossless round-trip conversions — provided the YAML content remains unchanged. That is, if the YAML content is not modified, converting back from YAML to XML, the original commented XML content will be written back to the XML file without any modification. However, if the YAML content is modified, the XML tree will be reconstructed from the YAML content and written to the XML file, which will differ from the original XML content included in the comments. This caching approach streamlines the XML → YAML → XML workflow and facilitates straightforward comparisons of XML files in version control systems such as Git.
 
 Like every scientific software, the `nyaml` tool also follows a specific workflow.
 
 ```mermaid
-graph TD;
-  subgraph Start
-    id1["Input File (YAML or XML)"]
-  end
-  subgraph Correct File Converter
-    id2["nyaml2nxdl Converter"]
-    id3["nxdl2nyaml Converter"]
-  end
-  subgraph nyaml2nxdl
-    id4["Comment Collector"]
-    id5["Python Dictionary Object"]
-  end
-  subgraph nxdl2nyaml
-    id6["XML Object"]
-  end
-  subgraph Final result
-  id7["Write XML File"]
-  id8["Write YAML File"]
-  end
-
-  id1--> |YAML File|id2
-  id1--> |XML File|id3
-  id2-->id4
-  id4-->id5
-  id3-->id6
-  id5-->id7
-  id6-->id8
+  graph TD;
+    subgraph Start
+      id1["Input File (YAML or XML)"]
+    end
+    subgraph Correct File Converter
+      id2["nyaml2nxdl Converter"]
+      id3["nxdl2nyaml Converter"]
+    end
+    subgraph nyaml2nxdl
+      id4["Comment Collector"]
+      id5["Python Dictionary Object"]
+    end
+    subgraph nxdl2nyaml
+      id6["XML Object"]
+      id7["YAML File (intermediate)"]
+      id8["SHA256 Hash for YAML Content"]
+    end
+    subgraph Final result
+    id9["Write XML File"]
+    id10["Write YAML File"]
+    end
+    id1--> |YAML File|id2
+    id1--> |XML File|id3
+    id2-->id4
+    id4-->id5
+    id3-->id6
+    id6-->id7
+    id7-->id8
+    id5-->id9
+    id8-->id10
 ```
 
 ## Conversion from YAML to XML and vice versa
@@ -41,9 +72,8 @@ Presented below is a concise and trimmed example of the `NXmpes` application def
 !!! note
     For in detailed explanation with examples please follow the [Tutorials for writing NeXus definition in YAML](../tutorials/tutorials.md).
 !!! note
-    The `NXmpes` application is an old and trimmed version which does not serve any scientific purpose, but only is used to illustrate the results of the conversion process.
+    The application definition, we are using here, is an old and trimmed version of `NXmpes`  which does not serve any scientific purpose (standard application definition for MPES follow [NXmpes](https://fairmat-nfdi.github.io/nexus_definitions/classes/applications/NXmpes.html)), but is only used here to illustrate the results of the conversion process.
 
-<!-- To do, add warning saying that the application definitions is not mandatory should the update NXmpes application. -->
 
 **NXmpes application definition in YAML and XML format**
 
