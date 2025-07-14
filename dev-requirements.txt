@@ -54,7 +54,7 @@ pyyaml==6.0.2
     #   pre-commit
 ruff==0.9.6
     # via nyaml (pyproject.toml)
-setuptools==75.8.0
+setuptools==78.1.1
     # via pip-tools
 types-beautifulsoup4==4.12.0.20250204
     # via types-lxml
