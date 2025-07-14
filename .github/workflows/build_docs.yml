@@ -1,7 +1,7 @@
 name: build_and_deploy_docs
 on:
   push:
-    branches: [main]
+    branches: [MkDoc]
 permissions:
   contents: write
 jobs:
@@ -30,4 +30,4 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: pip install ".[docs]"
-      - run: mkdocs gh-deploy --force
+      - run: mkdocs gh-deploy --force --remote-branch gh-pages
