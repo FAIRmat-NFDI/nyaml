@@ -1,5 +1,5 @@
 # nyaml Workflow
-`nyaml` implements a specific workflow for converting NeXus application definition and base classe between XML and YAML formats and vice-versa. The `nyaml` converter checks for the correct file type and calls the appropriate converter following a certain workflow (depicted in the workflow diagram below).
+`nyaml` implements a specific workflow for converting NeXus application definition and base class between XML and YAML formats and vice-versa. The `nyaml` converter checks for the correct file type and calls the appropriate converter following a certain workflow (depicted in the workflow diagram below).
 
 Conversion from YAML to XML follows specific workflow steps (depicted in workflow diagram below) according to NXDL rules and syntax specific to the YAML format. Starting from a given input YAML file (see workflow diagram below), the workflow performs the following steps:
 

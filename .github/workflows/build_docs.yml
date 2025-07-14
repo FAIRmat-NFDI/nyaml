@@ -14,11 +14,14 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
       - name: Check Spell
-        uses: streetsidesoftware/cspell-action@v7
-        with:
-          files: docs/**/*.md
-          config: .cspell/cspell.config.yaml
-          strict: true
+        run: |
+          npm install -g cspell
+          cspell --config ./cspell.config.yaml "docs/**/*.md"
+
+          if [[ $? -ne 0 ]]; then
+            echo "Docs contain spelling errors. Please fix them before deploying. Exiting."
+            exit 1
+          fi
       - uses: actions/setup-python@v4
         with:
           python-version: 3.x
