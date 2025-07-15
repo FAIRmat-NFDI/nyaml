@@ -1,9 +1,12 @@
 # Tutorials for NXDL in YAML format
 This tutorial will explain different keywords, terms, and rules from the perspective of YAML format of the NeXus schema. It provides a overall grasp on how to write a NeXus schema (base classes and application definitions) in YAML format using those syntactical components.
 
+!!! note
+    We do not support the NeXus `choice` concept in the `nyaml` tool yet.
+
 ## Design of NeXus Semantics and Terms in YAML
 
-Within the YAML format, the root section denotes the top-level description of the application definition or base class schema, comprising the `category`, `type`, `doc`, `symbols` block, and the name of the schema (e.g. `NXmpes(NXobject)`). Correspondingly, the root section refers to the XML element `definition`, encompassing the first `doc` child of the `definition` and `symbols`. The definition element encapsulates essential XML attributes such as the schema's `name` (and xml attribute), the object it `extends` (an xml attribute), and the schema `type` (an xml attribute), with additional XML attributes (i.e. `xmlns:xsi`) handled by the nyaml converter. The accurate designation of category as either `base` or `application` distinguishes between a `base class` and an `application definition` respectively. The schema name (i.e. `NXmpes(NXobject)`) with parenthesis indicates the extension of the current application definition `NXmpes` from base class `NXobject`, an application definition may extend either `NXobject` or other application definitions. Schemas may incorporate one or multiple symbols, each imbued with specialized physical meanings beyond their literal interpretation, which are utilized over the application definition.
+Within the YAML format, the root section denotes the top-level description of the application definition or base class schema, comprising the `category`, `type`, `doc`, `symbols` block, and the name of the schema (e.g. `NXmpes(NXobject)`). Correspondingly, the root section refers to the XML element `definition`, encompassing the first `doc` child of the `definition` and `symbols`. The definition element encapsulates essential XML attributes such as the schema's `name` (an xml attribute), the object it `extends` (an xml attribute), and the schema `type` (an xml attribute), with additional XML attributes (e.g. `xmlns:xsi`) handled by the nyaml converter. The accurate designation of category as either `base` or `application` distinguishes between a `base class` and an `application definition` respectively. The schema name (e.g. `NXmpes(NXobject)`) with parenthesis indicates the extension of the current application definition `NXmpes` from base class `NXobject`, an application definition may extend either `NXobject` or other application definitions. Schemas may incorporate one or multiple symbols, each imbued with specialized physical meanings beyond their literal interpretation, which are utilized over the application definition.
 
 **A typical root section for the application definition `NXmpes` outlined**
 
@@ -87,7 +90,8 @@ Furthermore, for `nameType`=`partial` (see keyword `nameType`), the uppercase pa
         A source used to generate a beam.
       </doc>
     </group>
-    <group type="NXmanipulator" optional="true">
+    <!-- If not nameType is specified default NXmanipulator has nameType any -->
+    <group type="NXmanipulator" optional="true" nameType="any">
       <doc>
         Manipulator for positioning of the sample.
       </doc>
@@ -95,7 +99,7 @@ Furthermore, for `nameType`=`partial` (see keyword `nameType`), the uppercase pa
     </group>
     ```
 #### NeXus Field and Attribute
-A NeXus `group` may contain NeXus `fields`, NeXus `attributes`, and other NeXus `groups`. A `field`, which is written as a string without a preceding `NX`, and an `attribute`, preceded by `\@`, must have a [NeXus type](https://manual.nexusformat.org/nxdl-types.html#index-0) (e.g.`NX_FLOAT`, `NX_CHAR`). The NeXus type type must be denoted inside parenthesis (e.g. `end_time(NX_DATE_TIME)`); if the type is omitted, the NeXus `field` or `attribute` has a implicit type `NX_CHAR` by default. Other XML attributes or properties of the NeXus `field`/`attribute`/`group`/`doc` can be defined using one of the special keywords (see `Special Keywords in YAML` below). The descriptive text for NeXus `field`/`attribute`/`group`/`link` is given within the `doc` child.
+A NeXus `group` may contain NeXus `fields`, NeXus `attributes`, and other NeXus `groups`. A `field`, representing an instance of NXDL/XSD fieldType, is written as a string without a preceding `NX`, and an `attribute`, preceded by `\@`, must have a [NeXus type](https://manual.nexusformat.org/nxdl-types.html#index-0) (e.g.`NX_FLOAT`, `NX_CHAR`). The NeXus type type must be denoted inside parenthesis (e.g. `end_time(NX_DATE_TIME)`); if the type is omitted, the NeXus `field` or `attribute` has an implicit type `NX_CHAR` by default. Other XML attributes or properties of the NeXus `field`/`attribute`/`group`/`doc` can be defined using one of the special keywords (see `Special Keywords in YAML` below). The descriptive text for NeXus `field`/`attribute`/`group`/`link` is given within the `doc` child.
 
 **NeXus field and attribute in YAML and XML format**
 
@@ -177,7 +181,7 @@ In this `choice` example, `pixel_shape` could be any of the groups `(NXoff_geome
 In the YAML schema, certain keywords hold self significance beyond their literal representational meanings. These special keywords are utilized to elucidate and denote various NeXus terms like `attributes`, `fields`, `links`, and `groups`, thereby improves the clarity and specificity of the data representation.
 
 #### Keyword `nameType`
-To initialize a NeXus `group`, `field` or `attribute` the keyword `nameType` carries very significant information on the initialized name depending whether all characters are upper case, lower case or combination of upper-lower case.
+To initialize a NeXus `group`, `field` or `attribute` the keyword `nameType` carries significant information on the initialized name depending whether all characters are upper case, lower case or combination of upper-lower case.
 
 
 |      `nameType`     |        `specified`         |             `any`            |          `partial`          |   default value       |
@@ -186,6 +190,41 @@ To initialize a NeXus `group`, `field` or `attribute` the keyword `nameType` car
 | All Lower Case      | &#10003;                   |   &#10003; (with warning msg)| &#10003; (with error);      | `specified`           |
 | Upper and Lower Case| &#10003;                   |   &#10003; (with warning msg)| &#10003;                    | `specified`           |
 | Anonymous Group Name| &#10003; (with error)      |   &#10003;                   | &#10003; (with error)       | `any`                 |
+
+**`nameType` keyword in YAML**
+
+=== "YAML"
+    ```yaml
+    # NeXus groups in YAML format
+    source_TYPE(NXsource):
+      exists: recommended
+      nameType: partial
+      doc: |
+        A source used to generate a beam.
+    (NXmanipulator):
+      exists: optional
+      nameType: any # default
+      doc: |
+        Manipulator for positioning of the sample.
+      value_log(NXlog):
+        exists: optional
+    ```
+
+=== "XML"
+    ```xml
+    <group name="source_TYPE" type="NXsource" recommended="true" nameType="partial">
+      <doc>
+        A source used to generate a beam.
+      </doc>
+    </group>
+    <!-- If no nameType is specified, by default NXmanipulator has nameType any -->
+    <group type="NXmanipulator" optional="true" nameType="any">
+      <doc>
+        Manipulator for positioning of the sample.
+      </doc>
+      <group name="value_log" type="NXlog" optional="true"/>
+    </group>
+    ```
 
 #### Keyword `exists`
 
@@ -237,8 +276,7 @@ The `unit` keyword is used to define the NeXus-compliant unit categories.
     ```
 === "XML"
     ```xml
-    <field name="detector_voltage" type="NX_FLOAT">
-      <unit>NX_VOLTAGE</unit>
+    <field name="detector_voltage" type="NX_FLOAT" units="NX_VOLTAGE"/>
       <doc>Voltage applied to detector.</doc>
     </field>
     ```
