@@ -22,7 +22,6 @@ $ pre-commit install
 ## How to Use
 `nyaml` works as a command line tool to convert NeXus application definitions or base classes from `yaml` file format into the `nxdl.xml` file format and vice-versa. The converter can be called by the command
 
-```bash
 ::: mkdocs-click
     :module: nyaml.cli
     :command: launch_tool
@@ -30,18 +29,9 @@ $ pre-commit install
     :depth: 2
     :style: table
     :list_subcommands: True
-```
-with the available options:
-```output
-  --output-file TEXT   Specify the output file path for the converted file.
-  --check-consistency  Check whether YAML and NXDL can be recursively
-                       converted, ensuring version consistency.
-  --do-not-store-nxdl  Prevent the input NXDL file from being stored as a
-                       comment at the end of the output YAML file.
-  --verbose            Display keywords and value types in standard output to
-                       assist in identifying issues in YAML files.
-  --help               Show this message and exit.
-```
+
+__Brief interpretation of the command line options__:
+
 `--output-file`: The option defines the output file name (including the file extension), if the option is not specified the converter will define the output file name from the input file. Exemplified for a given input file `NXapplication.nxdl.xml (NXapplication.yaml)`, the resultant file will be `NXapplication_parser.yaml (NXapplication.nxdl.xml)`.
 
 `--check-consistency`: With the option `--check-consistency`, `nyaml` produces the same type of file as the input, e.g. for input `NXapplication.nxdl.xml` the output file is `NXapplication_consistency.nxdl.xml`. When converting the `nxdl.xml` file into `yaml` it also stores the `nxdl.xml` file at the end of `yaml` file with a hash.
@@ -49,3 +39,5 @@ with the available options:
 `--do-not-store-nxdl`: The option `--do-not-store-nxdl` prevents the `yaml` file from storing the original `nxdl.xml` text as comment.
 
 `--verbose`: The `verbose` option is to identify any issues arising from unexpected conversion or syntax errors that occur while converting the file from one to another.
+
+`--help`: The `help` option Show this message and exit.
