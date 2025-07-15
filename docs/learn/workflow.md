@@ -67,7 +67,7 @@ Like every scientific software, the `nyaml` tool also follows a specific workflo
 ```
 
 ## Conversion from YAML to XML and vice versa
-Presented below is a concise and trimmed example of the `NXmpes` application definition (for discussion purpose) in `YAML` format, alongside its corresponding encoding into `XML` format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of the basic structure of NXDL, readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html).
+Presented below is a concise and trimmed example of the `NXmpes` application definition (for discussion purpose) in YAML format, alongside its corresponding encoding into XML format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of the basic structure of NXDL, readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html).
 
 !!! note
     For in detailed explanation with examples please follow the [Tutorials for writing NeXus definition in YAML](../tutorials/tutorials.md).

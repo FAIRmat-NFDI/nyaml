@@ -99,7 +99,7 @@ Furthermore, for `nameType`=`partial` (see keyword `nameType`), the uppercase pa
     </group>
     ```
 #### NeXus Field and Attribute
-A NeXus `group` may contain NeXus `fields`, NeXus `attributes`, and other NeXus `groups`. A `field`, representing an instance of NXDL/XSD fieldType, is written as a string without a preceding `NX`, and an `attribute`, preceded by `\@`, must have a [NeXus type](https://manual.nexusformat.org/nxdl-types.html#index-0) (e.g.`NX_FLOAT`, `NX_CHAR`). The NeXus type type must be denoted inside parenthesis (e.g. `end_time(NX_DATE_TIME)`); if the type is omitted, the NeXus `field` or `attribute` has an implicit type `NX_CHAR` by default. Other XML attributes or properties of the NeXus `field`/`attribute`/`group`/`doc` can be defined using one of the special keywords (see `Special Keywords in YAML` below). The descriptive text for NeXus `field`/`attribute`/`group`/`link` is given within the `doc` child.
+A NeXus `group` may contain NeXus `field`s, NeXus `attribute`s, and other NeXus `group`s. A `field`, representing an instance of NXDL/XSD fieldType, is written as a string without a preceding `NX`, and an `attribute`, preceded by `\@`, must have a [NeXus type](https://manual.nexusformat.org/nxdl-types.html#index-0) (e.g.`NX_FLOAT`, `NX_CHAR`). The NeXus type type must be denoted inside parenthesis (e.g. `end_time(NX_DATE_TIME)`); if the type is omitted, the NeXus `field` or `attribute` has an implicit type `NX_CHAR` by default. Other XML attributes or properties of the NeXus `field`/`attribute`/`group`/`doc` can be defined using one of the special keywords (see `Special Keywords in YAML` below). The descriptive text for NeXus `field`/`attribute`/`group`/`link` is given within the `doc` child.
 
 **NeXus field and attribute in YAML and XML format**
 
@@ -178,10 +178,10 @@ In this `choice` example, `pixel_shape` could be any of the groups `(NXoff_geome
 
 ### Special Keywords in YAML
 
-In the YAML schema, certain keywords hold self significance beyond their literal representational meanings. These special keywords are utilized to elucidate and denote various NeXus terms like `attributes`, `fields`, `links`, and `groups`, thereby improves the clarity and specificity of the data representation.
+In the YAML schema, certain keywords hold self significance beyond their literal representational meanings. These special keywords are utilized to elucidate and denote various NeXus terms like `attribute`s, and `group`s, thereby improves the clarity and specificity of the data representation.
 
 #### Keyword `nameType`
-To initialize a NeXus `group`, `field` or `attribute` the keyword `nameType` carries significant information on the initialized name depending whether all characters are upper case, lower case or combination of upper-lower case.
+To initialize a NeXus concepts, e.g., `group`, `field`, the keyword `nameType` carries significant information on the initialized name depending whether all characters are upper case, lower case or combination of upper-lower case.
 
 
 |      `nameType`     |        `specified`         |             `any`            |          `partial`          |   default value       |
@@ -228,7 +228,7 @@ To initialize a NeXus `group`, `field` or `attribute` the keyword `nameType` car
 
 #### Keyword `exists`
 
-The `exists` keyword plays a pivotal role in defining the optionality of NeXus concepts `attribute`, `field`, `link`, and `group`. It provides crucial insights for the expected presence or absence of these concepts within the NeXus data structure when implementing the NeXus definitions in NeXus files. By default, all the concepts of a base class are optional, while in an application definition, all concepts are required.
+The `exists` keyword plays a pivotal role in defining the optionality of NeXus concepts. e.g., `group`, `field`. It provides crucial insights for the expected presence or absence of these concepts within the NeXus data structure when implementing the NeXus definitions in NeXus files. By default, all the concepts of a base class are optional, while in an application definition, all concepts are required.
 
 
 Currently, the accepted values for the `exists` keyword encompass:
@@ -392,7 +392,7 @@ List of strings which are considered as a set of predefined values for fields or
 `open_enum` defines that along with the listed items other items are also valid while initializing the NeXus object.
 
 #### Keyword `xref`
-The `xref` keyword (which can only be used inside the keyword `doc`) is used to refer any other ontology or any other standard (such as `ISO`). The `xref` in the example `doc` will reflect the information inside the XML `doc`. Note that the `xref` keyword is only available in the `YAML` representation and will be transformed into its textual representation inside the `doc` text in `XML`.
+The `xref` keyword (which can only be used inside the keyword `doc`) is used to refer any other ontology or any other standard (such as `ISO`). The `xref` in the example `doc` will reflect the information inside the XML `doc`. Note that the `xref` keyword is only available in the YAML representation and will be transformed into its textual representation inside the `doc` text in XML.
 
 **`xref` in YAML**
 

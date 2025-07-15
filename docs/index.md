@@ -1,8 +1,8 @@
 # nyaml documentation
 
-The `nyaml` tool offers a user-friendly command-line interface for converting between `XML` and `YAML` representations of NeXus definitions written in the NeXus Definition Language (NXDL). While the official NeXus definitions are maintained in `XML,` authoring them in `YAML` provides a more concise and readable alternative. `nyaml` bridges this gap, allowing developers to work in `YAML` while ensuring compatibility with the official `XML` format.
+The `nyaml` tool offers a user-friendly command-line interface for converting between XML and YAML representations of NeXus definitions written in the NeXus Definition Language (NXDL). While the official NeXus definitions are maintained in `XML,` authoring them in YAML provides a more concise and readable alternative. `nyaml` bridges this gap, allowing developers to work in YAML while ensuring compatibility with the official XML format.
 
-The tool supports both NeXus application definitions and base classes. It can be installed via `pip` and includes comprehensive documentation and tutorials to assist users in writing NeXus definitions using `YAML`.
+The tool supports both NeXus application definitions and base classes. It can be installed via `pip` and includes comprehensive documentation and tutorials to assist users in writing NeXus definitions using YAML.
 
 <div markdown="block" class="home-grid">
 <div markdown="block">
@@ -28,7 +28,7 @@ How-to install and use the nyaml tool
 
 ### Learn
 
-An introduction to NeXus and its use in the light of `YAML` format using the `nyaml` tool.
+An introduction to NeXus and its use in the light of YAML format using the `nyaml` tool.
 
 - [An introduction to NeXus](https://manual.nexusformat.org/index.html)
 - [Motivation behind the nyaml tool](learn/explanations.md)
