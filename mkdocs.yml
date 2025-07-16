@@ -1,0 +1,70 @@
+site_name: NYAML Documentation
+site_description: |
+  Documentation for nyaml: A converter tool to transcode NeXus schema from YAML to XML and vice-versa.
+site_author: "The FAIRmat authors"
+repo_url: https://github.com/FAIRmat-NFDI/nyaml
+nav:
+  - Home: index.md
+  - Tutorial:
+      - Writing a NeXus definition in YAML: tutorials/tutorials.md
+  - How-To-Guide :
+      - Getting started with nyaml: howtos/howto.md
+  - Explanation:
+      - Introduction to NeXus: https://manual.nexusformat.org/index.html
+      - Motivation behind the nyaml tool: learn/explanations.md
+      - Workflow of the nyaml tool with examples: learn/workflow.md
+  - Reference:
+      - References: references/references.md
+plugins:
+  - mkdocstrings
+  - mermaid2
+  - search
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - admonition
+  - abbr
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - mkdocs-click
+  - pymdownx.extra
+  - toc:
+      permalink: True
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+theme:
+  name: "material"
+  palette:
+    primary: "#2A4CDF"
+    accent: "#008A67"
+  font:
+    text: "Titillium Web"
+  logo: assets/NeXus-FAIRmat-nyaml1.png
+  favicon: assets/favicon.png
+  features:
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - content.tabs.link
+    - content.tabs.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+
+extra:
+  generator: false
+  # homepage: https://fairmat-nfdi.github.io/nyaml/
+
+use_directory_urls: false
+extra_css:
+  - stylesheets/extra.css

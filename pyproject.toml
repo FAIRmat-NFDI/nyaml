@@ -44,6 +44,14 @@ dev = [
     "uv>=0.4.10",
 ]
 
+docs = [
+    "mkdocs",
+    "mkdocs-mermaid2-plugin",
+    "mkdocstrings",
+    "mkdocs-click",
+    "mkdocs-material",
+]
+
 [project.scripts]
 nyaml2nxdl = "nyaml.cli:launch_tool"
 n2n = "nyaml.cli:launch_tool"

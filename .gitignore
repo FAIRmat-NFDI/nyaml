@@ -199,6 +199,7 @@ cython_debug/
 .pyenv
 *.pyc
 *.txt
+!.cspell/*.txt
 !requirements.txt
 !dev-requirements.txt
 build/
