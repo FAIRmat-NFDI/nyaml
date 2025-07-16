@@ -56,7 +56,7 @@ authors:
 affiliations:
   - name: Physics Department and CSMB, Humboldt-Universität zu Berlin, Zum Großen Windkanal 2, D-12489 Berlin, Germany
     index: 1
-  - name: Lehrstuhl für Angewandte Physik, Friedrich-Alexander-Universität Erlangen-Nürnberg, Staudtstra{\ss}e 7, D-91058 Erlangen, Germany
+  - name: Lehrstuhl für Angewandte Physik, Friedrich-Alexander-Universität Erlangen-Nürnberg, Staudtstraße 7, D-91058 Erlangen, Germany
     index: 2
   - name: Department Heterogeneous Reactions, Max Planck Institute for Chemical Energy Conversion, Stiftstraße 34-36, D-45470 Mülheim an der Ruhr, Germany
     index: 3
@@ -83,35 +83,9 @@ The tool is designed to be used as a command-line utility but can also be utiliz
 
 ![Converter workflow for nyaml tool, XML to YAML and vice-versa \label{fig:nyaml_workflow}](assets/workflow-1.pdf){ width=75% }
 
-Conversion from __YAML to XML__ follows specific workflow steps (depicted in \autoref{fig:nyaml_workflow}) according to NXDL rules and syntax specific to the YAML format (see [documentation](https://fairmat-nfdi.github.io/nyaml)). Starting from a given input YAML file (see \autoref{fig:nyaml_workflow}), the workflow performs the following steps:
+Conversion from __YAML to XML__ follows specific workflow steps (depicted in \autoref{fig:nyaml_workflow}). Given an input YAML file (see \autoref{fig:nyaml_workflow}), the __nyaml2nxdl__ converter reads the __.yaml__ file, collects and tracks the locations of comments, and then constructs a nested Python hash-mapped object representing the YAML content using __PyYAML__ [@PyYAML:2024]. In the final stage, in accordance with the NXDL grammar and syntax specific to the XML format, the converter generates an XML file that includes the collected comments. In the __YAML to XML__ conversion, the algorithm interprets the keywords and syntactic rules specific to the YAML format (see [documentation](https://fairmat-nfdi.github.io/nyaml)) to transcode the NXDL content from YAML into XML. Leveraging the NXDL rules, the conversion process detects possible inconsistencies in the YAML content and raises errors or warnings if the rules are not properly followed.
 
-1. The __nyaml2nxdl__ converter collects the input __.yaml__ file.
-
-2. Using __PyYAML__ [@PyYAML:2024], the converter collects and tracks comments in the YAML file.
-
-3. The converter parses the YAML file into a nested hashed map—a Python dictionary object.
-
-4. The converter writes the hashed map and comments into an output XML file in accordance with NXDL concepts.
-
-
-The conversion algorithm interprets the specific keywords and syntactic rules to transcode the NXDL from YAML into XML (see [documentation](https://fairmat-nfdi.github.io/nyaml)). Leveraging the NXDL rules, the conversion process detects possible inconsistencies in the YAML content and raises errors or warnings if the rules are not properly followed.
-
-
-The __XML to YAML__ conversion also follows a well-defined data workflow (\autoref{fig:nyaml_workflow}) that converts a given input XML file into a YAML file. The workflow begins with the XML input and proceeds as follows:
-
-
-1. The __nxdl2nyaml__ converter takes over the __.nxdl.xml__ file.
-
-2. Using __lxml__ [@lxml:2025], the converter parses the XML file and builds an XML tree structure.
-
-3. Applying YAML-specific keywords and formatting rules, the converter generates a YAML file from the XML tree.
-
-4. The converter computes a SHA256 hash of the generated YAML content.
-
-5. The converter writes the YAML file and appends both the hash and the original XML content as comments at the end of the YAML file.
-
-
-By attaching the hash and the original XML content to the YAML output (__.yaml__ file), the tool enables lossless round-trip conversions — if the YAML is not modified, converting back from YAML to XML, the original commented XML content will be written back to the XML file without any modification. However, if the YAML content is modified, the XML tree will be reconstructed from the YAML content and written to the XML file, which will differ from the original XML content included in the comments. This caching approach streamlines the XML → YAML → XML workflow and facilitates straightforward comparisons of XML files in version control systems such as Git.
+In the reverse direction — __XML to YAML__ conversion (see \autoref{fig:nyaml_workflow}) — the __nxdl2nyaml__ converter takes the input __.nxdl.xml__ file and transforms it into an XML tree structure using the __lxml__ library [@lxml:2025]. This XML tree is then transcoded into a YAML file that adheres to the NXDL rules and syntax specific to the YAML format. The converter then computes a SHA256 hash from the generated YAML content and appends the hash to the end of the YAML file, followed by the original XML content. By attaching both the hash and the original XML content to the YAML output (__.yaml__ file), the tool enables lossless round-trip conversions: if the YAML is not modified, then when converting back from YAML to XML, the original commented XML content will be restored in the output XML file without modification. However, if the YAML content is changed, the XML tree will be reconstructed from the modified YAML and written to the XML file, resulting in differences from the original XML content included in the comments. This caching approach streamlines the XML → YAML → XML workflow and facilitates straightforward comparisons of XML files in version control systems such as Git.
 
 # Evaluation from NIAC
 
