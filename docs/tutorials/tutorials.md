@@ -327,7 +327,7 @@ The `dimensions` term  describes the multidimensional nature of the data, specif
     ```
 
 #### Keyword `enumeration`
-List of strings which are considered as a set of predefined values for fields or attributes. Individual items of the enumeration may also hold a `doc` keyword to provide a description of the item.
+List of strings which are considered as a set of predefined values for `field`s or `attribute`s. Individual items of the enumeration may also hold a `doc` keyword to provide a description of the item.
 
 **`enumeration` in YAML**
 

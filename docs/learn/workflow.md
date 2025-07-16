@@ -38,14 +38,17 @@ Like every scientific software, the `nyaml` tool also follows a specific workflo
     subgraph Start
       id1["Input File (YAML or XML)"]
     end
+
     subgraph Correct File Converter
       id2["nyaml2nxdl Converter"]
       id3["nxdl2nyaml Converter"]
     end
+
     subgraph nyaml2nxdl
       id4["Comment Collector"]
       id5["Python Dictionary Object"]
     end
+
     subgraph nxdl2nyaml
       id6["XML Object"]
       id7["YAML File (intermediate)"]
@@ -55,15 +58,16 @@ Like every scientific software, the `nyaml` tool also follows a specific workflo
     id9["Write XML File"]
     id10["Write YAML File"]
     end
+
     id1--> |YAML File|id2
     id1--> |XML File|id3
-    id2-->id4
+    id2-->nyaml2nxdl
     id4-->id5
-    id3-->id6
+    id3-->nxdl2nyaml
     id6-->id7
     id7-->id8
-    id5-->id9
-    id8-->id10
+    nyaml2nxdl-->id9
+    nxdl2nyaml-->id10
 ```
 
 ## Conversion from YAML to XML and vice versa
