@@ -3,7 +3,7 @@
 List of references used in this documentation:
 
 1. <a name="nyaml GitHub repository"></a>[nyaml GitHub repository](https://github.com/FAIRmat-NFDI/nyaml)
-2. <a name="NeXus-FAIRmat proposal"></a>[NeXus-FAIRmat proposal](https://fairmat-experimental.github.io/nexus-fairmat-proposal/)
+2. <a name="NeXus-FAIRmat proposal"></a>[NeXus-FAIRmat proposal](https://fairmat-nfdi.github.io/nexus_definitions/)
 3. <a name="FAIRmat-NeXus GitHub repository"></a>[FAIRmat-NeXus GitHub repository](https://github.com/FAIRmat-NFDI/nexus_definitions)
 4. <a name= "NeXus official website"></a>[NeXus official website](https://manual.nexusformat.org/index.html)
 5. <a name="NeXus paper by Könnecke et al."></a>[NeXus paper by Könnecke et al.](https://doi.org/10.1107/S1600576714027575)
