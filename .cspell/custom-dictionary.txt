@@ -104,3 +104,4 @@ autoref
 lxml
 nyaml
 orcid
+xmlschema1
