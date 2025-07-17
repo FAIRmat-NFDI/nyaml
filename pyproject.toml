@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=64.0.1", "setuptools-scm[toml]>=6.2"]
+requires = ["setuptools>=78.1.1", "setuptools-scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -11,13 +11,13 @@ authors = [
 description = "A tool to convert yaml NeXus application definitions (nyaml) to nexus definitions language (nxdl)."
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 classifiers = [
-    "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
@@ -41,7 +41,6 @@ dev = [
     "pre-commit",
     "types-pyyaml",
     "lxml-stubs",
-    "uv>=0.4.10",
 ]
 
 docs = [
