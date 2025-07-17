@@ -75,8 +75,6 @@ typing-extensions==4.14.1
     #   beautifulsoup4
     #   mypy
     #   types-lxml
-uv==0.7.21
-    # via nyaml (pyproject.toml)
 virtualenv==20.31.2
     # via pre-commit
 wheel==0.45.1
