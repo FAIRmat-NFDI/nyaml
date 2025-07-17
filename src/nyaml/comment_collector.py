@@ -25,7 +25,7 @@ The class Comment is an abstract class for general functions or method to be imp
 XMLComment and YAMLComment class.
 """
 
-from typing import Any, Tuple, Type, Union
+from typing import Any, Union
 
 from nyaml.helper import LineLoader
 
@@ -48,8 +48,8 @@ class CommentCollector:
         self._comment_chain: list = []
         self.file = input_file
         self._comment_tracker = 0
-        self._comment_hash: dict[Tuple, Type[Comment]] = {}
-        self.comment: Type[Comment]
+        self._comment_hash: dict[tuple, type[Comment]] = {}
+        self.comment: type[Comment]
         if self.file and not loaded_obj:
             if self.file.endswith(".xml"):
                 self.comment = XMLComment
@@ -114,7 +114,7 @@ class CommentCollector:
         """
         return self._comment_chain[self._comment_tracker]
 
-    def get_comment_by_line_info(self, comment_locs: Tuple[str, Union[int, str]]):
+    def get_comment_by_line_info(self, comment_locs: tuple[str, Union[int, str]]):
         """
         Get comment using line information.
         """
