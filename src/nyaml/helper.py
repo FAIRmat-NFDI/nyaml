@@ -347,9 +347,10 @@ def separate_hash_yaml_and_nxdl(yaml_file, sep_yaml, sep_xml):
     with open(yaml_file, encoding="utf-8") as inp_file:
         lines = inp_file.readlines()
         # file to write yaml part
-        with open(sep_yaml, "w", encoding="utf-8") as yml_f_ob, open(
-            sep_xml, "w", encoding="utf-8"
-        ) as xml_f_ob:
+        with (
+            open(sep_yaml, "w", encoding="utf-8") as yml_f_ob,
+            open(sep_xml, "w", encoding="utf-8") as xml_f_ob,
+        ):
             write_on_yaml = True
 
             last_line = lines[0]

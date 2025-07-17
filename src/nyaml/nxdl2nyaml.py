@@ -25,7 +25,7 @@ This file collects the functions for conversion from nxdl.xml to yaml version.
 import re
 import textwrap
 from pathlib import Path
-from typing import Callable, Dict, List
+from typing import Callable
 
 import lxml.etree as ET
 
@@ -139,8 +139,8 @@ class Nxdl2yaml:
 
     def __init__(
         self,
-        symbol_list: List[str],
-        root_level_definition: List[str],
+        symbol_list: list[str],
+        root_level_definition: list[str],
         root_level_doc="",
         root_level_symbols="",
     ):
@@ -160,7 +160,7 @@ class Nxdl2yaml:
         #                      'symbol_list': [symbols],
         #       The 'symbol_comments' contains comments for 'symbols doc' and all 'symbol'
         #                      'symbol_comments': [comments]}
-        self.root_level_comment: Dict[str, str] = {}
+        self.root_level_comment: dict[str, str] = {}
 
         self.optionality_keys = (
             "minOccurs",

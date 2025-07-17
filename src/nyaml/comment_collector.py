@@ -25,7 +25,7 @@ The class Comment is an abstract class for general functions or method to be imp
 XMLComment and YAMLComment class.
 """
 
-from typing import Any, Dict, List, Tuple, Type, Union
+from typing import Any, Tuple, Type, Union
 
 from nyaml.helper import LineLoader
 
@@ -38,17 +38,17 @@ class CommentCollector:
     _comment_chain.
     """
 
-    def __init__(self, input_file: str = None, loaded_obj: Union[object, Dict] = None):
+    def __init__(self, input_file: str = None, loaded_obj: Union[object, dict] = None):
         """
         Initialise CommentCollector
         parameters:
             input_file: raw input file (xml, yml)
             loaded_obj: file loaded by third party library
         """
-        self._comment_chain: List = []
+        self._comment_chain: list = []
         self.file = input_file
         self._comment_tracker = 0
-        self._comment_hash: Dict[Tuple, Type[Comment]] = {}
+        self._comment_hash: dict[Tuple, Type[Comment]] = {}
         self.comment: Type[Comment]
         if self.file and not loaded_obj:
             if self.file.endswith(".xml"):
@@ -192,14 +192,14 @@ class Comment:
         """Comment object can be considered as a block element that includes
         document element (an entity for what the comment is written).
         """
-        self._elemt: Dict[str, Any] = {}
+        self._elemt: dict[str, Any] = {}
         self._elemt_text: str = None
         self._is_elemt_found: bool = None
         self._is_elemt_stored: bool = None
 
         self._comnt: str = ""
         # If Multiple comments for one element or entity
-        self._comnt_list: List[str] = []
+        self._comnt_list: list[str] = []
         self.last_comment: Comment = last_comment if last_comment else None
         if comment_id >= 0 and last_comment:
             self.cid = comment_id
@@ -218,7 +218,7 @@ class Comment:
             self._comnt_end_found and self._is_elemt_stored
         )
 
-    def get_comment_text_list(self) -> Union[List, str]:
+    def get_comment_text_list(self) -> Union[list, str]:
         """
         Extract comment text from entrire comment (comment text + elment or
         line for what comment is intended)
@@ -334,7 +334,7 @@ class XMLComment(Comment):
         """
         return self._elemt
 
-    def get_comment_text_list(self) -> Union[List, str]:
+    def get_comment_text_list(self) -> Union[list, str]:
         """
         This method returns list of commnent text. As some xml element might have
         multiple separated comment intended for a single element.
