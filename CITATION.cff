@@ -4,46 +4,58 @@ message:
   If you use this software, please cite it using the
   metadata from this file.
 type: software
-version: 0.2.2
+version: 0.2.3
 authors:
-  - given-names: Andrea
-    family-names: Albino
-    orcid: 'https://orcid.org/0000-0001-9280-7431'
   - given-names: Rubel
     family-names: Mozumder
     orcid: 'https://orcid.org/0009-0007-5926-6646'
-  - given-names: Sandor
-    family-names: Brockhauser
-    orcid: 'https://orcid.org/0000-0002-9700-4803'
-  - given-names: Florian
-    family-names: Dobener
-    orcid: 'https://orcid.org/0000-0003-1987-6224'
-  - given-names: Markus
-    family-names: Kühbach
-    orcid: 'https://orcid.org/0000-0002-7117-5196'
   - given-names: Lukas
     family-names: Pielsticker
     orcid: 'https://orcid.org/0000-0001-9361-8333'
+  - given-names: Markus
+    family-names: Kühbach
+    orcid: 'https://orcid.org/0000-0002-7117-5196'
+  - given-names: Andrea
+    family-names: Albino
+    orcid: 'https://orcid.org/0000-0001-9280-7431'
+  - given-names: Florian
+    family-names: Dobener
+    orcid: 'https://orcid.org/0000-0003-1987-6224'
   - given-names: Sherjeel
     family-names: Shabih
     orcid: 'https://orcid.org/0009-0008-6635-4465'
+  - given-names: Christoph
+    family-names: Koch
+    orcid: 'https://orcid.org/0000-0002-3984-1523'
+  - given-names: Heiko B.
+    family-names: Weber
+    orcid: 'https://orcid.org/0000-0002-6403-9022'
+  - given-names: José Antonio
+    family-names: Márquez Prieto
+    orcid: 'https://orcid.org/0000-0002-8173-2566'
+  - given-names: Claudia
+    family-names: Draxl
+    orcid: 'https://orcid.org/0000-0003-3523-6657'
+  - given-names: Sandor
+    family-names: Brockhauser
+    orcid: 'https://orcid.org/0000-0002-9700-4803'
 
 doi: 10.5281/zenodo.13860810
 repository-code: 'https://github.com/FAIRmat-NFDI/nyaml'
 url: https://doi.org/10.5281/zenodo.13860810
 abstract:
-  The nyaml converter is a Python software tool designed to transform the NeXus Definition
-  Language (NXDL) from YAML format to XML, the official format for NeXus data exchange format
-  (https://www.nexusformat.org/), and vice versa. NXDL is used to define experiment instruments,
-  setups, or scientific data objects from experiments in a schema-based structure. While the
-  official NXDL format is in XML, this tool enables users to write the schema in a more
-  developer-friendly YAML format and seamlessly convert it into the official XML format.
-
-  The `nyaml` tool also supports the reverse process, converting XML-based NXDL schemas into
-  YAML format. Users can benefit from a more accessible and human-readable way to define
-  NeXus data structures, while still adhering to NeXus standards. The tool requires users to
-  follow a specific grammar (see full documentation at https://fairmat-nfdi.github.io/nyaml/)
-  for embedding NeXus data structures, ensuring compatibility with the XML-based NXDL.
+  The `nyaml` converter is a Python software tool designed for developers and users of the NeXus
+  data exchange format (https://www.nexusformat.org/). The tool transforms serializations of
+  the NeXus Definition Language (NXDL) in XML to serializations in YAML (https://yaml.org)
+  and vice-versa.
+  
+  NXDL is used to define experiment instruments, setups, or scientific data objects from experiments
+  in a schema-based structure. Writing NeXus data schemata via the indentation-based formatting of
+  YAML offers a more concise writing surplus reduces common sources of formatting inconsistencies,
+  while still adhering to NeXus standards.
+  
+  The tool requires users to follow a specific grammar for embedding NeXus data structures to ensure
+  compatibility with NXDL (see the full documentation at https://fairmat-nfdi.github.io/nyaml/).
 
   This work is part of the FAIRmat project (project ID 460197019), funded by the Deutsche
   Forschungsgemeinschaft (DFG, German Research Foundation)
