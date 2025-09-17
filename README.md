@@ -12,4 +12,5 @@ pip install nyaml
 
 The converter can be called by the command `nyaml2nxdl`.
 
-You can find the full documentation of the tool [here](https://fairmat-nfdi.github.io/nyaml/)
+You can find the full documentation of the tool [here](https://fairmat-nfdi.github.io/nyaml/).
+

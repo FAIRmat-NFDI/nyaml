@@ -44,19 +44,18 @@ doi: 10.5281/zenodo.13860810
 repository-code: 'https://github.com/FAIRmat-NFDI/nyaml'
 url: https://doi.org/10.5281/zenodo.13860810
 abstract:
-  The `nyaml` converter is a Python software tool designed for developers and users of the NeXus
-  data exchange format (https://www.nexusformat.org/). The tool transforms serializations of
-  the NeXus Definition Language (NXDL) in XML to serializations in YAML (https://yaml.org)
-  and vice-versa.
+  `nyaml` is a Python software tool designed for developers and users of the NeXus data exchange format
+  (https://www.nexusformat.org/). The tool converts files that follow the NeXus Definition Language
+  (NXDL) from XML to [YAML](https://yaml.org/), and vice versa.
   
   NXDL is used to define experiment instruments, setups, or scientific data objects from experiments
-  in a schema-based structure. Writing NeXus data schemata via the indentation-based formatting of
-  YAML offers a more concise writing surplus reduces common sources of formatting inconsistencies,
+  in a schema-based structure. Writing NeXus data schemas via the indentation-based formatting of
+  YAML offers a more concise writing and reduces common sources of formatting inconsistencies,
   while still adhering to NeXus standards.
   
   The tool requires users to follow a specific grammar for embedding NeXus data structures to ensure
   compatibility with NXDL (see the full documentation at https://fairmat-nfdi.github.io/nyaml/).
-
+  
   This work is part of the FAIRmat project (project ID 460197019), funded by the Deutsche
   Forschungsgemeinschaft (DFG, German Research Foundation)
   (https://gepris.dfg.de/gepris/projekt/460197019?language=en). Visit the
