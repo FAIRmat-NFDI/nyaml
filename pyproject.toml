@@ -8,7 +8,7 @@ dynamic = ["version"]
 authors = [
     { name = "The NOMAD Authors" },
 ]
-description = "A tool to convert yaml NeXus application definitions (nyaml) to nexus definitions language (nxdl)."
+description = "A tool to convert NeXus definitions from NXDL/XML format to YAML and vice versa."
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.9"
