@@ -11,9 +11,8 @@ authors = [
 description = "A tool to convert yaml NeXus application definitions (nyaml) to nexus definitions language (nxdl)."
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
