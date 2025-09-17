@@ -15,7 +15,7 @@ authors:
   - given-names: Lukas
     surname: Pielsticker
     orcid: https://orcid.org/0000-0001-9361-8333
-    affiliation: "1,3"
+    affiliation: "1,2"
   - given-names: Markus
     surname: Kühbach
     orcid: https://orcid.org/0000-0002-7117-5196
@@ -32,6 +32,18 @@ authors:
     surname: Shabih
     orcid: https://orcid.org/0009-0008-6635-4465
     affiliation: 1
+  - given-names: José A.
+    surname: Márquez Prieto
+    orcid: https://orcid.org/0000-0002-8173-2566
+    affiliation: 1
+  - given-names: Sandor
+    surname: Brockhauser
+    orcid: https://orcid.org/0000-0002-9700-4803
+    affiliation: 1
+  - given-names: Claudia
+    surname: Draxl
+    orcid: https://orcid.org/0000-0003-3523-6657
+    affiliation: 1
   - given-names: Christoph
     surname: Koch
     orcid: https://orcid.org/0000-0002-3984-1523
@@ -39,26 +51,14 @@ authors:
   - given-names: Heiko B.
     surname: Weber
     orcid: https://orcid.org/0000-0002-6403-9022
-    affiliation: 2
-  - given-names: José A.
-    surname: Márquez Prieto
-    orcid: https://orcid.org/0000-0002-8173-2566
-    affiliation: 1
-  - given-names: Claudia
-    surname: Draxl
-    orcid: https://orcid.org/0000-0003-3523-6657
-    affiliation: 1
-  - given-names: Sandor
-    surname: Brockhauser
-    orcid: https://orcid.org/0000-0002-9700-4803
-    affiliation: 1
+    affiliation: 3
 
 affiliations:
   - name: Physics Department and CSMB, Humboldt-Universität zu Berlin, Zum Großen Windkanal 2, D-12489 Berlin, Germany
     index: 1
-  - name: Lehrstuhl für Angewandte Physik, Friedrich-Alexander-Universität Erlangen-Nürnberg, Staudtstraße 7, D-91058 Erlangen, Germany
-    index: 2
   - name: Department Heterogeneous Reactions, Max Planck Institute for Chemical Energy Conversion, Stiftstraße 34-36, D-45470 Mülheim an der Ruhr, Germany
+    index: 2
+  - name: Lehrstuhl für Angewandte Physik, Friedrich-Alexander-Universität Erlangen-Nürnberg, Staudtstraße 7, D-91058 Erlangen, Germany
     index: 3
 
 date: 01 July 2025
@@ -77,11 +77,11 @@ As the NeXus standard and its community of definition developers continue to gro
 
 # Conversion process
 
-The `nyaml` tool is a Python package developed for converting NeXus definitions from YAML format (files with a `.yaml` extension) into the XML format (files with a `.nxdl.xml` extension), and vice versa. The package is published on PyPI and therefore can be installed using Python package managers (e.g., `pip` [@pip2025]). The `nyaml` package introduces a set of keywords and syntactic rules (see [documentation](https://fairmat-nfdi.github.io/nyaml)) that are specific to NXDL (NeXus Definition Language) in YAML. The keywords and syntactic rules imply a relationship between YAML and XML (XML tags and attributes) structures, enabling seamless conversion for new and existing definitions. Existing definitions can be modified using the following workflow: **XML $\rightarrow$ YAML $\rightarrow$ modification of YAML $\rightarrow$ XML**. New definitions can be designed in YAML and converted to XML directly
+`nyaml` is a Python package developed for converting NeXus definitions from YAML format (files with a `.yaml` extension) into the XML format (files with a `.nxdl.xml` extension) and vice versa. The package is published on PyPI and therefore can be installed using Python package managers (e.g., `pip` [@pip2025]). The `nyaml` package introduces a set of keywords and syntactic rules (see [documentation](https://fairmat-nfdi.github.io/nyaml)) that are specific to NXDL (NeXus Definition Language) in YAML. The keywords and syntactic rules imply a relationship between YAML and XML (XML tags and attributes) structures, enabling seamless conversion for new and existing definitions. Existing definitions can be modified using the following workflow: **XML $\rightarrow$ YAML $\rightarrow$ modification of YAML $\rightarrow$ XML**. New definitions can be designed in YAML and converted to XML directly
 
 The tool can be used as a command-line utility or imported as a Python module for programmatic use. The converter command is invoked using `nyaml2nxdl`, which determines the conversion direction based on the input file (either from YAML to XML or XML to YAML) and delegates the task to the appropriate converter. The converter then executes the corresponding data workflow pipeline (see \autoref{fig:nyaml_workflow}). These workflows, YAML to XML and XML to YAML. are designed to ensure that the conversion process is efficient, reliable, reproducible, and preserves the integrity of the original NeXus data structure and semantics.
 
-![Converter workflow for nyaml tool, XML to YAML and vice-versa \label{fig:nyaml_workflow}](assets/workflow-1.pdf){ width=75% }
+![Converter workflow for nyaml from XML to YAML and vice-versa. \label{fig:nyaml_workflow}](assets/Nyaml_workflow.svg){ width=100% }
 
 Conversion from **YAML to XML** follows specific workflow steps (depicted in \autoref{fig:nyaml_workflow}). Given an input YAML file (see \autoref{fig:nyaml_workflow}), the `nyaml2nxdl` converter reads the `.yaml` file, collects and tracks the locations of comments, and then constructs a nested Python hash-mapped object representing the YAML content using `PyYAML` [@PyYAML:2024]. In the final stage, the converter generates an XML file conforming to the NXDL grammar and syntax, including the collected comments. In the **YAML to XML** conversion, the algorithm interprets the keywords and syntactic rules specific to the YAML format (see [documentation](https://fairmat-nfdi.github.io/nyaml)) to transcode the NXDL content from YAML into XML. Leveraging the NXDL rules, the conversion process detects possible inconsistencies in the YAML content and raises errors or warnings if the rules are not properly followed.
 

@@ -40,21 +40,15 @@
     },
     {
       "@type": "Person",
-      "givenName": "Christoph",
-      "familyName": "Koch",
-      "orcid": "https://orcid.org/0000-0002-3984-1523"
-    },
-    {
-      "@type": "Person",
-      "givenName": "Heiko B.",
-      "familyName": "Weber",
-      "orcid": "https://orcid.org/0000-0002-6403-9022"
-    },
-    {
-      "@type": "Person",
       "givenName": "José Antonio",
       "familyName": "Márquez Prieto",
       "orcid": "https://orcid.org/0000-0002-8173-2566"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Sandor",
+      "familyName": "Brockhauser",
+      "orcid": "https://orcid.org/0000-0002-9700-4803"
     },
     {
       "@type": "Person",
@@ -64,9 +58,15 @@
     },
     {
       "@type": "Person",
-      "givenName": "Sandor",
-      "familyName": "Brockhauser",
-      "orcid": "https://orcid.org/0000-0002-9700-4803"
+      "givenName": "Christoph",
+      "familyName": "Koch",
+      "orcid": "https://orcid.org/0000-0002-3984-1523"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Heiko B.",
+      "familyName": "Weber",
+      "orcid": "https://orcid.org/0000-0002-6403-9022"
     }
   ],
   "identifier": "",
