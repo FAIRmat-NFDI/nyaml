@@ -28,7 +28,7 @@ from typing import Callable
 
 from yaml.composer import Composer
 from yaml.constructor import Constructor
-from yaml.loader import Loader
+from yaml.loader import SafeLoader
 from yaml.nodes import ScalarNode
 from yaml.resolver import BaseResolver
 
@@ -181,7 +181,7 @@ def check_for_proper_nameType(name, nameType, keyword_name):
             )
 
 
-class LineLoader(Loader):  # pylint: disable=too-many-ancestors
+class LineLoader(SafeLoader):  # pylint: disable=too-many-ancestors
     """Class to load yaml file with extra non yaml items.
 
     LineLoader parses a yaml into a python dictionary extended with extra items.
