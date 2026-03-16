@@ -214,8 +214,8 @@ class Comment:
             raise ValueError("Neither last comment nor comment id dound")
         self._comnt_start_found: bool = False
         self._comnt_end_found: bool = False
-        self.is_storing_single_comment = lambda: not (
-            self._comnt_end_found and self._is_elemt_stored
+        self.is_storing_single_comment = lambda: (
+            not (self._comnt_end_found and self._is_elemt_stored)
         )
 
     def get_comment_text_list(self) -> Union[list, str]:
