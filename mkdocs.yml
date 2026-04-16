@@ -6,7 +6,9 @@ repo_url: https://github.com/FAIRmat-NFDI/nyaml
 nav:
   - Home: index.md
   - Tutorial:
+      - Installation: tutorials/installation.md
       - Writing a NeXus definition in YAML: tutorials/tutorials.md
+      - Contributing: tutorials/contributing.md
   - How-To-Guide :
       - Getting started with nyaml: howtos/howto.md
   - Explanation:
