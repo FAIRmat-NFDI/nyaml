@@ -1,8 +1,11 @@
 # Getting started with nyaml
 
-`nyaml` is a Python package that is [published on PyPI](https://pypi.org/project/nyaml/).
+`nyaml` is a command line tool that converts NeXus definitions between YAML and NXDL XML format. It is [published on PyPI](https://pypi.org/project/nyaml/){:target="_blank" rel="noopener"}.
 
-## How to Install
+!!! note
+    `nyaml` is a *transcoding* tool that converts between YAML and XML representations of NeXus definitions. Validation of the resulting NXDL files is handled by the [official NeXus definitions repository](https://github.com/nexusformat/definitions){:target="_blank" rel="noopener"}.
+
+## How to install
 
 Install the `nyaml` Python package:
 
@@ -14,12 +17,11 @@ Install the `nyaml` Python package:
 
 === "pip"
 
-
     ```bash
     pip install nyaml
     ```
 
-## How to Use
+## How to use
 
 `nyaml` works as a command line tool to convert NeXus application definitions or base classes from YAML file format into the `nxdl.xml` file format and vice-versa. The converter can be called by the command
 
@@ -31,14 +33,18 @@ Install the `nyaml` Python package:
     :style: table
     :list_subcommands: True
 
-__Brief interpretation of the command line options__:
+**Brief interpretation of the command line options**:
 
-`--output-file`: The option defines the output file name (including the file extension), if the option is not specified the converter will define the output file name from the input file. Exemplified for a given input file `NXapplication.nxdl.xml (NXapplication.yaml)`, the resultant file will be `NXapplication_parser.yaml (NXapplication.nxdl.xml)`.
+`--output-file`: Defines the output file name (including the file extension). If not specified, the converter derives the output file name from the input file. For example, given input `NXapplication.nxdl.xml` (`NXapplication.yaml`), the output will be `NXapplication_parser.yaml` (`NXapplication.nxdl.xml`).
 
-`--check-consistency`: With the option `--check-consistency`, `nyaml` produces the same type of file as the input, e.g. for input `NXapplication.nxdl.xml` the output file is `NXapplication_consistency.nxdl.xml`. When converting the `nxdl.xml` file into YAML it also stores the `nxdl.xml` file at the end of YAML file with a hash.
+`--check-consistency`: Produces the same file type as the input. For input `NXapplication.nxdl.xml` the output is `NXapplication_consistency.nxdl.xml`. When converting an `nxdl.xml` file to YAML it also stores the `nxdl.xml` text at the end of the YAML file with a hash.
 
-`--do-not-store-nxdl`: The option `--do-not-store-nxdl` prevents the YAML file from storing the original `nxdl.xml` text as comment.
+`--do-not-store-nxdl`: Prevents the YAML file from storing the original `nxdl.xml` text as a comment.
 
-`--verbose`: The `verbose` option is to identify any issues arising from unexpected conversion or syntax errors that occur while converting the file from one to another.
+`--verbose`: Identifies any issues arising from unexpected conversion or syntax errors that occur while converting between formats.
 
-`--help`: The `help` option shows this message and exits.
+`--help`: Shows the help message and exits.
+
+## After conversion: validating your definition
+
+`nyaml` converts your definition between formats but does not validate it against the NeXus schema. To validate, fork the [official NeXus definitions repository](https://github.com/nexusformat/definitions){:target="_blank" rel="noopener"} and open a pull request. The repository runs an automated validation workflow on every pull request. Once approved, your definition is contributed to the shared NeXus definitions catalogue.

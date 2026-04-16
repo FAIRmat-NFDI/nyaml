@@ -1,26 +1,25 @@
 # nyaml Workflow
+
 `nyaml` implements a specific workflow for converting NeXus application definition and base class between XML and YAML formats and vice-versa. The `nyaml` converter checks for the correct file type and calls the appropriate converter following a certain workflow (depicted in the workflow diagram below).
 
 Conversion from YAML to XML follows specific workflow steps (depicted in workflow diagram below) according to NXDL rules and syntax specific to the YAML format. Starting from a given input YAML file (see workflow diagram below), the workflow performs the following steps:
 
 1. The `nyaml` invokes `nyaml2nxdl` converter which collects the input `.yaml` file.
 
-2. Using [PyYAML](https://github.com/yaml/pyyaml), the converter collects and tracks comments in the YAML file.
+2. Using [PyYAML](https://github.com/yaml/pyyaml){:target="_blank" rel="noopener"}, the converter collects and tracks comments in the YAML file.
 
-3. The converter parses the YAML file into a nested hashed map—a Python dictionary object.
+3. The converter parses the YAML file into a nested hashed map — a Python dictionary object.
 
 4. The converter writes the hashed map and comments into an output XML file in accordance with NXDL concepts.
 
-
 The conversion algorithm interprets the specific keywords and syntactic rules to transcode the NXDL from YAML into XML. Leveraging the NXDL rules, the conversion process detects possible inconsistencies in the YAML content and raises errors or warnings if the rules are not properly followed.
-
 
 The XML to YAML conversion also follows a well-defined data workflow (depicted in workflow diagram below) that converts a given input XML file into a YAML file. The workflow begins with the XML input and proceeds as follows:
 
 
 1. The `nyaml` calls `nxdl2nyaml` converter that takes over the `.nxdl.xml` file.
 
-2. Using [lxml](https://lxml.de/), the converter parses the XML file and builds an XML tree structure.
+2. Using [lxml](https://lxml.de/){:target="_blank" rel="noopener"}, the converter parses the XML file and builds an XML tree structure.
 
 3. Applying YAML-specific keywords and formatting rules, the converter generates a YAML file from the XML tree.
 
@@ -71,12 +70,13 @@ Like every scientific software, the `nyaml` tool also follows a specific workflo
 ```
 
 ## Conversion from YAML to XML and vice versa
-Presented below is a concise and trimmed example of the `NXmpes` application definition (for discussion purpose) in YAML format, alongside its corresponding encoding into XML format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of the basic structure of NXDL, readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html).
+
+Presented below is a concise and trimmed example of the `NXmpes` application definition (for discussion purpose) in YAML format, alongside its corresponding encoding into XML format, as illustrated below. Subsequently, the fundamental rules governing this conversion process are elucidated. For a comprehensive understanding of the basic structure of NXDL, readers are encouraged to explore the [NeXus Manual](https://manual.nexusformat.org/user_manual.html){:target="_blank" rel="noopener"}.
 
 !!! note
-    For in detailed explanation with examples please follow the [Tutorials for writing NeXus definition in YAML](../tutorials/tutorials.md).
+    For a detailed explanation with examples please follow [Tutorials > Writing a NeXus definition in YAML](../tutorials/writing-a-yaml-definition.md).
 !!! note
-    The application definition, we are using here, is an old and trimmed version of `NXmpes`  which does not serve any scientific purpose (standard application definition for MPES follow [NXmpes](https://fairmat-nfdi.github.io/nexus_definitions/classes/applications/NXmpes.html)), but is only used here to illustrate the results of the conversion process.
+    The application definition, we are using here, is an old and trimmed version of `NXmpes`  which does not serve any scientific purpose (standard application definition for MPES follow [NXmpes](https://fairmat-nfdi.github.io/nexus_definitions/classes/applications/NXmpes.html){:target="_blank" rel="noopener"}), but is only used here to illustrate the results of the conversion process.
 
 
 **NXmpes application definition in YAML and XML format**
