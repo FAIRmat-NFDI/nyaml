@@ -16,9 +16,11 @@ nav:
       - Motivation behind the nyaml tool: learn/explanations.md
       - Workflow of the nyaml tool with examples: learn/workflow.md
   - Reference:
+      - API for command line tool: references/cli-api.md
       - References: references/references.md
 plugins:
   - mkdocstrings
+  - markdown-exec
   - mermaid2
   - search
 markdown_extensions:

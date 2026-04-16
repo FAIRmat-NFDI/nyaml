@@ -44,6 +44,7 @@ An introduction to NeXus and its use in the light of YAML format using the `nyam
 ### References
 The list of references used in this documentation
 
+- [Command line API](references/cli-api.md)
 - [References](references/references.md)
 </div>
 
