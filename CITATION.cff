@@ -44,7 +44,7 @@ doi: 10.5281/zenodo.13860810
 repository-code: 'https://github.com/FAIRmat-NFDI/nyaml'
 url: https://doi.org/10.5281/zenodo.13860810
 abstract:
-  `nyaml` is a Python software tool designed for developers and users of the NeXus data exchange format
+  nyaml is a Python software tool designed for developers and users of the NeXus data exchange format
   (https://www.nexusformat.org/). The tool converts files that follow the NeXus Definition Language
   (NXDL) from XML to [YAML](https://yaml.org/), and vice versa.
   
