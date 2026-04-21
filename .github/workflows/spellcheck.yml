@@ -15,7 +15,7 @@ jobs:
     - name: Install dependencies and dictionary
       run: |
         npm install -g cspell jq \
-        @cspell/dict-en-us \
+        @cspell/dict-en_us \
         @cspell/dict-python \
         @cspell/dict-scientific-terms-us
 
