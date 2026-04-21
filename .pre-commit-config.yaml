@@ -25,5 +25,11 @@ repos:
       - id: cspell  # spellchecking
         pass_filenames: false
         args:
+          - --unique
           - --config
           - cspell.json
+          - README.md
+          - CITATION.cff
+          - docs/**/*.md
+          - src/nyaml/**/*.py
+          - tests/**/*.py

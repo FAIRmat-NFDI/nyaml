@@ -24,8 +24,8 @@ This file collects the functions for conversion from nxdl.xml to yaml version.
 
 import re
 import textwrap
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable
 
 import lxml.etree as ET
 
@@ -43,10 +43,10 @@ from nyaml.helper import (
 )
 
 DEPTH_SIZE = 2 * " "
-CMNT_TAG = "!--"
-CMNT_TAG_END = "--"
-CMNT_START = "<!--"
-CMNT_END = "-->"
+COMMENT_TAG = "!--"
+COMMENT_TAG_END = "--"
+COMMENT_START = "<!--"
+COMMENT_END = "-->"
 DEFINITION_CATEGORIES = ("category: application", "category: base")
 
 
@@ -64,15 +64,15 @@ def separate_pi_comments(input_file):
         lines = file.readlines()
         def_tag = "<definition"
         for line in lines:
-            if CMNT_START in line:
-                line = line.replace(CMNT_START, "")
-                if CMNT_END in line:
-                    line = line.replace(CMNT_END, "")
+            if COMMENT_START in line:
+                line = line.replace(COMMENT_START, "")
+                if COMMENT_END in line:
+                    line = line.replace(COMMENT_END, "")
                     comments_list.append(line)
                 else:
                     comment.append(line)
-            elif CMNT_END in line and len(comment) > 0:
-                comment.append(line.replace(CMNT_END, ""))
+            elif COMMENT_END in line and len(comment) > 0:
+                comment.append(line.replace(COMMENT_END, ""))
                 comments_list.append("".join(comment))
                 comment.clear()
             elif len(comment) > 0:
@@ -89,9 +89,9 @@ class _CommentedTreeBuilder(ET.TreeBuilder):
 
     def Comment(self, text):  # pylint: disable=invalid-name
         """Defining comment builder in TreeBuilder"""
-        self.start(CMNT_TAG, {})
+        self.start(COMMENT_TAG, {})
         self.data(text)
-        self.end(CMNT_TAG_END)
+        self.end(COMMENT_TAG_END)
 
 
 def parse(filepath):
@@ -152,7 +152,7 @@ class Nxdl2yaml:
         self.symbol_list = symbol_list
         self.include_comment = True
         self.pi_comments = None
-        # NOTE: Here is how root_level_comments organised for storing comments
+        # NOTE: Here is how root_level_comments organized for storing comments
         # root_level_comment= {'root_doc': comment,
         #                      'symbols': comment,
         #       The 'symbol_doc_comments' list is for comments from all 'symbol doc'
@@ -182,10 +182,10 @@ class Nxdl2yaml:
 
         self.pi_comments, root = parse(input_file)
         xml_tree = {"tree": root, "node": root}
-        self.xmlparse(output_yml, xml_tree, depth, verbose)
+        self.xml_parse(output_yml, xml_tree, depth, verbose)
 
     def handle_symbols(self, depth, node):
-        """Handle symbols field and its childs symbol"""
+        """Handle symbols field and its children symbol"""
 
         self.root_level_symbols = (
             f"{remove_namespace_from_tag(node.tag)}: "
@@ -193,26 +193,26 @@ class Nxdl2yaml:
         )
         depth += 1
         last_comment = ""
-        sbl_doc_cmnt_list = []
+        symbol_doc_comment_list = []
         # Comments that come above symbol tag
-        symbol_cmnt_list = []
+        symbol_comment_list = []
         for child in list(node):
             tag = remove_namespace_from_tag(child.tag)
-            if tag == CMNT_TAG and self.include_comment:
+            if tag == COMMENT_TAG and self.include_comment:
                 last_comment = self.convert_to_yaml_comment(depth, child.text)
             if tag == "doc":
-                symbol_cmnt_list.append(last_comment)
+                symbol_comment_list.append(last_comment)
                 # The line below is for handling length of 'symbol_comments' and
                 # 'symbol_doc_comments'. Otherwise print_root_level_info() gets inconsistency
                 # over for the loop while writing comment on file
-                sbl_doc_cmnt_list.append("")
+                symbol_doc_comment_list.append("")
                 last_comment = ""
                 self.symbol_list.append(
                     self.handle_not_root_level_doc(depth, text=child.text)
                 )
             elif tag == "symbol":
                 # place holder is symbol name
-                symbol_cmnt_list.append(last_comment)
+                symbol_comment_list.append(last_comment)
                 last_comment = ""
                 if "doc" in child.attrib:
                     self.symbol_list.append(
@@ -223,12 +223,12 @@ class Nxdl2yaml:
                 else:
                     for symbol_doc in list(child):
                         tag = remove_namespace_from_tag(symbol_doc.tag)
-                        if tag == CMNT_TAG and self.include_comment:
+                        if tag == COMMENT_TAG and self.include_comment:
                             last_comment = self.convert_to_yaml_comment(
                                 depth, symbol_doc.text
                             )
                         if tag == "doc":
-                            sbl_doc_cmnt_list.append(last_comment)
+                            symbol_doc_comment_list.append(last_comment)
                             last_comment = ""
                             self.symbol_list.append(
                                 self.handle_not_root_level_doc(
@@ -237,11 +237,11 @@ class Nxdl2yaml:
                                     text=symbol_doc.text,
                                 )
                             )
-        self.store_root_level_comments("symbol_doc_comments", sbl_doc_cmnt_list)
-        self.store_root_level_comments("symbol_comments", symbol_cmnt_list)
+        self.store_root_level_comments("symbol_doc_comments", symbol_doc_comment_list)
+        self.store_root_level_comments("symbol_comments", symbol_comment_list)
 
     def store_root_level_comments(self, holder, comment):
-        """Store yaml text or section line and the comments inteded for that lines or section"""
+        """Store yaml text or section line and the comments intended for that lines or section"""
 
         self.root_level_comment[holder] = comment
 
@@ -252,24 +252,24 @@ class Nxdl2yaml:
         the same order in nxdl from yaml.
         """
         keyword = ""
-        # tmp_word for reseving the location
+        # tmp_word for reserving the location
         tmp_word = "#xx#"
-        attribs = node.attrib
+        attributes = node.attrib
         # for tracking the order of name and type
         keyword_order = -1
-        for item in attribs:
+        for item in attributes:
             if "name" == item:
-                keyword = keyword + attribs[item]
+                keyword = keyword + attributes[item]
                 if keyword_order == -1:
                     self.root_level_definition.append(tmp_word)
                     keyword_order = self.root_level_definition.index(tmp_word)
             elif "extends" == item:
-                keyword = f"{keyword}({attribs[item]})"
+                keyword = f"{keyword}({attributes[item]})"
                 if keyword_order == -1:
                     self.root_level_definition.append(tmp_word)
                     keyword_order = self.root_level_definition.index(tmp_word)
             elif "schemaLocation" not in item and "extends" != item:
-                text = f"{item}: {attribs[item]}"
+                text = f"{item}: {attributes[item]}"
                 self.root_level_definition.append(text)
         self.root_level_definition[keyword_order] = f"{keyword}:"
 
@@ -280,7 +280,7 @@ class Nxdl2yaml:
         text = self.handle_not_root_level_doc(depth=0, text=node.text)
         self.root_level_doc = text
 
-    def clean_and_organise_text(self, text, depth):
+    def clean_and_organize_text(self, text, depth):
         """Reconstruct text from doc and comment.
 
         Cleaning up unintentional and accidental empty lines and spaces.
@@ -323,7 +323,7 @@ class Nxdl2yaml:
                 line_indent_n = len(line) - len(line.lstrip())
                 line_indent_n = line_indent_n + indent_diff
                 if line_indent_n < yaml_indent_n:
-                    # if line still under yaml identation
+                    # if line still under yaml indentation
                     text_tmp.append(yaml_indent_n * " " + line.strip())
                 else:
                     text_tmp.append(line_indent_n * " " + line.strip())
@@ -392,7 +392,7 @@ class Nxdl2yaml:
         if "}" in tag:
             tag = remove_namespace_from_tag(tag)
         indent = depth * DEPTH_SIZE
-        text = self.clean_and_organise_text(text, depth)  # starts with '\n'
+        text = self.clean_and_organize_text(text, depth)  # starts with '\n'
         docs = re.split(r"\n\s*\n", text)
         parts = []
 
@@ -465,10 +465,10 @@ class Nxdl2yaml:
 
     def convert_to_yaml_comment(self, depth, text):
         """
-        Convert into yaml comment by adding exta '#' char in front of comment lines
+        Convert into yaml comment by adding an extra '#' char in front of comment lines
         """
         # To store indentation text from comment
-        lines = self.clean_and_organise_text(text, depth).split("\n")
+        lines = self.clean_and_organize_text(text, depth).split("\n")
         indent = DEPTH_SIZE * depth
         mod_lines = []
         for line in lines:
@@ -486,7 +486,7 @@ class Nxdl2yaml:
         the information stored as definition attributes in the XML file
         """
         if depth < 0:
-            raise ValueError("Somthing wrong with indentation in root level.")
+            raise ValueError("Something wrong with the indentation in root level.")
 
         has_category = False
         for def_line in self.root_level_definition:
@@ -554,7 +554,7 @@ class Nxdl2yaml:
 
     def handle_exists(self, exists_dict, key, val):
         """
-        Create exist component as folows:
+        Create exist component as follows:
 
         {'min' : value for min,
          'max' : value for max,
@@ -832,11 +832,11 @@ class Nxdl2yaml:
                                 doc_depth, item_doc.text, item_doc.tag, file_out
                             )
                         if (
-                            remove_namespace_from_tag(item_doc.tag) == CMNT_TAG
+                            remove_namespace_from_tag(item_doc.tag) == COMMENT_TAG
                             and self.include_comment
                         ):
                             self.handle_comment(doc_depth, item_doc, file_out)
-                elif child_tag == CMNT_TAG and self.include_comment:
+                elif child_tag == COMMENT_TAG and self.include_comment:
                     self.handle_comment(depth + 1, child, file_out)
         else:
             enum_with_comment = False
@@ -845,7 +845,7 @@ class Nxdl2yaml:
                 child_tag = remove_namespace_from_tag(child.tag)
                 if child_tag == "item":
                     enum_list.append(child.attrib["value"])
-                elif child_tag == CMNT_TAG and self.include_comment:
+                elif child_tag == COMMENT_TAG and self.include_comment:
                     file_out.write("\n")
                     self.handle_comment(depth + 1, child, file_out)
                     # If there is a comment, we need to use the long notation with "items:"
@@ -879,7 +879,7 @@ class Nxdl2yaml:
             raise ValueError("Attribute must have a name key.")
 
         indent = depth * DEPTH_SIZE
-        escapesymbol = r"\@"
+        escape_symbol = r"\@"
 
         tmp_dict = {}
         exists_dict = {}
@@ -906,15 +906,15 @@ class Nxdl2yaml:
         datatype = tmp_dict.get("type")
 
         if datatype:
-            name_txt = f"{indent}{escapesymbol}{name}({datatype}):\n"
+            name_txt = f"{indent}{escape_symbol}{name}({datatype}):\n"
             del tmp_dict["type"]
         else:
-            name_txt = f"{indent}{escapesymbol}{name}:\n"
+            name_txt = f"{indent}{escape_symbol}{name}:\n"
 
         file_out.write(name_txt)
 
         has_min_max = False
-        has_opt_reco_requ = False
+        has_opt_recommended_required = False
         if exists_dict:
             for key, val in exists_dict.items():
                 if key in ["minOccurs", "maxOccurs"]:
@@ -922,8 +922,8 @@ class Nxdl2yaml:
                     has_min_max = True
                 elif key in ["optional", "recommended", "required"]:
                     tmp_dict["exists"] = key
-                    has_opt_reco_requ = True
-        if has_min_max and has_opt_reco_requ:
+                    has_opt_recommended_required = True
+        if has_min_max and has_opt_recommended_required:
             raise ValueError(
                 "Optionality 'exists' can take only either from ['minOccurs',"
                 " 'maxOccurs'] or from ['optional', 'recommended', 'required']"
@@ -972,7 +972,7 @@ class Nxdl2yaml:
 
         node_attr = node.attrib
         name = node_attr.pop("name", "")
-        # Handle special casees
+        # Handle special cases
         if name:
             indent = depth * DEPTH_SIZE
             file_out.write(f"{indent}{name}(choice): \n")
@@ -1001,17 +1001,17 @@ class Nxdl2yaml:
     def recursion_in_xml_tree(self, depth, xml_tree, output_yml, verbose):
         """
             Descend lower level in xml tree. If we are in the symbols branch, the recursive
-        behaviour is not triggered as we already handled the symbols' children.
+        behavior is not triggered as we already handled the symbols' children.
         """
 
         tree = xml_tree["tree"]
         node = xml_tree["node"]
         for child in list(node):
             xml_tree_children = {"tree": tree, "node": child}
-            self.xmlparse(output_yml, xml_tree_children, depth, verbose)
+            self.xml_parse(output_yml, xml_tree_children, depth, verbose)
 
     # pylint: disable=too-many-branches, too-many-statements
-    def xmlparse(self, output_yml, xml_tree, depth, verbose):
+    def xml_parse(self, output_yml, xml_tree, depth, verbose):
         """
         Main method of the nxdl2yaml converter.
         It parses XML tree, then prints recursively each level of the tree
@@ -1033,29 +1033,29 @@ class Nxdl2yaml:
                 self.found_definition = True
                 self.handle_definition(node)
                 # Taking care of root level doc and symbols
-                remove_cmnt_n = None
+                remove_comment_n = None
                 last_comment = ""
                 for child in node:
                     tag_tmp = remove_namespace_from_tag(child.tag)
-                    if tag_tmp == CMNT_TAG and self.include_comment:
+                    if tag_tmp == COMMENT_TAG and self.include_comment:
                         last_comment = self.convert_to_yaml_comment(depth, child.text)
-                        remove_cmnt_n = child
+                        remove_comment_n = child
                     if tag_tmp == "doc":
                         self.store_root_level_comments("root_doc", last_comment)
                         last_comment = ""
                         self.handle_root_level_doc(child)
                         node.remove(child)
-                        if remove_cmnt_n is not None:
-                            node.remove(remove_cmnt_n)
-                            remove_cmnt_n = None
+                        if remove_comment_n is not None:
+                            node.remove(remove_comment_n)
+                            remove_comment_n = None
                     if tag_tmp == "symbols":
                         self.store_root_level_comments("symbols", last_comment)
                         last_comment = ""
                         self.handle_symbols(depth, child)
                         node.remove(child)
-                        if remove_cmnt_n is not None:
-                            node.remove(remove_cmnt_n)
-                            remove_cmnt_n = None
+                        if remove_comment_n is not None:
+                            node.remove(remove_comment_n)
+                            remove_comment_n = None
 
             if tag == "doc" and depth != 1:
                 parent = get_node_parent_info(tree, node)[0]
@@ -1084,7 +1084,7 @@ class Nxdl2yaml:
                 self.handle_link(depth, node, file_out)
             if tag == ("choice"):
                 self.handle_choice(depth, node, file_out)
-            if tag == CMNT_TAG and self.include_comment:
+            if tag == COMMENT_TAG and self.include_comment:
                 self.handle_comment(depth, node, file_out)
 
         if recurse_again is True:

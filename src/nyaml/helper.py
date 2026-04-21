@@ -19,12 +19,12 @@
 """
 File consists of helping functions and variables.
 
-The functions and variables are utilised in the converting tool
+The functions and variables are utilized in the converting tool
 to convert from nyaml to nxdl and vice versa.
 """
 
 import hashlib
-from typing import Callable
+from collections.abc import Callable
 
 from yaml.composer import Composer
 from yaml.constructor import Constructor
@@ -316,7 +316,7 @@ def get_sha256_hash(file_name):
     return sha_hash.hexdigest()
 
 
-def extend_yamlfile_by_nxdl_as_comment(
+def extend_yaml_file_by_nxdl_as_comment(
     yaml_file, file_to_be_appended, top_lines_list=None
 ):
     """Extend yaml file by the file_to_be_appended as comment."""
@@ -369,7 +369,7 @@ def separate_hash_yaml_and_nxdl(yaml_file, sep_yaml, sep_xml):
                         sha_hash = line.split("# ", 1)[-1].strip()
                     else:
                         xml_f_ob.write(line[2:])
-            # If the yaml fiile does not contain any hash for nxdl then we may have last line.
+            # If the yaml file does not contain any hash for nxdl then we may have last line.
             if last_line:
                 yml_f_ob.write(last_line)
 
@@ -382,7 +382,7 @@ def is_copyright_comment(text):
     Return true if dom comment.
     """
 
-    # some signature keywords to distingush dom comments from other comments.
+    # some signature keywords to distinguish dom comments from other comments.
     signature_keyword_list = [
         "NeXus",
         "GNU Lesser General Public",

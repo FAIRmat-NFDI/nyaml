@@ -22,14 +22,14 @@ Tests for nyaml2nxdl tool
 import filecmp
 import os
 import re
-import yaml
 import sys
+from collections import OrderedDict
 from datetime import datetime
 from pathlib import Path
-from collections import OrderedDict
 
 import lxml.etree as ET
 import pytest
+import yaml
 from click.testing import CliRunner
 
 from nyaml import cli as nyaml2nxdl
@@ -80,7 +80,7 @@ def find_matches(xml_file, desired_matches):
         Read xml file and find desired matches. Return a list of two lists in the form:
     [[matching_line],[matching_line_index]]
     """
-    with open(xml_file, "r", encoding="utf-8") as file:
+    with open(xml_file, encoding="utf-8") as file:
         xml_reference = file.readlines()
     lines = []
     lines_index = []
@@ -515,9 +515,9 @@ def test_xml_parsing():
         In this test an xml file in converted to yml and then back to xml.
     The xml trees of the two files are then compared.
     """
-    ref_xml_file = "tests/data/Ref_NXellips.nxdl.xml"
-    test_yml_file = "tests/data/Ref_NXellips_parsed.yaml"
-    test_xml_file = "tests/data/Ref_NXellips_parsed.nxdl.xml"
+    ref_xml_file = "tests/data/Ref_NXellipsometry.nxdl.xml"
+    test_yml_file = "tests/data/Ref_NXellipsometry_parsed.yaml"
+    test_xml_file = "tests/data/Ref_NXellipsometry_parsed.nxdl.xml"
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
@@ -581,20 +581,20 @@ def test_yml_consistency_comment_parsing():
     assert result.exit_code == 0, (
         f"Exception: {result.exception}, \nExecution Info:{{result.exc_info}}"
     )
-    with open(ref_yml_file, "r", encoding="utf-8") as ref_yml:
+    with open(ref_yml_file, encoding="utf-8") as ref_yml:
         loader = LineLoader(ref_yml)
         ref_loaded_yaml = loader.get_single_data()
     ref_comment_blocks = CommentCollector(ref_yml_file, ref_loaded_yaml)
     ref_comment_blocks.extract_all_comment_blocks()
 
-    with open(test_yml_file, "r", encoding="utf-8") as test_yml:
+    with open(test_yml_file, encoding="utf-8") as test_yml:
         loader = LineLoader(test_yml)
         test_loaded_yaml = loader.get_single_data()
     test_comment_blocks = CommentCollector(test_yml_file, test_loaded_yaml)
     test_comment_blocks.extract_all_comment_blocks()
 
-    for ref_cmnt, test_cmnt in zip(ref_comment_blocks, test_comment_blocks):
-        assert ref_cmnt == test_cmnt, "Comment is not consistent."
+    for reference_comment, test_comment in zip(ref_comment_blocks, test_comment_blocks):
+        assert reference_comment == test_comment, "Comment is not consistent."
 
     os.remove(test_yml_file)
 
@@ -611,9 +611,9 @@ def test_conversion():
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(yaml)])
     assert result.exit_code == 0
     new_root = yaml.with_suffix(".nxdl.xml")
-    with open(root, encoding="utf-8", mode="r") as tmp_f:
+    with open(root, encoding="utf-8") as tmp_f:
         root_content = tmp_f.readlines()
-    with open(new_root, encoding="utf-8", mode="r") as tmp_f:
+    with open(new_root, encoding="utf-8") as tmp_f:
         new_root_content = tmp_f.readlines()
     assert root_content == new_root_content
     Path.unlink(yaml)
@@ -635,7 +635,7 @@ def test_yaml2nxdl_doc():
     if result.exit_code != 0:
         Path.unlink(out_doc_file)
     assert result.exit_code == 0, f"Error: Having issue running input file {doc_file}."
-    # Check copyright year and repalce it according to the ref file
+    # Check copyright year and replace it according to the ref file
     check_and_replace_latest_copyright(out_doc_file)
     ref_nxdl = ET.parse(str(ref_doc_file)).getroot()
     out_nxdl = ET.parse(str(out_doc_file)).getroot()
@@ -675,9 +675,10 @@ def test_nxdl2yaml_doc():
 
     assert result.exit_code == 0, "Error in converter execution."
 
-    with open(ref_yaml, mode="r", encoding="utf-8") as yaml1, open(
-        parsed_yaml_file, mode="r", encoding="utf-8"
-    ) as yaml2:
+    with (
+        open(ref_yaml, encoding="utf-8") as yaml1,
+        open(parsed_yaml_file, encoding="utf-8") as yaml2,
+    ):
         yaml_dict1 = LineLoader(yaml1).get_single_data()
         yaml_dict2 = LineLoader(yaml2).get_single_data()
 
@@ -747,11 +748,11 @@ def test_copyright_license_new_yaml(tmp_path):
 
 def test_check_copyright_license_in_full_modification_yaml_cycle(tmp_path):
     pwd = Path(__file__).parent
-    nxdl_file = pwd / "data/Ref_NXentry_Licence.nxdl.xml"
-    yaml_file = tmp_path / "Ref_NXentry_Licence_parsed.yaml"
-    modified_yaml_gen = tmp_path / "Ref_NXentry_Licence_modified.yaml"
-    modified_yaml_ref = pwd / "data/Ref_NXentry_Licence_modified.yaml"
-    latest_nxdl = tmp_path / "Ref_NXentry_Licence_modified.nxdl.xml"
+    nxdl_file = pwd / "data/Ref_NXentry_License.nxdl.xml"
+    yaml_file = tmp_path / "Ref_NXentry_License_parsed.yaml"
+    modified_yaml_gen = tmp_path / "Ref_NXentry_License_modified.yaml"
+    modified_yaml_ref = pwd / "data/Ref_NXentry_License_modified.yaml"
+    latest_nxdl = tmp_path / "Ref_NXentry_License_modified.nxdl.xml"
 
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool, [str(nxdl_file), "--output-file", str(yaml_file)]
@@ -765,9 +766,10 @@ def test_check_copyright_license_in_full_modification_yaml_cycle(tmp_path):
     updated_content = re.sub(find_pattern, replace_pattern, content)
     modified_yaml_gen.write_text(updated_content)
     # Compare two yaml and modified yaml
-    with open(modified_yaml_gen, mode="r", encoding="utf-8") as gen_yaml, open(
-        modified_yaml_ref, mode="r", encoding="utf-8"
-    ) as ref_yaml:
+    with (
+        open(modified_yaml_gen, encoding="utf-8") as gen_yaml,
+        open(modified_yaml_ref, encoding="utf-8") as ref_yaml,
+    ):
         gen_yaml_dict = LineLoader(gen_yaml).get_single_data()
         ref_yaml_dict = LineLoader(ref_yaml).get_single_data()
     compare_yaml_content(gen_yaml_dict, ref_yaml_dict, ["doc"])
@@ -922,10 +924,10 @@ def test_forward_conversion(test_input):
     result = runner.invoke(nyaml2nxdl.launch_tool, [test_yml_input_file])
     assert result.exit_code == 0
 
-    with open(test_xml_output_file, "r", encoding="utf-8") as logfile:
+    with open(test_xml_output_file, encoding="utf-8") as logfile:
         log = logfile.readlines()
-    with open(ref_xml_output_file, "r", encoding="utf-8") as reffile:
-        ref = reffile.readlines()
+    with open(ref_xml_output_file, encoding="utf-8") as reference_file:
+        ref = reference_file.readlines()
     assert log == ref
 
     os.remove(test_xml_output_file)
@@ -950,10 +952,10 @@ def test_backward_conversion(test_input):
     result = runner.invoke(nyaml2nxdl.launch_tool, [test_xml_input_file])
     assert result.exit_code == 0
 
-    with open(test_yml_output_file, "r", encoding="utf-8") as logfile:
+    with open(test_yml_output_file, encoding="utf-8") as logfile:
         log = logfile.readlines()
-    with open(ref_yml_output_file, "r", encoding="utf-8") as reffile:
-        ref = reffile.readlines()
+    with open(ref_yml_output_file, encoding="utf-8") as reference_file:
+        ref = reference_file.readlines()
     assert log == ref
 
     os.remove(test_yml_output_file)

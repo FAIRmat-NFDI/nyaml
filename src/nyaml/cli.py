@@ -21,7 +21,7 @@ Main file of nyaml2nxdl tool.
 
 To write a definition for a instrument, experiment and/or process in nxdl.xml file from a YAML
 file which details a hierarchy of data/metadata elements. It also allows both wa
-conversion beteen YAML and nxdl.xml files that follows rules of NeXus ontology or data format.
+conversion between YAML and nxdl.xml files that follows rules of NeXus ontology or data format.
 """
 
 from pathlib import Path
@@ -29,7 +29,7 @@ from pathlib import Path
 import click
 
 from nyaml.helper import (
-    extend_yamlfile_by_nxdl_as_comment,
+    extend_yaml_file_by_nxdl_as_comment,
     get_sha256_hash,
     separate_hash_yaml_and_nxdl,
 )
@@ -154,7 +154,7 @@ def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency, outpu
             f"# {yaml_hash}\n",
         ]
         if not do_not_store_nxdl:
-            extend_yamlfile_by_nxdl_as_comment(
+            extend_yaml_file_by_nxdl_as_comment(
                 yaml_file=yaml_out_file,
                 file_to_be_appended=input_file,
                 top_lines_list=top_lines,
