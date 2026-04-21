@@ -11,9 +11,8 @@ authors = [
 description = "A tool to convert NeXus definitions from NXDL/XML format to YAML and vice versa."
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 classifiers = [
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -34,12 +33,13 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "mypy",
-    "ruff>=0.12.0",
+    "ruff>=0.15.0",
     "pytest",
     "types-lxml",
     "pre-commit",
     "types-pyyaml",
     "lxml-stubs",
+    "pre-commit",
 ]
 
 docs = [

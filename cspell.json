@@ -1,0 +1,20 @@
+{
+  "version": "0.2",
+  "ignorePaths": ["paper/paper.bib"],
+  "dictionaryDefinitions": [
+    {
+      "name": "custom-dictionary",
+      "path": "./.cspell/custom-dictionary.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": [
+    "custom-dictionary",
+    "en_US",
+    "python"
+  ],
+  "words": [],
+  "ignoreWords": [],
+  "ignoreRegExpList": ["\\bNX\\w*\\b", "https?://[\\S]+"],
+  "language": "en-US"
+}
