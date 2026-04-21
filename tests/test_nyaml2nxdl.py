@@ -392,9 +392,9 @@ has not the same structure!!"
     sys.stdout.write("Test on xml -> yml doc formatting okay.\n")
 
 
-def test_fileline_error():
+def test_file_line_error():
     """
-    In this test the yaml fileline in the error message is tested.
+    In this test the yaml file line in the error message is tested.
     """
     test_yml_file = "tests/data/NXfilelineError1.yaml"
     out_nxdl = "tests/data/NXfilelineError1.nxdl.xml"
@@ -423,7 +423,7 @@ def test_fileline_error():
     os.remove(out_nxdl)
     os.remove(out_yaml)
 
-    sys.stdout.write("Test on xml -> yml fileline error handling okay.\n")
+    sys.stdout.write("Test on xml -> yml file line error handling okay.\n")
 
 
 def test_symbols():
