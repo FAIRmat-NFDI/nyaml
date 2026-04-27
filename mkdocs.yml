@@ -11,7 +11,7 @@ nav:
       - Contributing: tutorials/contributing.md
   - How-to guides:
       - Getting started with nyaml: howtos/howto.md
-  - Learn:
+  - Explanation:
       - Introduction to NeXus: https://manual.nexusformat.org/index.html
       - Motivation behind the nyaml tool: learn/explanations.md
       - Workflow of the nyaml tool with examples: learn/workflow.md

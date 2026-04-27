@@ -3,7 +3,7 @@
 `nyaml` is a command line tool that converts NeXus definitions between YAML and NXDL XML format. It is [published on PyPI](https://pypi.org/project/nyaml/){:target="_blank" rel="noopener"}.
 
 !!! note
-    `nyaml` is a *transcoding* tool that converts between YAML and XML representations of NeXus definitions. Validation of the resulting NXDL files is handled by the [official NeXus definitions repository](https://github.com/nexusformat/definitions){:target="_blank" rel="noopener"}.
+    `nyaml` is a *transcoding* tool that converts between YAML and XML representations of NeXus definitions. Validation of the resulting NXDL files against the NeXus design principle [official NeXus](https://manual.nexusformat.org/design.html){:target="_blank" rel="noopener"} is not handled by `nyaml`, but can instead be done  through the CI/CD pipeline provided by the [official NeXus definitions repository](https://github.com/nexusformat/definitions){:target="_blank" rel="noopener"}.
 
 ## How to install
 

@@ -43,7 +43,7 @@ NXmy_measurement(NXobject):
 
 The last line `NXmy_measurement(NXobject):` declares the definition name and the class it extends. Application definitions typically extend `NXobject`.
 
-You can already convert this to XML to check the round-trip:
+You can already convert this to XML:
 
 ```bash
 nyaml2nxdl NXmy_measurement.yaml
