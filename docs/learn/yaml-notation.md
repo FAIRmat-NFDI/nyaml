@@ -17,7 +17,7 @@ The root section is the top-level block of a definition. It maps to the XML `<de
 - `type`: always `group`
 - `doc`: free-text description of the definition
 - `symbols`: named dimension constants used throughout the definition (optional)
-- The schema name (e.g. `NXmpes(NXobject)`): the parenthesised base class indicates what this definition extends. An application definition may extend `NXobject` or another application definition.
+- The schema name (e.g. `NXmpes(NXobject)`): the parenthesized base class indicates what this definition extends. An application definition extends either `NXobject` or another application definition.
 
 === "YAML"
     ```yaml
@@ -70,7 +70,7 @@ The root section is the top-level block of a definition. It maps to the XML `<de
 
 [NeXus groups](https://manual.nexusformat.org/design.html#design-groups){:target="_blank" rel="noopener"} are instances of NeXus base classes and form the compositional structure of a definition. A group is written as `name(NXbaseclass):` in YAML.
 
-The `nameType` keyword (see below) controls whether the name is matched exactly, loosely, or as a prefix pattern in HDF5 files. Dynamic initialisation (using `nameType: any`) allows multiple instances of the same group type at the same hierarchy level; for example, `(NXmanipulator)` (with `nameType: any`) can be instantiated as `manipulator1` and `manipulator2` during data writing.
+The `nameType` keyword (see below) controls whether the name is matched exactly, loosely, or as a prefix (or suffix) pattern in HDF5 files. Dynamic initialization (using `nameType: any`) allows multiple instances of the same group type at the same hierarchy level; for example, `(NXmanipulator)` (with `nameType: any`) can be instantiated as `manipulator1` and `manipulator2` during data writing.
 
 The `group` annotation `source_TYPE(NXsource)` means the group's concept name is `source_TYPE` and its type is the `NXsource` base class. For `nameType: partial`, the uppercase part of the name can be replaced at instantiation time, allowing multiple distinct instances (e.g. `source_electric` and `source_magnetic`). The same uppercase rules apply to fields and attributes.
 
@@ -220,7 +220,7 @@ Controls how an instance name in an HDF5 file is matched against the concept nam
 
 ### `exists`
 
-Controls whether a concept must be present in a conforming file. By default, all concepts in a base class are optional and all concepts in an application definition are required.
+Controls whether an instance of a concept is present in a conforming NeXus file. By default, all concepts in a base class are optional, and all concepts in an application definition are required.
 
 Accepted values:
 

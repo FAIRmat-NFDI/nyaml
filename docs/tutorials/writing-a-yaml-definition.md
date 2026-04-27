@@ -73,7 +73,7 @@ NXmy_measurement(NXobject):
 A few things to notice:
 
 - `(NXentry):` without a name means any valid group name is accepted in the HDF5 file (e.g. `entry`, `entry1`). This is `nameType: any`, the default for anonymous groups.
-- `definition` is a field with no type, so it defaults to `NX_CHAR`.
+- `definition:` is a field with no type, so it defaults to `NX_CHAR`.
 - `start_time(NX_DATE_TIME):` declares a field with NeXus type `NX_DATE_TIME`.
 - `exists: recommended` on `end_time` means it is advised but not required. By default all concepts in an application definition are required; `exists` relaxes that. In base classes, however, all concepts are optional.
 

@@ -39,7 +39,7 @@ How to install and use the `nyaml` tool
 An introduction to NeXus and its use in the light of YAML format using the `nyaml` tool.
 
 - [Introduction to NeXus](https://manual.nexusformat.org/index.html){:target="_blank" rel="noopener"}
-- [Motivation behind the nyaml tool](learn/explanations.md)
+- [Motivation behind the `nyaml` tool](learn/explanations.md)
 - [Workflow of the nyaml tool with examples](learn/workflow.md)
 - [nyaml notation reference](learn/yaml-notation.md)
 
