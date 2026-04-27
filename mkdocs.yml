@@ -5,16 +5,17 @@ site_author: "The FAIRmat authors"
 repo_url: https://github.com/FAIRmat-NFDI/nyaml
 nav:
   - Home: index.md
-  - Tutorial:
+  - Tutorials:
       - Installation: tutorials/installation.md
-      - Writing a NeXus definition in YAML: tutorials/tutorials.md
+      - Writing a NeXus definition in YAML: tutorials/writing-a-yaml-definition.md
       - Contributing: tutorials/contributing.md
-  - How-To-Guide :
+  - How-to guides:
       - Getting started with nyaml: howtos/howto.md
   - Explanation:
       - Introduction to NeXus: https://manual.nexusformat.org/index.html
       - Motivation behind the nyaml tool: learn/explanations.md
       - Workflow of the nyaml tool with examples: learn/workflow.md
+      - nyaml notation: learn/yaml-notation.md
   - Reference:
       - API for command line tool: references/cli-api.md
       - References: references/references.md
