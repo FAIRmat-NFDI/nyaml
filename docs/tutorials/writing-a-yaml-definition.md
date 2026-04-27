@@ -102,7 +102,7 @@ NXmy_measurement(NXobject):
           doc: Distance from sample to detector surface.
 ```
 
-The `unit: NX_LENGTH` line declares the unit *category* for the `distance` field. This tells readers and validators that the stored values are a length (metres, millimetres, etc.), without fixing the exact unit; the writer stores the actual unit as a sibling HDF5 attribute. Use one of the [NeXus unit categories](https://manual.nexusformat.org/nxdl-types.html#unit-categories-allowed-in-nxdl-specifications){:target="_blank" rel="noopener"} rather than raw strings like `"m"`.
+The `unit: NX_LENGTH` line declares the unit *category* for the `distance` field. This tells readers and validators that the stored values are a length (metres, millimeters, etc.), without fixing the exact unit; the writer stores the actual unit as a sibling HDF5 attribute. Use one of the [NeXus unit categories](https://manual.nexusformat.org/nxdl-types.html#unit-categories-allowed-in-nxdl-specifications){:target="_blank" rel="noopener"} rather than raw strings like `"m"`.
 
 ---
 

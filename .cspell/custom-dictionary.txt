@@ -33,6 +33,7 @@ napimount
 nsmap
 nxdlformat
 nyaml
+pynxtools
 orcid
 refindex
 renameable
