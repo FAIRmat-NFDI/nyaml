@@ -227,7 +227,7 @@ def test_nyaml2nxdl_prohibited_nameType(
         {
             "category": "base",
             "doc": "Test",
-            "NXtest": OrderedDict({key: {"nameType": name_type_value}}),
+            "NXtest": OrderedDict({key: {r"\nameType": name_type_value}}),
         }
     )
 

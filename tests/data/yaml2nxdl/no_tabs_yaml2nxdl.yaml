@@ -21,7 +21,7 @@ doc: |
     The field named in the ``signal`` attribute **must** exist, either
     directly as a NeXus field or defined through a link.
 symbols:
-  doc: |
+  \doc: |
     These symbols will be used below to coordinate fields with the same shape.
   dataRank: |
     rank of the ``DATA`` field
@@ -38,5 +38,5 @@ ignoreExtraFields: true
 ignoreExtraAttributes: true
 NXtest(NXobject):
   title:
-    doc: |
+    \doc: |
       Title for the plot.

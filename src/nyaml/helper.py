@@ -39,6 +39,24 @@ ESCAPE_CHAR_DICT_IN_XML: dict[str, str] = {
     val: key for key, val in ESCAPE_CHAR_DICT_IN_YAML.items()
 }
 
+# Reserved nyaml keywords that map to NXDL concepts rather than concept names.
+# Use a backslash prefix (e.g. \rank) to use one of these as a concept name.
+# \@ is already the escape prefix for XML attributes (e.g. \@version).
+RESERVED_KEYWORDS = frozenset(
+    {
+        "doc",
+        "unit",
+        "enumeration",
+        "nameType",
+        "dim",
+        "dimensions",
+        "exists",
+        "minOccurs",
+        "maxOccurs",
+        "rank",  # sub-key inside a 'dimensions' block
+    }
+)
+
 # Set up attributes for nxdl version
 NXDL_GROUP_ATTRIBUTES: tuple[str, ...] = (
     "optional",

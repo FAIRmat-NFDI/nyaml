@@ -151,7 +151,7 @@ Presented below is a concise and trimmed example of the `NXmpes` application def
                 doc: |
                   Kinetic energy values
                 dimensions:
-                  rank: 1
+                  \rank: 1
                   dim: [[1, n_transmission_function]]
     ```
 

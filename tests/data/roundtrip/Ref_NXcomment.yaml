@@ -10,7 +10,7 @@ doc: This is the most general application definition for multidimensional photoe
 # 2: symbols comments: comments here
 symbols:
 # 3: symbols doc comments
-  doc: |
+  \doc: |
     symbols doc
 # 4: symbol comments: comments here
   n_different_temperatures: "Number of different temperature setpoints used in the experiment."
@@ -25,20 +25,20 @@ NXmpes:
 
   # 8: exists: comment
   (NXentry):
-    exists: recommended
+    \exists: recommended
     # 9: Title comment
     title:
     # 10: Field comment
     start_time(NX_DATE_TIME):
-      doc: "Datetime of the start of the measurement."
+      \doc: "Datetime of the start of the measurement."
       # 11: dim comments:
       #  dim comments:
-      dimensions:
-        dim: (1, 2, 6)
+      \dimensions:
+        \dim: (1, 2, 6)
     definition:
       # 12: version_attribute: comments hrere
       \@version:
-      enumeration: ["NXmpes"]
+      \enumeration: ["NXmpes"]
     # 12: Scond comment for Comment NXdata(data)
 
     # 13: comment nxdata(data): comments
@@ -54,13 +54,13 @@ NXmpes:
       data(link):
         target: /entry/instrument/fluorescence/data
       region_origin(NX_INT):
-        doc: |
+        \doc: |
           origin of rectangular region selected for readout
         # 17: dimensions comments:
         # 18: rank comments: comments
-        dimensions:
-          rank: 1
-          dim: [[1, 2]]
+        \dimensions:
+          \rank: 1
+          \dim: [[1, 2]]
 
   # 22: File ending comments
   # 22: File ending comments
