@@ -4,7 +4,8 @@
 
 ## How to Install
 
-install the `nyaml` Python package:
+Install the `nyaml` Python package:
+
 === "uv"
 
     ```bash

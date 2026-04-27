@@ -55,7 +55,7 @@ The list of references used in this documentation
 For questions or suggestions:
 
 - Open an issue on the [`nyaml` GitHub](https://github.com/FAIRmat-NFDI/nyaml/issues)
-- Join our [Discord channel ](https://discord.gg/Gyzx3ukUw8)
+- Join our [Discord channel](https://discord.gg/Gyzx3ukUw8)
 - Get in contact with our [lead developers](contact.md).
 
 <h2>Project and community</h2>

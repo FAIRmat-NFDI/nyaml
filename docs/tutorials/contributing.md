@@ -1,8 +1,8 @@
 # Development guide
 
-This tutorial will guide you through on how to set up a working environment for developing `nyaml`.
+This tutorial will guide you through how to set up a working environment for developing `nyaml`.
 
-## What should you should know before this tutorial?
+## What should you know before this tutorial?
 
 - You should read the [installation tutorial](installation.md).
 
@@ -10,7 +10,7 @@ This tutorial will guide you through on how to set up a working environment for 
 
 You will know
 
-- how to setup your environment for developing `nyaml`
+- how to set up your environment for developing `nyaml`
 - how to make changes to the software
 - how to test the software
 - how to contribute on GitHub
@@ -23,7 +23,7 @@ You will know
 
 ### Setup
 
-It is recommended to use python 3.11+ with a dedicated virtual environment for this package. Learn how to manage [python versions](https://github.com/pyenv/pyenv) and [virtual environments](https://realpython.com/python-virtual-environments-a-primer/). We recommend using [`uv`](https://github.com/astral-sh/uv), an extremely fast manager Python package and project manager. In this tutorial, you will find paralleled descriptions, using either `uv` or a more classical approach using `venv` and `pip`.
+It is recommended to use Python 3.11+ with a dedicated virtual environment for this package. Learn how to manage [python versions](https://github.com/pyenv/pyenv) and [virtual environments](https://realpython.com/python-virtual-environments-a-primer/). We recommend using [`uv`](https://github.com/astral-sh/uv), an extremely fast Python package and project manager. In this tutorial, you will find paralleled instrctions, using either `uv` or a more classical approach using `venv` and `pip`.
 
 Start by creating a virtual environment:
 
@@ -71,9 +71,9 @@ Next, we install the package in editable mode (together with its dependencies):
 
 ### Linting and formatting
 
-We are using ruff and mypy for linting, formatting, and type checking. It is recommended to use the [pre-commit hook](https://pre-commit.com/#intro) available for ruff which formats the code and checks the linting before actually making an actual Git commit.
+We are using ruff and mypy for linting, formatting, and type checking. It is recommended to use the [pre-commit hook](https://pre-commit.com/#intro) available for ruff which formats the code and runs linting checks before actually making a Git commit.
 
-Install the precommit by running
+Install the pre-commit hook by running
 
 ```console
 pre-commit install
@@ -91,7 +91,7 @@ pytest -sv tests
 
 ### Editing the documentation
 
-We are using [`mkdocs](https://www.mkdocs.org/) for the documentation. If you edit the documentation, you can build it locally. For this, you need to install an additional set of dependencies:
+We are using [`mkdocs`](https://www.mkdocs.org/) for the documentation. If you edit the documentation, you can build it locally. For this, you need to install an additional set of dependencies:
 
 === "uv"
 
@@ -110,12 +110,12 @@ You can then serve the documentation locally by running
 mkdocs serve
 ```
 
-### Contributing to the package on Github
+### Contributing to the package on GitHub
 
-Once you are happy with the changes, please commit them on a feature branch on a fork of the original repository and create a pull request on GitHub. We run a number of GitHub actions that check the correct linting, run the tests in an isolated environment, and build the documentation. Once these pass and a peer review of the code has occurred, your code will be accepted.
+Once you are happy with the changes, please commit them on a feature branch on a fork of the original repository and create a pull request on GitHub. We run a number of GitHub actions that check code formatting and linting, run the tests in an isolated environment, and build the documentation. Once these actions pass and a peer review of the code has occurred, your code will be accepted.
 
 ## Reporting issues and seeking support
 
-If you face any issues with the tool or when setting up the development environment, please create a new [Github Issue](https://github.com/FAIRmat-NFDI/nyaml/issues/new?template=bug.yaml).
+If you face any issues with the tool or when setting up the development environment, please create a new [GitHub Issue](https://github.com/FAIRmat-NFDI/nyaml/issues/new?template=bug.yaml).
 
 For general questions or support, see our [contact page](../contact.md) or join the [NOMAD Discord channel](https://discord.gg/Gyzx3ukUw8).

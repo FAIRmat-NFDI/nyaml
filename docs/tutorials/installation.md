@@ -1,6 +1,6 @@
 # Installation guide
 
-This tutorial serves as a guide to getting started with the `pynxtools` software.
+This tutorial serves as a guide to getting started with the `nyaml` software.
 
 ## What should you should know before this tutorial?
 
@@ -81,6 +81,6 @@ Run `nyaml2nxdl help` to check that the installation was successful:
 nyaml2nxdl --help
 ```
 
-## Start using `pynxtools`
+## Start using `nyaml`
 
 That's it! You can now use `nyaml` and the plugins that you have installed!
