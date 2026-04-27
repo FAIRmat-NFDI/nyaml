@@ -6,7 +6,9 @@ repo_url: https://github.com/FAIRmat-NFDI/nyaml
 nav:
   - Home: index.md
   - Tutorial:
+      - Installation: tutorials/installation.md
       - Writing a NeXus definition in YAML: tutorials/tutorials.md
+      - Contributing: tutorials/contributing.md
   - How-To-Guide :
       - Getting started with nyaml: howtos/howto.md
   - Explanation:
@@ -14,9 +16,11 @@ nav:
       - Motivation behind the nyaml tool: learn/explanations.md
       - Workflow of the nyaml tool with examples: learn/workflow.md
   - Reference:
+      - API for command line tool: references/cli-api.md
       - References: references/references.md
 plugins:
   - mkdocstrings
+  - markdown-exec
   - mermaid2
   - search
 markdown_extensions:

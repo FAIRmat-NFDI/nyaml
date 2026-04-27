@@ -37,7 +37,6 @@ dev = [
     "ruff>=0.12.0",
     "pytest",
     "types-lxml",
-    "pip-tools",
     "pre-commit",
     "types-pyyaml",
     "lxml-stubs",
@@ -45,6 +44,7 @@ dev = [
 
 docs = [
     "mkdocs",
+    "markdown-exec[ansi]",
     "mkdocs-mermaid2-plugin",
     "mkdocstrings",
     "mkdocs-click",

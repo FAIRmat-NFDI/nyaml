@@ -11,7 +11,10 @@ The tool supports both NeXus application definitions and base classes. It can be
 
 Tutorials to write different parts and a full NeXus application or base class
 
+- [Installation](tutorials/installation.md)
 - [Writing a NeXus definition in YAML](tutorials/tutorials.md)
+- [Contributing](tutorials/contributing.md)
+
 
 </div>
 <div markdown="block">
@@ -37,16 +40,24 @@ An introduction to NeXus and its use in the light of YAML format using the `nyam
 
 </div>
 <div markdown="block">
+
 ### References
 The list of references used in this documentation
 
+- [Command line API](references/cli-api.md)
 - [References](references/references.md)
 </div>
 
 </div>
 
+<h2> Contact </h2>
+
+For questions or suggestions:
+
+- Open an issue on the [`nyaml` GitHub](https://github.com/FAIRmat-NFDI/nyaml/issues)
+- Join our [Discord channel](https://discord.gg/Gyzx3ukUw8)
+- Get in contact with our [lead developers](contact.md).
+
 <h2>Project and community</h2>
 
-Any questions or suggestions? [Get in touch!](https://www.fair-di.eu/fairmat/about-fairmat/team-fairmat)
-
-[The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 460197019 (FAIRmat).](https://gepris.dfg.de/gepris/projekt/460197019?language=en)
+The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - [460197019 (FAIRmat)](https://gepris.dfg.de/gepris/projekt/460197019?language=en).

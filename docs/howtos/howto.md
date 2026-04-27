@@ -1,25 +1,26 @@
 # Getting started with nyaml
+
 `nyaml` is a Python package that is [published on PyPI](https://pypi.org/project/nyaml/).
 
 ## How to Install
-The tool is published to `PyPI` and available for pip install
-```bash
-$ pip install nyaml
-```
 
-To contribute to the tool or to install it in development mode, you should run
-```bash
-$ git clone https://github.com/FAIRmat-NFDI/nyaml.git
-$ cd nyaml
-$ pip install -e ".[dev]"
-```
+Install the `nyaml` Python package:
 
-There is also a [pre-commit hook](https://pre-commit.com/#intro) available which formats the code and checks the linting before actually committing. It can be installed with
-```bash
-$ pre-commit install
-```
+=== "uv"
+
+    ```bash
+    uv pip install nyaml
+    ```
+
+=== "pip"
+
+
+    ```bash
+    pip install nyaml
+    ```
 
 ## How to Use
+
 `nyaml` works as a command line tool to convert NeXus application definitions or base classes from YAML file format into the `nxdl.xml` file format and vice-versa. The converter can be called by the command
 
 ::: mkdocs-click
@@ -40,4 +41,4 @@ __Brief interpretation of the command line options__:
 
 `--verbose`: The `verbose` option is to identify any issues arising from unexpected conversion or syntax errors that occur while converting the file from one to another.
 
-`--help`: The `help` option Show this message and exit.
+`--help`: The `help` option shows this message and exits.
