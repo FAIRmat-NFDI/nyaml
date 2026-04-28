@@ -24,7 +24,9 @@ file which details a hierarchy of data/metadata elements. It also allows both wa
 conversion between YAML and nxdl.xml files that follows rules of NeXus ontology or data format.
 """
 
+import os
 from pathlib import Path
+from typing import Optional
 
 import click
 
@@ -43,7 +45,11 @@ NXDL_SUFFIX = ".nxdl.xml"
 # https://manual.nexusformat.org/nxdl_desc.html?highlight=optional
 
 
-def generate_nxdl_or_retrieve_nxdl(yaml_file, out_xml_file, verbose):
+def generate_nxdl_or_retrieve_nxdl(
+    yaml_file: str | os.PathLike[str],
+    out_xml_file: str | os.PathLike[str],
+    verbose: bool,
+) -> None:
     """
     Generate yaml, nxdl and hash.
 
@@ -51,10 +57,14 @@ def generate_nxdl_or_retrieve_nxdl(yaml_file, out_xml_file, verbose):
     retrieve the nxdl part from provided yaml.
     Else, generate nxdl from separated yaml with the help of nyaml2nxdl function
     """
-    file_path = Path(yaml_file)
+    file_path: Path = Path(yaml_file)
+    pa_path: Path
+    rel_file: str
     pa_path, rel_file = file_path.parent, file_path.name
-    sep_yaml = (pa_path / f"temp_{rel_file}").as_posix()
-    hash_found = separate_hash_yaml_and_nxdl(yaml_file, sep_yaml, out_xml_file)
+    sep_yaml: str = (pa_path / f"temp_{rel_file}").as_posix()
+    hash_found: str | None = separate_hash_yaml_and_nxdl(
+        os.fspath(yaml_file), sep_yaml, os.fspath(out_xml_file)
+    )
 
     if hash_found:
         gen_hash = get_sha256_hash(sep_yaml)
@@ -62,21 +72,22 @@ def generate_nxdl_or_retrieve_nxdl(yaml_file, out_xml_file, verbose):
             Path(sep_yaml).unlink()
             return
 
-    nyaml2nxdl(sep_yaml, out_xml_file, verbose)
+    nyaml2nxdl(sep_yaml, os.fspath(out_xml_file), verbose)
     Path(sep_yaml).unlink()
 
 
-def split_name_and_extension(file_path):
+def split_name_and_extension(file_path: str | os.PathLike[str]) -> tuple[str, str]:
     """
     Split file name into extension and rest of the file name.
 
     return file raw name and extension
     """
-    path = Path(file_path)
-    ext = "".join(path.suffixes)
+    file_path_str: str = os.fspath(file_path)
+    path: Path = Path(file_path_str)
+    ext: str = "".join(path.suffixes)
     # assuming that in NeXus yaml and nxdl files follow the pattern
     # NX<classname>.yaml and NX<classname>.nxdl.xml
-    full_path_stem = file_path[0 : file_path.index(ext)]
+    full_path_stem: str = file_path_str[0 : file_path_str.index(ext)]
     return full_path_stem, ext[1:]
 
 
@@ -115,12 +126,20 @@ def split_name_and_extension(file_path):
     ),
 )
 # def launch_tool(input_file, verbose, check_consistency):
-def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency, output_file):
+def launch_tool(
+    input_file: str,
+    verbose: bool,
+    do_not_store_nxdl: bool,
+    check_consistency: bool,
+    output_file: str | None,
+) -> None:
     """
     Main function that distinguishes the input file format and launches the tools.
     """
 
     if Path(input_file).is_file():
+        raw_name: str
+        ext: str
         raw_name, ext = split_name_and_extension(input_file)
     else:
         raise ValueError("Need a valid input file.")
@@ -132,21 +151,21 @@ def launch_tool(input_file, verbose, do_not_store_nxdl, check_consistency, outpu
 
         # For consistency running
         if check_consistency:
-            yaml_out_file = f"{raw_name}_consistency.{ext}"
+            yaml_out_file: Path = Path(f"{raw_name}_consistency.{ext}")
             converter = Nxdl2yaml([], [])
             converter.print_yml(xml_out_file, yaml_out_file, verbose)
             Path(xml_out_file).unlink()
     elif ext == "nxdl.xml":
         # if not append:
-        yaml_out_file = (
+        yaml_out_file = Path(
             f"{raw_name}_parsed.yaml" if output_file is None else output_file
         )
         converter = Nxdl2yaml([], [])
         converter.print_yml(input_file, yaml_out_file, verbose)
         # Store nxdl.xml file in output yaml file under SHA HASH
-        yaml_hash = get_sha256_hash(yaml_out_file)
+        yaml_hash: str = get_sha256_hash(yaml_out_file)
         # Lines as divider between yaml and nxdl
-        top_lines = [
+        top_lines: list[str] = [
             (
                 "\n# ++++++++++++++++++++++++++++++++++ SHA HASH"
                 " ++++++++++++++++++++++++++++++++++\n"

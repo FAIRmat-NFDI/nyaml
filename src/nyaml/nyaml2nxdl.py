@@ -25,15 +25,14 @@ import os
 import pathlib
 import re
 import textwrap
-import warnings
-from typing import Optional, Union
+from typing import Any
 from urllib.parse import unquote
 
 import lxml.etree as ET
 import yaml
 from yaml.scanner import ScannerError
 
-from nyaml.comment_collector import CommentCollector
+from nyaml.comment_collector import CommentCollector, YAMLComment
 from nyaml.helper import (
     YAML_ATTRIBUTES_ATTRIBUTES,
     YAML_FIELD_ATTRIBUTES,
@@ -110,7 +109,7 @@ def get_nxdl_copyright_license(nxdl_file: str | os.PathLike[str]) -> str:
 
 
 # pylint: disable=too-many-lines
-def set_copyright_text(nxdl_copyright_license=""):
+def set_copyright_text(nxdl_copyright_license: str = "") -> None:
     """Set copyright text from nxdl file or create from current year."""
 
     global DOM_COMMENT
@@ -147,7 +146,7 @@ def yml_reader(input_file: str | os.PathLike[str]) -> dict:
     return loaded_yaml
 
 
-def check_for_default_attribute_and_value(xml_element):
+def check_for_default_attribute_and_value(xml_element: ET._Element) -> None:
     """Check for default attribute for NeXus concepts.
 
     NeXus Groups, fields and attributes might have xml default attributes and values that must
@@ -168,7 +167,9 @@ def check_for_default_attribute_and_value(xml_element):
     # Eligible tag for default attr and value
     eligible_tag = ["group", "field", "attribute"]
 
-    def set_default_attribute(xml_elem, default_attr_to_val):
+    def set_default_attribute(
+        xml_elem: ET._Element, default_attr_to_val: dict[str, str]
+    ) -> None:
         for default_attribute, default_value in default_attr_to_val.items():
             if (
                 default_attribute not in xml_elem.attrib
@@ -205,7 +206,12 @@ def yml_reader_no_line_tag(input_file: str | os.PathLike[str]) -> dict:
     return parsed_yaml
 
 
-def check_for_skipped_attributes(component, value, allowed_attr=None, verbose=False):
+def check_for_skipped_attributes(
+    component: str,
+    value: dict | None,
+    allowed_attr: tuple[str, ...] | None = None,
+    verbose: bool = False,
+) -> None:
     """
     Check for any attributes have been skipped or not.
     NOTE: We should keep in mind about 'doc'
@@ -234,7 +240,7 @@ def check_for_skipped_attributes(component, value, allowed_attr=None, verbose=Fa
                 )
 
 
-def format_nxdl_doc(string):
+def format_nxdl_doc(string: str) -> str:
     """NeXus format for doc string"""
     string = check_for_mapping_char_other(string)
     string_len = 80
@@ -254,7 +260,7 @@ def format_nxdl_doc(string):
     return formatted_doc.expandtabs(4)
 
 
-def check_for_mapping_char_other(text):
+def check_for_mapping_char_other(text: Any) -> str:
     """
     Check for mapping char \':\' which does not be passed through yaml library.
     Then replace it by ':'.
@@ -275,7 +281,7 @@ def check_for_mapping_char_other(text):
     return text.strip()
 
 
-def handle_each_part_doc(text):
+def handle_each_part_doc(text: str) -> str:
     """Check and handle if the text is corresponds to xref or plain doc.
 
     In nyaml doc the entire documentation may come in list of small docs.
@@ -337,7 +343,12 @@ def handle_each_part_doc(text):
     )
 
 
-def xml_handle_doc(obj, value: str | list, line_number=None, line_loc=None):
+def xml_handle_doc(
+    obj: ET._Element,
+    value: str | list,
+    line_number: str | None = None,
+    line_loc: int | None = None,
+) -> None:
     """This function creates a 'doc' element instance, and appends it to an existing element"""
     # global comment_blocks
     doc_element = ET.SubElement(obj, "doc")
@@ -353,13 +364,15 @@ def xml_handle_doc(obj, value: str | list, line_number=None, line_loc=None):
         xml_handle_comment(obj, line_number, line_loc, doc_element)
 
 
-def xml_handle_units(obj, value):
+def xml_handle_units(obj: ET._Element, value: str) -> None:
     """This function creates a 'units' element instance, and appends it to an existing element"""
     obj.set("units", str(value))
 
 
 # pylint: disable=too-many-branches
-def xml_handle_exists(dct, obj, keyword, value):
+def xml_handle_exists(
+    dct: dict, obj: ET._Element, keyword: str, value: str | list
+) -> None:
     """
     This function creates an 'exists' element instance, and appends it to an existing element
     """
@@ -412,7 +425,9 @@ def xml_handle_exists(dct, obj, keyword, value):
             obj.set("minOccurs", "0")
 
 
-def xml_handle_dimensions(dct, obj, keyword, value):
+def xml_handle_dimensions(
+    dct: dict, obj: ET._Element, keyword: str, value: dict | str
+) -> None:
     """
     Create dimensionsType element instance, its children, and append to an existing element.
 
@@ -522,7 +537,9 @@ def xml_handle_dimensions(dct, obj, keyword, value):
     xml_handle_comment(obj, line_number, line_loc, dims)
 
 
-def xml_handle_enumeration(dct, obj, keyword, value, verbose):
+def xml_handle_enumeration(
+    dct: dict, obj: ET._Element, keyword: str, value: list | dict, verbose: bool
+) -> None:
     """This function creates an 'enumeration' element instance.
 
     Different cases are handled:
@@ -584,7 +601,9 @@ bear at least an argument !"
 
 
 # pylint: disable=unused-argument
-def xml_handle_link(dct, obj, keyword, value, verbose):
+def xml_handle_link(
+    dct: dict, obj: ET._Element, keyword: str, value: dict | None, verbose: bool
+) -> None:
     """
     If we have an NXDL link we decode the name attribute from <optional string>(link)[:-6]
     """
@@ -624,7 +643,9 @@ def xml_handle_link(dct, obj, keyword, value, verbose):
         recursive_build(link_obj, value, verbose=None)
 
 
-def xml_handle_choice(dct, obj, keyword, value, verbose=False):
+def xml_handle_choice(
+    dct: dict, obj: ET._Element, keyword: str, value: dict | None, verbose: bool = False
+) -> None:
     """
     Build choice xml elements. That consists of groups.
     """
@@ -665,7 +686,7 @@ def xml_handle_choice(dct, obj, keyword, value, verbose=False):
         recursive_build(choice_obj, value, verbose=None)
 
 
-def xml_handle_symbols(dct, obj, keyword, value: dict):
+def xml_handle_symbols(dct: dict, obj: ET._Element, keyword: str, value: dict) -> None:
     """Handle a set of NXDL symbols as a child to obj"""
     line_number = f"__line__{keyword}"
     line_loc = dct[line_number]
@@ -700,7 +721,7 @@ def xml_handle_symbols(dct, obj, keyword, value: dict):
         del value[key]
 
 
-def check_keyword_variable(verbose, dct, keyword, value):
+def check_keyword_variable(verbose: bool, dct: dict, keyword: str, value: Any) -> None:
     """
     Check whether both keyword_name and keyword_type are empty,
         and complains if it is the case
@@ -713,7 +734,7 @@ def check_keyword_variable(verbose, dct, keyword, value):
         raise ValueError(f"Line {dct[line_number]}: found an improper yaml key !")
 
 
-def helper_keyword_type(keyword_type):
+def helper_keyword_type(keyword_type: str) -> str | None:
     """
     Return a value of keyword_type if it belong to NX_TYPE_KEYS
     """
@@ -722,7 +743,7 @@ def helper_keyword_type(keyword_type):
     return None
 
 
-def verbose_flag(verbose, keyword, value):
+def verbose_flag(verbose: bool, keyword: str, value: Any) -> None:
     """
     Verbose stdout printing for nested levels of yaml file, if verbose flag is active
     """
@@ -730,7 +751,9 @@ def verbose_flag(verbose, keyword, value):
         print(f"key:{keyword}; value type is {type(value)}\n")
 
 
-def xml_handle_nametype(keyword, keyword_name, dct, obj):
+def xml_handle_nametype(
+    keyword: str, keyword_name: str, dct: dict, obj: ET._Element
+) -> None:
     """
     Identify NeXus nameType attribute for field, group, attribute use hint if required.
     """
@@ -744,7 +767,9 @@ def xml_handle_nametype(keyword, keyword_name, dct, obj):
         obj.set("nameType", name_type)
 
 
-def xml_handle_attributes(dct, obj, keyword, value, verbose):
+def xml_handle_attributes(
+    dct: dict, obj: ET._Element, keyword: str, value: dict | None, verbose: bool
+) -> None:
     """Handle the attributes found connected to attribute field"""
 
     line_number = f"__line__{keyword}"
@@ -807,7 +832,9 @@ def xml_handle_attributes(dct, obj, keyword, value, verbose):
         recursive_build(sub_element, value, verbose)
 
 
-def validate_field_attribute_and_value(v_attr, v_val, allowed_attribute, value):
+def validate_field_attribute_and_value(
+    v_attr: str, v_val: Any, allowed_attribute: tuple[str, ...] | list[str], value: dict
+) -> None:
     """
     Check for any attributes that comes with invalid name,
         and invalid value.
@@ -838,8 +865,14 @@ def validate_field_attribute_and_value(v_attr, v_val, allowed_attribute, value):
 
 
 def xml_handle_fields_or_group(
-    dct, obj, keyword, value, ele_type, allowed_attr, verbose=False
-):
+    dct: dict,
+    obj: ET._Element,
+    keyword: str,
+    value: dict | str | None,
+    ele_type: str,
+    allowed_attr: tuple[str, ...],
+    verbose: bool = False,
+) -> None:
     """Handle a field or group in yaml file."""
     line_annotation = f"__line__{keyword}"
     line_loc = dct[line_annotation]
@@ -973,7 +1006,7 @@ def xml_handle_comment(
     return []
 
 
-def recursive_build(obj, dct, verbose):
+def recursive_build(obj: ET._Element, dct: dict, verbose: bool) -> None:
     """Walk through nested dictionary.
     Parameters:
     -----------
@@ -1054,7 +1087,7 @@ def recursive_build(obj, dct, verbose):
                 xml_handle_dimensions(dct, obj, keyword, value)
 
 
-def extend_doc_type(doc_type, new_component, comment=False):
+def extend_doc_type(doc_type: str, new_component: str, comment: bool = False) -> str:
     """Extend doc type for etree.tostring function
 
     Extend doc type to build DOM and process instruction comments.
@@ -1067,7 +1100,9 @@ def extend_doc_type(doc_type, new_component, comment=False):
     return doc_type + "\n" + start_sym + new_component + end_sym
 
 
-def pretty_print_xml(xml_root, output_xml, def_comments=None):
+def pretty_print_xml(
+    xml_root: ET._Element, output_xml: str, def_comments: list[str] | None = None
+) -> None:
     """Print in nxdl.xml file.
 
     Print better human-readable indented and formatted xml file using
@@ -1258,8 +1293,8 @@ keyword has an invalid pattern, or is too short!"
         recursive_build(xml_root, yml_appdef[name_extends], verbose)
     # Taking care of comments that comes at the end of file that is might not be intended for
     # any nxdl elements.
-    if COMMENT_BLOCKS[-1].has_post_comment:  # noqa: F821
-        post_comment = COMMENT_BLOCKS[-1]  # noqa: F821
+    post_comment = COMMENT_BLOCKS[-1]  # noqa: F821
+    if isinstance(post_comment, YAMLComment) and post_comment.has_post_comment():
         (line_annotation, line_loc) = post_comment.get_line_info()
         xml_handle_comment(xml_root, line_annotation, line_loc)
 
