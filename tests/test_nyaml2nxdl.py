@@ -563,7 +563,6 @@ def test_yml_parsing():
 has not the same root entries!!"
     )
     os.remove("tests/data/Ref_NXellipsometry_parsed.yaml")
-    os.remove("tests/data/Ref_NXellipsometry.nxdl.xml")
     sys.stdout.write("Test on yml -> xml -> yml okay.\n")
 
 
@@ -748,10 +747,10 @@ def test_copyright_license_new_yaml(tmp_path):
 
 def test_check_copyright_license_in_full_modification_yaml_cycle(tmp_path):
     pwd = Path(__file__).parent
-    nxdl_file = pwd / "data/Ref_NXentry_License.nxdl.xml"
+    nxdl_file = pwd / "data" / "Ref_NXentry_License.nxdl.xml"
     yaml_file = tmp_path / "Ref_NXentry_License_parsed.yaml"
     modified_yaml_gen = tmp_path / "Ref_NXentry_License_modified.yaml"
-    modified_yaml_ref = pwd / "data/Ref_NXentry_License_modified.yaml"
+    modified_yaml_ref = pwd / "data" / "Ref_NXentry_License_modified.yaml"
     latest_nxdl = tmp_path / "Ref_NXentry_License_modified.nxdl.xml"
 
     result = CliRunner().invoke(
