@@ -25,7 +25,6 @@ to convert from nyaml to nxdl and vice versa.
 
 import hashlib
 import os
-from collections.abc import Callable
 from typing import Any
 
 from yaml.composer import Composer
@@ -103,13 +102,15 @@ YAML_ATTRIBUTES_ATTRIBUTES: tuple[str, ...] = (
 YAML_LINK_ATTRIBUTES: tuple[str, ...] = NXDL_LINK_ATTRIBUTES
 
 
-def remove_namespace_from_tag(tag: str | Callable[..., Any]) -> str:
+def remove_namespace_from_tag(tag: object) -> str:
     """Helper function to remove the namespace from an XML tag."""
     if callable(tag) and getattr(tag, "__name__", "") == "Comment":
         return "!--"
+    if isinstance(tag, (bytes, bytearray)):
+        tag = tag.decode("utf-8", errors="ignore")
     if isinstance(tag, str):
         return tag.split("}")[-1]
-    return ""
+    return str(tag).split("}")[-1] if tag is not None else ""
 
 
 def check_for_proper_nameType(
@@ -207,7 +208,7 @@ class LineLoader(SafeLoader):  # pylint: disable=too-many-ancestors
         """Compose node and return node."""
         # the line number where the previous token has ended (plus empty lines)
         node = Composer.compose_node(self, parent, index)
-        node.__line__ = self.line + 1
+        setattr(node, "__line__", self.line + 1)
         return node
 
     def construct_mapping(self, node: Any, deep: bool = False) -> dict[Any, Any]:

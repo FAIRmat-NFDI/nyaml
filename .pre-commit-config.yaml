@@ -9,9 +9,17 @@ repos:
         files: ^(src/nyaml|tests)/.*\.py$
 
   - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.20.1
+    rev: v1.20.2
     hooks:
       - id: mypy  # static type checking
+        # Pre-commit runs mypy in an isolated virtualenv.
+        # Disable filename passing to the venv explicit, so the hook checks
+        # in the same scope as local `mypy src/nyaml tests`.
+        pass_filenames: false
+        args:
+          - --config-file=pyproject.toml
+          - src/nyaml
+          - tests
 
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.21.2

@@ -25,7 +25,6 @@ This file collects the functions for conversion from nxdl.xml to yaml version.
 import os
 import re
 import textwrap
-from collections.abc import Callable
 from pathlib import Path
 from typing import Any, TextIO
 
@@ -631,7 +630,7 @@ class Nxdl2yaml:
 
         # tmp_dict intended to preserve order of attributes
         tmp_dict: dict[str, Any] = {}
-        exists_dict: dict[str, list[str] | str] = {}
+        exists_dict: dict[str, str | list[str]] = {}
         for key, val in node_attr.items():
             # Check for any unwanted attributes
             self.check_for_unwanted_attributes(node=node)
@@ -646,19 +645,23 @@ class Nxdl2yaml:
                 tmp_dict[key] = str(val)
 
         if exists_dict:
-            for key, val in exists_dict.items():
+            for key, exists_val in exists_dict.items():
                 if key in ["minOccurs", "maxOccurs"]:
-                    tmp_dict["exists"] = tmp_dict["exists"] + val
+                    tmp_dict["exists"] = (
+                        tmp_dict["exists"] + exists_val
+                        if isinstance(exists_val, list)
+                        else [exists_val]
+                    )
                 elif key in ["optional", "recommended", "required"]:
                     tmp_dict["exists"] = key
 
         depth_ = depth + 1
-        for key, val in tmp_dict.items():
+        for key, val_ in tmp_dict.items():
             # Increase depth size inside handle_map...() for writing text with one
             # more indentation.
             file_out.write(
                 f"{depth_ * DEPTH_SIZE}{key}: "
-                f"{handle_mapping_char(val, depth_ + 1, False)}\n"
+                f"{handle_mapping_char(val_, depth_ + 1, False)}\n"
             )
 
     def check_for_unwanted_attributes(
@@ -859,7 +862,7 @@ class Nxdl2yaml:
                     for item_doc in list(child):
                         if remove_namespace_from_tag(item_doc.tag) == "doc":
                             self.handle_not_root_level_doc(
-                                doc_depth, item_doc.text, item_doc.tag, file_out
+                                doc_depth, item_doc.text, str(item_doc.tag), file_out
                             )
                         if (
                             remove_namespace_from_tag(item_doc.tag) == COMMENT_TAG
@@ -948,9 +951,9 @@ class Nxdl2yaml:
         has_min_max = False
         has_opt_recommended_required = False
         if exists_dict:
-            for key, val in exists_dict.items():
+            for key, exists_val in exists_dict.items():
                 if key in ["minOccurs", "maxOccurs"]:
-                    tmp_dict["exists"] = tmp_dict["exists"] + val
+                    tmp_dict["exists"] = tmp_dict["exists"] + exists_val
                     has_min_max = True
                 elif key in ["optional", "recommended", "required"]:
                     tmp_dict["exists"] = key
@@ -1011,14 +1014,13 @@ class Nxdl2yaml:
 
         depth_ = depth + 1
         # Take care of attributes of choice element, attributes may come in future.
-        for attr in node_attr.items():
-            if attr in self.choice_allowed_attr:
+        for attr_key, value in node_attr.items():
+            if attr_key in self.choice_allowed_attr:
                 indent = depth_ * DEPTH_SIZE
-                value = node_attr[attr]
-                file_out.write(f"{indent}{attr}: {value}\n")
+                file_out.write(f"{indent}{attr_key}: {value}\n")
             else:
                 raise ValueError(
-                    f"An unexpected attribute '{attr}' of 'choice' has been found."
+                    f"An unexpected attribute '{attr_key}' of 'choice' has been found."
                     f"At this moment allowed attributes for choice {self.choice_allowed_attr}"
                 )
 
