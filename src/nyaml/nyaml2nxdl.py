@@ -76,8 +76,9 @@ COMMENT_BLOCKS: CommentCollector
 CATEGORY = ""  # Definition would be either 'base' or 'application'
 
 
-def get_nxdl_copyright_license(nxdl_file):
+def get_nxdl_copyright_license(nxdl_file: str | os.PathLike[str]) -> str:
     """Extract the license part from nxdl file if nxdl file as input."""
+    nxdl_file = os.fspath(nxdl_file)
     comment_start_sym = "^<!--"
     comment_end_sym = "-->\n+$"
     is_comment_start = False
@@ -105,6 +106,7 @@ def get_nxdl_copyright_license(nxdl_file):
                         is_comment_start = False
                         is_comment_end = False
         return ""
+    return ""
 
 
 # pylint: disable=too-many-lines
@@ -122,11 +124,12 @@ def set_copyright_text(nxdl_copyright_license=""):
         DOM_COMMENT = DOM_COMMENT.replace("__COPYRIGHT_YEAR__", copyright_year)
 
 
-def yml_reader(input_file):
+def yml_reader(input_file: str | os.PathLike[str]) -> dict:
     """
     This function launches the LineLoader class.
     It parses the yaml in a dict and extends it with line tag keys for each key of the dict.
     """
+    input_file = os.fspath(input_file)
     global COMMENT_BLOCKS
     with open(input_file, encoding="utf-8") as plain_text_yaml:
         loader = LineLoader(plain_text_yaml)
@@ -192,10 +195,11 @@ def check_for_default_attribute_and_value(xml_element):
         check_for_default_attribute_and_value(child)
 
 
-def yml_reader_no_line_tag(input_file):
+def yml_reader_no_line_tag(input_file: str | os.PathLike[str]) -> dict:
     """
     pyyaml based parsing of yaml file in python dict
     """
+    input_file = os.fspath(input_file)
     with open(input_file, encoding="utf-8") as stream:
         parsed_yaml = yaml.safe_load(stream)
     return parsed_yaml
@@ -1112,12 +1116,18 @@ def pretty_print_xml(xml_root, output_xml, def_comments=None):
 
 
 # pylint: disable=too-many-statements
-def nyaml2nxdl(input_file: str, out_file, verbose: bool):
+def nyaml2nxdl(
+    input_file: str | os.PathLike[str],
+    out_file: str | os.PathLike[str],
+    verbose: bool,
+) -> None:
     """
     Main of the nyaml2nxdl converter, creates XML tree, namespace and
     schema, definitions then evaluates a nested dictionary of groups recursively and
     fields or (their) attributes as children of the groups
     """
+    input_file = os.fspath(input_file)
+    out_file = os.fspath(out_file)
     nxdl_copyright_license = get_nxdl_copyright_license(nxdl_file=out_file)
     set_copyright_text(nxdl_copyright_license=nxdl_copyright_license)
     def_attributes = [
@@ -1147,10 +1157,7 @@ def nyaml2nxdl(input_file: str, out_file, verbose: bool):
     assert yml_appdef["category"] in [
         "application",
         "base",
-    ], (
-        "Only \
-application and base are valid categories!"
-    )
+    ], "Only application and base are valid categories!"
     assert "doc" in yml_appdef.keys(), "Required root-level keyword doc is missing!"
 
     name_extends = ""

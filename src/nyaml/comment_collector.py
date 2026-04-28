@@ -25,6 +25,7 @@ The class Comment is an abstract class for general functions or method to be imp
 XMLComment and YAMLComment class.
 """
 
+import os
 from typing import Any, Union
 
 from nyaml.helper import LineLoader
@@ -38,7 +39,11 @@ class CommentCollector:
     _comment_chain.
     """
 
-    def __init__(self, input_file: str = None, loaded_obj: object | dict = None):
+    def __init__(
+        self,
+        input_file: str | os.PathLike[str] = None,
+        loaded_obj: object | dict = None,
+    ):
         """
         Initialise CommentCollector
         parameters:
@@ -46,7 +51,7 @@ class CommentCollector:
             loaded_obj: file loaded by third party library
         """
         self._comment_chain: list = []
-        self.file = input_file
+        self.file = os.fspath(input_file)
         self._comment_tracker = 0
         self._comment_hash: dict[tuple, type[Comment]] = {}
         self.comment: type[Comment]
