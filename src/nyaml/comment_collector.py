@@ -52,7 +52,7 @@ class CommentCollector:
             loaded_obj: file loaded by third party library
         """
         self._comment_chain: list[YAMLComment | XMLComment] = []
-        self.file = os.fspath(input_file)
+        self.file: str = os.fspath(input_file)
         self._comment_tracker = 0
         self._comment_hash: dict[tuple, Comment] = {}
         self.comment: type[XMLComment] | type[YAMLComment] = None
