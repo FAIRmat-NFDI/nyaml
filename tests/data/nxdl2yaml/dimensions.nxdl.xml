@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
+<!--
+# NeXus - Neutron and X-ray Common Data Format
+#
+# Copyright (C) 2014-2024 NeXus International Advisory Committee (NIAC)
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+# Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+# For further information, see http://www.nexusformat.org
+-->
+<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" category="application" type="group" name="NXarchive" extends="NXobject" xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">
+    <doc>
+         This is a test for the dimension keywords.
+    </doc>
+    <group type="NXentry">
+        <field name="my_dim_array" type="NX_NUMBER">
+            <doc>
+                 Test
+            </doc>
+            <dimensions>
+                <dim index="1" value="2"/>
+            </dimensions>
+        </field>
+        <field name="my_dim_array2" type="NX_NUMBER">
+            <doc>
+                 Testarray with dimensions spelled out
+            </doc>
+            <dimensions>
+                <dim index="1" value="10"/>
+                <dim index="2" value="30"/>
+            </dimensions>
+        </field>
+        <field name="my_dim_with_numpy_3d" type="NX_NUMBER">
+            <dimensions>
+                <dim index="1" value="2"/>
+                <dim index="2" value="4"/>
+                <dim index="3" value="5"/>
+            </dimensions>
+        </field>
+        <field name="my_dim_with_doc_and_dim_attr" type="NX_NUMBER">
+            <dimensions>
+                <doc>
+                     Test with doc and dim attribute
+                </doc>
+                <dim index="1" value="2" ref="s"/>
+                <dim index="3" value="4" ref="m"/>
+            </dimensions>
+        </field>
+    </group>
+</definition>

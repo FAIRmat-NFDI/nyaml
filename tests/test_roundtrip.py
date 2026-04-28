@@ -23,6 +23,10 @@ import os
 import re
 import sys
 from pathlib import Path
+import pytest
+import yaml
+from collections import OrderedDict
+from datetime import datetime
 
 import lxml.etree as ET
 from click.testing import CliRunner
@@ -31,11 +35,11 @@ from helpers import check_file_fresh_baked, compare_yaml_content
 from nyaml import cli as nyaml2nxdl
 from nyaml import nyaml2nxdl as nyaml2nxdl_forward_tools
 from nyaml.comment_collector import CommentCollector
-from nyaml.helper import LineLoader
+from nyaml.helper import RESERVED_KEYWORDS, LineLoader, remove_namespace_from_tag
 from nyaml.nyaml2nxdl import get_nxdl_copyright_license
 
 ROUNDTRIP_DATA_DIR = Path(__file__).parent / "data" / "roundtrip"
-
+NXDL2YAML_DATA = Path(__file__).parent / "data" / "nxdl2yaml"
 
 def test_xml_parsing():
     """In this test an xml file is converted to yml and then back to xml.
@@ -44,10 +48,10 @@ def test_xml_parsing():
     ref_xml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry.nxdl.xml")
     test_yml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry_parsed.yaml")
     test_xml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry_parsed.nxdl.xml")
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(ref_xml_file)])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [test_yml_file])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(test_yml_file)])
     assert result.exit_code == 0
     check_file_fresh_baked(test_xml_file)
 
@@ -63,8 +67,8 @@ has not the same tree structure!!"
     )
     os.remove(test_xml_file)
     os.remove(test_yml_file)
-    sys.stdout.write("Test on xml -> yml -> xml okay.\n")
 
+ROUNDTRIP_DATA_DIR = Path(__file__).parent / "data" / "roundtrip"
 
 def test_yml_parsing():
     """In this test a yml file is converted to xml and then back to yml.
@@ -89,7 +93,6 @@ def test_yml_parsing():
 has not the same root entries!!"
     )
     os.remove(str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry_parsed.yaml"))
-    sys.stdout.write("Test on yml -> xml -> yml okay.\n")
 
 
 def test_yml_consistency_comment_parsing():
@@ -217,3 +220,61 @@ def test_check_copyright_license_in_modified_yaml(tmp_path):
     text_list = re.findall(expected_text, license_text, re.DOTALL)
 
     assert len(text_list) == 1, "License text is not correct."
+
+@pytest.mark.parametrize(
+    "keyword",
+    sorted(RESERVED_KEYWORDS),
+)
+def test_reserved_keyword_roundtrip(tmp_path, keyword):
+    """A bare (unescaped) reserved keyword as a YAML concept name must survive
+    yaml -> xml -> yaml unchanged: it produces <field name="keyword"/> in the
+    NXDL and reappears as bare 'keyword:' in the round-tripped YAML."""
+
+    def ordered_dict_representer(dumper, value):
+        return dumper.represent_mapping("tag:yaml.org,2002:map", value.items())
+
+    yaml.add_representer(OrderedDict, ordered_dict_representer)
+
+    yaml_data = OrderedDict(
+        {
+            "category": "base",
+            "doc": "Round-trip test for reserved keyword concept",
+            "NXtest": OrderedDict({keyword: None}),
+        }
+    )
+
+    in_yaml = tmp_path / "test.yaml"
+    out_xml = tmp_path / "test.nxdl.xml"
+    rt_yaml = tmp_path / "test_parsed.yaml"
+
+    with open(in_yaml, "w") as f:
+        yaml.dump(yaml_data, f, default_flow_style=False, allow_unicode=True)
+
+    # yaml -> xml
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        [str(in_yaml), "--output-file", str(out_xml)],
+    )
+    assert result.exit_code == 0, f"yaml->xml failed for '{keyword}': {result.output}"
+
+    tree = ET.parse(str(out_xml))
+    fields = [
+        el
+        for el in tree.iter()
+        if remove_namespace_from_tag(el.tag) == "field" and el.get("name") == keyword
+    ]
+    assert len(fields) == 1, (
+        f"Expected <field name='{keyword}'/> in NXDL for bare '{keyword}', got {len(fields)}"
+    )
+
+    # xml -> yaml
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        ["--do-not-store-nxdl", str(out_xml)],
+    )
+    assert result.exit_code == 0, f"xml->yaml failed for '{keyword}': {result.output}"
+
+    rt_content = rt_yaml.read_text()
+    assert f"  {keyword}:\n" in rt_content, (
+        f"Expected bare '  {keyword}:' in round-tripped YAML, not found.\n{rt_content}"
+    )

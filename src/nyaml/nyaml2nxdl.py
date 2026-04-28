@@ -48,7 +48,7 @@ from nyaml.helper import (
     remove_namespace_from_tag,
 )
 
-DOM_COMMENT = (
+DOM_COMMENT_TEMPLATE = (
     "# NeXus - Neutron and X-ray Common Data Format\n"
     "#\n"
     "# Copyright (C) __COPYRIGHT_YEAR__ "
@@ -70,6 +70,7 @@ DOM_COMMENT = (
     "#\n"
     "# For further information, see http://www.nexusformat.org\n"
 )
+DOM_COMMENT = DOM_COMMENT_TEMPLATE
 DEPTH_SIZE = 4 * " "
 # Initialized in yml_reader() function
 COMMENT_BLOCKS: CommentCollector
@@ -120,7 +121,7 @@ def set_copyright_text(nxdl_copyright_license: str = "") -> None:
             f"{datetime.datetime.now().year}-{datetime.datetime.now().year}"
         )
 
-        DOM_COMMENT = DOM_COMMENT.replace("__COPYRIGHT_YEAR__", copyright_year)
+        DOM_COMMENT = DOM_COMMENT_TEMPLATE.replace("__COPYRIGHT_YEAR__", copyright_year)
 
 
 def yml_reader(input_file: str | os.PathLike[str]) -> dict:
@@ -440,15 +441,9 @@ def xml_handle_dimensions(
         # internal names (which the rest of this function uses). Also accept the old
         # bare forms with a DeprecationWarning where applicable.
         value = dict(value)  # shallow copy so we do not mutate the caller's dict
-        for _kw in (r"\rank", r"\doc", r"\dim"):
-            bare = _kw[1:]  # strip leading backslash
-            if _kw in value:
-                value[bare] = value.pop(_kw)
-                line_key = f"__line__{_kw}"
-                if line_key in value:
-                    value[f"__line__{bare}"] = value.pop(line_key)
         if "rank" in value and r"\rank" not in value:
-            # Accept old bare 'rank' with a deprecation warning
+            # Accept old bare 'rank' with a deprecation warning, checked before
+            # normalization so the check targets the original unescaped key.
             warnings.warn(
                 r"Use '\rank' instead of 'rank' as the key inside a 'dimensions' block. "
                 "Support for the unescaped 'rank' keyword is deprecated and will be "
@@ -456,6 +451,13 @@ def xml_handle_dimensions(
                 DeprecationWarning,
                 stacklevel=2,
             )
+        for _kw in (r"\rank", r"\doc", r"\dim"):
+            bare = _kw[1:]  # strip leading backslash
+            if _kw in value:
+                value[bare] = value.pop(_kw)
+                line_key = f"__line__{_kw}"
+                if line_key in value:
+                    value[f"__line__{bare}"] = value.pop(line_key)
         # top-level docstring dealt with already by the caller
         n_idx_dicts = len(
             [key for key in value if re.match("^[0-9]+$", f"{key}") is not None]
