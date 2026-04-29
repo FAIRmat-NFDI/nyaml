@@ -12,14 +12,8 @@ The tool supports both NeXus application definitions and base classes. It can be
 Step-by-step guides for installing `nyaml` and writing NeXus definitions in YAML
 
 - [Installation](tutorials/installation.md)
-<<<<<<< HEAD
-- [Writing a NeXus definition in YAML](tutorials/tutorials.md)
-- [Contributing](tutorials/contributing.md)
-
-=======
 - [Writing a NeXus definition in YAML](tutorials/writing-a-yaml-definition.md)
 - [Contributing](tutorials/contributing.md)
->>>>>>> 2262a53 (restructure tutorial, add a learning section)
 
 </div>
 <div markdown="block">
@@ -50,11 +44,7 @@ An introduction to NeXus and its use in the light of YAML format using the `nyam
 
 The list of references used in this documentation
 
-<<<<<<< HEAD
-- [Command line API](references/cli-api.md)
-=======
 - [CLI API](references/cli-api.md)
->>>>>>> 2262a53 (restructure tutorial, add a learning section)
 - [References](references/references.md)
 
 </div>
