@@ -191,8 +191,7 @@ def test_check_copyright_license_in_modified_yaml(tmp_path):
     """While converting the modified yaml to nxdl the license text should
     come from stored nxdl file.
     """
-    pwd = Path(__file__).parent
-    yaml_file = pwd / "data/Ref_NXentry.yaml"
+    yaml_file = Path(__file__).parent / "data/nxdl2yaml/Ref_NXentry.yaml"
     modified_yaml = tmp_path / "NXentry_modified.yaml"
     output = tmp_path / "NXentry_modified.nxdl.xml"
 

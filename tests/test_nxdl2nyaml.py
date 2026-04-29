@@ -71,9 +71,9 @@ def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     to yaml to check if they are correct.
             2. In test-2: Check the nxdl that comes at the end of yaml file as comment.
     """
-    ref_xml_file = "tests/data/Ref_NXentry.nxdl.xml"
-    ref_yml_file = "tests/data/Ref_NXentry.yaml"
-    test_yml_file = "tests/data/Ref_NXentry_parsed.yaml"
+    ref_xml_file = "tests/data/nxdl2yaml/Ref_NXentry.nxdl.xml"
+    ref_yml_file = "tests/data/nxdl2yaml/Ref_NXentry.yaml"
+    test_yml_file = "tests/data/nxdl2yaml/Ref_NXentry_parsed.yaml"
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
@@ -113,9 +113,9 @@ def test_nxdl2yaml_doc():
     """To test the doc style from nxdl to yaml."""
 
     pwd = Path(__file__).parent
-    nxdl_file = pwd / "data/doc_nxdl2yaml.nxdl.xml"
-    ref_yaml = pwd / "data/ref_doc_nxdl2yaml.yaml"
-    parsed_yaml_file = pwd / "data/doc_nxdl2yaml_parsed.yaml"
+    nxdl_file = pwd / "data/nxdl2yaml/doc_nxdl2yaml.nxdl.xml"
+    ref_yaml = pwd / "data/nxdl2yaml/ref_doc_nxdl2yaml.yaml"
+    parsed_yaml_file = pwd / "data/nxdl2yaml/doc_nxdl2yaml_parsed.yaml"
 
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", str(nxdl_file)]
