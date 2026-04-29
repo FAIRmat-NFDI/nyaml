@@ -1,8 +1,8 @@
-category: base
-doc: |
+\category: base
+\doc: |
   my nice doc string in root level.
   my nice doc string in root level, line 2.
-type: group
+\type: group
 NXentry(NXobject):
   \@default:
     \doc: |
@@ -48,10 +48,12 @@ NXentry(NXobject):
     \doc: |
       Trailing line doc stringy. Trailing lines are removed
   test_field:
-    \@vector(NX_NUMBER):
+    \@vector:
+      \type: NX_NUMBER
       \doc: |
         Attribute with specific datatype within a field.
-  \@vector(NX_NUMBER):
+  \@vector:
+    \type: NX_NUMBER
     \doc: |
       Attribute with specific datatype within a group.
   (NXuser):
@@ -64,7 +66,7 @@ NXentry(NXobject):
   (NXsubentry):
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 940f22aeaf148fd2940bbf828b3edd9fe1e18e582ad95ff77161cdf3943a696b
+# 73f676d5817e4866e90cf0724292bdcde951271777327bacc9f74a6655b8a63f
 # <?xml version="1.0" encoding="UTF-8"?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl" ?>
 # <!--

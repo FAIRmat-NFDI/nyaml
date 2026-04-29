@@ -827,6 +827,7 @@ def xml_handle_attributes(
                 r"\unit",
                 r"\exists",
                 r"\nameType",
+                r"\type",
                 *YAML_ATTRIBUTES_ATTRIBUTES,
             ] and not isinstance(attr_val, dict):
                 if attr == r"\unit":
@@ -849,6 +850,11 @@ def xml_handle_attributes(
                     xml_handle_nametype(keyword, keyword_name, dct, sub_element)
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
+                elif attr == r"\type":
+                    elemt_obj.set("type", check_for_mapping_char_other(attr_val))
+                    rm_key_list.append(attr)
+                    rm_key_list.append(line_number)
+                    xml_handle_comment(obj, line_number, line_loc, elemt_obj)
                 else:
                     sub_element.set(attr, check_for_mapping_char_other(attr_val))
                     rm_key_list.append(attr)
@@ -881,7 +887,14 @@ def validate_field_attribute_and_value(
         )
 
     # The below elements might come as child element
-    skipped_child_name = [r"\doc", "dimension", r"\enumeration", "choice", r"\exists"]
+    skipped_child_name = [
+        r"\doc",
+        "dimension",
+        r"\enumeration",
+        "choice",
+        r"\exists",
+        r"\type",
+    ]
     # check for invalid key or attributes
     if (
         v_attr not in [*skipped_child_name, *allowed_attribute]
@@ -977,6 +990,11 @@ def xml_handle_fields_or_group(
                 xml_handle_nametype(keyword, keyword_name, dct, sub_element)
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
+            elif attr == r"\type" and not isinstance(vval, dict) and vval:
+                elemt_obj.set("type", check_for_mapping_char_other(vval))
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+                xml_handle_comment(obj, line_number, line_loc, elemt_obj)
             elif attr == r"\unit" and ele_type == "field":
                 xml_handle_units(sub_element, val)
                 xml_handle_comment(obj, line_number, line_loc, sub_element)
@@ -1206,7 +1224,15 @@ def nyaml2nxdl(
         "restricts",
     ]
     yml_appdef = yml_reader(input_file)
-    def_comment_text = []
+    # Normalize escaped root-level reserved keywords (\category, \doc, \type, \symbols)
+    for _esc in (r"\category", r"\type", r"\doc", r"\symbols"):
+        _bare = _esc[1:]
+        if _esc in yml_appdef:
+            yml_appdef[_bare] = yml_appdef.pop(_esc)
+            _lk = f"__line__{_esc}"
+            if _lk in yml_appdef:
+                yml_appdef[f"__line__{_bare}"] = yml_appdef.pop(_lk)
+    def_cmnt_text = []
     if verbose:
         print(f"input-file: {input_file}\n")
         print("application/base contains the following root-level entries:\n")

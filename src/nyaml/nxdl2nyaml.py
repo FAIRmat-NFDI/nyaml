@@ -49,7 +49,7 @@ COMMENT_TAG = "!--"
 COMMENT_TAG_END = "--"
 COMMENT_START = "<!--"
 COMMENT_END = "-->"
-DEFINITION_CATEGORIES = ("category: application", "category: base")
+DEFINITION_CATEGORIES = (r"\category: application", r"\category: base")
 
 
 def separate_pi_comments(input_file: str | os.PathLike[str]) -> list[str]:
@@ -197,7 +197,7 @@ class Nxdl2yaml:
         """Handle symbols field and its children symbol"""
 
         self.root_level_symbols = (
-            f"{remove_namespace_from_tag(node.tag)}: "
+            f"\\{remove_namespace_from_tag(node.tag)}: "
             f"{node.text.strip() if node.text else ''}"
         )
         depth += 1
@@ -278,7 +278,8 @@ class Nxdl2yaml:
                     self.root_level_definition.append(tmp_word)
                     keyword_order = self.root_level_definition.index(tmp_word)
             elif "schemaLocation" not in item and "extends" != item:
-                text = f"{item}: {attributes[item]}"
+                prefix = "\\" if item in RESERVED_KEYWORDS else ""
+                text = f"{prefix}{item}: {attributes[item]}"
                 self.root_level_definition.append(text)
         self.root_level_definition[keyword_order] = f"{keyword}:"
 
@@ -408,7 +409,7 @@ class Nxdl2yaml:
         """
         if "}" in tag:
             tag = remove_namespace_from_tag(tag)
-        if depth > 0 and tag in RESERVED_KEYWORDS:
+        if tag in RESERVED_KEYWORDS:
             tag = f"\\{tag}"
         indent = depth * DEPTH_SIZE
         text = self.clean_and_organize_text(text, depth)  # starts with '\n'
@@ -565,7 +566,7 @@ class Nxdl2yaml:
                 if "NX" in defs and defs[-1] == ":":
                     nx_name = defs
                     continue
-                if defs in ("category: application", "category: base"):
+                if defs in DEFINITION_CATEGORIES:
                     continue
                 self.write_out(indent=0 * DEPTH_SIZE, text=defs, file_out=file_out)
             self.write_out(indent=0 * DEPTH_SIZE, text=nx_name, file_out=file_out)

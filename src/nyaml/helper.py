@@ -54,6 +54,9 @@ RESERVED_KEYWORDS = frozenset(
         "minOccurs",
         "maxOccurs",
         "rank",  # sub-key inside a 'dimensions' block
+        "type",  # field/group NeXus data type and root-level definition type
+        "category",  # root-level definition category
+        "symbols",  # root-level named dimension constants
     }
 )
 

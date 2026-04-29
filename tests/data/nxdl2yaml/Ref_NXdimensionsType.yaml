@@ -1,5 +1,5 @@
-category: application
-doc: |
+\category: application
+\doc: |
   This is a test for processing the dimensionsType.
 
 # https://manual.nexusformat.org/nxdl_desc.html#nxdl-data-type-dimensionstype
@@ -11,7 +11,7 @@ doc: |
 # base_classes/NXmonitor, use of rank only and index, ref pairs
 # base_classes/NXdetector_group, use of index, ref pairs
 # base_classes/NXsensor, use of index, value and index, ref pairs respectively
-type: group
+\type: group
 NXdimensions(NXobject):
   (NXentry):
 
@@ -88,7 +88,7 @@ NXdimensions(NXobject):
         \rank: symbol_a
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 23ce6aed7316b55082ed58c3a0e5054331257299c91d97f8a999aaef8a01af65
+# e5634ff10e8ef3cf9fb1a951578f365faab729c581cd30cb7b526a13792a168f
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--

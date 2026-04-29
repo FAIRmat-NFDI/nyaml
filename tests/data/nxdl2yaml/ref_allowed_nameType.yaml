@@ -1,7 +1,7 @@
-category: base
-doc: |
+\category: base
+\doc: |
   NXnametype test
-type: group
+\type: group
 NXallowed_name_type(NXobject):
   lower_case_group_no_nametype(NXobject):
     \doc: |
@@ -143,7 +143,7 @@ NXallowed_name_type(NXobject):
             variadic parts.
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 2916992dab1dc9d527de39b163a6d5b070afbf0d66ecdebad19937fb8cabf64a
+# 1e4eac122c92d1f821a72bf12347e78c344650254251cda36cde9e61ac3945d3
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--
