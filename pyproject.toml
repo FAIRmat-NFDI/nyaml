@@ -39,8 +39,6 @@ dev = [
     "types-lxml",
     "pre-commit",
     "types-pyyaml",
-    "lxml-stubs",
-    "pre-commit",
 ]
 
 docs = [
