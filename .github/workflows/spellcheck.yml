@@ -1,0 +1,38 @@
+name: Spell check
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  spellcheck:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install dependencies and dictionary
+      run: |
+        npm install -g cspell jq \
+        @cspell/dict-en_us \
+        @cspell/dict-python \
+        @cspell/dict-scientific-terms-us
+
+    - name: Run cspell
+      id: cspell
+      continue-on-error: true
+      run: |
+        cspell --config cspell.json \
+        "README.md" "CITATION.cff" \
+        "docs/**/*.md" \
+        "src/nyaml/**/*.py" \
+        "tests/**/*.py" 2>&1 | tee cspell.log
+
+    - name: Fail on errors
+      if: steps.cspell.outcome == 'failure'
+      run: |
+        echo "There are spelling errors in your code. Please fix them and try again."
+        echo "++++++++++ cspell error ++++++++++"
+        cat cspell.log
+        exit 1

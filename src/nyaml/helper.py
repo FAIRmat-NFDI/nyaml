@@ -19,12 +19,13 @@
 """
 File consists of helping functions and variables.
 
-The functions and variables are utilised in the converting tool
+The functions and variables are utilized in the converting tool
 to convert from nyaml to nxdl and vice versa.
 """
 
 import hashlib
-from typing import Callable
+import os
+from typing import Any
 
 from yaml.composer import Composer
 from yaml.constructor import Constructor
@@ -33,11 +34,13 @@ from yaml.nodes import ScalarNode
 from yaml.resolver import BaseResolver
 
 # Yaml library does not except the keys (escape char "\t" and yaml separator ":")
-ESCAPE_CHAR_DICT_IN_YAML = {"\t": "    "}
-ESCAPE_CHAR_DICT_IN_XML = {val: key for key, val in ESCAPE_CHAR_DICT_IN_YAML.items()}
+ESCAPE_CHAR_DICT_IN_YAML: dict[str, str] = {"\t": "    "}
+ESCAPE_CHAR_DICT_IN_XML: dict[str, str] = {
+    val: key for key, val in ESCAPE_CHAR_DICT_IN_YAML.items()
+}
 
 # Set up attributes for nxdl version
-NXDL_GROUP_ATTRIBUTES = (
+NXDL_GROUP_ATTRIBUTES: tuple[str, ...] = (
     "optional",
     "recommended",
     "name",
@@ -47,7 +50,7 @@ NXDL_GROUP_ATTRIBUTES = (
     "deprecated",
     "nameType",
 )
-NXDL_FIELD_ATTRIBUTES = (
+NXDL_FIELD_ATTRIBUTES: tuple[str, ...] = (
     "optional",
     "recommended",
     "name",
@@ -68,7 +71,7 @@ NXDL_FIELD_ATTRIBUTES = (
     "units",
 )
 
-NXDL_ATTRIBUTES_ATTRIBUTES = (
+NXDL_ATTRIBUTES_ATTRIBUTES: tuple[str, ...] = (
     "name",
     "type",
     "recommended",
@@ -77,31 +80,44 @@ NXDL_ATTRIBUTES_ATTRIBUTES = (
     "nameType",
 )
 
-NXDL_LINK_ATTRIBUTES = ("name", "target", "napimount", "nameType")
+NXDL_LINK_ATTRIBUTES: tuple[str, ...] = ("name", "target", "napimount", "nameType")
 
 # Set up attributes for yaml version
-YAML_GROUP_ATTRIBUTES = (*NXDL_GROUP_ATTRIBUTES, "exists")
+YAML_GROUP_ATTRIBUTES: tuple[str, ...] = (*NXDL_GROUP_ATTRIBUTES, "exists")
 
-YAML_FIELD_ATTRIBUTES = (*NXDL_FIELD_ATTRIBUTES[0:-1], "unit", "exists", "dim")
+YAML_FIELD_ATTRIBUTES: tuple[str, ...] = (
+    *NXDL_FIELD_ATTRIBUTES[0:-1],
+    "unit",
+    "exists",
+    "dim",
+)
 
-YAML_ATTRIBUTES_ATTRIBUTES = (
+YAML_ATTRIBUTES_ATTRIBUTES: tuple[str, ...] = (
     *NXDL_ATTRIBUTES_ATTRIBUTES,
     "minOccurs",
     "maxOccurs",
     "exists",
 )
 
-YAML_LINK_ATTRIBUTES = NXDL_LINK_ATTRIBUTES
+YAML_LINK_ATTRIBUTES: tuple[str, ...] = NXDL_LINK_ATTRIBUTES
 
 
-def remove_namespace_from_tag(tag):
+def remove_namespace_from_tag(tag: object) -> str:
     """Helper function to remove the namespace from an XML tag."""
-    if isinstance(tag, Callable) and tag.__name__ == "Comment":
+    if callable(tag) and getattr(tag, "__name__", "") == "Comment":
         return "!--"
-    return tag.split("}")[-1]
+    if isinstance(tag, (bytes, bytearray)):
+        tag = tag.decode("utf-8", errors="ignore")
+    if isinstance(tag, str):
+        return tag.split("}")[-1]
+    return str(tag).split("}")[-1] if tag is not None else ""
 
 
-def check_for_proper_nameType(name, nameType, keyword_name):
+def check_for_proper_nameType(
+    name: str,
+    nameType: str | None,
+    keyword_name: str,
+) -> None:
     """Check for proper nameType for a given name.
 
     Rules:
@@ -188,14 +204,14 @@ class LineLoader(SafeLoader):  # pylint: disable=too-many-ancestors
     The new items have as keys __line__<yaml_keyword> and as values the yaml file line number
     """
 
-    def compose_node(self, parent, index):
+    def compose_node(self, parent: Any, index: Any) -> Any:
         """Compose node and return node."""
         # the line number where the previous token has ended (plus empty lines)
         node = Composer.compose_node(self, parent, index)
-        node.__line__ = self.line + 1
+        setattr(node, "__line__", self.line + 1)
         return node
 
-    def construct_mapping(self, node, deep=False):
+    def construct_mapping(self, node: Any, deep: bool = False) -> dict[Any, Any]:
         """Construct mapping between node info and line info."""
         node_pair_lst_for_appending = []
 
@@ -214,18 +230,18 @@ class LineLoader(SafeLoader):  # pylint: disable=too-many-ancestors
         return Constructor.construct_mapping(self, node, deep=deep)
 
 
-def get_yaml_escape_char_dict():
+def get_yaml_escape_char_dict() -> dict[str, str]:
     """Get escape char and the way to skip them in yaml."""
     return ESCAPE_CHAR_DICT_IN_YAML
 
 
-def get_yaml_escape_char_reverter_dict():
+def get_yaml_escape_char_reverter_dict() -> dict[str, str]:
     """To revert yaml escape char in xml constructor from yaml."""
 
     return ESCAPE_CHAR_DICT_IN_XML
 
 
-def type_check(nx_type):
+def type_check(nx_type: str) -> str:
     """Check for nexus type if type is NX_CHAR get '' or get as it is."""
 
     if nx_type in ["NX_CHAR", ""]:
@@ -235,7 +251,7 @@ def type_check(nx_type):
     return nx_type
 
 
-def get_node_parent_info(tree, node):
+def get_node_parent_info(tree: Any, node: Any) -> tuple[Any, int]:
     """Return tuple of (parent, index).
 
     parent = parent node is the first level node under tree node
@@ -243,18 +259,18 @@ def get_node_parent_info(tree, node):
     """
 
     # map from grand child to parent which is child of tree
-    parent_map = {c: p for p in tree.iter() for c in p}
+    parent_map: dict[Any, Any] = {c: p for p in tree.iter() for c in p}
     parent = parent_map[node]
     return parent, list(parent).index(node)
 
 
-def clean_empty_lines(line_list):
+def clean_empty_lines(line_list: list[str] | str) -> list[str]:
     """Clean up empty lines by top part and bottom and part."""
     if not isinstance(line_list, list):
         line_list = line_list.split("\n") if "\n" in line_list else [""]
 
     start_non_empty_line = -1
-    ends_non_empty_line = None
+    ends_non_empty_line: int | None = None
     # Find the index of first non-empty line
     for ind, line in enumerate(line_list):
         if len(line.strip()) > 1:
@@ -272,7 +288,7 @@ def clean_empty_lines(line_list):
     return line_list[start_non_empty_line:ends_non_empty_line]
 
 
-def nx_name_type_resolving(tmp):
+def nx_name_type_resolving(tmp: str) -> tuple[str, str]:
     """Separate name and NeXus type
 
     Extracts the eventual custom name {optional_string}
@@ -302,12 +318,12 @@ def nx_name_type_resolving(tmp):
     return nam, typ
 
 
-def get_sha256_hash(file_name):
+def get_sha256_hash(file_name: str | os.PathLike[str]) -> str:
     """Generate a sha256_hash for a given file."""
     sha_hash = hashlib.sha256()
 
     with open(
-        file=file_name,
+        file=os.fspath(file_name),
         mode="rb",
     ) as file_obj:
         # Update hash for each 4k block of bytes
@@ -316,22 +332,28 @@ def get_sha256_hash(file_name):
     return sha_hash.hexdigest()
 
 
-def extend_yamlfile_by_nxdl_as_comment(
-    yaml_file, file_to_be_appended, top_lines_list=None
-):
+def extend_yaml_file_by_nxdl_as_comment(
+    yaml_file: str | os.PathLike[str],
+    file_to_be_appended: str | os.PathLike[str],
+    top_lines_list: list[str] | None = None,
+) -> None:
     """Extend yaml file by the file_to_be_appended as comment."""
 
-    with open(yaml_file, mode="a+", encoding="utf-8") as f1_obj:
+    with open(os.fspath(yaml_file), mode="a+", encoding="utf-8") as f1_obj:
         if top_lines_list:
             for line in top_lines_list:
                 f1_obj.write(line)
 
-        with open(file_to_be_appended, encoding="utf-8") as f2_obj:
+        with open(os.fspath(file_to_be_appended), encoding="utf-8") as f2_obj:
             for line in f2_obj:
                 f1_obj.write(f"# {line}")
 
 
-def separate_hash_yaml_and_nxdl(yaml_file, sep_yaml, sep_xml):
+def separate_hash_yaml_and_nxdl(
+    yaml_file: str | os.PathLike[str],
+    sep_yaml: str | os.PathLike[str],
+    sep_xml: str | os.PathLike[str],
+) -> str:
     """Separate yaml, SHA hash and nxdl parts.
 
     Separate the provided yaml file into yaml, nxdl and hash if yaml was extended with
@@ -344,12 +366,12 @@ def separate_hash_yaml_and_nxdl(yaml_file, sep_yaml, sep_xml):
                     <nxdl part>
     """
     sha_hash = ""
-    with open(yaml_file, encoding="utf-8") as inp_file:
+    with open(os.fspath(yaml_file), encoding="utf-8") as inp_file:
         lines = inp_file.readlines()
         # file to write yaml part
         with (
-            open(sep_yaml, "w", encoding="utf-8") as yml_f_ob,
-            open(sep_xml, "w", encoding="utf-8") as xml_f_ob,
+            open(os.fspath(sep_yaml), "w", encoding="utf-8") as yml_f_ob,
+            open(os.fspath(sep_xml), "w", encoding="utf-8") as xml_f_ob,
         ):
             write_on_yaml = True
 
@@ -369,20 +391,20 @@ def separate_hash_yaml_and_nxdl(yaml_file, sep_yaml, sep_xml):
                         sha_hash = line.split("# ", 1)[-1].strip()
                     else:
                         xml_f_ob.write(line[2:])
-            # If the yaml fiile does not contain any hash for nxdl then we may have last line.
+            # If the yaml file does not contain any hash for nxdl then we may have last line.
             if last_line:
                 yml_f_ob.write(last_line)
 
     return sha_hash
 
 
-def is_copyright_comment(text):
+def is_copyright_comment(text: str) -> bool:
     """Analyze a comment, whether it is a copyright comment or not.
 
     Return true if dom comment.
     """
 
-    # some signature keywords to distingush dom comments from other comments.
+    # some signature keywords to distinguish dom comments from other comments.
     signature_keyword_list = [
         "NeXus",
         "GNU Lesser General Public",

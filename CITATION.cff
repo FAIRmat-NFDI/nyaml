@@ -1,10 +1,11 @@
 cff-version: 1.2.0
-title: 'Nyaml: A Python package that converts NeXus application definitions and base classes from the NXDL XML format to the YAML format and vice versa'
+title: 'nyaml: A Python package that converts NeXus application definitions and base classes from the NXDL XML format to the YAML format and vice versa'
+version: 0.2.3
 message:
   If you use this software, please cite it using the
   metadata from this file.
 type: software
-version: 0.2.3
+
 authors:
   - given-names: Rubel
     family-names: Mozumder
@@ -39,12 +40,11 @@ authors:
   - given-names: Heiko B.
     family-names: Weber
     orcid: 'https://orcid.org/0000-0002-6403-9022'
-
 doi: 10.5281/zenodo.13860810
 repository-code: 'https://github.com/FAIRmat-NFDI/nyaml'
 url: https://doi.org/10.5281/zenodo.13860810
 abstract:
-  `nyaml` is a Python software tool designed for developers and users of the NeXus data exchange format
+  nyaml is a Python software tool designed for developers and users of the NeXus data exchange format
   (https://www.nexusformat.org/). The tool converts files that follow the NeXus Definition Language
   (NXDL) from XML to [YAML](https://yaml.org/), and vice versa.
   
@@ -56,10 +56,13 @@ abstract:
   The tool requires users to follow a specific grammar for embedding NeXus data structures to ensure
   compatibility with NXDL (see the full documentation at https://fairmat-nfdi.github.io/nyaml/).
   
-  This work is part of the FAIRmat project (project ID 460197019), funded by the Deutsche
-  Forschungsgemeinschaft (DFG, German Research Foundation)
-  (https://gepris.dfg.de/gepris/projekt/460197019?language=en). Visit the
-  [FAIRmat page](https://www.fairmat-nfdi.eu/fairmat/about-fairmat/consortium-fairmat) for more info.
+  The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 460197019 (FAIRmat)
+  (https://gepris.dfg.de/gepris/projekt/460197019?language=en).
 
-
+  Visit the [FAIRmat page](https://www.fairmat-nfdi.eu/fairmat/about-fairmat/consortium-fairmat) for more info.
 license: Apache-2.0
+funding:
+  - name: Deutsche Forschungsgemeinschaft
+    award-number: 460197019
+    title: FAIRmat - FAIR Data Infrastructure for Condensed-Matter Physics and the Chemical Physics of Solids
+    award-uri: https://gepris.dfg.de/gepris/projekt/460197019?language=en
