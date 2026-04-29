@@ -108,7 +108,6 @@ def get_nxdl_copyright_license(nxdl_file: str | os.PathLike[str]) -> str:
     return ""
 
 
-# pylint: disable=too-many-lines
 def set_copyright_text(nxdl_copyright_license: str = "") -> None:
     """Set copyright text from nxdl file or create from current year."""
 
@@ -369,7 +368,6 @@ def xml_handle_units(obj: ET._Element, value: str) -> None:
     obj.set("units", str(value))
 
 
-# pylint: disable=too-many-branches
 def xml_handle_exists(
     dct: dict, obj: ET._Element, keyword: str, value: str | list
 ) -> None:
@@ -600,7 +598,6 @@ bear at least an argument !"
                     recursive_build(itm, element_value, verbose)
 
 
-# pylint: disable=unused-argument
 def xml_handle_link(
     dct: dict, obj: ET._Element, keyword: str, value: dict | None, verbose: bool
 ) -> None:

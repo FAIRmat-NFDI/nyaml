@@ -33,8 +33,9 @@ jobs:
 
       - name: Cache mkdocs-material environment
         uses: actions/cache@v3
+        # Restore content with the same cache key
         with:
-          key: mkdocs-material-${{ steps.cache_key.outputs.value }} # Restore content with the same cache key
+          key: mkdocs-material-${{ steps.cache_key.outputs.value }}
           path: .cache
           restore-keys: |
             mkdocs-material-
