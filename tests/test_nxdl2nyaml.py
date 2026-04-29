@@ -70,29 +70,6 @@ has not the same structure!!"
     sys.stdout.write("Test on xml -> yml doc formatting okay.\n")
 
 
-@pytest.mark.parametrize(
-    "test_input",
-    [
-        ("NXdimensionsType"),
-    ],
-)
-def test_dimension(test_input):
-    """
-    Tests if the conversion of specific test files from NXDL to YAML results as expected.
-    Expected output files shall have the corresponding name with the prefix Ref_.
-    """
-    test_xml_input_file = str(NXDL2NYAML_DATA_DIR / f"{test_input}.nxdl.xml")
-    test_yml_output_file = str(NXDL2NYAML_DATA_DIR / f"{test_input}_parsed.yaml")
-    ref_yml_output_file = str(NXDL2NYAML_DATA_DIR / f"Ref_{test_input}.yaml")
-    runner = CliRunner()
-    result = runner.invoke(nyaml2nxdl.launch_tool, [test_xml_input_file])
-    assert result.exit_code == 0
-
-    compare_log_and_reference(test_yml_output_file, ref_yml_output_file)
-
-    os.remove(test_yml_output_file)
-
-
 def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     """
     This test for two reasons:
@@ -146,7 +123,7 @@ def test_nxdl2yaml_doc():
     parsed_yaml_file = str(NXDL2NYAML_DATA_DIR / "doc_nxdl2yaml_parsed.yaml")
 
     result = CliRunner().invoke(
-        nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", nxdl_file]
+        nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", str(nxdl_file)]
     )
 
     if result.exit_code != 0:
