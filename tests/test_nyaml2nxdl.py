@@ -589,7 +589,7 @@ def test_forward_conversion(test_input):
     result = runner.invoke(nyaml2nxdl.launch_tool, [test_yml_input_file])
     assert result.exit_code == 0
 
-    # check_and_replace_latest_copyright(Path(test_xml_output_file))
+    check_and_replace_latest_copyright(Path(test_xml_output_file))
 
     with open(test_xml_output_file, encoding="utf-8") as logfile:
         log = logfile.readlines()

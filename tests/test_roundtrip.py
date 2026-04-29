@@ -34,14 +34,16 @@ from nyaml.comment_collector import CommentCollector
 from nyaml.helper import LineLoader
 from nyaml.nyaml2nxdl import get_nxdl_copyright_license
 
+ROUNDTRIP_DATA_DIR = Path(__file__).parent / "data" / "roundtrip"
+
 
 def test_xml_parsing():
     """In this test an xml file is converted to yml and then back to xml.
     The xml trees of the two files are then compared.
     """
-    ref_xml_file = "tests/data/Ref_NXellipsometry.nxdl.xml"
-    test_yml_file = "tests/data/Ref_NXellipsometry_parsed.yaml"
-    test_xml_file = "tests/data/Ref_NXellipsometry_parsed.nxdl.xml"
+    ref_xml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry.nxdl.xml")
+    test_yml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry_parsed.yaml")
+    test_xml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry_parsed.nxdl.xml")
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
@@ -68,9 +70,9 @@ def test_yml_parsing():
     """In this test a yml file is converted to xml and then back to yml.
     The yml trees of the two files are then compared.
     """
-    ref_yml_file = "tests/data/Ref_NXellipsometry.yaml"
-    test_xml_file = "tests/data/Ref_NXellipsometry.nxdl.xml"
-    test_yml_file = "tests/data/Ref_NXellipsometry_parsed.yaml"
+    ref_yml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry.yaml")
+    test_xml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry.nxdl.xml")
+    test_yml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry_parsed.yaml")
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_yml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_xml_file)
@@ -86,7 +88,7 @@ def test_yml_parsing():
         "Ref YML and parsed YML \
 has not the same root entries!!"
     )
-    os.remove("tests/data/Ref_NXellipsometry_parsed.yaml")
+    os.remove(str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry_parsed.yaml"))
     sys.stdout.write("Test on yml -> xml -> yml okay.\n")
 
 
@@ -95,8 +97,8 @@ def test_yml_consistency_comment_parsing():
     '.nxdl.xml' to '.yaml'
     """
 
-    ref_yml_file = "tests/data/Ref_NXcomment.yaml"
-    test_yml_file = "tests/data/Ref_NXcomment_consistency.yaml"
+    ref_yml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXcomment.yaml")
+    test_yml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXcomment_consistency.yaml")
 
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool, ["--check-consistency", ref_yml_file]
@@ -126,7 +128,7 @@ def test_conversion():
     """
     Test conversion of NXentry: nxdl -> yaml -> nxdl
     """
-    root = Path(__file__).parent / "data" / "NXentry.nxdl.xml"
+    root = ROUNDTRIP_DATA_DIR / "NXentry.nxdl.xml"
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(root)])
     assert result.exit_code == 0
     # Replace suffixes
@@ -148,10 +150,10 @@ def test_check_copyright_license_in_full_modification_yaml_cycle(tmp_path):
     the original license text.
     """
     pwd = Path(__file__).parent
-    nxdl_file = pwd / "data" / "Ref_NXentry_License.nxdl.xml"
+    nxdl_file = ROUNDTRIP_DATA_DIR / "Ref_NXentry_License.nxdl.xml"
     yaml_file = tmp_path / "Ref_NXentry_License_parsed.yaml"
     modified_yaml_gen = tmp_path / "Ref_NXentry_License_modified.yaml"
-    modified_yaml_ref = pwd / "data" / "Ref_NXentry_License_modified.yaml"
+    modified_yaml_ref = ROUNDTRIP_DATA_DIR / "Ref_NXentry_License_modified.yaml"
     latest_nxdl = tmp_path / "Ref_NXentry_License_modified.nxdl.xml"
 
     result = CliRunner().invoke(
