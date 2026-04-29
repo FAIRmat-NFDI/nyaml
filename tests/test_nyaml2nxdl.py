@@ -64,10 +64,9 @@ def test_nametypes_nyaml2nxdl():
     test_yml_file = str(NYAML2NXDL_DATA_DIR / "allowed_nameType.yaml")
     test_xml_file = str(NYAML2NXDL_DATA_DIR / "allowed_nameType.nxdl.xml")
     desired_matches = ["partial", "specified", "any"]
-
-    compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
-    os.remove(test_xml_file)
-    sys.stdout.write("Test on open/closed enumerations okay.\n")
+    compare_matches(str(ref_xml), str(test_yml), str(test_xml), desired_matches)
+    os.remove(test_xml)
+    sys.stdout.write("Test on nameType okay.\n")
 
 
 @pytest.mark.parametrize(
@@ -210,9 +209,7 @@ def test_nametypes_nyaml2nxdl():
         ),
     ],
 )
-def test_nyaml2nxdl_prohibited_nameType(
-    tmp_path, input_tuple, exit_code, expected_error
-):
+def test_prohibited_nameType(tmp_path, input_tuple, exit_code, expected_error):
     """Run nyaml2nxdl on individual incorrect elements and check errors."""
 
     def ordered_dict_representer(dumper, value):
@@ -222,16 +219,14 @@ def test_nyaml2nxdl_prohibited_nameType(
 
     key, name_type_value = input_tuple
 
-    # Create the structure with the tuple data
     yaml_data = OrderedDict(
         {
-            "category": "base",
-            "doc": "Test",
+            r"\category": "base",
+            r"\doc": "Test",
             "NXtest": OrderedDict({key: {r"\nameType": name_type_value}}),
         }
     )
 
-    # Write the YAML to a file
     test_file = Path(tmp_path) / "test.yaml"
     output_file = Path(tmp_path) / "out.nxdl.xml"
     with open(test_file, "w") as file:
@@ -243,7 +238,6 @@ def test_nyaml2nxdl_prohibited_nameType(
         [str(test_file), "--output-file", str(output_file)],
     )
 
-    # Assert that we encounter the expected error message
     assert result.exit_code == exit_code
     assert expected_error in (str(result.output) + str(result.exception))
     os.remove(test_file)
@@ -254,35 +248,16 @@ def test_file_line_error():
     """
     In this test the yaml file line in the error message is tested.
     """
-    test_yml_file = str(NYAML2NXDL_DATA_DIR / "NXfilelineError1.yaml")
-    out_nxdl = str(NYAML2NXDL_DATA_DIR / "NXfilelineError1.nxdl.xml")
-    out_yaml = str(NYAML2NXDL_DATA_DIR / "temp_NXfilelineError1.yaml")
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [test_yml_file])
-    assert result.exit_code == 1
-    assert "13" in str(result.exception)
-    os.remove(out_nxdl)
-    os.remove(out_yaml)
-
-    test_yml_file = str(NYAML2NXDL_DATA_DIR / "NXfilelineError2.yaml")
-    out_nxdl = str(NYAML2NXDL_DATA_DIR / "NXfilelineError2.nxdl.xml")
-    out_yaml = str(NYAML2NXDL_DATA_DIR / "temp_NXfilelineError2.yaml")
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [test_yml_file])
-    assert result.exit_code == 1
-    assert "21" in str(result.exception)
-    os.remove(out_nxdl)
-    os.remove(out_yaml)
-
-    test_yml_file = str(NYAML2NXDL_DATA_DIR / "NXfilelineError3.yaml")
-    out_nxdl = str(NYAML2NXDL_DATA_DIR / "NXfilelineError3.nxdl.xml")
-    out_yaml = str(NYAML2NXDL_DATA_DIR / "temp_NXfilelineError3.yaml")
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [test_yml_file])
-    assert result.exit_code == 1
-    assert "25" in str(result.exception)
-    os.remove(out_nxdl)
-    os.remove(out_yaml)
-
+    for n, expected_line in [(1, "13"), (2, "21"), (3, "25")]:
+        test_yml = NYAML2NXDL_DATA_DIR / f"NXfilelineError{n}.yaml"
+        out_nxdl = NYAML2NXDL_DATA_DIR / f"NXfilelineError{n}.nxdl.xml"
+        out_yaml = NYAML2NXDL_DATA_DIR / f"temp_NXfilelineError{n}.yaml"
+        result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(test_yml)])
+        assert result.exit_code == 1
+        assert expected_line in str(result.exception)
+        os.remove(out_nxdl)
+        os.remove(out_yaml)
     sys.stdout.write("Test on xml -> yml file line error handling okay.\n")
-
 
 def test_symbols():
     """
@@ -319,19 +294,15 @@ def test_symbols_and_enum_docs():
         "</dimensions>",
         "<dim",
     ]
-    compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
-    os.remove(f"{NYAML2NXDL_DATA_DIR}/NXmytests.nxdl.xml")
+    compare_matches(str(ref_xml_file), str(test_yml_file), str(test_xml_file), desired_matches)
+    os.remove(f"{FORWARD_DATA_DIR}/NXmytests.nxdl.xml")
     sys.stdout.write("Test on docs in enumeration and symbols okay.\n")
 
 
-def test_enumerations_nyaml2nxdl():
-    """
-    Check the correct handling of enumerations (closed and open ones) for the direction
-    nyaml->nxdl.
-    """
-    ref_xml_file = "tests/data/yaml2nxdl/ref_enumerations.nxdl.xml"
-    test_yml_file = "tests/data/yaml2nxdl/enumerations.yaml"
-    test_xml_file = "tests/data/yaml2nxdl/enumerations.nxdl.xml"
+def test_enumerations():
+    ref_xml = FORWARD_DATA_DIR / "ref_enumerations.nxdl.xml"
+    test_yml = FORWARD_DATA_DIR / "enumerations.yaml"
+    test_xml = FORWARD_DATA_DIR / "enumerations.nxdl.xml"
     desired_matches = [
         "<enumeration",
         "</enumeration>",
@@ -341,8 +312,8 @@ def test_enumerations_nyaml2nxdl():
         "</doc>",
         "<!--",
     ]
-    compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
-    os.remove(test_xml_file)
+    compare_matches(str(ref_xml), str(test_yml), str(test_xml), desired_matches)
+    os.remove(test_xml)
     sys.stdout.write("Test on open/closed enumerations okay.\n")
 
 
@@ -369,7 +340,6 @@ def test_yaml2nxdl_doc():
         if len(parent1) > 0 and len(parent2) > 0:
             for par1, par2 in zip(parent1, parent2):
                 compare_nxdl_doc(par1, par2)
-
         elif (
             remove_namespace_from_tag(parent1.tag) == "doc"
             and remove_namespace_from_tag(parent2.tag) == "doc"
@@ -391,10 +361,11 @@ def test_yaml2nxdl_no_tabs(tmp_path):
     doc_file = NYAML2NXDL_DATA_DIR / "no_tabs_yaml2nxdl.yaml"
     ref_doc_file = NYAML2NXDL_DATA_DIR / "ref_no_tabs_yaml2nxdl.nxdl.xml"
     out_doc_file = tmp_path / "no_tabs_yaml2nxdl.nxdl.xml"
+
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool, [str(doc_file), "--output-file", str(out_doc_file)]
     )
-    assert result.exit_code == 0, f"Error: Having issue running input file {doc_file}."
+    assert result.exit_code == 0, f"Error running {doc_file}."
     check_and_replace_latest_copyright(out_doc_file)
     ref_nxdl = ET.parse(str(ref_doc_file)).getroot()
     out_nxdl = ET.parse(str(out_doc_file)).getroot()
@@ -403,7 +374,6 @@ def test_yaml2nxdl_no_tabs(tmp_path):
         if len(parent1) > 0 and len(parent2) > 0:
             for par1, par2 in zip(parent1, parent2):
                 compare_nxdl_doc(par1, par2)
-
         elif (
             remove_namespace_from_tag(parent1.tag) == "doc"
             and remove_namespace_from_tag(parent2.tag) == "doc"
@@ -512,9 +482,7 @@ def test_copyright_license_new_yaml(tmp_path):
     ],
 )
 def test_handle_xref(test_input, output, is_valid):
-    """
-    Tests whether the xref generates a correct docstring.
-    """
+    """Tests whether the xref generates a correct docstring."""
     if is_valid:
         assert handle_each_part_doc(test_input) == output
         return
@@ -530,6 +498,7 @@ def test_handle_xref(test_input, output, is_valid):
     [
         ("NXattributes"),
         ("NXcomment"),
+        ("NXdimensionsType"),
         ("NXellipsometry-docCheck"),
         ("NXfit"),
     ],
@@ -544,15 +513,73 @@ def test_forward_conversion(test_input):
     test_xml_output_file = str(NYAML2NXDL_DATA_DIR / f"{test_input}.nxdl.xml")
     ref_xml_output_file = str(NYAML2NXDL_DATA_DIR / f"Ref_{test_input}.nxdl.xml")
     runner = CliRunner()
-    result = runner.invoke(nyaml2nxdl.launch_tool, [test_yml_input_file])
+    result = runner.invoke(nyaml2nxdl.launch_tool, [str(test_yml_input_file)])
     assert result.exit_code == 0
 
     check_and_replace_latest_copyright(Path(test_xml_output_file))
 
     with open(test_xml_output_file, encoding="utf-8") as logfile:
         log = logfile.readlines()
-    with open(ref_xml_output_file, encoding="utf-8") as reference_file:
+    with open(ref_xml, encoding="utf-8") as reference_file:
         ref = reference_file.readlines()
     assert log == ref
 
     os.remove(test_xml_output_file)
+
+
+@pytest.mark.parametrize(
+    "keyword",
+    sorted(
+        {
+            "doc",
+            "unit",
+            "enumeration",
+            "nameType",
+            "dim",
+            "dimensions",
+            "exists",
+            "minOccurs",
+            "maxOccurs",
+            "rank",
+        }
+    ),
+)
+def test_reserved_keyword_as_field_name(tmp_path, keyword):
+    """A bare (unescaped) reserved keyword as a YAML key inside a group must
+    produce <field name="<keyword>"/> in the NXDL output, not activate keyword
+    dispatch (which requires the \\keyword escape prefix)."""
+
+    def ordered_dict_representer(dumper, value):
+        return dumper.represent_mapping("tag:yaml.org,2002:map", value.items())
+
+    yaml.add_representer(OrderedDict, ordered_dict_representer)
+
+    yaml_data = OrderedDict(
+        {
+            r"\category": "base",
+            r"\doc": "Reserved keyword concept test",
+            "NXtest": OrderedDict({keyword: None}),
+        }
+    )
+
+    test_file = tmp_path / "test.yaml"
+    out_file = tmp_path / "test.nxdl.xml"
+    with open(test_file, "w") as f:
+        yaml.dump(yaml_data, f, default_flow_style=False, allow_unicode=True)
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        [str(test_file), "--output-file", str(out_file)],
+    )
+    assert result.exit_code == 0, f"Conversion failed: {result.output}"
+
+    tree = ET.parse(str(out_file))
+    fields = [
+        el
+        for el in tree.iter()
+        if remove_namespace_from_tag(el.tag) == "field" and el.get("name") == keyword
+    ]
+    assert len(fields) == 1, (
+        f"Expected exactly one <field name='{keyword}'/> for bare '{keyword}', "
+        f"got {len(fields)}"
+    )

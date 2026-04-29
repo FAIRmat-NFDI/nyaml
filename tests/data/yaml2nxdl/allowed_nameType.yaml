@@ -1,7 +1,7 @@
-category: base
-doc: |
+\category: base
+\doc: |
   NXnametype test
-type: group
+\type: group
 NXallowed_name_type(NXobject):
   lower_case_group_no_nametype(NXobject):
     \doc: An all lower case group with no nameType.
@@ -48,7 +48,7 @@ NXallowed_name_type(NXobject):
           \nameType: any
           target: field
           \doc: An unnamed link with nameType="any".
-    
+
     objectOBJECT(NXobject):
       \nameType: partial
       \doc: A partially-renameable group with nameType="partial". Variadic part at the end.

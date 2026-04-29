@@ -1,13 +1,13 @@
-category: base
-doc: |
+\category: base
+\doc: |
   Description of a fit procedure.
-symbols:
+\symbols:
   \doc: |
     The symbols used in the schema to specify e.g. dimensions of arrays.
   dimRank: |
     Rank of the dependent and independent data arrays (for
     multidimensional/multivariate fit.)
-type: group
+\type: group
 NXfit(NXprocess):
   label:
     \doc: |
@@ -76,14 +76,14 @@ NXfit(NXprocess):
       \doc: |
         Relative sensitivity for this peak, to be used for quantification in
         an NXprocess.
-        
+
         As an example, in X-ray spectroscopy could depend on the energy scale
         (see position), the ionization cross section, and the element probed.
     relative_area(NX_NUMBER):
       \unit: NX_ANY
       \doc: |
         Relative area of this peak compared to other peaks.
-        
+
         The relative area can simply be derived by dividing the total_area by the
         total area of all peaks or by a more complicated method (e.g., by
         additionally dividing by the relative sensitivity factors). Details shall
@@ -121,14 +121,14 @@ NXfit(NXprocess):
         As an example, for a linear least squared algorithm on independent components, the formula of the error_function
         would be :math:`LLS(peak_1(p_1) + peak2(p_2) + backgr(p_3))`, where each :math:`p_x` describes the set
         of parameters for one peak/background.
-        
+
         It is however also possible to supply more involved formulas (e.g., in the case of constrained fits).
   figure_of_meritMETRIC(NX_NUMBER):
     \unit: NX_UNITLESS
     \doc: |
       Figure-of-merit to determine the goodness of fit, i.e., how well the peak model
       fits the measured observations.
-      
+
       This value (which is a single number) is oftenused to guide adjustments to the
       fitting parameters in the peak fitting process.
     \@metric:

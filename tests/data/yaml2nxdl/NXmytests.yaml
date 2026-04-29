@@ -1,6 +1,6 @@
-category: base
-doc: "This is a test file for checking the correct parsing of several fields and attributes in nxdl files"
-symbols: 
+\category: base
+\doc: "This is a test file for checking the correct parsing of several fields and attributes in nxdl files"
+\symbols:
   \doc: "symbolic array lengths to be coordinated between various fields"
   n_Temp: "number of temperatures"
   n_eField: "number of values in applied electric field"
@@ -19,10 +19,10 @@ NXbeam:
       \dim: [[1, i]]
   mode:
     \doc: "source operating mode"
-    \enumeration: 
-      Single Bunch: 
+    \enumeration:
+      Single Bunch:
         \doc: "for storage rings"
-      Multi Bunch: 
+      Multi Bunch:
         \doc: "for storage rings"
   electric_field(NX_FLOAT):
     \unit: NX_VOLTAGE

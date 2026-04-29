@@ -472,7 +472,15 @@ class YAMLComment(Comment):
         """
         Return line no for which line the comment is created.
         """
-        return self._element[line_key]
+        if line_key in self._element:
+            return self._element[line_key]
+        # Backslash-escaped form (\symbols, \doc, …) after normalization strips the backslash.
+        # Try the escaped variant so comments are found even when the dict key was normalised.
+        if line_key.startswith("__line__"):
+            escaped = f"__line__\\{line_key[8:]}"
+            if escaped in self._element:
+                return self._element[escaped]
+        raise KeyError(f"Line key '{line_key}' not found in comment element.")
 
     def get_line_info(self) -> tuple[str, int]:
         """
@@ -512,7 +520,14 @@ class YAMLComment(Comment):
 
     def __contains__(self, line_key: str) -> bool:
         """For checking whether __line__<NAME> is in _element dict or not."""
-        return line_key in self._element
+        if line_key in self._element:
+            return True
+        # Backslash-escaped form (\symbols, \doc, …) after normalization strips the backslash.
+        # Try the escaped variant so comments are found even when the dict key was normalised.
+        if line_key.startswith("__line__"):
+            escaped = f"__line__\\{line_key[8:]}"
+            return escaped in self._element
+        return False
 
     def __eq__(self, comment_obj: "Comment") -> bool:  # type: ignore[override]
         """Check the self has same value as right comment."""

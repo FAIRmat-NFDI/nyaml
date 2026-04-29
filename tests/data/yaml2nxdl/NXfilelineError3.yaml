@@ -1,9 +1,9 @@
 #test case for attributes
-doc: documentation no. 0
-symbols:
+\doc: documentation no. 0
+\symbols:
   \doc: documentation no. 1
   testnamesymbol: test description of symbol
-category: application
+\category: application
 NXellipsometry_base_draft(my_test_extend):
   (NXentry):
     \@entry:

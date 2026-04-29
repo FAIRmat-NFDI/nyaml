@@ -1,7 +1,7 @@
-category: base
-doc: |
+\category: base
+\doc: |
   This is a test for enumerations.
-type: group
+\type: group
 NXenums(NXobject):
   (NXentry):
     closed_enum_no_docs_list:

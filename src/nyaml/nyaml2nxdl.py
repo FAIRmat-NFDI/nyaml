@@ -25,9 +25,9 @@ import os
 import pathlib
 import re
 import textwrap
+import warnings
 from typing import Any
 from urllib.parse import unquote
-import warnings
 
 import lxml.etree as ET
 import yaml
@@ -48,7 +48,7 @@ from nyaml.helper import (
     remove_namespace_from_tag,
 )
 
-DOM_COMMENT_TEMPLATE = (
+DOM_COMMENT = (
     "# NeXus - Neutron and X-ray Common Data Format\n"
     "#\n"
     "# Copyright (C) __COPYRIGHT_YEAR__ "
@@ -70,7 +70,6 @@ DOM_COMMENT_TEMPLATE = (
     "#\n"
     "# For further information, see http://www.nexusformat.org\n"
 )
-DOM_COMMENT = DOM_COMMENT_TEMPLATE
 DEPTH_SIZE = 4 * " "
 # Initialized in yml_reader() function
 COMMENT_BLOCKS: CommentCollector
@@ -121,7 +120,7 @@ def set_copyright_text(nxdl_copyright_license: str = "") -> None:
             f"{datetime.datetime.now().year}-{datetime.datetime.now().year}"
         )
 
-        DOM_COMMENT = DOM_COMMENT_TEMPLATE.replace("__COPYRIGHT_YEAR__", copyright_year)
+        DOM_COMMENT = DOM_COMMENT.replace("__COPYRIGHT_YEAR__", copyright_year)
 
 
 def yml_reader(input_file: str | os.PathLike[str]) -> dict:
@@ -137,13 +136,14 @@ def yml_reader(input_file: str | os.PathLike[str]) -> dict:
     COMMENT_BLOCKS = CommentCollector(input_file, loaded_yaml)
     COMMENT_BLOCKS.extract_all_comment_blocks()
 
-    if "category" not in loaded_yaml.keys():
+    _cat = loaded_yaml.get(r"\category") or loaded_yaml.get("category")
+    if _cat is None:
         raise ValueError(
             "All definitions should be either 'base' or 'application' category. "
             "No category has been found."
         )
     global CATEGORY
-    CATEGORY = loaded_yaml["category"]
+    CATEGORY = _cat
     return loaded_yaml
 
 
@@ -437,7 +437,7 @@ def xml_handle_dimensions(
     line_loc = dct[line_number]
     dims: ET.Element | None = None
     if isinstance(value, dict):
-        # Normalise escape-prefixed keywords inside a dimensions block to their bare
+        # Normalize escape-prefixed keywords inside a dimensions block to their bare
         # internal names (which the rest of this function uses). Also accept the old
         # bare forms with a DeprecationWarning where applicable.
         value = dict(value)  # shallow copy so we do not mutate the caller's dict
@@ -647,9 +647,7 @@ def xml_handle_link(
                 rm_key_list.append(line_number)
             elif attr == r"\nameType":
                 link_name = keyword[:-6]  # strip "(link)"
-                check_for_proper_nameType(
-                    link_name, str(val) if val else None, keyword
-                )
+                check_for_proper_nameType(link_name, str(val) if val else None, keyword)
                 if val:
                     link_obj.set("nameType", str(val))
                 rm_key_list.append(attr)
@@ -851,10 +849,10 @@ def xml_handle_attributes(
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
                 elif attr == r"\type":
-                    elemt_obj.set("type", check_for_mapping_char_other(attr_val))
+                    sub_element.set("type", check_for_mapping_char_other(attr_val))
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
-                    xml_handle_comment(obj, line_number, line_loc, elemt_obj)
+                    xml_handle_comment(obj, line_number, line_loc, sub_element)
                 else:
                     sub_element.set(attr, check_for_mapping_char_other(attr_val))
                     rm_key_list.append(attr)
@@ -889,7 +887,6 @@ def validate_field_attribute_and_value(
     # The below elements might come as child element
     skipped_child_name = [
         r"\doc",
-        "dimension",
         r"\enumeration",
         "choice",
         r"\exists",
@@ -990,11 +987,11 @@ def xml_handle_fields_or_group(
                 xml_handle_nametype(keyword, keyword_name, dct, sub_element)
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
-            elif attr == r"\type" and not isinstance(vval, dict) and vval:
-                elemt_obj.set("type", check_for_mapping_char_other(vval))
+            elif attr == r"\type" and not isinstance(val, dict) and val:
+                sub_element.set("type", check_for_mapping_char_other(val))
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
-                xml_handle_comment(obj, line_number, line_loc, elemt_obj)
+                xml_handle_comment(obj, line_number, line_loc, sub_element)
             elif attr == r"\unit" and ele_type == "field":
                 xml_handle_units(sub_element, val)
                 xml_handle_comment(obj, line_number, line_loc, sub_element)
@@ -1088,7 +1085,7 @@ def recursive_build(obj: ET._Element, dct: dict, verbose: bool) -> None:
         elif keyword[-8:] == "(choice)":
             xml_handle_choice(dct, obj, keyword, value)
         # symbols of fields or attributes, root level symbols dealt with by nyaml2nxdl()
-        elif keyword_type == "" and keyword_name == "symbols":
+        elif keyword_type == "" and keyword_name == "symbols" and isinstance(value, dict):
             xml_handle_symbols(dct, obj, keyword, value)
         elif re.match(r"NX[a-zA-Z].*", keyword_type) is not None:
             elem_type = "group"
@@ -1224,15 +1221,20 @@ def nyaml2nxdl(
         "restricts",
     ]
     yml_appdef = yml_reader(input_file)
-    # Normalize escaped root-level reserved keywords (\category, \doc, \type, \symbols)
-    for _esc in (r"\category", r"\type", r"\doc", r"\symbols"):
-        _bare = _esc[1:]
-        if _esc in yml_appdef:
-            yml_appdef[_bare] = yml_appdef.pop(_esc)
-            _lk = f"__line__{_esc}"
-            if _lk in yml_appdef:
-                yml_appdef[f"__line__{_bare}"] = yml_appdef.pop(_lk)
-    def_cmnt_text = []
+    # Normalize escaped root-level reserved keywords, preserving YAML key order.
+    # All def_attributes plus doc/symbols may be written with \ prefix; strip it here
+    # so the rest of the code sees bare names only.
+    _root_esc = {f"\\{k}": k for k in (*def_attributes, "doc", "symbols")}
+    _normalized: dict = {}
+    for _k, _v in yml_appdef.items():
+        if _k.startswith("__line__") and _k[8:] in _root_esc:
+            _normalized[f"__line__{_root_esc[_k[8:]]}"] = _v
+        elif _k in _root_esc:
+            _normalized[_root_esc[_k]] = _v
+        else:
+            _normalized[_k] = _v
+    yml_appdef = _normalized
+    def_comment_text = []
     if verbose:
         print(f"input-file: {input_file}\n")
         print("application/base contains the following root-level entries:\n")

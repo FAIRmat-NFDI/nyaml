@@ -149,8 +149,8 @@ def test_backward_conversion(test_input):
 
     with open(test_yml, encoding="utf-8") as logfile:
         log = logfile.readlines()
-    with open(ref_yml, encoding="utf-8") as reffile:
-        ref = reffile.readlines()
+    with open(ref_yml, encoding="utf-8") as reference_file:
+        ref = reference_file.readlines()
     assert log == ref
 
     os.remove(test_yml)

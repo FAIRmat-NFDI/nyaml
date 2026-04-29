@@ -1,6 +1,6 @@
-category: application
-doc: "draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry."
-symbols: 
+\category: application
+\doc: "draft application definition for ellipsometry measurements, including complex systems up to variable angle spectroscopic ellipsometry."
+\symbols:
   \doc: "Variables used throughout the document, e.g. dimensions and important parameters"
   angle_of_incidence: "The angle of incidence to the surface normal (stage normal) of the sample"
   N_wavelength: "Size of the energy / wavelength vector used"
@@ -8,7 +8,7 @@ symbols:
   N_angles: "Number of incident angles used"
   N_p1: "Number of first sample parameters scanned"
   N_time: "Number of time points measured"
-type: group
+\type: group
 NXellipsometry_base_draft(NXobject):
   (NXentry):
     \doc: "to be defined"

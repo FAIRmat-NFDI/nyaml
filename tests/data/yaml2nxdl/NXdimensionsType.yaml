@@ -1,7 +1,7 @@
-category: application
-doc: |
+\category: application
+\doc: |
   This is a test for processing the dimensionsType.
-type: group
+\type: group
 # https://manual.nexusformat.org/nxdl_desc.html#nxdl-data-type-dimensionstype
 # for examples of non-trivial use cases of dimensionsType in the wild see
 # https://github.com/FAIRmat-NFDI/nexus_definitions/commit/f7ba53f4fb409b03fde6af6ccf29146392a2c142
@@ -41,11 +41,11 @@ NXdimensions(NXobject):
         Shorthand where the rank can be set explicitly. For testing purposes
         the rank is here intentionally set to a value that is different to the number
         of entries in dim.
-        
+
         Authors and designers of NeXus classes should preferentially use
         the shorthand notation unless the full_syntax is required as
         using rank_only is insufficient.
-        
+
         This is the default to which nxdl2yaml converts unless
         the XML content substantiates that either using
         rank_only suffices or that full_syntax is required.

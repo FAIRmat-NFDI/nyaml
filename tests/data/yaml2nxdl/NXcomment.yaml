@@ -1,13 +1,13 @@
-category: application
+\category: application
 
 # 1: Pincelli, Rettig, Arora at fhi-berlin.mpg.de, Dobener at hu-berlin.de, 06/2022
 #Draft version of a NeXus application definition for photoemission,
 #It is designed to be extended by other application definitions
 #with higher granularity in the data description.
 
-doc: This is the most general application definition for multidimensional photoelectron spectroscopy.
+\doc: This is the most general application definition for multidimensional photoelectron spectroscopy.
 # 2: symbols comments: comments here
-symbols:
+\symbols:
 # 3: symbols doc comments
   \doc: |
     symbols doc

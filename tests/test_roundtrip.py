@@ -237,8 +237,8 @@ def test_reserved_keyword_roundtrip(tmp_path, keyword):
 
     yaml_data = OrderedDict(
         {
-            "category": "base",
-            "doc": "Round-trip test for reserved keyword concept",
+            r"\category": "base",
+            r"\doc": "Round-trip test for reserved keyword concept",
             "NXtest": OrderedDict({keyword: None}),
         }
     )

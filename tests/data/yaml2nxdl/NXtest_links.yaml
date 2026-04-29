@@ -1,5 +1,5 @@
-category: base
-doc: Test case for verifying that the parser can handle links correctly.
+\category: base
+\doc: Test case for verifying that the parser can handle links correctly.
 NXentry:
    (NXdata):
      polar_angle(link):

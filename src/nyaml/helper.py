@@ -57,6 +57,11 @@ RESERVED_KEYWORDS = frozenset(
         "type",  # field/group NeXus data type and root-level definition type
         "category",  # root-level definition category
         "symbols",  # root-level named dimension constants
+        "deprecated",  # root-level definition attribute
+        "ignoreExtraGroups",  # root-level definition attribute
+        "ignoreExtraFields",  # root-level definition attribute
+        "ignoreExtraAttributes",  # root-level definition attribute
+        "restricts",  # root-level definition attribute
     }
 )
 
