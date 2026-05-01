@@ -475,7 +475,7 @@ class YAMLComment(Comment):
         if line_key in self._element:
             return self._element[line_key]
         # Backslash-escaped form (\symbols, \doc, …) after normalization strips the backslash.
-        # Try the escaped variant so comments are found even when the dict key was normalised.
+        # Try the escaped variant so comments are found even when the dict key was normalized.
         if line_key.startswith("__line__"):
             escaped = f"__line__\\{line_key[8:]}"
             if escaped in self._element:
@@ -523,7 +523,7 @@ class YAMLComment(Comment):
         if line_key in self._element:
             return True
         # Backslash-escaped form (\symbols, \doc, …) after normalization strips the backslash.
-        # Try the escaped variant so comments are found even when the dict key was normalised.
+        # Try the escaped variant so comments are found even when the dict key was normalized.
         if line_key.startswith("__line__"):
             escaped = f"__line__\\{line_key[8:]}"
             return escaped in self._element

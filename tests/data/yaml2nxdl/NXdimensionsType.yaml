@@ -59,7 +59,7 @@ NXdimensions(NXobject):
         \doc: |
           Some docs.
         \rank: 2
-        \dim: (1, symbol_a, symbol_b)    
+        \dim: (1, symbol_a, symbol_b)
     shorthand_explicit_rank_old(NX_NUMBER):
       \doc: |
         A version of shorthand_explicit_rank_new that supports

@@ -25,10 +25,10 @@ NXprohibited_name_type:
         \doc: An all lower case link with nameType="any". Raises a warning.
   lower_case_group_partial(NXobject):
     \nameType: partial
-    \doc: An all lower case group with nameType="partial". Raises an error. 
+    \doc: An all lower case group with nameType="partial". Raises an error.
     lower_case_field_partial:
       \nameType: partial
-      \doc: An all lower case field with nameType="partial". Raises an error. 
+      \doc: An all lower case field with nameType="partial". Raises an error.
       \@lower_case_attribute_partial:
         \nameType: partial
         \doc: An all lower case attribute with nameType="partial". Raises an error.
