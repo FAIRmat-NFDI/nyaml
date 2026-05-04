@@ -26,10 +26,16 @@ from pathlib import Path
 
 import pytest
 from click.testing import CliRunner
-from helpers import check_file_fresh_baked, compare_yaml_content
+from helpers import (
+    check_file_fresh_baked,
+    compare_log_and_reference,
+    compare_yaml_content,
+)
 
 from nyaml import cli as nyaml2nxdl
 from nyaml.helper import LineLoader
+
+NXDL2NYAML_TESTS_DIR = Path(__file__).parent / "data" / "nxdl2yaml"
 
 
 def test_nxdl2yaml_nameType():
@@ -37,9 +43,9 @@ def test_nxdl2yaml_nameType():
     Check the correct handling of the nameType attribute for the direction
     nxdl->nyaml.
     """
-    ref_xml_file = "tests/data/nxdl2yaml/allowed_nameType.nxdl.xml"
-    ref_yml_file = "tests/data/nxdl2yaml/ref_allowed_nameType.yaml"
-    test_yml_file = "tests/data/nxdl2yaml/allowed_nameType_parsed.yaml"
+    ref_xml_file = str(NXDL2NYAML_TESTS_DIR / "allowed_nameType.nxdl.xml")
+    ref_yml_file = str(NXDL2NYAML_TESTS_DIR / "ref_allowed_nameType.yaml")
+    test_yml_file = str(NXDL2NYAML_TESTS_DIR / "allowed_nameType_parsed.yaml")
 
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
     assert result.exit_code == 0
@@ -64,6 +70,29 @@ has not the same structure!!"
     sys.stdout.write("Test on xml -> yml doc formatting okay.\n")
 
 
+@pytest.mark.parametrize(
+    "test_input",
+    [
+        ("NXdimensionsType"),
+    ],
+)
+def test_dimension(test_input):
+    """
+    Tests if the conversion of specific test files from NXDL to YAML results as expected.
+    Expected output files shall have the corresponding name with the prefix Ref_.
+    """
+    test_xml_input_file = str(NXDL2NYAML_TESTS_DIR / f"{test_input}.nxdl.xml")
+    test_yml_output_file = str(NXDL2NYAML_TESTS_DIR / f"{test_input}_parsed.yaml")
+    ref_yml_output_file = str(NXDL2NYAML_TESTS_DIR / f"Ref_{test_input}.yaml")
+    runner = CliRunner()
+    result = runner.invoke(nyaml2nxdl.launch_tool, [test_xml_input_file])
+    assert result.exit_code == 0
+
+    compare_log_and_reference(test_yml_output_file, ref_yml_output_file)
+
+    os.remove(test_yml_output_file)
+
+
 def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     """
     This test for two reasons:
@@ -71,9 +100,9 @@ def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     to yaml to check if they are correct.
             2. In test-2: Check the nxdl that comes at the end of yaml file as comment.
     """
-    ref_xml_file = "tests/data/nxdl2yaml/Ref_NXentry.nxdl.xml"
-    ref_yml_file = "tests/data/nxdl2yaml/Ref_NXentry.yaml"
-    test_yml_file = "tests/data/nxdl2yaml/Ref_NXentry_parsed.yaml"
+    ref_xml_file = str(NXDL2NYAML_TESTS_DIR / "Ref_NXentry.nxdl.xml")
+    ref_yml_file = str(NXDL2NYAML_TESTS_DIR / "Ref_NXentry.yaml")
+    test_yml_file = str(NXDL2NYAML_TESTS_DIR / "Ref_NXentry_parsed.yaml")
     result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
@@ -92,9 +121,9 @@ def test_nxdl2yaml_enumerations():
     Check the correct handling of enumerations (closed and open ones) for the direction
     nxdl->nyaml.
     """
-    ref_xml_file = "tests/data/nxdl2yaml/enumerations.nxdl.xml"
-    ref_yml_file = "tests/data/nxdl2yaml/ref_enumerations.yaml"
-    test_yml_file = "tests/data/nxdl2yaml/enumerations_parsed.yaml"
+    ref_xml_file = str(NXDL2NYAML_TESTS_DIR / "enumerations.nxdl.xml")
+    ref_yml_file = str(NXDL2NYAML_TESTS_DIR / "ref_enumerations.yaml")
+    test_yml_file = str(NXDL2NYAML_TESTS_DIR / "enumerations_parsed.yaml")
 
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", str(ref_xml_file)]
@@ -112,10 +141,9 @@ def test_nxdl2yaml_enumerations():
 def test_nxdl2yaml_doc():
     """To test the doc style from nxdl to yaml."""
 
-    pwd = Path(__file__).parent
-    nxdl_file = pwd / "data/nxdl2yaml/doc_nxdl2yaml.nxdl.xml"
-    ref_yaml = pwd / "data/nxdl2yaml/ref_doc_nxdl2yaml.yaml"
-    parsed_yaml_file = pwd / "data/nxdl2yaml/doc_nxdl2yaml_parsed.yaml"
+    nxdl_file = str(NXDL2NYAML_TESTS_DIR / "doc_nxdl2yaml.nxdl.xml")
+    ref_yaml = str(NXDL2NYAML_TESTS_DIR / "ref_doc_nxdl2yaml.yaml")
+    parsed_yaml_file = str(NXDL2NYAML_TESTS_DIR / "doc_nxdl2yaml_parsed.yaml")
 
     result = CliRunner().invoke(
         nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", str(nxdl_file)]
@@ -148,18 +176,13 @@ def test_backward_conversion(test_input):
     Tests if the conversion of specific test files from NXDL to YAML results as expected.
     Expected output files shall have the corresponding name with the prefix Ref_.
     """
-    prefix = "tests/data/nxdl2yaml/"
-    test_xml_input_file = prefix + test_input + ".nxdl.xml"
-    test_yml_output_file = prefix + test_input + "_parsed.yaml"
-    ref_yml_output_file = prefix + "Ref_" + test_input + ".yaml"
+    test_xml_input_file = str(NXDL2NYAML_TESTS_DIR / f"{test_input}.nxdl.xml")
+    test_yml_output_file = str(NXDL2NYAML_TESTS_DIR / f"{test_input}_parsed.yaml")
+    ref_yml_output_file = str(NXDL2NYAML_TESTS_DIR / f"Ref_{test_input}.yaml")
     runner = CliRunner()
     result = runner.invoke(nyaml2nxdl.launch_tool, [test_xml_input_file])
     assert result.exit_code == 0
 
-    with open(test_yml_output_file, encoding="utf-8") as logfile:
-        log = logfile.readlines()
-    with open(ref_yml_output_file, encoding="utf-8") as reference_file:
-        ref = reference_file.readlines()
-    assert log == ref
+    compare_log_and_reference(test_yml_output_file, ref_yml_output_file)
 
     os.remove(test_yml_output_file)

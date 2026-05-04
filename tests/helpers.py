@@ -28,6 +28,24 @@ COPYRIGHT_REPLACEMENT = (
 )
 
 
+def compare_log_and_reference(log_file, ref_file):
+    with open(log_file, encoding="utf-8") as logfile:
+        log = logfile.readlines()
+    with open(ref_file, encoding="utf-8") as reference_file:
+        ref = reference_file.readlines()
+    filtered_log = [line for line in log if line.strip()]
+    filtered_ref = [line for line in ref if line.strip()]
+
+    for ind, (log_line, ref_line) in enumerate(
+        zip(filtered_log, filtered_ref), start=1
+    ):
+        if log_line.strip() == ref_line.strip():
+            continue
+        assert log_line == ref_line, (
+            f"Line {ind} does not match:\nLog: {log_line!r}\nReference: {ref_line!r}"
+        )
+
+
 def check_and_replace_latest_copyright(nxdl_file):
     """Check if the latest copyright date has been written properly,
     and replace it accordingly to the test data file.
