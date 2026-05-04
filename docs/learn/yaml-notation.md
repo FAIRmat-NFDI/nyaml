@@ -13,23 +13,23 @@ For a step-by-step introduction that teaches these concepts progressively throug
 
 The root section is the top-level block of a definition. It maps to the XML `<definition>` element and contains the following keys:
 
-- `category`: `application` for application definitions, `base` for base classes
-- `type`: always `group`
-- `doc`: free-text description of the definition
-- `symbols`: named dimension constants used throughout the definition (optional)
+- `\category`: `application` for application definitions, `base` for base classes
+- `\type`: always `group`
+- `\doc`: free-text description of the definition
+- `\symbols`: named dimension constants used throughout the definition (optional)
 - The schema name (e.g. `NXmpes(NXobject)`): the parenthesized base class indicates what this definition extends. An application definition extends either `NXobject` or another application definition.
 
 === "YAML"
     ```yaml
-    category: application
-    type: group
-    doc: |
+    \category: application
+    \type: group
+    \doc: |
       This is the most general application definition for multidimensional photoelectron spectroscopy.
 
       .. _ISO 18115-1:2023: https://www.iso.org/standard/74811.html
       .. _IUPAC Recommendations 2020: https://doi.org/10.1515/pac-2019-0404
-    symbols:
-      doc: |
+    \symbols:
+      \doc: |
         The symbols used in the schema to specify e.g. dimensions of arrays
       n_transmission_function: |
         Number of data points in the transmission function.
@@ -70,24 +70,24 @@ The root section is the top-level block of a definition. It maps to the XML `<de
 
 [NeXus groups](https://manual.nexusformat.org/design.html#design-groups){:target="_blank" rel="noopener"} are instances of NeXus base classes and form the compositional structure of a definition. A group is written as `name(NXbaseclass):` in YAML.
 
-The `nameType` keyword (see below) controls whether the name is matched exactly, loosely, or as a prefix (or suffix) pattern in HDF5 files. Dynamic initialization (using `nameType: any`) allows multiple instances of the same group type at the same hierarchy level; for example, `(NXmanipulator)` (with `nameType: any`) can be instantiated as `manipulator1` and `manipulator2` during data writing.
+The `\nameType` keyword (see below) controls whether the name is matched exactly, loosely, or as a prefix (or suffix) pattern in HDF5 files. Dynamic initialization (using `\nameType: any`) allows multiple instances of the same group type at the same hierarchy level; for example, `(NXmanipulator)` (with `\nameType: any`) can be instantiated as `manipulator1` and `manipulator2` during data writing.
 
-The `group` annotation `source_TYPE(NXsource)` means the group's concept name is `source_TYPE` and its type is the `NXsource` base class. For `nameType: partial`, the uppercase part of the name can be replaced at instantiation time, allowing multiple distinct instances (e.g. `source_electric` and `source_magnetic`). The same uppercase rules apply to fields and attributes.
+The `group` annotation `source_TYPE(NXsource)` means the group's concept name is `source_TYPE` and its type is the `NXsource` base class. For `\nameType: partial`, the uppercase part of the name can be replaced at instantiation time, allowing multiple distinct instances (e.g. `source_electric` and `source_magnetic`). The same uppercase rules apply to fields and attributes.
 
 === "YAML"
     ```yaml
     source_TYPE(NXsource):
-      exists: recommended
-      nameType: partial
-      doc: |
+      \exists: recommended
+      \nameType: partial
+      \doc: |
         A source used to generate a beam.
     (NXmanipulator):
-      exists: optional
-      nameType: any # default for anonymous groups
-      doc: |
+      \exists: optional
+      \nameType: any  # default for anonymous groups
+      \doc: |
         Manipulator for positioning of the sample.
       value_log(NXlog):
-        exists: optional
+        \exists: optional
     ```
 
 === "XML"
@@ -114,26 +114,26 @@ A NeXus `field` is a named data entry written without an `NX` prefix. Its NeXus 
 
 A NeXus `attribute` is a metadata entry for a field or group, prefixed with `\@`. It must also have a NeXus type, which defaults to `NX_CHAR` if omitted.
 
-Descriptive text for any concept is given in the `doc` child.
+Descriptive text for any concept is given in the `\doc` child.
 
 === "YAML"
     ```yaml
     (NXentry):
       definition:  # Field type: NX_CHAR
         \@version:  # Attribute type: NX_CHAR
-        enumeration: [NXmpes]
+        \enumeration: [NXmpes]
       title:
       start_time(NX_DATE_TIME):
-        doc: Datetime of the start of the measurement.
+        \doc: Datetime of the start of the measurement.
       end_time(NX_DATE_TIME):
-        exists: recommended
-        doc: Datetime of the end of the measurement.
+        \exists: recommended
+        \doc: Datetime of the end of the measurement.
     ```
 === "XML"
     ```xml
     <group type="NXentry">
       <field name="definition" type="NX_CHAR">
-        <attribute name="\@version"/>
+        <attribute name="version"/>
         <enumeration>
           <item value="NXmpes"/>
         </enumeration>
@@ -173,6 +173,55 @@ In the example above, `reference_measurement` links to the `NXentry` group at `/
 
 ## Special keywords
 
+### Reserved keywords and escape characters
+
+`nyaml` uses a set of reserved keys, each written with a `\` prefix, that map to NXDL concept properties. The `\` prefix activates the corresponding feature; writing the same key *without* the `\` prefix makes it a plain concept name (field, group, or attribute) instead.
+
+**Reserved keywords**
+
+| Keyword | Where it applies |
+|---------|-----------------|
+| `\doc` | doc string for any concept |
+| `\unit` | unit category for a field |
+| `\enumeration` | enumeration values for a field or attribute |
+| `\nameType` | name-matching rule (`specified`, `any`, `partial`) |
+| `\dim` | dimension specification shorthand |
+| `\dimensions` | full dimension block |
+| `\exists` | presence constraint (`required`, `recommended`, `optional`, …) |
+| `\minOccurs`, `\maxOccurs` | occurrence bounds |
+| `\rank` | rank inside a `\dimensions` block |
+| `\type` | NeXus type override for a field or the root group type |
+| `\category` | root-level definition category (`base` or `application`) |
+| `\symbols` | root-level named dimension constants |
+| `\deprecated` | deprecation notice |
+| `\restricts`, `\ignoreExtraGroups`, `\ignoreExtraFields`, `\ignoreExtraAttributes` | root-level definition modifiers |
+
+**Using a reserved keyword as a concept name**
+
+Omit the `\` prefix to use a keyword as an actual field, group, or attribute name:
+
+=== "YAML"
+    ```yaml
+    NXtest(NXobject):
+      doc:           # plain concept named "doc"  →  <field name="doc"/>
+      unit:          # plain concept named "unit" →  <field name="unit"/>
+      enumeration:   # plain concept named "enumeration" → <field name="enumeration"/>
+    ```
+=== "XML"
+    ```xml
+    <group name="NXtest" type="NXobject">
+      <field name="doc"/>
+      <field name="unit"/>
+      <field name="enumeration"/>
+    </group>
+    ```
+
+With the `\` prefix, `\doc:`, `\unit:`, and `\enumeration:` activate their respective handlers and produce `<doc>`, `<field units="…">`, and `<enumeration>` elements.
+
+The `\@` prefix for XML attributes follows the same convention: `\@version` names the attribute `version` in the NXDL output, distinguishing it from a child field named `version`.
+
+---
+
 ### `nameType`
 
 Controls how an instance name in an HDF5 file is matched against the concept name in the definition.
@@ -187,17 +236,17 @@ Controls how an instance name in an HDF5 file is matched against the concept nam
 === "YAML"
     ```yaml
     source_TYPE(NXsource):
-      exists: recommended
-      nameType: partial
-      doc: |
+      \exists: recommended
+      \nameType: partial
+      \doc: |
         A source used to generate a beam.
     (NXmanipulator):
-      exists: optional
-      nameType: any # default for anonymous groups
-      doc: |
+      \exists: optional
+      \nameType: any  # default for anonymous groups
+      \doc: |
         Manipulator for positioning of the sample.
       value_log(NXlog):
-        exists: optional
+        \exists: optional
     ```
 
 === "XML"
@@ -232,11 +281,11 @@ Accepted values:
 === "YAML"
     ```yaml
     transmission_correction(NXcalibration):
-      exists: optional
-      doc: |
+      \exists: optional
+      \doc: |
         This calibration procedure is used to account for the different transmission efficiencies.
       calibrationDATA(NXdata):
-        exists: [min, 3, max, infty]
+        \exists: [min, 3, max, infty]
     ```
 === "XML"
     ```xml
@@ -259,8 +308,8 @@ Specifies the NeXus unit category for a field. Use one of the existing [unit cat
 === "YAML"
     ```yaml
     detector_voltage(NX_FLOAT):
-      unit: NX_VOLTAGE
-      doc: |
+      \unit: NX_VOLTAGE
+      \doc: |
         Voltage applied to detector.
     ```
 === "XML"
@@ -281,9 +330,9 @@ The optional `dim_parameters` key allows adding documentation or references to i
 === "YAML"
     ```yaml
     # 2D particle motion, full form
-    dimensions:
-      rank: 2
-      dim: [[0, nx], [1, ny]]
+    \dimensions:
+      \rank: 2
+      \dim: [[0, nx], [1, ny]]
       dim_parameters:
         doc: ["Position of particle on x-axis.", "Position of particle on y-axis."]
     ```
@@ -291,9 +340,9 @@ The optional `dim_parameters` key allows adding documentation or references to i
 === "YAML (shorter form)"
     ```yaml
     # 2D particle motion, shorter form
-    dimensions:
-      rank: 2
-      dim: (nx, ny)
+    \dimensions:
+      \rank: 2
+      \dim: (nx, ny)
     ```
 === "XML"
     ```xml
@@ -324,7 +373,7 @@ A list of predefined allowed values for a field or attribute. Individual items m
     ```yaml
     definition:
       \@version:
-        enumeration: [NXmpes]
+        \enumeration: [NXmpes]
     ```
 === "XML"
     ```xml
@@ -340,7 +389,7 @@ A list of predefined allowed values for a field or attribute. Individual items m
 === "YAML (open enum)"
     ```yaml
     enum_with_open_enum:
-      enumeration:
+      \enumeration:
         open_enum: true
         items: [NXmpes]
     ```
@@ -356,7 +405,7 @@ A list of predefined allowed values for a field or attribute. Individual items m
 === "YAML (open enum with doc)"
     ```yaml
     enum_with_open_and_vector_items:
-      enumeration:
+      \enumeration:
         open_enum: true
         '[0, 1, 0]':
           doc: |

@@ -83,15 +83,15 @@ Presented below is a concise and trimmed example of the `NXmpes` application def
 
 === "YAML"
     ```yaml
-    category: application
-    type: group
-    doc: |
+    \category: application
+    \type: group
+    \doc: |
       This is the most general application definition for multidimensional photoelectron spectroscopy.
 
       .. _ISO 18115-1:2023: https://www.iso.org/standard/74811.html
       .. _IUPAC Recommendations 2020: https://doi.org/10.1515/pac-2019-0404
-    symbols:
-      doc: |
+    \symbols:
+      \doc: |
         The symbols used in the schema to specify e.g. dimensions of arrays
       n_transmission_function: |
         Number of data points in the transmission function.
@@ -99,17 +99,17 @@ Presented below is a concise and trimmed example of the `NXmpes` application def
       (NXentry):
         definition:
           \@version:
-          enumeration: [NXmpes]
+          \enumeration: [NXmpes]
         title:
         start_time(NX_DATE_TIME):
-          doc: |
+          \doc: |
             Datetime of the start of the measurement.
         end_time(NX_DATE_TIME):
-          exists: recommended
-          doc: |
+          \exists: recommended
+          \doc: |
             Datetime of the end of the measurement.
         (NXinstrument):
-          doc:
+          \doc:
           - |
             Description of the MPES spectrometer and its individual parts.
           - |
@@ -118,41 +118,41 @@ Presented below is a concise and trimmed example of the `NXmpes` application def
               term: 12.58
               url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
           source_TYPE(NXsource):
-            exists: recommended
-            doc: |
+            \exists: recommended
+            \doc: |
               A source used to generate a beam.
           (NXmanipulator):
-            exists: optional
-            doc: |
+            \exists: optional
+            \doc: |
               Manipulator for positioning of the sample.
             value_log(NXlog):
-              exists: optional
+              \exists: optional
               value(NX_NUMBER):
-                unit: NX_PRESSURE
-                doc: |
+                \unit: NX_PRESSURE
+                \doc: |
                   In the case of an experiment in which the gas pressure changes and is recorded,
                   this is an array of length m of gas pressures.
         (NXprocess):
-          exists: recommended
-          doc: |
+          \exists: recommended
+          \doc: |
             Document an event of data processing, reconstruction, or analysis for this data.
           transmission_correction(NXcalibration):
-            exists: optional
-            doc: |
+            \exists: optional
+            \doc: |
               This calibration procedure is used to account for the different transmission efficiencies.
             transmission_function(NXdata):
-              exists: recommended
-              doc: |
+              \exists: recommended
+              \doc: |
                 Transmission function of the electron analyzer.
               \@axes:
-                enumeration: [kinetic_energy]
+                \enumeration: [kinetic_energy]
               kinetic_energy(NX_FLOAT):
-                unit: NX_ENERGY
-                doc: |
+                \unit: NX_ENERGY
+                \doc: |
                   Kinetic energy values
-                dimensions:
+                \dimensions:
                   \rank: 1
-                  dim: [[1, n_transmission_function]]
+                  \dim: [[1, n_transmission_function]]
     ```
 
 === "XML"
