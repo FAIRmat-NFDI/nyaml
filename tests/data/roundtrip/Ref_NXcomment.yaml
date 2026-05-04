@@ -49,10 +49,10 @@ NXmpes:
      # 15: comment (energy(link)):
      # A comment for energy(link)
       energy(link):
-        target: /entry/instrument/fluorescence/energy
+        \target: /entry/instrument/fluorescence/energy
      # 16: comment (data(link)):
       data(link):
-        target: /entry/instrument/fluorescence/data
+        \target: /entry/instrument/fluorescence/data
       region_origin(NX_INT):
         \doc: |
           origin of rectangular region selected for readout

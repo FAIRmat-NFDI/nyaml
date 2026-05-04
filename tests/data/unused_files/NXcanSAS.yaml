@@ -990,7 +990,7 @@ NXcanSAS(NXobject):
         \exists: ['min', '0', 'max', '1']
         \doc: |
           Optional description for this data processing or analysis step
-      term:
+      \term:
         \exists: ['min', '0', 'max', 'unbounded']
         \nameType: any
         \doc: |

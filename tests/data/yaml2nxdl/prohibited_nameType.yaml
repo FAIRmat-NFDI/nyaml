@@ -49,7 +49,7 @@ NXprohibited_name_type:
   #       doc: A renameable field with nameType="partial". Does not raise.
   #     LINK(link):
   #       nameType: specified
-  #       target: field
+  #       \target: field
   #       doc: An unnamed link with nameType="partial".
   OBJECT(NXobject):
     \nameType: partial
@@ -61,7 +61,7 @@ NXprohibited_name_type:
         \nameType: partial
         \doc: A renameable field with nameType="partial". Raises an error.
       LINK(link):
-        target: field
+        \target: field
         \doc: A renameable link with nameType="partial".
 
   # Mixed lower and upper case names
@@ -73,7 +73,7 @@ NXprohibited_name_type:
       \@attributeATTRIBUTEattributeATTRIBUTE:
         \doc: A partially-renameable attribute with no nameType. Raises a warning.
       linkLINKlinkLINK(link):
-        target: field
+        \target: field
         \doc: A partially-renameable link with no nameType. Raises a warning.
 
   # objectOBJECTobjectOBJECT(NXobject):
@@ -87,7 +87,7 @@ NXprohibited_name_type:
   #       doc: A partially-renameable attribute with nameType="specified". Does not raise.
   #     linkLINKlinkLINK(link):
   #       nameType: specified
-  #       target: field
+  #       \target: field
   #       doc: A partially-renameable link with nameType="specified". Does not raise.
 
   objectOBJECTobjectOBJECT(NXobject):
@@ -101,5 +101,5 @@ NXprohibited_name_type:
         \doc: A partially-renameable attribute with nameType="any". Raises a warning.
       linkLINKlinkLINK(link):
         \nameType: any
-        target: field
+        \target: field
         \doc: A partially-renameable link with nameType="any". Raises a warning.

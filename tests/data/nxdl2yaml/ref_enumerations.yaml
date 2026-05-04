@@ -58,7 +58,7 @@ NXenums(NXobject):
       \doc: |
         This is an open enumeration without any docstrings for the individual items.
       \enumeration:
-        open_enum: true
+        \open_enum: true
         items: [value0, value1, value2]
     open_enum_no_docs_with_comments:
       \doc: |
@@ -67,13 +67,13 @@ NXenums(NXobject):
       \enumeration:
         
         # comment4
-        open_enum: true
+        \open_enum: true
         items: [value0, value1, value2]
     open_enum_with_docs:
       \doc: |
         This is an open enumeration, with each item having a docstring.
       \enumeration:
-        open_enum: true
+        \open_enum: true
         
         # comment5
         value0:
@@ -92,7 +92,7 @@ NXenums(NXobject):
         This is an open enumeration with docstrings for the individual items.
         The individual items are lists themselves.
       \enumeration:
-        open_enum: true
+        \open_enum: true
         "[1, 0, 0]":
           \doc: |
             Doc for [1, 0, 0]

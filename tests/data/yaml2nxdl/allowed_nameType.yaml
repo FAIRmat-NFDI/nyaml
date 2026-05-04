@@ -10,7 +10,7 @@ NXallowed_name_type(NXobject):
       \@lower_case_attribute_no_nametype:
         \doc: An all lower case attribute with no nameType.
     lower_case_link_no_nametype(link):
-      target: field
+      \target: field
       \doc: An all lower case link with no nameType.
   lower_case_group_specified(NXobject):
     \nameType: specified
@@ -22,7 +22,7 @@ NXallowed_name_type(NXobject):
         \nameType: specified
         \doc: An all lower case attribute with nameType="specified".
       lower_case_link_specified(link):
-        target: field
+        \target: field
         \doc: An all lower case link with no nameType.
 
     (NXobject):
@@ -32,7 +32,7 @@ NXallowed_name_type(NXobject):
         \@ATTRIBUTE:
           \doc: An unnamed attribute no nameType. Interpretead as nameType="any".
         LINK(link):
-          target: field
+          \target: field
           \doc: An unnamed link with no nameType. Interpretead as nameType="any".
 
     (NXdata):
@@ -46,7 +46,7 @@ NXallowed_name_type(NXobject):
           \doc: An unnamed attribute with nameType="any".
         LINK(link):
           \nameType: any
-          target: field
+          \target: field
           \doc: An unnamed link with nameType="any".
 
     objectOBJECT(NXobject):
@@ -60,7 +60,7 @@ NXallowed_name_type(NXobject):
           \doc: A partially-renameable attribute nameType="partial". Variadic part at the end.
         linkLINK(link):
           \nameType: partial
-          target: field
+          \target: field
           \doc: A partially-renameable link nameType="partial". Variadic part at the end.
     objectOBJECTobject(NXobject):
       \nameType: specified
@@ -73,7 +73,7 @@ NXallowed_name_type(NXobject):
           \doc: A partially-renameable attribute with nameType="partial". Variadic part in the middle.
         linkLINKlink(link):
           \nameType: specified
-          target: field
+          \target: field
           \doc: A partially-renameable link with nameType="partial". Variadic part in the middle.
     OBJECTobject(NXobject):
       \nameType: specified
@@ -86,7 +86,7 @@ NXallowed_name_type(NXobject):
           \doc: A partially-renameable attribute with nameType="partial". Variadic part at the start.
         LINKlink(link):
           \nameType: specified
-          target: field
+          \target: field
           \doc: A partially-renameable link with nameType="partial". Variadic part at the start.
     OBJECTobjectOBJECTobject(NXobject):
       \nameType: partial
@@ -99,5 +99,5 @@ NXallowed_name_type(NXobject):
           \doc: A partially-renameable attribute with nameType="partial". Multiple variadic and non-variadic parts.
         LINKlinkLINKlink(link):
           \nameType: partial
-          target: field
+          \target: field
           \doc: A partially-renameable link with nameType="partial". Multiple variadic and non-variadic parts.

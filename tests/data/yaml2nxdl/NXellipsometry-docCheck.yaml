@@ -53,7 +53,7 @@
         \doc: |
           Version number to identify which definition of this application definition was
           used for this entry/data.
-      \@url:
+      \@\url:
         type: NX_CHAR
         \doc: |
           URL where to find further material (documentation, examples) relevant to the
@@ -85,7 +85,7 @@
           repository where the source code of the program and build instructions can be
           found so that the program can be configured in such a way that result files can
           be created ideally in a deterministic manner.
-      \@url:
+      \@\url:
         type: NX_CHAR
         \doc: |
           Website of the software.
@@ -143,7 +143,7 @@
           type: NX_CHAR
           \doc: |
             Version and build number or commit hash of the software source code
-        \@url:
+        \@\url:
           type: NX_CHAR
           \doc: |
             Website of the software.

@@ -20,10 +20,10 @@ NXarchive(NXobject):
           lkokö
           sddfdfd
       - |
-        xref:
-          spec: ISO 18115-1:2023
-          term: 12.58
-          url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
+        \xref:
+          \spec: ISO 18115-1:2023
+          \term: 12.58
+          \url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:\term:12.58
       - |
         This is test doc.
     experiment_description(NX_CHAR):
@@ -32,30 +32,30 @@ NXarchive(NXobject):
         Part1: Text line 1.
         part1: Text line 2
       - |
-        xref:
-          spec: spec
-          term: term
-          url: url
+        \xref:
+          \spec: spec
+          \term: term
+          \url: url
     only_iso_string(NX_CHAR):
       doc: |
-        xref:
-          spec: ISO 18115-1:2023
-          term: 1.1
-          url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:1.1
+        \xref:
+          \spec: ISO 18115-1:2023
+          \term: 1.1
+          \url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:\term:1.1
     double_iso_string(NX_CHAR):
       doc:
       - |
         Way of scanning the energy axis (fixed or sweep).
       - |
-        xref:
-          spec: ISO 18115-1:2023
-          term: 12.65
-          url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.65
+        \xref:
+          \spec: ISO 18115-1:2023
+          \term: 12.65
+          \url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:\term:12.65
       - |
-        xref:
-          spec: ISO 18115-1:2023
-          term: 12.66
-          url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.66
+        \xref:
+          \spec: ISO 18115-1:2023
+          \term: 12.66
+          \url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:\term:12.66
     collection_identifier(NX_CHAR):
       doc: |
         ID of user or DAQ define group of data files
@@ -112,7 +112,7 @@ NXarchive(NXobject):
 # 
 #              This concept is related to term `12.58`_ of the ISO 18115-1:2023 standard.
 # 
-#              .. _12.58: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
+#              .. _12.58: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:\term:12.58
 # 
 #            This is test doc.
 #       </doc>
@@ -131,7 +131,7 @@ NXarchive(NXobject):
 #         <doc>
 #             This concept is related to term `1.1`_ of the ISO 18115-1:2023 standard.
 #             
-#             .. _1.1: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:1.1
+#             .. _1.1: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:\term:1.1
 #         </doc>
 #     </field>
 #     <field name="double_iso_string" type="NX_CHAR">
@@ -140,11 +140,11 @@ NXarchive(NXobject):
 # 
 #          This concept is related to term `12.65`_ of the ISO 18115-1:2023 standard.
 # 
-#          .. _12.65: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.65
+#          .. _12.65: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:\term:12.65
 # 
 #          This concept is related to term `12.66`_ of the ISO 18115-1:2023 standard.
 # 
-#          .. _12.66: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.66
+#          .. _12.66: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:\term:12.66
 #       </doc>
 #     </field>
 #     <field name="collection_identifier" type="NX_CHAR">
