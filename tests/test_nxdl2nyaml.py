@@ -168,7 +168,8 @@ def test_nxdl2yaml_doc():
 @pytest.mark.parametrize(
     "test_input",
     [
-        ("NXdimensionsType"),
+        "NXattributes",
+        "NXdimensionsType",
     ],
 )
 def test_backward_conversion(test_input):

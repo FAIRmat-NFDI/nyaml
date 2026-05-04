@@ -86,9 +86,22 @@ NXdimensions(NXobject):
         Shorthand for cases that specify only the rank.
       \dimensions:
         \rank: symbol_a
+    dim_with_ref(NX_NUMBER):
+      \doc: |
+        Dimensions block using the ref attribute on individual dim elements to
+        reference named dimension constants defined in the symbols block.
+      \dimensions:
+        \doc: |
+          Test with doc and dim ref attribute
+        1:
+          value: 2
+          ref: s
+        3:
+          value: 4
+          ref: m
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# e5634ff10e8ef3cf9fb1a951578f365faab729c581cd30cb7b526a13792a168f
+# fbaadcf9c28d77f8d3923789c5b8c4901e15c2ea52f61620fc7bc9200e122e08
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--
@@ -228,6 +241,19 @@ NXdimensions(NXobject):
 #                 Shorthand for cases that specify only the rank.
 #             </doc>
 #             <dimensions rank="symbol_a"/>
+#         </field>
+#         <field name="dim_with_ref" type="NX_NUMBER">
+#             <doc>
+#                 Dimensions block using the ref attribute on individual dim elements to
+#                 reference named dimension constants defined in the symbols block.
+#             </doc>
+#             <dimensions>
+#                 <doc>
+#                     Test with doc and dim ref attribute
+#                 </doc>
+#                 <dim index="1" value="2" ref="s"/>
+#                 <dim index="3" value="4" ref="m"/>
+#             </dimensions>
 #         </field>
 #     </group>
 # </definition>
