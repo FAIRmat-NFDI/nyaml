@@ -25,6 +25,7 @@ to convert from nyaml to nxdl and vice versa.
 
 import hashlib
 import os
+from collections.abc import Set
 from typing import Any
 
 from yaml.composer import Composer
@@ -38,32 +39,6 @@ ESCAPE_CHAR_DICT_IN_YAML: dict[str, str] = {"\t": "    "}
 ESCAPE_CHAR_DICT_IN_XML: dict[str, str] = {
     val: key for key, val in ESCAPE_CHAR_DICT_IN_YAML.items()
 }
-
-# Reserved nyaml keywords that map to NXDL concepts rather than concept names.
-# Use a backslash prefix (e.g. \rank) to use one of these as a concept name.
-# \@ is already the escape prefix for XML attributes (e.g. \@version).
-RESERVED_KEYWORDS = frozenset(
-    {
-        "doc",
-        "unit",
-        "enumeration",
-        "nameType",
-        "dim",
-        "dimensions",
-        "exists",
-        "minOccurs",
-        "maxOccurs",
-        "rank",  # sub-key inside a 'dimensions' block
-        "type",  # field/group NeXus data type and root-level definition type
-        "category",  # root-level definition category
-        "symbols",  # root-level named dimension constants
-        "deprecated",  # root-level definition attribute
-        "ignoreExtraGroups",  # root-level definition attribute
-        "ignoreExtraFields",  # root-level definition attribute
-        "ignoreExtraAttributes",  # root-level definition attribute
-        "restricts",  # root-level definition attribute
-    }
-)
 
 # Set up attributes for nxdl version
 NXDL_GROUP_ATTRIBUTES: tuple[str, ...] = (
@@ -125,7 +100,44 @@ YAML_ATTRIBUTES_ATTRIBUTES: tuple[str, ...] = (
     "exists",
 )
 
-YAML_LINK_ATTRIBUTES: tuple[str, ...] = NXDL_LINK_ATTRIBUTES
+YAML_LINK_ATTRIBUTES: tuple[str, ...] = tuple(
+    f"\\{attr}" for attr in NXDL_LINK_ATTRIBUTES
+)
+
+
+# Reserved nyaml keywords that map to NXDL concepts rather than concept names.
+# Use a backslash prefix (e.g. \rank) to use one of these as a concept name.
+# \@ is already the escape prefix for XML attributes (e.g. \@version).
+RESERVED_KEYWORDS: Set = frozenset(
+    {
+        "doc",
+        "unit",
+        "enumeration",
+        "nameType",
+        "dim",
+        "dimensions",
+        "exists",
+        "minOccurs",
+        "maxOccurs",
+        "type",  # field/group NeXus data type
+    }
+)
+
+LIMITED_RESERVED_KEYWORDS: dict[str, Set] = {
+    "definition": frozenset(
+        {
+            "category",  # root-level definition category
+            "symbols",  # root-level named dimension constants
+            "type",  #  root-level definition type
+            "deprecated",  # root-level definition attribute
+            "ignoreExtraGroups",  # root-level definition attribute
+            "ignoreExtraFields",  # root-level definition attribute
+            "ignoreExtraAttributes",  # root-level definition attribute
+            "restricts",  # root-level definition attribute
+        }
+    ),
+    "link": frozenset({*RESERVED_KEYWORDS, *NXDL_LINK_ATTRIBUTES}),
+}
 
 
 def remove_namespace_from_tag(tag: object) -> str:

@@ -422,10 +422,10 @@ def test_copyright_license_new_yaml(tmp_path):
     [
         (
             """
-    xref:
-        spec: <spec>
-        term: <term>
-        url: <url>
+    \\xref:
+        \\spec: <spec>
+        \\term: <term>
+        \\url: <url>
     """,
             "This concept is related to term `<term>`_ "
             "of the <spec> standard.\n\n.. _<term>: <url>",
@@ -433,55 +433,65 @@ def test_copyright_license_new_yaml(tmp_path):
         ),
         (
             """
-    xref:
-        spec: <spec>
-         term: <term>
-        url: <url>
+    \\xref:
+        \\spec: <spec>
+         \\term: <term>
+        \\url: <url>
     """,
             "Found invalid xref. Please make sure that your xref entries are valid yaml.",
             False,
         ),
         (
             """
-    xref:
-        spec: <spec>
-        term: <term>
-        url: <url>
-        term: <term2>
+    \\xref:
+        \\spec: <spec>
+        \\term: <term>
+        \\url: <url>
+        \\term: <term2>
     """,
             "Invalid xref. It contains nested or duplicate keys.",
             False,
         ),
         (
             """
-    xref:
-        spec: <spec>
-        term: <term>
-        url: <url>
-        hallo: <term2>
+    \\xref:
+        \\spec: <spec>
+        \\term: <term>
+        \\url: <url>
+        \\hallo: <term2>
     """,
             "Invalid xref. Too many keys.",
             False,
         ),
         (
             """
-    xref:
-        spec: <spec>
-        my_key: <term>
-        url: <url>
+    \\xref:
+        \\spec: <spec>
+        \\my_key: <term>
+        \\url: <url>
     """,
-            "Invalid xref key `my_key`. Must be one of `term`, `spec` or `url`.",
+            "Invalid xref key `\\my_key`. Must be one of `\\term`, `\\spec` or `\\url`.",
             False,
         ),
         (
             """
-    xref:
-        spec: <spec>
-        term:
+    \\xref:
+        \\spec: <spec>
+        \\term:
             test: <nested_value>
-        url: <url>
+        \\url: <url>
     """,
             "Invalid xref. It contains nested or duplicate keys.",
+            False,
+        ),
+        (
+            """
+    \\xref:
+        spec: <spec>
+        \\term: <term>
+        \\url: <url>
+    """,
+            "Invalid xref key `spec`. Must be one of `\\term`, `\\spec` or `\\url`.",
             False,
         ),
     ],

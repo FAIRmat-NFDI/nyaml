@@ -113,10 +113,10 @@ Presented below is a concise and trimmed example of the `NXmpes` application def
           - |
             Description of the MPES spectrometer and its individual parts.
           - |
-            xref:
-              spec: ISO 18115-1:2023
-              term: 12.58
-              url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
+            \xref:
+              \spec: ISO 18115-1:2023
+              \term: 12.58
+              \url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
           source_TYPE(NXsource):
             \exists: recommended
             \doc: |

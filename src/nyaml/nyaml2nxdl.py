@@ -312,7 +312,7 @@ def handle_each_part_doc(text: str) -> str:
 
     clean_txt = text.strip()
 
-    if not clean_txt.startswith("xref:"):
+    if not clean_txt.startswith(r"\xref:"):
         return format_nxdl_doc(check_for_mapping_char_other(clean_txt)).strip()
 
     no_lines = len(clean_txt.splitlines())
@@ -322,7 +322,11 @@ def handle_each_part_doc(text: str) -> str:
         raise ValueError(
             "Found invalid xref. Please make sure that your xref entries are valid yaml."
         ) from scan_err
-    xref_entries = xref_dict.get("xref", {})
+    xref_key = r"\xref"
+    term_key = r"\term"
+    spec_key = r"\spec"
+    url_key = r"\url"
+    xref_entries = xref_dict.get(xref_key, {})
 
     if no_lines != len(xref_entries) + 1:
         raise ValueError("Invalid xref. It contains nested or duplicate keys.")
@@ -331,16 +335,16 @@ def handle_each_part_doc(text: str) -> str:
         raise ValueError("Invalid xref. Too many keys.")
 
     for key in xref_entries:
-        if key not in ("term", "spec", "url"):
+        if key not in (term_key, spec_key, url_key):
             raise ValueError(
-                f"Invalid xref key `{key}`. Must be one of `term`, `spec` or `url`."
+                f"Invalid xref key `{key}`. Must be one of `\\term`, `\\spec` or `\\url`."
             )
 
     return (
-        f"This concept is related to term `{xref_entries.get('term', 'NO TERM')}`_ "
-        f"of the {xref_entries.get('spec', 'NO TERM')} standard.\n\n"
-        f".. _{xref_entries.get('term', 'NO SPECIFICATION')}: "
-        f"{xref_entries.get('url', 'NO URL')}"
+        f"This concept is related to term `{xref_entries.get(term_key, 'NO TERM')}`_ "
+        f"of the {xref_entries.get(spec_key, 'NO STANDARD')} standard.\n\n"
+        f".. _{xref_entries.get(term_key, 'NO TERM')}: "
+        f"{xref_entries.get(url_key, 'NO URL')}"
     )
 
 
@@ -561,15 +565,15 @@ def xml_handle_dimensions(
 def xml_handle_enumeration(
     dct: dict, obj: ET._Element, keyword: str, value: list | dict, verbose: bool
 ) -> None:
-    """This function creates an 'enumeration' element instance.
+    r"""This function creates an 'enumeration' element instance.
 
     Different cases are handled:
     1) The items are in a flat list directly under "enumeration".
     2) The items are in a dictionary under the "items" key.
     3) The items are dictionaries and may contain a nested doc.
-    4) The enumeration is open. The input is a dict with keywords "open_enum"
+    4) The enumeration is open. The input is a dict with keywords "\open"
        and "items" (which is  a flat list of all enum items without docs).
-    5) The enumeration is open. The input is a nested dict with keyword "open_enum"
+    5) The enumeration is open. The input is a nested dict with keyword "\open"
        and each items is a dict itself (with docs for each item).
     """
     line_number = f"__line__{keyword}"
@@ -589,13 +593,13 @@ bear at least an argument !"
             itm = ET.SubElement(enum, "item")
             itm.set("value", str(element))
     if isinstance(value, dict) and value != {}:
-        if "open_enum" in value:
-            line_number = f"__line__{'open_enum'}"
+        if r"\open" in value:
+            line_number = "__line__\\open"
             line_loc = value[line_number]
             xml_handle_comment(enum, line_number, line_loc)
-            enum.set("open", check_for_mapping_char_other(str(value["open_enum"])))
+            enum.set("open", check_for_mapping_char_other(str(value[r"\open"])))
 
-            del value["open_enum"]
+            del value[r"\open"]
 
         if "items" in value:
             line_number = f"__line__{'items'}"
@@ -654,7 +658,7 @@ def xml_handle_link(
                 rm_key_list.append(line_number)
             elif attr in YAML_LINK_ATTRIBUTES and not isinstance(val, dict):
                 if val:
-                    link_obj.set(attr, str(val))
+                    link_obj.set(attr.lstrip("\\"), str(val))
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
                 xml_handle_comment(obj, line_number, line_loc, link_obj)
@@ -1085,7 +1089,9 @@ def recursive_build(obj: ET._Element, dct: dict, verbose: bool) -> None:
         elif keyword[-8:] == "(choice)":
             xml_handle_choice(dct, obj, keyword, value)
         # symbols of fields or attributes, root level symbols dealt with by nyaml2nxdl()
-        elif keyword_type == "" and keyword_name == "symbols" and isinstance(value, dict):
+        elif (
+            keyword_type == "" and keyword_name == "symbols" and isinstance(value, dict)
+        ):
             xml_handle_symbols(dct, obj, keyword, value)
         elif re.match(r"NX[a-zA-Z].*", keyword_type) is not None:
             elem_type = "group"

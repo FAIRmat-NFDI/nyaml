@@ -152,13 +152,13 @@ Descriptive text for any concept is given in the `\doc` child.
 
 ## Links
 
-A NeXus `link` avoids data duplication by letting one concept point to another. In YAML it uses the `(link)` suffix; the `target` child gives the path to the actual data.
+A NeXus `link` avoids data duplication by letting one concept point to another. In YAML it uses the `(link)` suffix; the `\target` child gives the path to the actual data.
 
 === "YAML"
     ```yaml
     reference_measurement(link):
-      target: /entry
-      doc: A link to a full data collection.
+      \target: /entry
+      \doc: A link to a full data collection.
     ```
 === "XML"
     ```xml
@@ -367,7 +367,7 @@ The optional `dim_parameters` key allows adding documentation or references to i
 
 ### `enumeration`
 
-A list of predefined allowed values for a field or attribute. Individual items may include a `doc` child. Set `open_enum: true` to allow values beyond the listed ones.
+A list of predefined allowed values for a field or attribute. Individual items may include a `doc` child. Set `\open: true` to allow values beyond the listed ones.
 
 === "YAML"
     ```yaml
@@ -390,7 +390,7 @@ A list of predefined allowed values for a field or attribute. Individual items m
     ```yaml
     enum_with_open_enum:
       \enumeration:
-        open_enum: true
+        \open: true
         items: [NXmpes]
     ```
 === "XML (open enum)"
@@ -406,7 +406,7 @@ A list of predefined allowed values for a field or attribute. Individual items m
     ```yaml
     enum_with_open_and_vector_items:
       \enumeration:
-        open_enum: true
+        \open: true
         '[0, 1, 0]':
           doc: |
             This is an open enumeration with values 0, 1, and 0.
@@ -432,7 +432,7 @@ A list of predefined allowed values for a field or attribute. Individual items m
 
 ### `xref`
 
-The `xref` keyword (only valid inside `doc`) links a concept to an entry in an external ontology or standard such as ISO. It is YAML-only: `nyaml` converts it to the corresponding textual representation inside the XML `<doc>` element.
+The `\xref` keyword (only valid inside `doc`) links a concept to an entry in an external ontology or standard such as ISO. It is YAML-only: `nyaml` converts it to the corresponding textual representation inside the XML `<doc>` element.
 
 === "YAML"
     ```yaml
@@ -441,10 +441,10 @@ The `xref` keyword (only valid inside `doc`) links a concept to an entry in an e
       - |
         Description of the MPES spectrometer and its individual parts.
       - |
-        xref:
-          spec: ISO 18115-1:2023
-          term: 12.58
-          url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
+        \xref:
+          \spec: ISO 18115-1:2023
+          \term: 12.58
+          \url: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:12.58
     ```
 === "XML"
     ```xml

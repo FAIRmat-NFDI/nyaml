@@ -31,6 +31,7 @@ from typing import Any, TextIO
 import lxml.etree as ET
 
 from nyaml.helper import (
+    LIMITED_RESERVED_KEYWORDS,
     NXDL_ATTRIBUTES_ATTRIBUTES,
     NXDL_FIELD_ATTRIBUTES,
     NXDL_GROUP_ATTRIBUTES,
@@ -278,7 +279,7 @@ class Nxdl2yaml:
                     self.root_level_definition.append(tmp_word)
                     keyword_order = self.root_level_definition.index(tmp_word)
             elif "schemaLocation" not in item and "extends" != item:
-                prefix = "\\" if item in RESERVED_KEYWORDS else ""
+                prefix = "\\" if item in LIMITED_RESERVED_KEYWORDS["definition"] else ""
                 text = f"{prefix}{item}: {attributes[item]}"
                 self.root_level_definition.append(text)
         self.root_level_definition[keyword_order] = f"{keyword}:"
@@ -373,7 +374,7 @@ class Nxdl2yaml:
             return part of doc as formatted
         """
 
-        xref_key, spec_key, term_key, url_key = ("xref", "spec", "term", "url")
+        xref_key, spec_key, term_key, url_key = (r"\xref", r"\spec", r"\term", r"\url")
         spec, term, url = (None, None, None)
         matches = re.search(
             r"This concept is related to term `([^`:]+)`_ of the"
@@ -834,12 +835,12 @@ class Nxdl2yaml:
     def handle_enumeration(
         self, depth: int, node: ET._Element, file_out: TextIO
     ) -> None:
-        """
+        r"""
         Handle the enumeration field parsed from the XML file.
 
         - If enumeration items contain a <doc> field, they will be stored as child fields.
         - If no docs are provided, items will be stored in a list format.
-        - If the enumeration is open, an 'open_enum' key will be included.
+        - If the enumeration is open, an '\open_enum' key will be included.
         """
         indent = depth * DEPTH_SIZE
         tag = remove_namespace_from_tag(node.tag)
@@ -856,7 +857,7 @@ class Nxdl2yaml:
         if check_doc:
             file_out.write("\n")
             if open_enum:
-                file_out.write(f"{indent + DEPTH_SIZE}open_enum: true\n")
+                file_out.write(f"{indent + DEPTH_SIZE}\\open: true\n")
             for child in node_children:
                 child_tag = remove_namespace_from_tag(child.tag)
                 if child_tag == "item":
@@ -894,9 +895,9 @@ class Nxdl2yaml:
 
             if open_enum:
                 if not enum_with_comment:
-                    file_out.write(f"\n{indent + DEPTH_SIZE}open_enum: true\n")
+                    file_out.write(f"\n{indent + DEPTH_SIZE}\\open: true\n")
                 else:
-                    file_out.write(f"{indent + DEPTH_SIZE}open_enum: true\n")
+                    file_out.write(f"{indent + DEPTH_SIZE}\\open: true\n")
 
             if open_enum or enum_with_comment:
                 file_out.write(
@@ -1004,7 +1005,9 @@ class Nxdl2yaml:
             if attr_key in NXDL_LINK_ATTRIBUTES:
                 indent = depth_ * DEPTH_SIZE
                 escaped_key = (
-                    f"\\{attr_key}" if attr_key in RESERVED_KEYWORDS else attr_key
+                    f"\\{attr_key}"
+                    if attr_key in LIMITED_RESERVED_KEYWORDS["link"]
+                    else attr_key
                 )
                 file_out.write(f"{indent}{escaped_key}: {val}\n")
             else:
