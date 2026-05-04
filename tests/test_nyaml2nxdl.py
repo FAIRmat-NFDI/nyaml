@@ -64,8 +64,10 @@ def test_nametypes_nyaml2nxdl():
     test_yml_file = str(NYAML2NXDL_DATA_DIR / "allowed_nameType.yaml")
     test_xml_file = str(NYAML2NXDL_DATA_DIR / "allowed_nameType.nxdl.xml")
     desired_matches = ["partial", "specified", "any"]
-    compare_matches(str(ref_xml), str(test_yml), str(test_xml), desired_matches)
-    os.remove(test_xml)
+    compare_matches(
+        str(ref_xml_file), str(test_yml_file), str(test_xml_file), desired_matches
+    )
+    os.remove(test_xml_file)
     sys.stdout.write("Test on nameType okay.\n")
 
 
@@ -259,6 +261,7 @@ def test_file_line_error():
         os.remove(out_yaml)
     sys.stdout.write("Test on xml -> yml file line error handling okay.\n")
 
+
 def test_symbols():
     """
     Check the correct parsing of symbols
@@ -294,7 +297,9 @@ def test_symbols_and_enum_docs():
         "</dimensions>",
         "<dim",
     ]
-    compare_matches(str(ref_xml_file), str(test_yml_file), str(test_xml_file), desired_matches)
+    compare_matches(
+        str(ref_xml_file), str(test_yml_file), str(test_xml_file), desired_matches
+    )
     os.remove(f"{FORWARD_DATA_DIR}/NXmytests.nxdl.xml")
     sys.stdout.write("Test on docs in enumeration and symbols okay.\n")
 
@@ -520,7 +525,7 @@ def test_forward_conversion(test_input):
 
     with open(test_xml_output_file, encoding="utf-8") as logfile:
         log = logfile.readlines()
-    with open(ref_xml, encoding="utf-8") as reference_file:
+    with open(ref_xml_output_file, encoding="utf-8") as reference_file:
         ref = reference_file.readlines()
     assert log == ref
 
