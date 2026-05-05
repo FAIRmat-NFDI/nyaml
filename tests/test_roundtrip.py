@@ -22,13 +22,13 @@ Tests for bidirectional (roundtrip) conversions: nxdl→yaml→nxdl and yaml→n
 import os
 import re
 import sys
-from pathlib import Path
-import pytest
-import yaml
 from collections import OrderedDict
 from datetime import datetime
+from pathlib import Path
 
 import lxml.etree as ET
+import pytest
+import yaml
 from click.testing import CliRunner
 from helpers import check_file_fresh_baked, compare_yaml_content
 
@@ -40,6 +40,7 @@ from nyaml.nyaml2nxdl import get_nxdl_copyright_license
 
 ROUNDTRIP_DATA_DIR = Path(__file__).parent / "data" / "roundtrip"
 NXDL2YAML_DATA = Path(__file__).parent / "data" / "nxdl2yaml"
+
 
 def test_xml_parsing():
     """In this test an xml file is converted to yml and then back to xml.
@@ -68,7 +69,6 @@ has not the same tree structure!!"
     os.remove(test_xml_file)
     os.remove(test_yml_file)
 
-ROUNDTRIP_DATA_DIR = Path(__file__).parent / "data" / "roundtrip"
 
 def test_yml_parsing():
     """In this test a yml file is converted to xml and then back to yml.
@@ -220,6 +220,7 @@ def test_check_copyright_license_in_modified_yaml(tmp_path):
     text_list = re.findall(expected_text, license_text, re.DOTALL)
 
     assert len(text_list) == 1, "License text is not correct."
+
 
 @pytest.mark.parametrize(
     "keyword",
