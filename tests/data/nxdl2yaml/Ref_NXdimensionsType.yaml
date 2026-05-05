@@ -14,7 +14,7 @@ doc: |
 type: group
 NXdimensions(NXobject):
   (NXentry):
-    
+
     # provided a proper escape sign is used also an even more compact way could be possible
     minimal(NX_NUMBER):
       doc: |
@@ -45,11 +45,11 @@ NXdimensions(NXobject):
         Shorthand where the rank can be set explicitly. For testing purposes
         the rank is here intentionally set to a value that is different to the number
         of entries in dim.
-        
+
         Authors and designers of NeXus classes should preferentially use
         the shorthand notation unless the full_syntax is required as
         using rank_only is insufficient.
-        
+
         This is the default to which nxdl2yaml converts unless
         the XML content substantiates that either using
         rank_only suffices or that full_syntax is required.
@@ -171,11 +171,11 @@ NXdimensions(NXobject):
 #                 Shorthand where the rank can be set explicitly. For testing purposes
 #                 the rank is here intentionally set to a value that is different to the number
 #                 of entries in dim.
-#                 
+#
 #                 Authors and designers of NeXus classes should preferentially use
 #                 the shorthand notation unless the full_syntax is required as
 #                 using rank_only is insufficient.
-#                 
+#
 #                 This is the default to which nxdl2yaml converts unless
 #                 the XML content substantiates that either using
 #                 rank_only suffices or that full_syntax is required.
