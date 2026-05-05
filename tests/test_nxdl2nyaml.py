@@ -146,11 +146,11 @@ def test_nxdl2yaml_doc():
     parsed_yaml_file = str(NXDL2NYAML_DATA_DIR / "doc_nxdl2yaml_parsed.yaml")
 
     result = CliRunner().invoke(
-        nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", str(nxdl_file)]
+        nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", nxdl_file]
     )
 
     if result.exit_code != 0:
-        Path.unlink(parsed_yaml_file)
+        os.remove(parsed_yaml_file)
 
     assert result.exit_code == 0, "Error in converter execution."
 
@@ -162,7 +162,7 @@ def test_nxdl2yaml_doc():
         yaml_dict2 = LineLoader(yaml2).get_single_data()
 
     compare_yaml_content(yaml_dict1, yaml_dict2, ["doc"])
-    Path.unlink(parsed_yaml_file)
+    os.remove(parsed_yaml_file)
 
 
 @pytest.mark.parametrize(
