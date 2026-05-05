@@ -444,3 +444,54 @@ The `\xref` keyword (only valid inside `doc`) links a concept to an entry in an 
       </doc>
     </group>
     ```
+
+---
+
+## NXDL coverage
+
+`nyaml` covers all NXDL concepts that are relevant to writing modern NeXus definitions. The table below maps each major NXDL XSD type and its attributes to the corresponding nyaml notation.
+
+| NXDL XSD concept | Attributes / children | nyaml notation |
+|---|---|---|
+| `definition` | `category` | `\category` |
+| | `type` | `\type` |
+| | `name`, `extends` | `NXname(NXbase):` key |
+| | `restricts` | `\restricts` |
+| | `deprecated` | `\deprecated` |
+| | `ignoreExtraGroups` | `\ignoreExtraGroups` |
+| | `ignoreExtraFields` | `\ignoreExtraFields` |
+| | `ignoreExtraAttributes` | `\ignoreExtraAttributes` |
+| `group` | `name`, `type` | `name(NXbaseclass):` key |
+| | `minOccurs`, `maxOccurs` | `\minOccurs`, `\maxOccurs` |
+| | `recommended`, `optional` | `\exists: recommended / optional` |
+| | `nameType` | `\nameType` |
+| | `deprecated` | `\deprecated` |
+| `field` | `name` | plain key, e.g. `fieldname:` |
+| | `type` | `fieldname(NX_TYPE):` |
+| | `units` | `\unit` |
+| | `minOccurs`, `maxOccurs` | `\minOccurs`, `\maxOccurs` |
+| | `recommended`, `optional` | `\exists: recommended / optional` |
+| | `nameType` | `\nameType` |
+| | `deprecated` | `\deprecated` |
+| | `dimensions` child | `\dimensions` with `\rank`, `\dim` |
+| | `enumeration` child | `\enumeration` |
+| | `attribute` child | `\@name:` |
+| `attribute` | `name`, `type` | `\@name(NX_TYPE):` |
+| | `recommended`, `optional` | `\exists: recommended / optional` |
+| | `nameType` | `\nameType` |
+| | `enumeration` child | `\enumeration` |
+| `link` | `name` | `name(link):` key |
+| | `target` | `\target` |
+| | `napimount` | `\napimount` |
+| `enumeration` | `open` | `\open: true` |
+| | `item` children | list items or dict keys under `\enumeration` |
+| `doc` | free text | `\doc` |
+| | cross-reference | `\xref` with `\spec`, `\term`, `\url` |
+| `symbols` | `doc`, `symbol` children | `\symbols` block |
+| `dimensions` | `rank` | `\rank` |
+| | `dim` children | `\dim` |
+
+**Not supported:**
+
+- `choice` — the NeXus `choice` element is not yet implemented in `nyaml`
+- Legacy `field` XML attributes (`signal`, `axes`, `axis`, `primary`, `long_name`, `stride`, `data_offset`, `interpretation`) — these are field XML attributes that are now deprecated; use `\@signal:`, `\@axes:` etc. (the standard `attribute` syntax) instead
