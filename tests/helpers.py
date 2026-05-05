@@ -21,6 +21,10 @@ import re
 from datetime import datetime
 from pathlib import Path
 
+from click.testing import CliRunner
+
+from nyaml import cli as nyaml2nxdl
+
 LATEST_COPYRIGHT_YEAR = f"{datetime.now().year}-{datetime.now().year}"
 LATEST_COPYRIGHT = rf"# Copyright \(C\) {LATEST_COPYRIGHT_YEAR} NeXus International Advisory Committee \(NIAC\)"
 COPYRIGHT_REPLACEMENT = (
@@ -77,3 +81,47 @@ def compare_yaml_content(yaml_dict1, yaml_dict2, test_key_list):
                 assert val1 == val2, f"{ref_key} content is not the same."
             elif isinstance(val1, dict) and isinstance(val2, dict):
                 compare_yaml_content(val1, val2, test_key_list)
+
+
+def delete_duplicates(list_of_matching_string):
+    """Delete duplicates from a list while preserving order."""
+    return list(dict.fromkeys(list_of_matching_string))
+
+
+def find_matches(xml_file, desired_matches):
+    """Read xml file and find desired matches. Return a list of two lists in the form:
+    [[matching_line],[matching_line_index]]
+    """
+    with open(xml_file, encoding="utf-8") as file:
+        xml_reference = file.readlines()
+    lines = []
+    lines_index = []
+    found_matches = []
+    for i, line in enumerate(xml_reference):
+        for desired_match in desired_matches:
+            if str(desired_match) in str(line):
+                lines.append(line)
+                lines_index.append(i)
+                found_matches.append(desired_match)
+    # ascertain that all the desired matches were found in file
+    found_matches_clean = delete_duplicates(found_matches)
+    assert len(found_matches_clean) == len(desired_matches), (
+        "some desired_matches were \nnot found in file"
+    )
+    return [lines, lines_index]
+
+
+def compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches):
+    """Check if a new xml file is generated
+    and if test xml file is equal to reference xml file.
+    """
+    # Reference file is read
+    ref_matches = find_matches(ref_xml_file, desired_matches)
+    # Test file is generated
+    runner = CliRunner()
+    result = runner.invoke(nyaml2nxdl.launch_tool, [test_yml_file])
+    assert result.exit_code == 0
+    check_file_fresh_baked(test_xml_file)
+    # Test file is read
+    test_matches = find_matches(test_xml_file, desired_matches)
+    assert test_matches == ref_matches
