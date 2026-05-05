@@ -766,7 +766,7 @@ class Nxdl2yaml:
         # perform I/O based on the cases analyzed
         yml_dim_dct_keys = list(yml_dim_dct)
         indent = depth * DEPTH_SIZE
-        if set(yml_dim_dct_keys) in [{r"\rank"}, {"doc", r"\rank"}]:
+        if set(yml_dim_dct_keys) in [{r"\rank"}, {r"\doc", r"\rank"}]:
             # rank only notation
             file_out.write(f"{indent}\\dimensions:\n")
             for key, val in yml_dim_dct.items():

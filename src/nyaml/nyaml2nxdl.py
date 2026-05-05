@@ -25,7 +25,6 @@ import os
 import pathlib
 import re
 import textwrap
-import warnings
 from typing import Any
 from urllib.parse import unquote
 
@@ -442,19 +441,8 @@ def xml_handle_dimensions(
     dims: ET.Element | None = None
     if isinstance(value, dict):
         # Normalize escape-prefixed keywords inside a dimensions block to their bare
-        # internal names (which the rest of this function uses). Also accept the old
-        # bare forms with a DeprecationWarning where applicable.
+        # internal names (which the rest of this function uses).
         value = dict(value)  # shallow copy so we do not mutate the caller's dict
-        if "rank" in value and r"\rank" not in value:
-            # Accept old bare 'rank' with a deprecation warning, checked before
-            # normalization so the check targets the original unescaped key.
-            warnings.warn(
-                r"Use '\rank' instead of 'rank' as the key inside a 'dimensions' block. "
-                "Support for the unescaped 'rank' keyword is deprecated and will be "
-                "removed in a future version.",
-                DeprecationWarning,
-                stacklevel=2,
-            )
         for _kw in (r"\rank", r"\doc", r"\dim"):
             bare = _kw[1:]  # strip leading backslash
             if _kw in value:

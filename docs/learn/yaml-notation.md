@@ -323,9 +323,7 @@ Specifies the NeXus unit category for a field. Use one of the existing [unit cat
 
 ### `dimensions`
 
-Describes the shape of a multidimensional data array. Using the "dimensions" keyword constraints the instance data of a field to an array with at least one dimension. The `rank` key gives the number of dimensions. Each dimension is specified with `dim` using either the full array-of-arrays form or the shorter tuple form. Use symbolic names from the root `symbols` block rather than hardcoded integers.
-
-The optional `dim_parameters` key allows adding documentation or references to individual dimensions; each entry must have the same length as `rank`.
+Describes the shape of a multidimensional data array. Using the "dimensions" keyword constraints the instance data of a field to an array with at least one dimension. The `\rank` key gives the number of dimensions. Each dimension is specified with `\dim` using either the full array-of-arrays form or the shorter tuple form. Use symbolic names from the root `\symbols` block rather than hardcoded integers.
 
 === "YAML"
     ```yaml
@@ -333,8 +331,6 @@ The optional `dim_parameters` key allows adding documentation or references to i
     \dimensions:
       \rank: 2
       \dim: [[0, nx], [1, ny]]
-      dim_parameters:
-        doc: ["Position of particle on x-axis.", "Position of particle on y-axis."]
     ```
 
 === "YAML (shorter form)"
@@ -345,17 +341,6 @@ The optional `dim_parameters` key allows adding documentation or references to i
       \dim: (nx, ny)
     ```
 === "XML"
-    ```xml
-    <dimensions rank="2">
-      <dim index="0" value="nx">
-        <doc>Position of particle on x-axis.</doc>
-      </dim>
-      <dim index="1" value="ny">
-        <doc>Position of particle on y-axis.</doc>
-      </dim>
-    </dimensions>
-    ```
-=== "XML (shorter form)"
     ```xml
     <dimensions rank="2">
       <dim index="0" value="nx"/>

@@ -300,14 +300,14 @@ def test_symbols_and_enum_docs():
     compare_matches(
         str(ref_xml_file), str(test_yml_file), str(test_xml_file), desired_matches
     )
-    os.remove(f"{FORWARD_DATA_DIR}/NXmytests.nxdl.xml")
+    os.remove(f"{NYAML2NXDL_DATA_DIR}/NXmytests.nxdl.xml")
     sys.stdout.write("Test on docs in enumeration and symbols okay.\n")
 
 
 def test_enumerations():
-    ref_xml = FORWARD_DATA_DIR / "ref_enumerations.nxdl.xml"
-    test_yml = FORWARD_DATA_DIR / "enumerations.yaml"
-    test_xml = FORWARD_DATA_DIR / "enumerations.nxdl.xml"
+    ref_xml = NYAML2NXDL_DATA_DIR / "ref_enumerations.nxdl.xml"
+    test_yml = NYAML2NXDL_DATA_DIR / "enumerations.yaml"
+    test_xml = NYAML2NXDL_DATA_DIR / "enumerations.nxdl.xml"
     desired_matches = [
         "<enumeration",
         "</enumeration>",
