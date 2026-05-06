@@ -49,10 +49,10 @@ def test_xml_parsing():
     ref_xml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry.nxdl.xml")
     test_yml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry_parsed.yaml")
     test_xml_file = str(ROUNDTRIP_DATA_DIR / "Ref_NXellipsometry_parsed.nxdl.xml")
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(ref_xml_file)])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [ref_xml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_yml_file)
-    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(test_yml_file)])
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [test_yml_file])
     assert result.exit_code == 0
     check_file_fresh_baked(test_xml_file)
 

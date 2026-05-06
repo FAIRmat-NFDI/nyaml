@@ -13,7 +13,7 @@ NXenums(NXobject):
       \enumeration:
         
         # comment1
-        items: [value0, value1, value2]
+        \items: [value0, value1, value2]
     closed_enum_with_numbers(NX_NUMBER):
       \doc: |
         This is a closed enumeration with NX_NUMBER items.
@@ -59,7 +59,7 @@ NXenums(NXobject):
         This is an open enumeration without any docstrings for the individual items.
       \enumeration:
         \open: true
-        items: [value0, value1, value2]
+        \items: [value0, value1, value2]
     open_enum_no_docs_with_comments:
       \doc: |
         This is an open enumeration without any docstrings for the individual items.
@@ -68,7 +68,7 @@ NXenums(NXobject):
         
         # comment4
         \open: true
-        items: [value0, value1, value2]
+        \items: [value0, value1, value2]
     open_enum_with_docs:
       \doc: |
         This is an open enumeration, with each item having a docstring.

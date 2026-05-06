@@ -1,8 +1,8 @@
-category: base
-doc: |
+\category: base
+\doc: |
   my nice doc string in root level.
   my nice doc string in root level, line 2. Modified.
-type: group
+\type: group
 NXentry(NXobject):
   \@default:
     \doc: |
@@ -12,7 +12,7 @@ NXentry(NXobject):
       my nice doc string.
             my nice doc string, line 2.
   \@IDF_Version:
-    
+
     # as ratified at NIAC2010
     \doc: |
       my nice single line doc string
@@ -89,7 +89,7 @@ NXentry(NXobject):
 #     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 #     xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd"
 #     >
-# 
+#
 #     <attribute name="default">
 #         <doc>
 #                 oki

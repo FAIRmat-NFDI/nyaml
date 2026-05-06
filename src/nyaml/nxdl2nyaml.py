@@ -835,12 +835,12 @@ class Nxdl2yaml:
     def handle_enumeration(
         self, depth: int, node: ET._Element, file_out: TextIO
     ) -> None:
-        """
+        r"""
         Handle the enumeration field parsed from the XML file.
 
         - If enumeration items contain a <doc> field, they will be stored as child fields.
         - If no docs are provided, items will be stored in a list format.
-        - If the enumeration is open, an '\open_enum' key will be included.
+        - If the enumeration is open, an '\open' key will be included.
         """
         indent = depth * DEPTH_SIZE
         tag = remove_namespace_from_tag(node.tag)
@@ -890,7 +890,7 @@ class Nxdl2yaml:
                 elif child_tag == COMMENT_TAG and self.include_comment:
                     file_out.write("\n")
                     self.handle_comment(depth + 1, child, file_out)
-                    # If there is a comment, we need to use the long notation with "items:"
+                    # If there is a comment, we need to use the long notation with "\items:"
                     enum_with_comment = True
 
             if open_enum:
@@ -901,7 +901,7 @@ class Nxdl2yaml:
 
             if open_enum or enum_with_comment:
                 file_out.write(
-                    f"{indent + DEPTH_SIZE}items: [{', '.join(enum_list)}]\n"
+                    f"{indent + DEPTH_SIZE}\\items: [{', '.join(enum_list)}]\n"
                 )
 
             else:

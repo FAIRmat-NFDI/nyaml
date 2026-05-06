@@ -175,7 +175,7 @@ In the example above, `reference_measurement` links to the `NXentry` group at `/
 
 ### Reserved keywords and escape characters
 
-`nyaml` uses a set of reserved keys, each written with a `\` prefix, that map to NXDL concept properties. The `\` prefix activates the corresponding feature; writing the same key *without* the `\` prefix makes it a plain concept name (field or group) instead, and  `\@` for attributes. 
+`nyaml` uses a set of reserved keys, each written with a `\` prefix, that map to NXDL concept properties. The `\` prefix activates the corresponding feature; writing the same key *without* the `\` prefix makes it a plain concept name (field or group) instead, and  `\@` for attributes.
 
 **Reserved keywords**
 
@@ -289,7 +289,7 @@ Accepted values:
     ```
 === "XML"
     ```xml
-    <group type="NXcalibration" optional="true">
+    <group name="transmission_correction" type="NXcalibration" optional="true">
       <doc>
         This calibration procedure is used to account for the different transmission efficiencies.
       </doc>
@@ -396,7 +396,7 @@ A list of predefined allowed values for a field or attribute. Individual items m
           \doc: |
             This is an open enumeration with values 0, 1, and 0.
         '[0, 1, 1]':
-          doc: |
+          \doc: |
             This is an open enumeration with values 0, 1, and 1.
     ```
 === "XML (open enum with doc)"
@@ -422,7 +422,7 @@ The `\xref` keyword (only valid inside `doc`) links a concept to an entry in an 
 === "YAML"
     ```yaml
     (NXinstrument):
-      doc:
+      \doc:
       - |
         Description of the MPES spectrometer and its individual parts.
       - |
@@ -484,7 +484,7 @@ The `\xref` keyword (only valid inside `doc`) links a concept to an entry in an 
 | | `target` | `\target` |
 | | `napimount` | `\napimount` |
 | `enumeration` | `open` | `\open: true` |
-| | `item` children | list items or dict keys under `\enumeration` |
+| | `item` children | list items or dict keys under `\enumeration` (possibly with `items`) |
 | `doc` | free text | `\doc` |
 | | cross-reference | `\xref` with `\spec`, `\term`, `\url` |
 | `symbols` | `doc`, `symbol` children | `\symbols` block |

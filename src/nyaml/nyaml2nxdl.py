@@ -135,7 +135,7 @@ def yml_reader(input_file: str | os.PathLike[str]) -> dict:
     COMMENT_BLOCKS = CommentCollector(input_file, loaded_yaml)
     COMMENT_BLOCKS.extract_all_comment_blocks()
 
-    _cat = loaded_yaml.get(r"\category") or loaded_yaml.get("category")
+    _cat = loaded_yaml.get(r"\category")
     if _cat is None:
         raise ValueError(
             "All definitions should be either 'base' or 'application' category. "
@@ -553,14 +553,14 @@ def xml_handle_dimensions(
 def xml_handle_enumeration(
     dct: dict, obj: ET._Element, keyword: str, value: list | dict, verbose: bool
 ) -> None:
-    """This function creates an 'enumeration' element instance.
+    r"""This function creates an 'enumeration' element instance.
 
     Different cases are handled:
     1) The items are in a flat list directly under "enumeration".
-    2) The items are in a dictionary under the "items" key.
+    2) The items are in a dictionary under the "\items" key.
     3) The items are dictionaries and may contain a nested doc.
     4) The enumeration is open. The input is a dict with keywords "\open"
-       and "items" (which is  a flat list of all enum items without docs).
+       and "\items" (which is  a flat list of all enum items without docs).
     5) The enumeration is open. The input is a nested dict with keyword "\open"
        and each items is a dict itself (with docs for each item).
     """
@@ -589,13 +589,13 @@ bear at least an argument !"
 
             del value[r"\open"]
 
-        if "items" in value:
-            line_number = f"__line__{'items'}"
+        if r"\items" in value:
+            line_number = "__line__{'\\items'}"
             line_loc = value[line_number]
             xml_handle_comment(enum, line_number, line_loc)
 
-            if isinstance(value["items"], list):
-                for element in value["items"]:
+            if isinstance(value[r"\items"], list):
+                for element in value[r"\items"]:
                     itm = ET.SubElement(enum, "item")
                     itm.set("value", str(element))
             return
