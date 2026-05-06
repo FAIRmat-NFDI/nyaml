@@ -185,9 +185,9 @@ In the example above, `reference_measurement` links to the `NXentry` group at `/
 | Keyword | Where it applies |
 |---------|-----------------|
 | `\doc` | doc string for any concept |
-| `\unit` | unit category for a field |
+| `\unit` | NeXus unit category for a field |
 | `\enumeration` | enumeration values for a field or attribute |
-| `\nameType` | name-matching rule (`specified`, `any`, `partial`) |
+| `\nameType` | enumeration for the name-matching rule (`specified`, `any`, `partial`) |
 | `\dim` | dimension specification shorthand |
 | `\dimensions` | full dimension block |
 | `\exists` | presence constraint (`required`, `recommended`, `optional`, …) |
@@ -466,21 +466,21 @@ The `\xref` keyword (only valid inside `doc`) links a concept to an entry in an 
 | | `ignoreExtraAttributes` | `\ignoreExtraAttributes` |
 | `group` | `name`, `type` | `name(NXbaseclass):` key |
 | | `minOccurs`, `maxOccurs` | `\minOccurs`, `\maxOccurs` |
-| | `recommended`, `optional` | `\exists: recommended / optional` |
+| | `recommended`, `optional` | `\exists: recommended`, `\exists: optional` |
 | | `nameType` | `\nameType` |
 | | `deprecated` | `\deprecated` |
 | `field` | `name` | plain key, e.g. `fieldname:` |
 | | `type` | `fieldname(NX_TYPE):` |
 | | `units` | `\unit` |
 | | `minOccurs`, `maxOccurs` | `\minOccurs`, `\maxOccurs` |
-| | `recommended`, `optional` | `\exists: recommended / optional` |
+| | `recommended`, `optional` | `\exists: recommended`, `\exists: optional` |
 | | `nameType` | `\nameType` |
 | | `deprecated` | `\deprecated` |
 | | `dimensions` child | `\dimensions` with `\rank`, `\dim` |
 | | `enumeration` child | `\enumeration` |
 | | `attribute` child | `\@name:` |
 | `attribute` | `name`, `type` | `\@name(NX_TYPE):` |
-| | `recommended`, `optional` | `\exists: recommended / optional` |
+| | `recommended`, `optional` | `\exists: recommended`, `\exists: optional` |
 | | `nameType` | `\nameType` |
 | | `enumeration` child | `\enumeration` |
 | `link` | `name` | `name(link):` key |
