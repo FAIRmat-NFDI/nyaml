@@ -69,7 +69,7 @@ def test_nametypes_nyaml2nxdl():
     test_xml_file = str(NYAML2NXDL_DATA_DIR / "allowed_nameType.nxdl.xml")
     desired_matches = ["partial", "specified", "any"]
     compare_matches(
-        str(ref_xml_file), str(test_yml_file), str(test_xml_file), desired_matches
+        ref_xml_file, test_yml_file, test_xml_file, desired_matches
     )
     os.remove(test_xml_file)
     sys.stdout.write("Test on nameType okay.\n")
