@@ -835,7 +835,7 @@ class Nxdl2yaml:
     def handle_enumeration(
         self, depth: int, node: ET._Element, file_out: TextIO
     ) -> None:
-        r"""
+        """
         Handle the enumeration field parsed from the XML file.
 
         - If enumeration items contain a <doc> field, they will be stored as child fields.

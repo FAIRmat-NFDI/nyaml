@@ -553,7 +553,7 @@ def xml_handle_dimensions(
 def xml_handle_enumeration(
     dct: dict, obj: ET._Element, keyword: str, value: list | dict, verbose: bool
 ) -> None:
-    r"""This function creates an 'enumeration' element instance.
+    """This function creates an 'enumeration' element instance.
 
     Different cases are handled:
     1) The items are in a flat list directly under "enumeration".

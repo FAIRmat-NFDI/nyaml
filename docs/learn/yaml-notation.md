@@ -175,7 +175,7 @@ In the example above, `reference_measurement` links to the `NXentry` group at `/
 
 ### Reserved keywords and escape characters
 
-`nyaml` uses a set of reserved keys, each written with a `\` prefix, that map to NXDL concept properties. The `\` prefix activates the corresponding feature; writing the same key *without* the `\` prefix makes it a plain concept name (field, group, or attribute) instead.
+`nyaml` uses a set of reserved keys, each written with a `\` prefix, that map to NXDL concept properties. The `\` prefix activates the corresponding feature; writing the same key *without* the `\` prefix makes it a plain concept name (field or group) instead, and  `\@` for attributes. 
 
 **Reserved keywords**
 
@@ -376,7 +376,7 @@ A list of predefined allowed values for a field or attribute. Individual items m
     enum_with_open_enum:
       \enumeration:
         \open: true
-        items: [NXmpes]
+        \items: [NXmpes]
     ```
 === "XML (open enum)"
     ```xml
@@ -393,7 +393,7 @@ A list of predefined allowed values for a field or attribute. Individual items m
       \enumeration:
         \open: true
         '[0, 1, 0]':
-          doc: |
+          \doc: |
             This is an open enumeration with values 0, 1, and 0.
         '[0, 1, 1]':
           doc: |
