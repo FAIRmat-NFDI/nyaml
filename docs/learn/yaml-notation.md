@@ -355,7 +355,7 @@ Describes the shape of a data array. Using the "dimensions" keyword constraints 
 
 ### `enumeration`
 
-A list of predefined allowed values for a field or attribute. Individual items may include a `doc` child. Set `\open: true` to allow values beyond the listed ones.
+A list of predefined allowed values for a field or attribute. Individual items may include a `doc` child. Set `\open: true` to allow values beyond the listed ones. Enumerations are closed by default; `\open: false` is accepted by the forward converter but is redundant and will be dropped on the return trip (XML→YAML), so it should not be used.
 
 === "YAML"
     ```yaml

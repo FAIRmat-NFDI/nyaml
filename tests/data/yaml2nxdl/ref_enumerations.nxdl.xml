@@ -117,6 +117,27 @@
                 </item>
             </enumeration>
         </field>
+        <field name="closed_enum_explicit_false_with_numbers" type="NX_NUMBER">
+            <doc>
+                This is a closed enumeration with NX_NUMBER items and an explicit \open: false.
+            </doc>
+            <enumeration open="false">
+                <item value="0"/>
+                <item value="1"/>
+                <item value="2"/>
+            </enumeration>
+        </field>
+        <field name="closed_enum_explicit_false_with_list_of_lists" type="NX_NUMBER">
+            <doc>
+                This is a closed enumeration, where the individual items are lists themselves,
+                with an explicit \open: false.
+            </doc>
+            <enumeration open="false">
+                <item value="[1, 0, 0]"/>
+                <item value="[0, 1, 0]"/>
+                <item value="[0, 0, -1]"/>
+            </enumeration>
+        </field>
         <field name="open_enum_no_docs_no_comments">
             <doc>
                 This is an open enumeration without any docstrings for the individual items.

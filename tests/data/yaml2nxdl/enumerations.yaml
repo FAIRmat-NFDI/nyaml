@@ -54,6 +54,19 @@ NXenums(NXobject):
         "[0, 0, -1]":
           \doc: |
             Doc for [0, 1, 0]
+    closed_enum_explicit_false_with_numbers(NX_NUMBER):
+      \doc: |
+        This is a closed enumeration with NX_NUMBER items and an explicit \open: false.
+      \enumeration:
+        \open: false
+        \items: [0, 1, 2]
+    closed_enum_explicit_false_with_list_of_lists(NX_NUMBER):
+      \doc: |
+        This is a closed enumeration, where the individual items are lists themselves,
+        with an explicit \open: false.
+      \enumeration:
+        \open: false
+        \items: [[1, 0, 0], [0, 1, 0], [0, 0, -1]]
     open_enum_no_docs_no_comments:
       \doc: |
         This is an open enumeration without any docstrings for the individual items.
