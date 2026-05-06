@@ -420,7 +420,7 @@ A list of predefined allowed values for a field or attribute. Individual items m
 
 ### `xref`
 
-The `\xref` keyword (only valid inside `doc`) links a concept to an entry in an external ontology or standard such as ISO. It is YAML-only: `nyaml` converts it to the corresponding textual representation inside the XML `<doc>` element.
+The `\xref` keyword (only valid inside `\doc`) links a concept to an entry in an external ontology or standard such as ISO. It is YAML-only: `nyaml` converts it to the corresponding textual representation inside the XML `<doc>` element.
 
 === "YAML"
     ```yaml

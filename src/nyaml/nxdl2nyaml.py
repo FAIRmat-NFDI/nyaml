@@ -816,7 +816,7 @@ class Nxdl2yaml:
                 # two loops to assure that doc and rank are written before
                 # the individual explicit dimension dicts
                 for key, obj in sorted(yml_dim_dct.items()):
-                    if key not in [r"\rank", "doc"] and isinstance(obj, dict):
+                    if key not in [r"\rank", r"\doc"] and isinstance(obj, dict):
                         if (
                             sum(
                                 1

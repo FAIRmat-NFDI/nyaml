@@ -1,5 +1,5 @@
-category: application
-doc: |
+\category: application
+\doc: |
   Implementation of the canSAS standard to store reduced small-angle scattering data of any dimension.
   
   .. index:: canSAS
@@ -80,7 +80,7 @@ doc: |
 # All such related resources are stored in the related subdirectory: ./canSAS/
 # In general, for an NXDL file:  NXsomenxdl.nxdl.xml
 # all related resources should be stored in subdirectory:  ./somenxdl/
-type: group
+\type: group
 NXcanSAS(NXobject):
   (NXentry):
     \@default:

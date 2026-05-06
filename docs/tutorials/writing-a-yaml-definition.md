@@ -13,11 +13,11 @@ You will know
 
 - the basic structure of a NeXus definition written in YAML
 - how to write groups, fields, and attributes
-- how to use the key special keywords (`\exists`, `\unit`, `\dimensions`, `\enumeration`, etc.)
+- how to use the special keywords (`\exists`, `\unit`, `\dimensions`, `\enumeration`, etc.)
 - how to convert a YAML definition to NXDL XML using `nyaml2nxdl`
 
 !!! note
-    We are making extensive use of special keywords here (`\nameType`, `\exists`, `\unit`, `\dimensions`, `\enumeration`, `\xref`) that indicate specific parts of the NeXus schema in the YAML notation. All of these keywords are identified by the `\` prefix. To learn more, see [Learn > nyaml notation](../learn/yaml-notation.md). The NeXus `choice` concept is not yet supported in `nyaml`.
+    We are making extensive use of special keywords here (`\nameType`, `\exists`, `\unit`, `\dimensions`, `\enumeration`, `\xref`) that indicate specific parts of the NeXus schema in the YAML notation. All of these special keywords are identified by the `\` prefix. To learn more, see [Learn > nyaml notation](../learn/yaml-notation.md). The NeXus `choice` concept is not yet supported in `nyaml`.
 
 ---
 
@@ -205,7 +205,7 @@ The `\@signal` and `\@axes` entries are NeXus *attributes* (prefixed with `\@`) 
 !!! note
     In a real HDF5 file these fields would typically be HDF5 hard-links into the detector group rather than duplicated data. The NXDL definition specifies what *must be accessible* at that path; the writer decides whether to copy or link.
 
-We are also using `\enumeration` here to restrict the values that the `signal` and `axes` attributes can have in data instance files.
+We are also using `\enumeration` here to restrict the values that the `\@signal` and `\@axes` attributes can have in data instance files.
 
 ---
 
