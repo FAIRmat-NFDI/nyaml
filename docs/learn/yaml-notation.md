@@ -19,6 +19,9 @@ The root section is the top-level block of a definition. It maps to the XML `<de
 - `\symbols`: named dimension constants used throughout the definition (optional)
 - The schema name (e.g. `NXmpes(NXobject)`): the parenthesized base class indicates what this definition extends. An application definition extends either `NXobject` or another application definition.
 
+!!! warning
+    All definition-level keys (`\category`, `\type`, `\doc`, `\symbols`, `\deprecated`, `\restricts`, `\ignoreExtraGroups`, `\ignoreExtraFields`, `\ignoreExtraAttributes`) **must** be written with the `\` prefix. Writing them bare (e.g. `category:` instead of `\category:`) is an error and the converter will reject the file.
+
 === "YAML"
     ```yaml
     \category: application

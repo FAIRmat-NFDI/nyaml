@@ -68,9 +68,7 @@ def test_nametypes_nyaml2nxdl():
     test_yml_file = str(NYAML2NXDL_DATA_DIR / "allowed_nameType.yaml")
     test_xml_file = str(NYAML2NXDL_DATA_DIR / "allowed_nameType.nxdl.xml")
     desired_matches = ["partial", "specified", "any"]
-    compare_matches(
-        ref_xml_file, test_yml_file, test_xml_file, desired_matches
-    )
+    compare_matches(ref_xml_file, test_yml_file, test_xml_file, desired_matches)
     os.remove(test_xml_file)
     sys.stdout.write("Test on nameType okay.\n")
 
@@ -686,4 +684,46 @@ def test_link_keywords_as_xml_attributes(
     assert links[0].get(xml_attr) == xml_attr_value, (
         f"Expected <link {xml_attr}='{xml_attr_value}'/>, "
         f"got {xml_attr}='{links[0].get(xml_attr)}'"
+    )
+
+
+@pytest.mark.parametrize(
+    "keyword",
+    sorted(LIMITED_RESERVED_KEYWORDS["definition"] | {"doc", "symbols"}),
+)
+def test_bare_definition_keyword_at_root_raises_error(tmp_path, keyword):
+    """A bare (unescaped) definition-level keyword at the root of the YAML must
+    raise an error. These keywords (category, doc, symbols, type, deprecated, …)
+    require the \\keyword escape prefix at the root level; without it they are
+    ambiguous and should never silently activate definition behavior."""
+
+    def ordered_dict_representer(dumper, value):
+        return dumper.represent_mapping("tag:yaml.org,2002:map", value.items())
+
+    yaml.add_representer(OrderedDict, ordered_dict_representer)
+
+    # Build a valid root definition but inject the bare keyword alongside it
+    yaml_data = OrderedDict(
+        {
+            r"\category": "base",
+            r"\doc": "Bare definition keyword test",
+            keyword: "some_value",  # bare, no \ prefix — must be rejected
+            "NXtest": None,
+        }
+    )
+
+    test_file = tmp_path / "test.yaml"
+    out_file = tmp_path / "test.nxdl.xml"
+    with open(test_file, "w") as f:
+        yaml.dump(yaml_data, f, default_flow_style=False, allow_unicode=True)
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        [str(test_file), "--output-file", str(out_file)],
+    )
+    assert result.exit_code != 0, (
+        f"Expected non-zero exit for bare root-level keyword '{keyword}', but got 0"
+    )
+    assert keyword in str(result.output) + str(result.exception), (
+        f"Expected keyword '{keyword}' to appear in the error output"
     )

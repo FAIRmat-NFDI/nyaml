@@ -590,7 +590,7 @@ bear at least an argument !"
             del value[r"\open"]
 
         if r"\items" in value:
-            line_number = "__line__{'\\items'}"
+            line_number = r"__line__\items"
             line_loc = value[line_number]
             xml_handle_comment(enum, line_number, line_loc)
 
@@ -1215,10 +1215,20 @@ def nyaml2nxdl(
         "restricts",
     ]
     yml_appdef = yml_reader(input_file)
+    # Guard: definition-level keywords at root level must use the \ prefix.
+    # A bare (unescaped) key like 'category:' is ambiguous and must be rejected.
+    _must_escape = frozenset((*def_attributes, "doc", "symbols"))
+    _bare_found = [
+        k for k in yml_appdef if not k.startswith("__line__") and k in _must_escape
+    ]
+    if _bare_found:
+        raise ValueError(
+            f"Root-level keyword(s) {_bare_found!r} must be written with a backslash "
+            f"prefix (e.g. '\\{_bare_found[0]}'). Bare definition-level keywords are not allowed."
+        )
     # Normalize escaped root-level reserved keywords, preserving YAML key order.
-    # All def_attributes plus doc/symbols may be written with \ prefix; strip it here
-    # so the rest of the code sees bare names only.
-    _root_esc = {f"\\{k}": k for k in (*def_attributes, "doc", "symbols")}
+    # Strip the \ prefix so the rest of the code sees bare names only.
+    _root_esc = {f"\\{k}": k for k in _must_escape}
     _normalized: dict = {}
     for _k, _v in yml_appdef.items():
         if _k.startswith("__line__") and _k[8:] in _root_esc:
