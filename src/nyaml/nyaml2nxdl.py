@@ -228,7 +228,7 @@ def check_for_skipped_attributes(
                 print(f"__line__ : {value[line_number]}")
             if (
                 not isinstance(val, dict)
-                and r"\@" not in attr
+                and not attr.startswith(r"\@")
                 and attr not in allowed_attr
                 and "NX" not in attr
                 and val

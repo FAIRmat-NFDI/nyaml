@@ -105,8 +105,9 @@ YAML_LINK_ATTRIBUTES: tuple[str, ...] = tuple(
 )
 
 
-# Reserved nyaml keywords that map to NXDL concepts rather than concept names.
-# Use a backslash prefix (e.g. \rank) to use one of these as a concept name.
+# Reserved nyaml keywords that map to NXDL concepts rather than concept names
+# provided these are prefixed with a backslash (e.g. \rank) to distinguish them
+# from a concept name.
 # \@ is already the escape prefix for XML attributes (e.g. \@version).
 RESERVED_KEYWORDS: Set = frozenset(
     {

@@ -326,7 +326,7 @@ Specifies the NeXus unit category for a field. Use one of the existing [unit cat
 
 ### `dimensions`
 
-Describes the shape of a multidimensional data array. Using the "dimensions" keyword constraints the instance data of a field to an array with at least one dimension. The `\rank` key gives the number of dimensions. Each dimension is specified with `\dim` using either the full array-of-arrays form or the shorter tuple form. Use symbolic names from the root `\symbols` block rather than hardcoded integers.
+Describes the shape of a data array. Using the "dimensions" keyword constraints the instance data of a field to an array with at least one dimension. The `\rank` key gives the number of dimensions. Each dimension is specified with `\dim` using either the full array-of-arrays form or the shorter tuple form. Use symbolic names from the root `\symbols` block rather than hardcoded integers.
 
 === "YAML"
     ```yaml

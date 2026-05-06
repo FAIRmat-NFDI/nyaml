@@ -39,14 +39,14 @@ NXprohibited_name_type:
   # Upper case names
 
   # OBJECT(NXobject):
-  #   nameType: specified
-  #   doc: A renameable group with nameType="specified". Does not raise.
+  #   \nameType: specified
+  #   \doc: A renameable group with nameType="specified". Does not raise.
   #   FIELD:
-  #     nameType: specified
+  #     \nameType: specified
   #     doc: A renameable field with nameType="specified". Does not raise.
   #     \@ATTRIBUTE:
-  #       nameType: specified
-  #       doc: A renameable field with nameType="partial". Does not raise.
+  #       \nameType: specified
+  #       \doc: A renameable field with nameType="partial". Does not raise.
   #     LINK(link):
   #       \nameType: specified
   #       \target: field
@@ -78,12 +78,12 @@ NXprohibited_name_type:
 
   # objectOBJECTobjectOBJECT(NXobject):
   #   \nameType: specified
-  #   doc: A partially-renameable with nameType="specified". Does not raise.
+  #   \doc: A partially-renameable with nameType="specified". Does not raise.
   #   fieldFIELDfieldFIELD:
-  #     nameType: specified
-  #     doc: A partially-renameable field with nameType="specified". Does not raise.
+  #     \nameType: specified
+  #     \doc: A partially-renameable field with nameType="specified". Does not raise.
   #     \@attributeATTRIBUTEattributeATTRIBUTE:
-  #       nameType: specified
+  #       \nameType: specified
   #       \doc: A partially-renameable attribute with nameType="specified". Does not raise.
   #     linkLINKlinkLINK(link):
   #       \nameType: specified
