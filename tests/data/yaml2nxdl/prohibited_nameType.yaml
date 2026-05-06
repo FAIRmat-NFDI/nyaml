@@ -48,9 +48,9 @@ NXprohibited_name_type:
   #       nameType: specified
   #       doc: A renameable field with nameType="partial". Does not raise.
   #     LINK(link):
-  #       nameType: specified
+  #       \nameType: specified
   #       \target: field
-  #       doc: An unnamed link with nameType="partial".
+  #       \doc: An unnamed link with nameType="partial".
   OBJECT(NXobject):
     \nameType: partial
     \doc: A renameable group with nameType="partial". Raises an error.
@@ -77,18 +77,18 @@ NXprohibited_name_type:
         \doc: A partially-renameable link with no nameType. Raises a warning.
 
   # objectOBJECTobjectOBJECT(NXobject):
-  #   nameType: specified
+  #   \nameType: specified
   #   doc: A partially-renameable with nameType="specified". Does not raise.
   #   fieldFIELDfieldFIELD:
   #     nameType: specified
   #     doc: A partially-renameable field with nameType="specified". Does not raise.
   #     \@attributeATTRIBUTEattributeATTRIBUTE:
   #       nameType: specified
-  #       doc: A partially-renameable attribute with nameType="specified". Does not raise.
+  #       \doc: A partially-renameable attribute with nameType="specified". Does not raise.
   #     linkLINKlinkLINK(link):
-  #       nameType: specified
+  #       \nameType: specified
   #       \target: field
-  #       doc: A partially-renameable link with nameType="specified". Does not raise.
+  #       \doc: A partially-renameable link with nameType="specified". Does not raise.
 
   objectOBJECTobjectOBJECT(NXobject):
     \nameType: any
