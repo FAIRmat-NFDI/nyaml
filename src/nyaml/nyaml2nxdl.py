@@ -560,7 +560,7 @@ def xml_handle_enumeration(
     2) The items are in a dictionary under the "\items" key.
     3) The items are dictionaries and may contain a nested doc.
     4) The enumeration is open. The input is a dict with keywords "\open"
-       and "\items" (which is  a flat list of all enum items without docs).
+       and "\items" (which is a flat list of all enum items without docs).
     5) The enumeration is open. The input is a nested dict with keyword "\open"
        and each items is a dict itself (with docs for each item).
     """
@@ -979,6 +979,21 @@ def xml_handle_fields_or_group(
                 xml_handle_nametype(keyword, keyword_name, dct, sub_element)
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
+            elif attr == r"\deprecated" and not isinstance(val, dict) and val:
+                sub_element.set("deprecated", check_for_mapping_char_other(val))
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+                xml_handle_comment(obj, line_number, line_loc, sub_element)
+            elif attr == r"\minOccurs" and not isinstance(val, dict) and val:
+                sub_element.set("minOccurs", check_for_mapping_char_other(val))
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+                xml_handle_comment(obj, line_number, line_loc, sub_element)
+            elif attr == r"\maxOccurs" and not isinstance(val, dict) and val:
+                sub_element.set("maxOccurs", check_for_mapping_char_other(val))
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+                xml_handle_comment(obj, line_number, line_loc, sub_element)
             elif attr == r"\type" and not isinstance(val, dict) and val:
                 sub_element.set("type", check_for_mapping_char_other(val))
                 rm_key_list.append(attr)
@@ -1066,8 +1081,6 @@ def recursive_build(obj: ET._Element, dct: dict, verbose: bool) -> None:
         line_number = f"__line__{keyword}"
         line_loc = dct[line_number]
         keyword_name, keyword_type = nx_name_type_resolving(keyword)
-        # keyword's like nameType need proper escape character in the future
-        # to simplify their distinction from NX_CHAR fields and attributes
         check_keyword_variable(verbose, dct, keyword, value)
         if verbose:
             print(f"keyword_name:{keyword_name} keyword_type {keyword_type}\n")

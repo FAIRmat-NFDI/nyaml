@@ -83,21 +83,37 @@ NXDL_ATTRIBUTES_ATTRIBUTES: tuple[str, ...] = (
 
 NXDL_LINK_ATTRIBUTES: tuple[str, ...] = ("name", "target", "napimount", "nameType")
 
-# Set up attributes for yaml version
-YAML_GROUP_ATTRIBUTES: tuple[str, ...] = (*NXDL_GROUP_ATTRIBUTES, "exists")
-
-YAML_FIELD_ATTRIBUTES: tuple[str, ...] = (
-    *NXDL_FIELD_ATTRIBUTES[0:-1],
-    "unit",
-    "exists",
-    "dim",
+# Keyword-level attributes that must be written with a \ prefix in YAML.
+# Bare forms (e.g. "recommended: true") are rejected; use \exists, \deprecated,
+# \nameType, \minOccurs, \maxOccurs instead.
+_YAML_ONLY_KEYWORDS: frozenset[str] = frozenset(
+    {
+        "optional",
+        "recommended",
+        "required",
+        "deprecated",
+        "nameType",
+        "exists",
+        "minOccurs",
+        "maxOccurs",
+    }
 )
 
-YAML_ATTRIBUTES_ATTRIBUTES: tuple[str, ...] = (
-    *NXDL_ATTRIBUTES_ATTRIBUTES,
-    "minOccurs",
-    "maxOccurs",
-    "exists",
+# Set up attributes for yaml version
+YAML_GROUP_ATTRIBUTES: tuple[str, ...] = tuple(
+    k for k in (*NXDL_GROUP_ATTRIBUTES, "exists") if k not in _YAML_ONLY_KEYWORDS
+)
+
+YAML_FIELD_ATTRIBUTES: tuple[str, ...] = tuple(
+    k
+    for k in (*NXDL_FIELD_ATTRIBUTES[0:-1], "unit", "exists", "dim")
+    if k not in _YAML_ONLY_KEYWORDS
+)
+
+YAML_ATTRIBUTES_ATTRIBUTES: tuple[str, ...] = tuple(
+    k
+    for k in (*NXDL_ATTRIBUTES_ATTRIBUTES, "minOccurs", "maxOccurs", "exists")
+    if k not in _YAML_ONLY_KEYWORDS
 )
 
 YAML_LINK_ATTRIBUTES: tuple[str, ...] = tuple(

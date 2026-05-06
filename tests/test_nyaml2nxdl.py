@@ -32,6 +32,7 @@ from helpers import check_and_replace_latest_copyright, compare_matches
 
 from nyaml import cli as nyaml2nxdl
 from nyaml.helper import (
+    _YAML_ONLY_KEYWORDS,
     LIMITED_RESERVED_KEYWORDS,
     RESERVED_KEYWORDS,
     remove_namespace_from_tag,
@@ -684,6 +685,44 @@ def test_link_keywords_as_xml_attributes(
     assert links[0].get(xml_attr) == xml_attr_value, (
         f"Expected <link {xml_attr}='{xml_attr_value}'/>, "
         f"got {xml_attr}='{links[0].get(xml_attr)}'"
+    )
+
+
+@pytest.mark.parametrize("keyword", sorted(_YAML_ONLY_KEYWORDS))
+def test_bare_yaml_only_keyword_in_concept_raises_error(tmp_path, keyword):
+    """Bare (unescaped) concept-level keywords that have \\keyword equivalents
+    (recommended, optional, deprecated, nameType, exists, minOccurs, maxOccurs, required)
+    must be rejected with an error when used as a property key inside a field or group.
+    Use \\exists: recommended/optional, \\deprecated:, \\nameType:, \\minOccurs:,
+    \\maxOccurs: instead."""
+
+    def ordered_dict_representer(dumper, value):
+        return dumper.represent_mapping("tag:yaml.org,2002:map", value.items())
+
+    yaml.add_representer(OrderedDict, ordered_dict_representer)
+
+    yaml_data = OrderedDict(
+        {
+            r"\category": "base",
+            r"\doc": "Bare concept-level keyword rejection test",
+            "NXtest": OrderedDict({"my_field": OrderedDict({keyword: "true"})}),
+        }
+    )
+
+    test_file = tmp_path / "test.yaml"
+    out_file = tmp_path / "test.nxdl.xml"
+    with open(test_file, "w") as f:
+        yaml.dump(yaml_data, f, default_flow_style=False, allow_unicode=True)
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        [str(test_file), "--output-file", str(out_file)],
+    )
+    assert result.exit_code != 0, (
+        f"Expected non-zero exit for bare concept-level keyword '{keyword}', but got 0"
+    )
+    assert keyword in str(result.output) + str(result.exception), (
+        f"Expected keyword '{keyword}' to appear in the error output"
     )
 
 
