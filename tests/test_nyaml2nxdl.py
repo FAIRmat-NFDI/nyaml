@@ -28,7 +28,11 @@ import lxml.etree as ET
 import pytest
 import yaml
 from click.testing import CliRunner
-from helpers import check_and_replace_latest_copyright, compare_matches
+from helpers import (
+    check_and_replace_latest_copyright,
+    compare_log_and_reference,
+    compare_matches,
+)
 
 from nyaml import cli as nyaml2nxdl
 from nyaml.helper import (
@@ -548,6 +552,57 @@ def test_forward_conversion(test_input):
     assert log == ref
 
     os.remove(test_xml_output_file)
+
+
+@pytest.mark.parametrize(
+    "dimension_contents,error_message",
+    [
+        pytest.param(
+            (
+                "\\category: application\n"
+                "\\doc: Rank mismatch test\n"
+                "NXtest(NXobject):\n"
+                "  some_field(NX_NUMBER):\n"
+                "    \\dimensions:\n"
+                "      \\rank: 2\n"
+                "      \\dim: (1, symbol_a, symbol_b)\n"
+            ),
+            "rank '2' does not match the number of dim entries (3).",
+            id="shorthand_tuple_rank2_vs_3dims",
+        ),
+        pytest.param(
+            (
+                "\\category: application\n"
+                "\\doc: Rank mismatch test\n"
+                "NXtest(NXobject):\n"
+                "  some_field(NX_NUMBER):\n"
+                "    \\dimensions:\n"
+                "      \\rank: 2\n"
+                "      \\dim: [[1, symbol_a]]\n"
+            ),
+            "rank '2' does not match the number of dim entries (1).",
+            id="shorthand_old_list_rank2_vs_1dim",
+        ),
+    ],
+)
+def test_dimensions_rank_dim_mismatch_raises_error(
+    tmp_path, dimension_contents, error_message
+):
+    """An explicit numeric rank must match the number of explicit dim entries."""
+
+    yaml_text = dimension_contents
+    test_file = tmp_path / "rank_mismatch.yaml"
+    out_file = tmp_path / "rank_mismatch.nxdl.xml"
+    test_file.write_text(yaml_text, encoding="utf-8")
+
+    result = CliRunner().invoke(
+        nyaml2nxdl.launch_tool,
+        [str(test_file), "--output-file", str(out_file)],
+    )
+
+    assert result.exit_code != 0
+    message = str(result.output) + str(result.exception)
+    assert error_message in message
 
 
 @pytest.mark.parametrize("keyword", sorted(RESERVED_KEYWORDS))

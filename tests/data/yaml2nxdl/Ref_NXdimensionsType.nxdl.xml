@@ -89,7 +89,7 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
                 the XML content substantiates that either using
                 rank_only suffices or that full_syntax is required.
             </doc>
-            <dimensions rank="2">
+            <dimensions rank="3">
                 <dim index="1" value="1"/>
                 <dim index="2" value="symbol_a"/>
                 <dim index="3" value="symbol_b"/>
@@ -99,7 +99,7 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
             <doc>
                 The same as shorthand_explicit_rank_new, but with docs for the dimensions tag.
             </doc>
-            <dimensions rank="2">
+            <dimensions rank="3">
                 <doc>
                     Some docs.
                 </doc>
@@ -137,6 +137,12 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
                 Shorthand for cases that specify only the rank.
             </doc>
             <dimensions rank="symbol_a"/>
+        </field>
+        <field name="dimensions_without_dim" type="NX_NUMBER">
+            <doc>
+                This is an example of a dimensions definition that does not specify the dim.
+            </doc>
+            <dimensions rank="5"/>
         </field>
     </group>
 </definition>

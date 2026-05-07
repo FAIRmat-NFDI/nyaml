@@ -765,6 +765,24 @@ class Nxdl2yaml:
                             "Found incorrect dim child that has no index attribute !"
                         )
 
+        dim_count = sum(1 for val in yml_dim_dct.values() if isinstance(val, dict))
+        rank_value = yml_dim_dct.get(r"\rank")
+        if rank_value is not None and dim_count > 0:
+            try:
+                rank_as_int = int(rank_value)
+            except (TypeError, ValueError):
+                rank_as_int = None  # Symbolic rank is allowed and cannot be validated.
+            if rank_as_int is not None and rank_as_int != dim_count:
+                line_info = (
+                    f"Line {node.sourceline}: "
+                    if getattr(node, "sourceline", None) is not None
+                    else ""
+                )
+                raise ValueError(
+                    f"{line_info}rank '{rank_as_int}' does not match the "
+                    f"number of dim entries ({dim_count})."
+                )
+
         # perform I/O based on the cases analyzed
         yml_dim_dct_keys = list(yml_dim_dct)
         indent = depth * DEPTH_SIZE

@@ -50,7 +50,7 @@ NXdimensions(NXobject):
         the XML content substantiates that either using
         rank_only suffices or that full_syntax is required.
       \dimensions:
-        \rank: 2
+        \rank: 3
         \dim: (1, symbol_a, symbol_b)
     shorthand_explicit_rank_new_with_docs(NX_NUMBER):
       \doc: |
@@ -58,7 +58,7 @@ NXdimensions(NXobject):
       \dimensions:
         \doc: |
           Some docs.
-        \rank: 2
+        \rank: 3
         \dim: (1, symbol_a, symbol_b)
     shorthand_explicit_rank_old(NX_NUMBER):
       \doc: |
@@ -92,3 +92,8 @@ NXdimensions(NXobject):
         Shorthand for cases that specify only the rank.
       \dimensions:
         \rank: symbol_a
+    dimensions_without_dim(NX_NUMBER):
+      \doc: |
+        This is an example of a dimensions definition that does not specify the dim.
+      \dimensions:
+        \rank: 5

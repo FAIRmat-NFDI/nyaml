@@ -14,7 +14,7 @@
 \type: group
 NXdimensions(NXobject):
   (NXentry):
-
+    
     # provided a proper escape sign is used also an even more compact way could be possible
     minimal(NX_NUMBER):
       \doc: |
@@ -45,22 +45,22 @@ NXdimensions(NXobject):
         Shorthand where the rank can be set explicitly. For testing purposes
         the rank is here intentionally set to a value that is different to the number
         of entries in dim.
-
+        
         Authors and designers of NeXus classes should preferentially use
         the shorthand notation unless the full_syntax is required as
         using rank_only is insufficient.
-
+        
         This is the default to which nxdl2yaml converts unless
         the XML content substantiates that either using
         rank_only suffices or that full_syntax is required.
       \dimensions:
-        \rank: 2
+        \rank: 3
         \dim: (1, symbol_a, symbol_b)
     shorthand_explicit_rank_new_with_docs(NX_NUMBER):
       \doc: |
         The same as shorthand_explicit_rank_new, but with docs for the dimensions tag.
       \dimensions:
-        \rank: 2
+        \rank: 3
         \doc: |
           Some docs.
         \dim: (1, symbol_a, symbol_b)
@@ -101,7 +101,7 @@ NXdimensions(NXobject):
           ref: m
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# fbaadcf9c28d77f8d3923789c5b8c4901e15c2ea52f61620fc7bc9200e122e08
+# 170126736195ec23d0f8dc7f63f9a7b19fe201943ef961a044b9946d753829cd
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--
@@ -184,16 +184,16 @@ NXdimensions(NXobject):
 #                 Shorthand where the rank can be set explicitly. For testing purposes
 #                 the rank is here intentionally set to a value that is different to the number
 #                 of entries in dim.
-#
+#                 
 #                 Authors and designers of NeXus classes should preferentially use
 #                 the shorthand notation unless the full_syntax is required as
 #                 using rank_only is insufficient.
-#
+#                 
 #                 This is the default to which nxdl2yaml converts unless
 #                 the XML content substantiates that either using
 #                 rank_only suffices or that full_syntax is required.
 #             </doc>
-#             <dimensions rank="2">
+#             <dimensions rank="3">
 #                 <dim index="1" value="1"/>
 #                 <dim index="2" value="symbol_a"/>
 #                 <dim index="3" value="symbol_b"/>
@@ -203,7 +203,7 @@ NXdimensions(NXobject):
 #             <doc>
 #                 The same as shorthand_explicit_rank_new, but with docs for the dimensions tag.
 #             </doc>
-#             <dimensions rank="2">
+#             <dimensions rank="3">
 #                 <doc>
 #                     Some docs.
 #                 </doc>
