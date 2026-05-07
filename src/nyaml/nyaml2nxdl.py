@@ -818,10 +818,18 @@ def xml_handle_attributes(
                 r"\exists",
                 r"\nameType",
                 r"\type",
+                r"\deprecated",
                 *YAML_ATTRIBUTES_ATTRIBUTES,
             ] and not isinstance(attr_val, dict):
                 if attr == r"\unit":
                     sub_element.set("units", str(attr_val))
+                    rm_key_list.append(attr)
+                    rm_key_list.append(line_number)
+                    xml_handle_comment(obj, line_number, line_loc, sub_element)
+                if attr == r"\deprecated" and attr_val:
+                    sub_element.set(
+                        "deprecated", check_for_mapping_char_other(attr_val)
+                    )
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
                     xml_handle_comment(obj, line_number, line_loc, sub_element)
@@ -855,7 +863,7 @@ def xml_handle_attributes(
             del value[key]
         # Check cor skipped attribute
         check_for_skipped_attributes(
-            "Attribute", value, YAML_ATTRIBUTES_ATTRIBUTES, verbose
+            "attribute", value, YAML_ATTRIBUTES_ATTRIBUTES, verbose
         )
     if value:
         recursive_build(sub_element, value, verbose)

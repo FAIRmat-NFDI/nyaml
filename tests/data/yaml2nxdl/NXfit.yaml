@@ -13,6 +13,7 @@ NXfit(NXprocess):
     \doc: |
       Human-readable label for this fit procedure.
   data(NXdata):
+    \deprecated: true
     \doc: |
       Input data and results of the fit.
     input_dependent(NX_NUMBER):

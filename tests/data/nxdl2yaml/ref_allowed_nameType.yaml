@@ -4,6 +4,7 @@
 \type: group
 NXallowed_name_type(NXobject):
   lower_case_group_no_nametype(NXobject):
+    \deprecated: true
     \doc: |
       An all lower case group with no nameType.
     lower_case_field_no_nametype:
@@ -143,7 +144,7 @@ NXallowed_name_type(NXobject):
             variadic parts.
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 29a66a4a61f5a6bbfdc6cfbdeb05e2972035d588dbbb8b22845fee404fc7290c
+# 8f54bcc556a8b3effa77654cee1c81f60ae156d915412c1eb87a089fcfd9ccb3
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--
@@ -171,7 +172,7 @@ NXallowed_name_type(NXobject):
 #     <doc>
 #         NXnametype test
 #     </doc>
-#     <group name="lower_case_group_no_nametype" type="NXobject">
+#     <group name="lower_case_group_no_nametype" type="NXobject" deprecated="true">
 #         <doc>
 #             An all lower case group with no nameType.
 #         </doc>

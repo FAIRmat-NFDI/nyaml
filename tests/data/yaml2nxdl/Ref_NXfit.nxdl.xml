@@ -41,7 +41,7 @@
             Human-readable label for this fit procedure.
         </doc>
     </field>
-    <group name="data" type="NXdata">
+    <group name="data" type="NXdata" deprecated="true">
         <doc>
             Input data and results of the fit.
         </doc>
