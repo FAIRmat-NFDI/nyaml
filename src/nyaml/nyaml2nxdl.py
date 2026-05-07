@@ -439,6 +439,22 @@ def xml_handle_dimensions(
     line_number = f"__line__{keyword}"
     line_loc = dct[line_number]
     dims: ET.Element | None = None
+
+    def validate_rank_dim_count(dim_count: int, rank_value: Any) -> None:
+        """Validate rank against explicit dimension count when rank is provided."""
+        try:
+            rank_value = int(rank_value)
+        except (ValueError, TypeError):
+            return  # Descriptive rank
+        if rank_value is None:
+            return
+
+        if int(rank_value) != int(dim_count):
+            raise ValueError(
+                f"Line {line_loc}: rank '{rank_value}' does not match the "
+                f"number of dim entries ({dim_count})."
+            )
+
     if isinstance(value, dict):
         # Normalize escape-prefixed keywords inside a dimensions block to their bare
         # internal names (which the rest of this function uses).
@@ -471,6 +487,7 @@ def xml_handle_dimensions(
             dims = ET.SubElement(obj, "dimensions")
             if "rank" in value:
                 dims.set("rank", f"{value['rank']}")
+                validate_rank_dim_count(n_idx_dicts, value.get("rank", None))
             if "doc" in value:
                 docs = ET.SubElement(dims, "doc")
                 docs.text = f"\n{value['doc']}"
@@ -498,6 +515,7 @@ def xml_handle_dimensions(
             if re.match("^\\([A-Za-z0-9_, ]+\\)$", value["dim"]) is not None:
                 # common for cases shorthand_terse and shorthand_explicit_rank_new
                 dims = ET.SubElement(obj, "dimensions")
+                dim_count = 0
                 # rank = 0
                 if "doc" in value:
                     docs = ET.SubElement(dims, "doc")
@@ -506,23 +524,33 @@ def xml_handle_dimensions(
                     value["dim"][1:-1].replace(" ", "").split(",")
                 ):
                     if val != "":
+                        dim_count += 1
                         dim = ET.SubElement(dims, "dim")
                         dim.set("index", f"{idx + 1}")
                         dim.set("value", f"{val}")
                     # rank += 1
+                validate_rank_dim_count(
+                    dim_count=dim_count, rank_value=value.get("rank", None)
+                )
                 if "rank" in value:  # shorthand_explicit_rank_new
                     dims.set("rank", f"{value['rank']}")
+                    validate_rank_dim_count(dim_count, value["rank"])
                 # else:  # shorthand_terse, automatic setting of rank switched off
                 #     dims.set("rank", f"{rank}")
         elif "dim" in value and isinstance(value["dim"], list) and "rank" in value:
+            validate_rank_dim_count(
+                dim_count=len(value["dim"]), rank_value=value.get("rank", None)
+            )
             # shorthand_explicit_rank_old
             dims = ET.SubElement(obj, "dimensions")
             dims.set("rank", f"{value['rank']}")
+            dim_count = 0
             if "doc" in value:
                 docs = ET.SubElement(dims, "doc")
                 docs.text = f"\n{value['doc']}"
             for entry in value["dim"]:
                 if len(entry) == 2 and all(val != "" for val in entry):
+                    dim_count += 1
                     dim = ET.SubElement(dims, "dim")
                     dim.set("index", f"{entry[0]}")
                     dim.set("value", f"{entry[1]}")
