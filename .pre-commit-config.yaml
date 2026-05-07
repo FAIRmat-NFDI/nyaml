@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.15.11
+    rev: v0.15.12
     hooks:
       # Run the linter.
       - id: ruff-check
@@ -28,7 +28,7 @@ repos:
         args: [--py310-plus]  # modernizes syntax for Python 3.10+
 
   - repo: https://github.com/streetsidesoftware/cspell-cli
-    rev: v9.8.0
+    rev: v10.0.0
     hooks:
       - id: cspell  # spellchecking
         pass_filenames: false
