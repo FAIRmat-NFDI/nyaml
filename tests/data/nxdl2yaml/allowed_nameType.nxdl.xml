@@ -25,7 +25,7 @@
     <doc>
         NXnametype test
     </doc>
-    <group name="lower_case_group_no_nametype" type="NXobject">
+    <group name="lower_case_group_no_nametype" type="NXobject" deprecated="true">
         <doc>
             An all lower case group with no nameType.
         </doc>

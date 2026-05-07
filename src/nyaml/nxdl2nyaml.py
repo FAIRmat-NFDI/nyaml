@@ -644,6 +644,8 @@ class Nxdl2yaml:
                 if r"\exists" not in tmp_dict:
                     tmp_dict[r"\exists"] = []
                 self.handle_exists(exists_dict, key, val)
+            elif key == "deprecated":
+                tmp_dict[r"\deprecated"] = str(val)
             elif key == "units":
                 tmp_dict[r"\unit"] = str(val)
             else:
@@ -944,6 +946,8 @@ class Nxdl2yaml:
                 self.handle_exists(exists_dict, key, val)
             elif key == "units":
                 tmp_dict[r"\unit"] = val
+            elif key == "deprecated":
+                tmp_dict[r"\deprecated"] = str(val)
             else:
                 # Escape reserved keywords so they are not misinterpreted on round-trip
                 escaped_key = f"\\{key}" if key in RESERVED_KEYWORDS else key
