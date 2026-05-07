@@ -1,101 +1,114 @@
-category: base
-doc: |
+\category: base
+\doc: |
   This is a test for enumerations.
-type: group
+\type: group
 NXenums(NXobject):
   (NXentry):
     closed_enum_no_docs_list:
-      doc: |
+      \doc: |
         This is a closed enumeration without any docstrings for the individual items.
         The items are stored in a flat list.
       # comment 0
-      enumeration: [value0, value1, value2]
+      \enumeration: [value0, value1, value2]
     closed_enum_no_docs_dict:
-      doc: |
+      \doc: |
         This is a closed enumeration without any docstrings for the individual items.
         The items are stored in a dict with the items keyword.
-      enumeration:
+      \enumeration:
         # comment 1
-        items: [value0, value1, value2]
+        \items: [value0, value1, value2]
     closed_enum_with_numbers(NX_NUMBER):
-      doc: |
+      \doc: |
         This is a closed enumeration with NX_NUMBER items.
-      enumeration: [0, 1, 2]
+      \enumeration: [0, 1, 2]
     closed_enum_with_list_of_lists(NX_NUMBER):
-      doc: |
+      \doc: |
         This is a closed enumeration, where the individual items are lists themselves.
-      enumeration: [[1, 0, 0], [0, 1, 0], [0, 0, -1]]
+      \enumeration: [[1, 0, 0], [0, 1, 0], [0, 0, -1]]
     closed_enum_with_docs:
-      doc: |
+      \doc: |
         This is a closed enumeration, with each item having a docstring.
-      enumeration:
+      \enumeration:
         # comment 2
         value0:
           # comment 3
-          doc: |
+          \doc: |
             Doc for value0
         value1:
-          doc: |
+          \doc: |
             Doc for value1
         value2:
-          doc: |
+          \doc: |
             Doc for value1
     closed_enum_with_list_of_lists_and_docs(NX_NUMBER):
-      doc: |
+      \doc: |
         This is a closed enumeration with any docstrings for the individual items.
         The individual items are lists themselves.
-      enumeration:
+      \enumeration:
         "[1, 0, 0]":
-          doc: |
+          \doc: |
             Doc for [1, 0, 0]
         "[0, 1, 0]":
-          doc: |
+          \doc: |
             Doc for [0, 1, 0]
         "[0, 0, -1]":
-          doc: |
+          \doc: |
             Doc for [0, 1, 0]
+    closed_enum_explicit_false_with_numbers(NX_NUMBER):
+      \doc: |
+        This is a closed enumeration with NX_NUMBER items and an explicit \open: false.
+      \enumeration:
+        \open: false
+        \items: [0, 1, 2]
+    closed_enum_explicit_false_with_list_of_lists(NX_NUMBER):
+      \doc: |
+        This is a closed enumeration, where the individual items are lists themselves,
+        with an explicit \open: false.
+      \enumeration:
+        \open: false
+        \items: [[1, 0, 0], [0, 1, 0], [0, 0, -1]]
     open_enum_no_docs_no_comments:
-      doc: |
+      \doc: |
         This is an open enumeration without any docstrings for the individual items.
-      enumeration:
-        open_enum: true
-        items: [value0, value1, value2]
+      \enumeration:
+        \open: true
+        \items: [value0, value1, value2]
     open_enum_no_docs_with_comments:
-      doc: |
+      \doc: |
         This is an open enumeration without any docstrings for the individual items.
         There is a comment in the enumeration.
-      enumeration:
+      \enumeration:
         # comment4
-        open_enum: true
-        items: [value0, value1, value2]
+        \open: true
+        \items: [value0, value1, value2]
     open_enum_with_docs:
-      doc: |
+      \doc: |
         This is a open enumeration, with each item having a docstring.
-      enumeration:
+      \enumeration:
         # comment 5
-        open_enum: true
+        \open: true
         value0:
           # comment 6
-          doc: |
+          \doc: |
             Doc for value0
         value1:
-          doc: |
+          \doc: |
             Doc for value1
         value2:
-          doc: |
+          \doc: |
             Doc for value2
     open_enum_with_list_of_lists_and_docs(NX_NUMBER):
-      doc: |
+      \doc: |
         This is an open enumeration with docstrings for the individual items.
         The individual items are lists themselves.
-      enumeration:
-        open_enum: true
+      \enumeration:
+        \open: true
         "[1, 0, 0]":
-          doc: |
+          \doc: |
             Doc for [1, 0, 0]
         "[0, 1, 0]":
-          doc: |
+          \doc: |
             Doc for [0, 1, 0]
         "[0, 0, -1]":
-          doc: |
+          \doc: |
             Doc for [0, 1, 0]

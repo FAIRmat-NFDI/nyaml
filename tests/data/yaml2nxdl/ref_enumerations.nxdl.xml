@@ -1,9 +1,9 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 <!--
 # NeXus - Neutron and X-ray Common Data Format
 #
-# Copyright (C) 2025-2025 NeXus International Advisory Committee (NIAC)
+# Copyright (C) 2026-2026 NeXus International Advisory Committee (NIAC)
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -115,6 +115,27 @@
                         Doc for [0, 1, 0]
                     </doc>
                 </item>
+            </enumeration>
+        </field>
+        <field name="closed_enum_explicit_false_with_numbers" type="NX_NUMBER">
+            <doc>
+                This is a closed enumeration with NX_NUMBER items and an explicit \open: false.
+            </doc>
+            <enumeration open="false">
+                <item value="0"/>
+                <item value="1"/>
+                <item value="2"/>
+            </enumeration>
+        </field>
+        <field name="closed_enum_explicit_false_with_list_of_lists" type="NX_NUMBER">
+            <doc>
+                This is a closed enumeration, where the individual items are lists themselves,
+                with an explicit \open: false.
+            </doc>
+            <enumeration open="false">
+                <item value="[1, 0, 0]"/>
+                <item value="[0, 1, 0]"/>
+                <item value="[0, 0, -1]"/>
             </enumeration>
         </field>
         <field name="open_enum_no_docs_no_comments">

@@ -135,13 +135,14 @@ def yml_reader(input_file: str | os.PathLike[str]) -> dict:
     COMMENT_BLOCKS = CommentCollector(input_file, loaded_yaml)
     COMMENT_BLOCKS.extract_all_comment_blocks()
 
-    if "category" not in loaded_yaml.keys():
+    _cat = loaded_yaml.get(r"\category")
+    if _cat is None:
         raise ValueError(
             "All definitions should be either 'base' or 'application' category. "
             "No category has been found."
         )
     global CATEGORY
-    CATEGORY = loaded_yaml["category"]
+    CATEGORY = _cat
     return loaded_yaml
 
 
@@ -215,10 +216,10 @@ def check_for_skipped_attributes(
     Check for any attributes have been skipped or not.
     NOTE: We should keep in mind about 'doc'
     """
-    block_tag = ["enumeration"]
+    block_tag = [r"\enumeration"]
     if value:
         for attr, val in value.items():
-            if attr == "doc":
+            if attr == r"\doc":
                 continue
             if "__line__" in attr or attr in block_tag:
                 continue
@@ -227,7 +228,7 @@ def check_for_skipped_attributes(
                 print(f"__line__ : {value[line_number]}")
             if (
                 not isinstance(val, dict)
-                and "\\@" not in attr
+                and not attr.startswith(r"\@")
                 and attr not in allowed_attr
                 and "NX" not in attr
                 and val
@@ -310,7 +311,7 @@ def handle_each_part_doc(text: str) -> str:
 
     clean_txt = text.strip()
 
-    if not clean_txt.startswith("xref:"):
+    if not clean_txt.startswith(r"\xref:"):
         return format_nxdl_doc(check_for_mapping_char_other(clean_txt)).strip()
 
     no_lines = len(clean_txt.splitlines())
@@ -320,7 +321,11 @@ def handle_each_part_doc(text: str) -> str:
         raise ValueError(
             "Found invalid xref. Please make sure that your xref entries are valid yaml."
         ) from scan_err
-    xref_entries = xref_dict.get("xref", {})
+    xref_key = r"\xref"
+    term_key = r"\term"
+    spec_key = r"\spec"
+    url_key = r"\url"
+    xref_entries = xref_dict.get(xref_key, {})
 
     if no_lines != len(xref_entries) + 1:
         raise ValueError("Invalid xref. It contains nested or duplicate keys.")
@@ -329,16 +334,16 @@ def handle_each_part_doc(text: str) -> str:
         raise ValueError("Invalid xref. Too many keys.")
 
     for key in xref_entries:
-        if key not in ("term", "spec", "url"):
+        if key not in (term_key, spec_key, url_key):
             raise ValueError(
-                f"Invalid xref key `{key}`. Must be one of `term`, `spec` or `url`."
+                f"Invalid xref key `{key}`. Must be one of `\\term`, `\\spec` or `\\url`."
             )
 
     return (
-        f"This concept is related to term `{xref_entries.get('term', 'NO TERM')}`_ "
-        f"of the {xref_entries.get('spec', 'NO TERM')} standard.\n\n"
-        f".. _{xref_entries.get('term', 'NO SPECIFICATION')}: "
-        f"{xref_entries.get('url', 'NO URL')}"
+        f"This concept is related to term `{xref_entries.get(term_key, 'NO TERM')}`_ "
+        f"of the {xref_entries.get(spec_key, 'NO STANDARD')} standard.\n\n"
+        f".. _{xref_entries.get(term_key, 'NO TERM')}: "
+        f"{xref_entries.get(url_key, 'NO URL')}"
     )
 
 
@@ -435,6 +440,16 @@ def xml_handle_dimensions(
     line_loc = dct[line_number]
     dims: ET.Element | None = None
     if isinstance(value, dict):
+        # Normalize escape-prefixed keywords inside a dimensions block to their bare
+        # internal names (which the rest of this function uses).
+        value = dict(value)  # shallow copy so we do not mutate the caller's dict
+        for _kw in (r"\rank", r"\doc", r"\dim"):
+            bare = _kw[1:]  # strip leading backslash
+            if _kw in value:
+                value[bare] = value.pop(_kw)
+                line_key = f"__line__{_kw}"
+                if line_key in value:
+                    value[f"__line__{bare}"] = value.pop(line_key)
         # top-level docstring dealt with already by the caller
         n_idx_dicts = len(
             [key for key in value if re.match("^[0-9]+$", f"{key}") is not None]
@@ -538,15 +553,15 @@ def xml_handle_dimensions(
 def xml_handle_enumeration(
     dct: dict, obj: ET._Element, keyword: str, value: list | dict, verbose: bool
 ) -> None:
-    """This function creates an 'enumeration' element instance.
+    r"""This function creates an 'enumeration' element instance.
 
     Different cases are handled:
     1) The items are in a flat list directly under "enumeration".
-    2) The items are in a dictionary under the "items" key.
+    2) The items are in a dictionary under the "\items" key.
     3) The items are dictionaries and may contain a nested doc.
-    4) The enumeration is open. The input is a dict with keywords "open_enum"
-       and "items" (which is  a flat list of all enum items without docs).
-    5) The enumeration is open. The input is a nested dict with keyword "open_enum"
+    4) The enumeration is open. The input is a dict with keywords "\open"
+       and "\items" (which is a flat list of all enum items without docs).
+    5) The enumeration is open. The input is a nested dict with keyword "\open"
        and each items is a dict itself (with docs for each item).
     """
     line_number = f"__line__{keyword}"
@@ -566,21 +581,21 @@ bear at least an argument !"
             itm = ET.SubElement(enum, "item")
             itm.set("value", str(element))
     if isinstance(value, dict) and value != {}:
-        if "open_enum" in value:
-            line_number = f"__line__{'open_enum'}"
+        if r"\open" in value:
+            line_number = "__line__\\open"
             line_loc = value[line_number]
             xml_handle_comment(enum, line_number, line_loc)
-            enum.set("open", check_for_mapping_char_other(str(value["open_enum"])))
+            enum.set("open", check_for_mapping_char_other(str(value[r"\open"])))
 
-            del value["open_enum"]
+            del value[r"\open"]
 
-        if "items" in value:
-            line_number = f"__line__{'items'}"
+        if r"\items" in value:
+            line_number = r"__line__\items"
             line_loc = value[line_number]
             xml_handle_comment(enum, line_number, line_loc)
 
-            if isinstance(value["items"], list):
-                for element in value["items"]:
+            if isinstance(value[r"\items"], list):
+                for element in value[r"\items"]:
                     itm = ET.SubElement(enum, "item")
                     itm.set("value", str(element))
             return
@@ -611,8 +626,6 @@ def xml_handle_link(
     link_obj = ET.SubElement(obj, "link")
     link_obj.set("name", str(name))
 
-    xml_handle_nametype(keyword, keyword, dct, obj)
-
     if value:
         rm_key_list = []
         for attr, val in value.items():
@@ -620,13 +633,20 @@ def xml_handle_link(
                 continue
             line_number = f"__line__{attr}"
             line_loc = value[line_number]
-            if attr == "doc":
+            if attr == r"\doc":
                 xml_handle_doc(link_obj, val, line_number, line_loc)
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+            elif attr == r"\nameType":
+                link_name = keyword[:-6]  # strip "(link)"
+                check_for_proper_nameType(link_name, str(val) if val else None, keyword)
+                if val:
+                    link_obj.set("nameType", str(val))
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
             elif attr in YAML_LINK_ATTRIBUTES and not isinstance(val, dict):
                 if val:
-                    link_obj.set(attr, str(val))
+                    link_obj.set(attr.lstrip("\\"), str(val))
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
                 xml_handle_comment(obj, line_number, line_loc, link_obj)
@@ -663,7 +683,7 @@ def xml_handle_choice(
                 continue
             line_number = f"__line__{attr}"
             line_loc = value[line_number]
-            if attr == "doc":
+            if attr == r"\doc":
                 xml_handle_doc(choice_obj, val, line_number, line_loc)
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
@@ -692,17 +712,17 @@ def xml_handle_symbols(dct: dict, obj: ET._Element, keyword: str, value: dict) -
     )
     xml_handle_comment(obj, line_number, line_loc)
     syms = ET.SubElement(obj, "symbols")
-    if "doc" in value.keys():
-        line_number = "__line__doc"
+    if r"\doc" in value.keys():
+        line_number = r"__line__\doc"
         line_loc = value[line_number]
         xml_handle_comment(syms, line_number, line_loc)
         doc_tag = ET.SubElement(syms, "doc")
-        doc_tag.text = "\n" + textwrap.fill(value["doc"], width=70) + "\n"
+        doc_tag.text = "\n" + textwrap.fill(value[r"\doc"], width=70) + "\n"
     rm_key_list = []
     for key, val in value.items():
         if "__line__" in key:
             continue
-        if key != "doc":
+        if key != r"\doc":
             line_number = f"__line__{key}"
             line_loc = value[line_number]
             xml_handle_comment(syms, line_number, line_loc)
@@ -755,8 +775,8 @@ def xml_handle_nametype(
     Identify NeXus nameType attribute for field, group, attribute use hint if required.
     """
 
-    concept_name = keyword_name.replace("\\@", "").replace("(link)", "")
-    name_type = dct[keyword].get("nameType")
+    concept_name = keyword_name.replace(r"\@", "").replace("(link)", "")
+    name_type = dct[keyword].get(r"\nameType")
 
     check_for_proper_nameType(concept_name, name_type, keyword_name)
 
@@ -792,27 +812,39 @@ def xml_handle_attributes(
                 continue
             line_number = f"__line__{attr}"
             line_loc = value[line_number]
-            if attr in ["doc", *YAML_ATTRIBUTES_ATTRIBUTES] and not isinstance(
-                attr_val, dict
-            ):
-                if attr == "unit":
-                    sub_element.set(f"{attr}s", str(attr_val))
+            if attr in [
+                r"\doc",
+                r"\unit",
+                r"\exists",
+                r"\nameType",
+                r"\type",
+                *YAML_ATTRIBUTES_ATTRIBUTES,
+            ] and not isinstance(attr_val, dict):
+                if attr == r"\unit":
+                    sub_element.set("units", str(attr_val))
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
                     xml_handle_comment(obj, line_number, line_loc, sub_element)
-                elif attr == "exists" and attr_val:
+                elif attr == r"\exists" and attr_val:
                     xml_handle_exists(value, sub_element, attr, attr_val)
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
                     xml_handle_comment(obj, line_number, line_loc, sub_element)
-                elif attr == "doc":
+                elif attr == r"\doc":
                     xml_handle_doc(
                         sub_element, format_nxdl_doc(attr_val), line_number, line_loc
                     )
                     rm_key_list.append(attr)
                     rm_key_list.append(line_number)
-                elif attr == "nameType":
+                elif attr == r"\nameType":
                     xml_handle_nametype(keyword, keyword_name, dct, sub_element)
+                    rm_key_list.append(attr)
+                    rm_key_list.append(line_number)
+                elif attr == r"\type":
+                    sub_element.set("type", check_for_mapping_char_other(attr_val))
+                    rm_key_list.append(attr)
+                    rm_key_list.append(line_number)
+                    xml_handle_comment(obj, line_number, line_loc, sub_element)
                 else:
                     sub_element.set(attr, check_for_mapping_char_other(attr_val))
                     rm_key_list.append(attr)
@@ -845,14 +877,20 @@ def validate_field_attribute_and_value(
         )
 
     # The below elements might come as child element
-    skipped_child_name = ["doc", "dimension", "enumeration", "choice", "exists"]
+    skipped_child_name = [
+        r"\doc",
+        r"\enumeration",
+        "choice",
+        r"\exists",
+        r"\type",
+    ]
     # check for invalid key or attributes
     if (
         v_attr not in [*skipped_child_name, *allowed_attribute]
         and "__line__" not in v_attr
         and not isinstance(v_val, dict)
         and "(" not in v_attr  # skip only groups and field that has name and type
-        and "\\@" not in v_attr
+        and r"\@" not in v_attr
     ):  # skip nexus attributes
         line_number = f"__line__{v_attr}"
         raise ValueError(
@@ -923,7 +961,7 @@ def xml_handle_fields_or_group(
                 continue
             line_number = f"__line__{attr}"
             line_loc = value[line_number]
-            if attr == "doc":
+            if attr == r"\doc":
                 xml_handle_doc(
                     sub_element,
                     val,
@@ -932,18 +970,40 @@ def xml_handle_fields_or_group(
                 )
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
-            elif attr == "exists" and val:
+            elif attr == r"\exists" and val:
                 xml_handle_exists(value, sub_element, attr, val)
                 rm_key_list.append(attr)
                 rm_key_list.append(line_number)
                 xml_handle_comment(obj, line_number, line_loc, sub_element)
-            elif attr == "nameType":
+            elif attr == r"\nameType":
                 xml_handle_nametype(keyword, keyword_name, dct, sub_element)
-            elif attr == "unit" and ele_type == "field":
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+            elif attr == r"\deprecated" and not isinstance(val, dict) and val:
+                sub_element.set("deprecated", check_for_mapping_char_other(val))
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+                xml_handle_comment(obj, line_number, line_loc, sub_element)
+            elif attr == r"\minOccurs" and not isinstance(val, dict) and val:
+                sub_element.set("minOccurs", check_for_mapping_char_other(val))
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+                xml_handle_comment(obj, line_number, line_loc, sub_element)
+            elif attr == r"\maxOccurs" and not isinstance(val, dict) and val:
+                sub_element.set("maxOccurs", check_for_mapping_char_other(val))
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+                xml_handle_comment(obj, line_number, line_loc, sub_element)
+            elif attr == r"\type" and not isinstance(val, dict) and val:
+                sub_element.set("type", check_for_mapping_char_other(val))
+                rm_key_list.append(attr)
+                rm_key_list.append(line_number)
+                xml_handle_comment(obj, line_number, line_loc, sub_element)
+            elif attr == r"\unit" and ele_type == "field":
                 xml_handle_units(sub_element, val)
                 xml_handle_comment(obj, line_number, line_loc, sub_element)
                 rm_key_list.append(attr)
-            elif attr in ("dimensions", "dim") and ele_type == "field":
+            elif attr in (r"\dimensions", r"\dim") and ele_type == "field":
                 xml_handle_dimensions(
                     dct=value, obj=sub_element, keyword=attr, value=val
                 )
@@ -1021,12 +1081,6 @@ def recursive_build(obj: ET._Element, dct: dict, verbose: bool) -> None:
         line_number = f"__line__{keyword}"
         line_loc = dct[line_number]
         keyword_name, keyword_type = nx_name_type_resolving(keyword)
-        # keyword's like nameType need proper escape character in the future
-        # to simplify their distinction from NX_CHAR fields and attributes
-        if 0 < sum(1 for char in keyword if char.isupper()) < len(keyword):
-            if isinstance(value, str):
-                continue
-
         check_keyword_variable(verbose, dct, keyword, value)
         if verbose:
             print(f"keyword_name:{keyword_name} keyword_type {keyword_type}\n")
@@ -1036,7 +1090,9 @@ def recursive_build(obj: ET._Element, dct: dict, verbose: bool) -> None:
         elif keyword[-8:] == "(choice)":
             xml_handle_choice(dct, obj, keyword, value)
         # symbols of fields or attributes, root level symbols dealt with by nyaml2nxdl()
-        elif keyword_type == "" and keyword_name == "symbols":
+        elif (
+            keyword_type == "" and keyword_name == "symbols" and isinstance(value, dict)
+        ):
             xml_handle_symbols(dct, obj, keyword, value)
         elif re.match(r"NX[a-zA-Z].*", keyword_type) is not None:
             elem_type = "group"
@@ -1050,17 +1106,17 @@ def recursive_build(obj: ET._Element, dct: dict, verbose: bool) -> None:
                 YAML_GROUP_ATTRIBUTES,
                 verbose=False,
             )
-        elif keyword_name[0:2] == "\\@":  # check if obj qualifies as a NeXus attribute
+        elif keyword_name[:2] == r"\@":  # check if obj qualifies as a NeXus attribute
             xml_handle_attributes(dct, obj, keyword, value, verbose)
-        elif keyword == "doc":
+        elif keyword == r"\doc":
             xml_handle_doc(obj, value, line_number, line_loc)
-        elif keyword == "unit":
+        elif keyword == r"\unit":
             xml_handle_units(obj, value)
-        elif keyword == "enumeration":
+        elif keyword == r"\enumeration":
             xml_handle_enumeration(dct, obj, keyword, value, verbose)
-        elif keyword in ("dimensions", "dim"):
+        elif keyword in (r"\dimensions", r"\dim"):
             xml_handle_dimensions(dct, obj, keyword, value)
-        elif keyword == "exists":
+        elif keyword == r"\exists":
             xml_handle_exists(dct, obj, keyword, value)
         # Handles fields e.g. AXISNAME
         elif keyword_name != "" and "__line__" not in keyword_name:
@@ -1172,6 +1228,29 @@ def nyaml2nxdl(
         "restricts",
     ]
     yml_appdef = yml_reader(input_file)
+    # Guard: definition-level keywords at root level must use the \ prefix.
+    # A bare (unescaped) key like 'category:' is ambiguous and must be rejected.
+    _must_escape = frozenset((*def_attributes, "doc", "symbols"))
+    _bare_found = [
+        k for k in yml_appdef if not k.startswith("__line__") and k in _must_escape
+    ]
+    if _bare_found:
+        raise ValueError(
+            f"Root-level keyword(s) {_bare_found!r} must be written with a backslash "
+            f"prefix (e.g. '\\{_bare_found[0]}'). Bare definition-level keywords are not allowed."
+        )
+    # Normalize escaped root-level reserved keywords, preserving YAML key order.
+    # Strip the \ prefix so the rest of the code sees bare names only.
+    _root_esc = {f"\\{k}": k for k in _must_escape}
+    _normalized: dict = {}
+    for _k, _v in yml_appdef.items():
+        if _k.startswith("__line__") and _k[8:] in _root_esc:
+            _normalized[f"__line__{_root_esc[_k[8:]]}"] = _v
+        elif _k in _root_esc:
+            _normalized[_root_esc[_k]] = _v
+        else:
+            _normalized[_k] = _v
+    yml_appdef = _normalized
     def_comment_text = []
     if verbose:
         print(f"input-file: {input_file}\n")

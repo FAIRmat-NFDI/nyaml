@@ -138,5 +138,18 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
             </doc>
             <dimensions rank="symbol_a"/>
         </field>
+        <field name="dim_with_ref" type="NX_NUMBER">
+            <doc>
+                Dimensions block using the ref attribute on individual dim elements to
+                reference named dimension constants defined in the symbols block.
+            </doc>
+            <dimensions>
+                <doc>
+                    Test with doc and dim ref attribute
+                </doc>
+                <dim index="1" value="2" ref="s"/>
+                <dim index="3" value="4" ref="m"/>
+            </dimensions>
+        </field>
     </group>
 </definition>

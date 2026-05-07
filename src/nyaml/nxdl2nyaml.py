@@ -31,10 +31,12 @@ from typing import Any, TextIO
 import lxml.etree as ET
 
 from nyaml.helper import (
+    LIMITED_RESERVED_KEYWORDS,
     NXDL_ATTRIBUTES_ATTRIBUTES,
     NXDL_FIELD_ATTRIBUTES,
     NXDL_GROUP_ATTRIBUTES,
     NXDL_LINK_ATTRIBUTES,
+    RESERVED_KEYWORDS,
     check_for_proper_nameType,
     clean_empty_lines,
     get_node_parent_info,
@@ -48,7 +50,7 @@ COMMENT_TAG = "!--"
 COMMENT_TAG_END = "--"
 COMMENT_START = "<!--"
 COMMENT_END = "-->"
-DEFINITION_CATEGORIES = ("category: application", "category: base")
+DEFINITION_CATEGORIES = (r"\category: application", r"\category: base")
 
 
 def separate_pi_comments(input_file: str | os.PathLike[str]) -> list[str]:
@@ -196,7 +198,7 @@ class Nxdl2yaml:
         """Handle symbols field and its children symbol"""
 
         self.root_level_symbols = (
-            f"{remove_namespace_from_tag(node.tag)}: "
+            f"\\{remove_namespace_from_tag(node.tag)}: "
             f"{node.text.strip() if node.text else ''}"
         )
         depth += 1
@@ -277,7 +279,8 @@ class Nxdl2yaml:
                     self.root_level_definition.append(tmp_word)
                     keyword_order = self.root_level_definition.index(tmp_word)
             elif "schemaLocation" not in item and "extends" != item:
-                text = f"{item}: {attributes[item]}"
+                prefix = "\\" if item in LIMITED_RESERVED_KEYWORDS["definition"] else ""
+                text = f"{prefix}{item}: {attributes[item]}"
                 self.root_level_definition.append(text)
         self.root_level_definition[keyword_order] = f"{keyword}:"
 
@@ -371,7 +374,7 @@ class Nxdl2yaml:
             return part of doc as formatted
         """
 
-        xref_key, spec_key, term_key, url_key = ("xref", "spec", "term", "url")
+        xref_key, spec_key, term_key, url_key = (r"\xref", r"\spec", r"\term", r"\url")
         spec, term, url = (None, None, None)
         matches = re.search(
             r"This concept is related to term `([^`:]+)`_ of the"
@@ -407,6 +410,8 @@ class Nxdl2yaml:
         """
         if "}" in tag:
             tag = remove_namespace_from_tag(tag)
+        if tag in RESERVED_KEYWORDS:
+            tag = f"\\{tag}"
         indent = depth * DEPTH_SIZE
         text = self.clean_and_organize_text(text, depth)  # starts with '\n'
         docs = re.split(r"\n\s*\n", text)
@@ -562,7 +567,7 @@ class Nxdl2yaml:
                 if "NX" in defs and defs[-1] == ":":
                     nx_name = defs
                     continue
-                if defs in ("category: application", "category: base"):
+                if defs in DEFINITION_CATEGORIES:
                     continue
                 self.write_out(indent=0 * DEPTH_SIZE, text=defs, file_out=file_out)
             self.write_out(indent=0 * DEPTH_SIZE, text=nx_name, file_out=file_out)
@@ -636,24 +641,26 @@ class Nxdl2yaml:
             self.check_for_unwanted_attributes(node=node)
             # As both 'minOccurs', 'maxOccurs' and optionality move to the 'exists'
             if key in self.optionality_keys:
-                if "exists" not in tmp_dict:
-                    tmp_dict["exists"] = []
+                if r"\exists" not in tmp_dict:
+                    tmp_dict[r"\exists"] = []
                 self.handle_exists(exists_dict, key, val)
             elif key == "units":
-                tmp_dict["unit"] = str(val)
+                tmp_dict[r"\unit"] = str(val)
             else:
-                tmp_dict[key] = str(val)
+                # Escape reserved keywords so they are not misinterpreted on round-trip
+                escaped_key = f"\\{key}" if key in RESERVED_KEYWORDS else key
+                tmp_dict[escaped_key] = str(val)
 
         if exists_dict:
             for key, exists_val in exists_dict.items():
                 if key in ["minOccurs", "maxOccurs"]:
-                    tmp_dict["exists"] = (
-                        tmp_dict["exists"] + exists_val
+                    tmp_dict[r"\exists"] = (
+                        tmp_dict[r"\exists"] + exists_val
                         if isinstance(exists_val, list)
                         else [exists_val]
                     )
                 elif key in ["optional", "recommended", "required"]:
-                    tmp_dict["exists"] = key
+                    tmp_dict[r"\exists"] = key
 
         depth_ = depth + 1
         for key, val_ in tmp_dict.items():
@@ -710,7 +717,7 @@ class Nxdl2yaml:
             if not isinstance(val, dict):
                 if attr in ["rank"]:
                     # indent = (depth + 1) * DEPTH_SIZE
-                    yml_dim_dct["rank"] = val
+                    yml_dim_dct[r"\rank"] = val
                     break
                 # rank is the only allowed attribute of a dimensionsType node
                 # see https://manual.nexusformat.org/nxdl_desc.html#dimensionstype
@@ -759,9 +766,9 @@ class Nxdl2yaml:
         # perform I/O based on the cases analyzed
         yml_dim_dct_keys = list(yml_dim_dct)
         indent = depth * DEPTH_SIZE
-        if set(yml_dim_dct_keys) in [{"rank"}, {"doc", "rank"}]:
+        if set(yml_dim_dct_keys) in [{r"\rank"}, {r"\doc", r"\rank"}]:
             # rank only notation
-            file_out.write(f"{indent}dimensions:\n")
+            file_out.write(f"{indent}\\dimensions:\n")
             for key, val in yml_dim_dct.items():
                 if key == "doc":
                     file_out.write(f"{val}")
@@ -776,10 +783,10 @@ class Nxdl2yaml:
                             use_shorthand_notation = False
                             break
             if use_shorthand_notation:  # shorthand_explicit_rank_new
-                file_out.write(f"{indent}dimensions:\n")
+                file_out.write(f"{indent}\\dimensions:\n")
                 dim_index_value: list[str] = []
                 for key, obj in yml_dim_dct.items():
-                    if key == "rank":  # "doc"
+                    if key == r"\rank":  # "doc"
                         if isinstance(obj, str):
                             file_out.write(f"{indent}{' ' * 2}{key}: {obj}\n")
                     elif key == "doc":
@@ -793,14 +800,14 @@ class Nxdl2yaml:
                                     dim_index_value.append(attr_val)
                 if len(dim_index_value) > 1:
                     file_out.write(
-                        f"{indent}{' ' * 2}dim: ({', '.join(dim_index_value)})\n"
+                        f"{indent}{' ' * 2}\\dim: ({', '.join(dim_index_value)})\n"
                     )
                 elif len(dim_index_value) == 1:
-                    file_out.write(f"{indent}{' ' * 2}dim: ({dim_index_value[0]},)\n")
+                    file_out.write(f"{indent}{' ' * 2}\\dim: ({dim_index_value[0]},)\n")
             else:  # full syntax
-                file_out.write(f"{indent}dimensions:\n")
+                file_out.write(f"{indent}\\dimensions:\n")
                 for key, obj in yml_dim_dct.items():
-                    if key == "rank":  # "doc"
+                    if key == r"\rank":  # "doc"
                         if isinstance(obj, str):
                             file_out.write(f"{indent}{' ' * 2}{key}: {obj}\n")
                     elif key == "doc":
@@ -809,7 +816,7 @@ class Nxdl2yaml:
                 # two loops to assure that doc and rank are written before
                 # the individual explicit dimension dicts
                 for key, obj in sorted(yml_dim_dct.items()):
-                    if key not in ["rank", "doc"] and isinstance(obj, dict):
+                    if key not in [r"\rank", r"\doc"] and isinstance(obj, dict):
                         if (
                             sum(
                                 1
@@ -828,15 +835,17 @@ class Nxdl2yaml:
     def handle_enumeration(
         self, depth: int, node: ET._Element, file_out: TextIO
     ) -> None:
-        """
+        r"""
         Handle the enumeration field parsed from the XML file.
 
         - If enumeration items contain a <doc> field, they will be stored as child fields.
         - If no docs are provided, items will be stored in a list format.
-        - If the enumeration is open, an 'open_enum' key will be included.
+        - If the enumeration is open, an '\open' key will be included.
         """
         indent = depth * DEPTH_SIZE
         tag = remove_namespace_from_tag(node.tag)
+        if tag in RESERVED_KEYWORDS:
+            tag = f"\\{tag}"
         attributes = node.attrib
         open_enum = attributes.get("open", "false").lower() == "true"
         node_children = list(node)
@@ -848,7 +857,7 @@ class Nxdl2yaml:
         if check_doc:
             file_out.write("\n")
             if open_enum:
-                file_out.write(f"{indent + DEPTH_SIZE}open_enum: true\n")
+                file_out.write(f"{indent + DEPTH_SIZE}\\open: true\n")
             for child in node_children:
                 child_tag = remove_namespace_from_tag(child.tag)
                 if child_tag == "item":
@@ -881,18 +890,18 @@ class Nxdl2yaml:
                 elif child_tag == COMMENT_TAG and self.include_comment:
                     file_out.write("\n")
                     self.handle_comment(depth + 1, child, file_out)
-                    # If there is a comment, we need to use the long notation with "items:"
+                    # If there is a comment, we need to use the long notation with "\items:"
                     enum_with_comment = True
 
             if open_enum:
                 if not enum_with_comment:
-                    file_out.write(f"\n{indent + DEPTH_SIZE}open_enum: true\n")
+                    file_out.write(f"\n{indent + DEPTH_SIZE}\\open: true\n")
                 else:
-                    file_out.write(f"{indent + DEPTH_SIZE}open_enum: true\n")
+                    file_out.write(f"{indent + DEPTH_SIZE}\\open: true\n")
 
             if open_enum or enum_with_comment:
                 file_out.write(
-                    f"{indent + DEPTH_SIZE}items: [{', '.join(enum_list)}]\n"
+                    f"{indent + DEPTH_SIZE}\\items: [{', '.join(enum_list)}]\n"
                 )
 
             else:
@@ -930,13 +939,15 @@ class Nxdl2yaml:
                 )
             # As both 'minOccurs', 'maxOccurs' and optionality move to the 'exists'
             if key in self.optionality_keys:
-                if "exists" not in tmp_dict:
-                    tmp_dict["exists"] = []
+                if r"\exists" not in tmp_dict:
+                    tmp_dict[r"\exists"] = []
                 self.handle_exists(exists_dict, key, val)
             elif key == "units":
-                tmp_dict["unit"] = val
+                tmp_dict[r"\unit"] = val
             else:
-                tmp_dict[key] = val
+                # Escape reserved keywords so they are not misinterpreted on round-trip
+                escaped_key = f"\\{key}" if key in RESERVED_KEYWORDS else key
+                tmp_dict[escaped_key] = val
 
         datatype = tmp_dict.get("type")
 
@@ -953,10 +964,10 @@ class Nxdl2yaml:
         if exists_dict:
             for key, exists_val in exists_dict.items():
                 if key in ["minOccurs", "maxOccurs"]:
-                    tmp_dict["exists"] = tmp_dict["exists"] + exists_val
+                    tmp_dict[r"\exists"] = tmp_dict[r"\exists"] + val
                     has_min_max = True
                 elif key in ["optional", "recommended", "required"]:
-                    tmp_dict["exists"] = key
+                    tmp_dict[r"\exists"] = key
                     has_opt_recommended_required = True
         if has_min_max and has_opt_recommended_required:
             raise ValueError(
@@ -993,7 +1004,12 @@ class Nxdl2yaml:
         for attr_key, val in node_attr.items():
             if attr_key in NXDL_LINK_ATTRIBUTES:
                 indent = depth_ * DEPTH_SIZE
-                file_out.write(f"{indent}{attr_key}: {val}\n")
+                escaped_key = (
+                    f"\\{attr_key}"
+                    if attr_key in LIMITED_RESERVED_KEYWORDS["link"]
+                    else attr_key
+                )
+                file_out.write(f"{indent}{escaped_key}: {val}\n")
             else:
                 raise ValueError(
                     f"An unexpected attribute '{attr_key}' of link has found."

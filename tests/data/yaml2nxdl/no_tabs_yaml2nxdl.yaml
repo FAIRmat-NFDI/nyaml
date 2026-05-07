@@ -1,5 +1,5 @@
-category: base
-doc: |
+\category: base
+\doc: |
   * Each :ref:`NXdata` group will define one field as the default
     plottable data.  The value of the ``signal`` attribute names this field.
     Additional fields may be used to describe the dimension scales and
@@ -20,8 +20,8 @@ doc: |
 
     The field named in the ``signal`` attribute **must** exist, either
     directly as a NeXus field or defined through a link.
-symbols:
-  doc: |
+\symbols:
+  \doc: |
     These symbols will be used below to coordinate fields with the same shape.
   dataRank: |
     rank of the ``DATA`` field
@@ -33,10 +33,10 @@ symbols:
     length of the ``y`` field
   nz: |
     length of the ``z`` field
-type: group
-ignoreExtraFields: true
-ignoreExtraAttributes: true
+\type: group
+\ignoreExtraFields: true
+\ignoreExtraAttributes: true
 NXtest(NXobject):
   title:
-    doc: |
+    \doc: |
       Title for the plot.

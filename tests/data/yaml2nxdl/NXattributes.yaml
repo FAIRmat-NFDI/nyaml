@@ -1,46 +1,44 @@
-doc: documentation no. 0
-symbols:
-  doc: documentation no. 1
+\doc: documentation no. 0
+\symbols:
+  \doc: documentation no. 1
   testnamesymbol: test description of symbol
-category: application
+\category: application
 NXellipsometry_base_draft(my_test_extends):
   (NXentry):
     \@entry:
-      doc: attribute documentation
-    doc: documentation no. 2
+      \doc: attribute documentation
+    \doc: documentation no. 2
     experiment_identifier:
-      exists: ['min', 3, 'max', 100]
-      doc: documentation no. 3
+      \exists: ['min', 3, 'max', 100]
+      \doc: documentation no. 3
     experiment_description:
-      exists: required
+      \exists: required
     start_time(NX_DATE_TIME):
-      exists: required
-      unit: NX_TIME
+      \exists: required
+      \unit: NX_TIME
     program_name:
-      doc: documentation no. 4
+      \doc: documentation no. 4
     program_version:
-      exists: ['min', 5]
-      doc: documentation no. 5
+      \exists: ['min', 5]
+      \doc: documentation no. 5
     time_zone(NX_DATE_TIME):
-      exists: required
-      doc: documentation no. 6
+      \exists: required
+      \doc: documentation no. 6
     definition_local:
-      exists: ['max', 5]
-      doc: documentation no. 7
+      \exists: ['max', 5]
+      \doc: documentation no. 7
       \@version:
     calibration_data(NX_NUMBER):
-      unit: NX_UNITLESS
-      doc: |
+      \unit: NX_UNITLESS
+      \doc: |
         Calibration is performed on a reference surface (usually silicon wafer with well
         defined oxide layer) at a number of angles, then in a straight through mode
         (transmission in air).
-      dimensions:
-        rank: 3
-        dim: [[3, N_calibration_angles+1], [2, N_variables], [1, N_calibration_wavelength]]
-        dim_parameters:
-          required: ['true', 'true', 'true']
+      \dimensions:
+        \rank: 3
+        \dim: [[3, N_calibration_angles+1], [2, N_variables], [1, N_calibration_wavelength]]
     test_field:
       \@vector(NX_NUMBER):
-        doc: Attribute with specific datatype within a field.
+        \doc: Attribute with specific datatype within a field.
     \@vector(NX_NUMBER):
-      doc: Attribute with specific datatype within a group.
+      \doc: Attribute with specific datatype within a group.

@@ -1,149 +1,149 @@
-category: base
-doc: |
+\category: base
+\doc: |
   NXnametype test
-type: group
+\type: group
 NXallowed_name_type(NXobject):
   lower_case_group_no_nametype(NXobject):
-    doc: |
+    \doc: |
       An all lower case group with no nameType.
     lower_case_field_no_nametype:
-      doc: |
+      \doc: |
         An all lower case field with no nameType.
       \@lower_case_attribute_no_nametype:
-        doc: |
+        \doc: |
           An all lower case attribute with no nameType.
     lower_case_link_no_nametype(link):
-      target: field
-      doc: |
+      \target: field
+      \doc: |
         An all lower case link with no nameType.
   lower_case_group_specified(NXobject):
-    nameType: specified
-    doc: |
+    \nameType: specified
+    \doc: |
       An all lower case group with nameType="specified".
     lower_case_field_specified:
-      nameType: specified
-      doc: |
+      \nameType: specified
+      \doc: |
         An all lower case field with nameType="specified".
       \@lower_case_attribute_specified:
-        nameType: specified
-        doc: |
+        \nameType: specified
+        \doc: |
           An all lower case attribute with nameType="specified".
       lower_case_link_specified(link):
-        target: field
-        doc: |
+        \target: field
+        \doc: |
           An all lower case link with no nameType.
     (NXobject):
-      doc: |
+      \doc: |
         An unnamed group with no nameType. Interpretead as nameType="any".
       FIELD:
-        doc: |
+        \doc: |
           An unnamed field with no nameType. Interpretead as nameType="any".
         \@ATTRIBUTE:
-          doc: |
+          \doc: |
             An unnamed attribute no nameType. Interpretead as nameType="any".
         LINK(link):
-          target: field
-          doc: |
+          \target: field
+          \doc: |
             An unnamed link with no nameType. Interpretead as nameType="any".
     (NXdata):
-      nameType: any
-      doc: |
+      \nameType: any
+      \doc: |
         An unnamed group with nameType="any".
       FIELD:
-        nameType: any
-        doc: |
+        \nameType: any
+        \doc: |
           An unnamed field with nameType="any".
         \@ATTRIBUTE:
-          nameType: any
-          doc: |
+          \nameType: any
+          \doc: |
             An unnamed attribute with nameType="any".
         LINK(link):
-          nameType: any
-          target: field
-          doc: |
+          \nameType: any
+          \target: field
+          \doc: |
             An unnamed link with nameType="any".
     objectOBJECT(NXobject):
-      nameType: partial
-      doc: |
+      \nameType: partial
+      \doc: |
         A partially-renameable group with nameType="partial". Variadic part at the end.
       fieldFIELD:
-        nameType: partial
-        doc: |
+        \nameType: partial
+        \doc: |
           A partially-renameable field with nameType="partial". Variadic part at the end.
         \@attributeATTRIBUTE:
-          nameType: partial
-          doc: |
+          \nameType: partial
+          \doc: |
             A partially-renameable attribute nameType="partial". Variadic part at the end.
         linkLINK(link):
-          nameType: partial
-          target: field
-          doc: |
+          \nameType: partial
+          \target: field
+          \doc: |
             A partially-renameable link nameType="partial". Variadic part at the end.
     objectOBJECTobject(NXobject):
-      nameType: specified
-      doc: |
+      \nameType: specified
+      \doc: |
         A partially-renameable group with nameType="partial". Variadic part in the
         middle.
       fieldFIELDfield:
-        nameType: specified
-        doc: |
+        \nameType: specified
+        \doc: |
           A partially-renameable field with nameType="partial". Variadic part in the
           middle.
         \@attributeATTRIBUTEattribute:
-          nameType: specified
-          doc: |
+          \nameType: specified
+          \doc: |
             A partially-renameable attribute with nameType="partial". Variadic part in the
             middle.
         linkLINKlink(link):
-          target: field
-          nameType: partial
-          doc: |
+          \target: field
+          \nameType: partial
+          \doc: |
             A partially-renameable link with nameType="partial". Variadic part in the
             middle.
     OBJECTobject(NXobject):
-      nameType: partial
-      doc: |
+      \nameType: partial
+      \doc: |
         A partially-renameable group with nameType="partial". Variadic part at the
         start.
       FIELDfield:
-        nameType: partial
-        doc: |
+        \nameType: partial
+        \doc: |
           A partially-renameable field with nameType="partial". Variadic part at the
           start.
         \@ATTRIBUTEattribute:
-          nameType: partial
-          doc: |
+          \nameType: partial
+          \doc: |
             A partially-renameable attribute with nameType="partial". Variadic part at the
             start.
         LINKlink(link):
-          target: field
-          nameType: partial
-          doc: |
+          \target: field
+          \nameType: partial
+          \doc: |
             A partially-renameable link with nameType="partial". Variadic part at the start.
     OBJECTobjectOBJECTobject(NXobject):
-      nameType: specified
-      doc: |
+      \nameType: specified
+      \doc: |
         A partially-renameable group with nameType="partial". Multiple variadic and non-
         variadic parts.
       FIELDfieldFIELDfield:
-        nameType: specified
-        doc: |
+        \nameType: specified
+        \doc: |
           A partially-renameable field with nameType="partial". Multiple variadic and non-
           variadic parts.
         \@ATTRIBUTEattributeATTRIBUTEattribute:
-          nameType: specified
-          doc: |
+          \nameType: specified
+          \doc: |
             A partially-renameable attribute with nameType="partial". Multiple variadic and
             non-variadic parts.
         LINKlinkLINKlink(link):
-          target: field
-          nameType: specified
-          doc: |
+          \target: field
+          \nameType: specified
+          \doc: |
             A partially-renameable link with nameType="partial". Multiple variadic and non-
             variadic parts.
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 41badfbc71e26dfa487feee3574c1a002dd8dda03da498fa6aba060e126a4648
+# 29a66a4a61f5a6bbfdc6cfbdeb05e2972035d588dbbb8b22845fee404fc7290c
 # <?xml version='1.0' encoding='UTF-8'?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl"?>
 # <!--

@@ -146,7 +146,7 @@ def test_nxdl2yaml_doc():
     parsed_yaml_file = str(NXDL2NYAML_DATA_DIR / "doc_nxdl2yaml_parsed.yaml")
 
     result = CliRunner().invoke(
-        nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", nxdl_file]
+        nyaml2nxdl.launch_tool, ["--do-not-store-nxdl", str(nxdl_file)]
     )
 
     if result.exit_code != 0:
@@ -168,7 +168,8 @@ def test_nxdl2yaml_doc():
 @pytest.mark.parametrize(
     "test_input",
     [
-        ("NXdimensionsType"),
+        "NXattributes",
+        "NXdimensionsType",
     ],
 )
 def test_backward_conversion(test_input):

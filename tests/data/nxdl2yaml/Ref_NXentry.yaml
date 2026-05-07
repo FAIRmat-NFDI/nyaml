@@ -1,58 +1,60 @@
-category: base
-doc: |
+\category: base
+\doc: |
   my nice doc string in root level.
   my nice doc string in root level, line 2.
-type: group
+\type: group
 NXentry(NXobject):
   \@default:
-    doc: |
+    \doc: |
       oki
   (NXdata):
-    doc: |
+    \doc: |
       my nice doc string.
             my nice doc string, line 2.
   \@IDF_Version:
     
     # as ratified at NIAC2010
-    doc: |
+    \doc: |
       my nice single line doc string
   title:
-    doc: |
+    \doc: |
       Extended title for entry
   collection_description:
-    doc: |
+    \doc: |
       My not very proper doc string, it is supported though
   experiment_identifier:
-    doc: |
+    \doc: |
       My not very proper doc string, it is supported though
          Point-1:
               my not very proper doc string, line2
       my not very proper doc string, line3
   experiment_description:
-    doc: |
+    \doc: |
       My single line doc string.
   experiment_documentation(NXnote):
-    doc: |
+    \doc: |
       My single line doc string, with doc tags in different lines
   collection_identifier:
-    doc: |
+    \doc: |
       Yet another doc string not very proper but supported
   entry_identifier_uuid:
-    doc: |
+    \doc: |
       Yet another doc string not very proper but supported
       Yet another doc string not very proper but supported, line2
     \@version:
-      doc: |
+      \doc: |
         Version of UUID used
   entry_identifier:
-    doc: |
+    \doc: |
       Trailing line doc stringy. Trailing lines are removed
   test_field:
-    \@vector(NX_NUMBER):
-      doc: |
+    \@vector:
+      \type: NX_NUMBER
+      \doc: |
         Attribute with specific datatype within a field.
-  \@vector(NX_NUMBER):
-    doc: |
+  \@vector:
+    \type: NX_NUMBER
+    \doc: |
       Attribute with specific datatype within a group.
   (NXuser):
   (NXsample):
@@ -64,7 +66,7 @@ NXentry(NXobject):
   (NXsubentry):
 
 # ++++++++++++++++++++++++++++++++++ SHA HASH ++++++++++++++++++++++++++++++++++
-# 8d8156cf685e453b5484635835e30c6a8fa7dbe6b16c0c64afae82c6e444de14
+# 73f676d5817e4866e90cf0724292bdcde951271777327bacc9f74a6655b8a63f
 # <?xml version="1.0" encoding="UTF-8"?>
 # <?xml-stylesheet type="text/xsl" href="nxdlformat.xsl" ?>
 # <!--
