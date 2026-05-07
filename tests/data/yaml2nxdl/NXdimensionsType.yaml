@@ -94,8 +94,6 @@ NXdimensions(NXobject):
         \rank: symbol_a
     dimensions_without_dim(NX_NUMBER):
       \doc: |
-        This is an example of a dimensions definition that does not specify the rank.
-        This is not recommended as it can lead to ambiguity and is not supported by
-        the current version of nyaml2nxdl.
+        This is an example of a dimensions definition that does not specify the dim.
       \dimensions:
         \rank: 5
