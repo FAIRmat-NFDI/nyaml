@@ -93,6 +93,64 @@ def test_dimension(test_input):
     os.remove(test_yml_output_file)
 
 
+@pytest.mark.parametrize(
+    "rank_value,dim_entries,expected_error",
+    [
+        pytest.param(
+            "2",
+            [
+                '<dim index="1" value="1"/>',
+                '<dim index="2" value="symbol_a"/>',
+                '<dim index="3" value="symbol_b"/>',
+            ],
+            "rank '2' does not match the number of dim entries (3).",
+            id="rank2_vs_3_dims",
+        ),
+        pytest.param(
+            "1",
+            [
+                '<dim index="1" value="symbol_a"/>',
+                '<dim index="2" value="symbol_b"/>',
+            ],
+            "rank '1' does not match the number of dim entries (2).",
+            id="rank1_vs_2_dims",
+        ),
+    ],
+)
+def test_dimensions_rank_dim_mismatch_raises_error(
+    tmp_path, rank_value, dim_entries, expected_error
+):
+    """An explicit numeric rank in NXDL dimensions must match the number of dim entries."""
+    dims_xml = "\n".join(f"        {entry}" for entry in dim_entries)
+    nxdl_text = (
+        "<?xml version='1.0' encoding='UTF-8'?>\n"
+        '<definition xmlns="http://definition.nexusformat.org/nxdl/3.1" '
+        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" '
+        'category="application" type="group" name="NXtest" '
+        'extends="NXobject" '
+        'xsi:schemaLocation="http://definition.nexusformat.org/nxdl/3.1 ../nxdl.xsd">\n'
+        '  <group type="NXentry">\n'
+        '    <field name="some_field" type="NX_NUMBER">\n'
+        f'      <dimensions rank="{rank_value}">\n'
+        f"{dims_xml}\n"
+        "      </dimensions>\n"
+        "    </field>\n"
+        "  </group>\n"
+        "</definition>\n"
+    )
+    input_file = tmp_path / "rank_dim_mismatch.nxdl.xml"
+    parsed_yaml_file = tmp_path / "rank_dim_mismatch_parsed.yaml"
+    input_file.write_text(nxdl_text, encoding="utf-8")
+
+    result = CliRunner().invoke(nyaml2nxdl.launch_tool, [str(input_file)])
+    assert result.exit_code != 0
+    message = str(result.output) + str(result.exception)
+    assert expected_error in message
+
+    if parsed_yaml_file.exists():
+        os.remove(parsed_yaml_file)
+
+
 def test_nxdl2yaml_doc_format_and_nxdl_part_as_comment():
     """
     This test for two reasons:

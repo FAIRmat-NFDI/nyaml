@@ -445,7 +445,7 @@ def xml_handle_dimensions(
         try:
             rank_value = int(rank_value)
         except (ValueError, TypeError):
-            return  # Descriptive rank
+            return  # Descriptive rank coming from symbolic name
         if rank_value is None:
             return
 

@@ -138,5 +138,13 @@ base_classes/NXsensor, use of index, value and index, ref pairs respectively-->
             </doc>
             <dimensions rank="symbol_a"/>
         </field>
+        <field name="dimensions_without_dim" type="NX_NUMBER">
+            <doc>
+                This is an example of a dimensions definition that does not specify the rank.
+                This is not recommended as it can lead to ambiguity and is not supported by
+                the current version of nyaml2nxdl.
+            </doc>
+            <dimensions rank="5"/>
+        </field>
     </group>
 </definition>

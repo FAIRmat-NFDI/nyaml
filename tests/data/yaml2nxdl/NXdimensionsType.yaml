@@ -92,3 +92,10 @@ NXdimensions(NXobject):
         Shorthand for cases that specify only the rank.
       \dimensions:
         \rank: symbol_a
+    dimensions_without_dim(NX_NUMBER):
+      \doc: |
+        This is an example of a dimensions definition that does not specify the rank.
+        This is not recommended as it can lead to ambiguity and is not supported by
+        the current version of nyaml2nxdl.
+      \dimensions:
+        \rank: 5
