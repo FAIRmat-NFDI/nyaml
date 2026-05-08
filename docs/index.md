@@ -23,6 +23,7 @@ Step-by-step guides for installing `nyaml` and writing NeXus definitions in YAML
 How to install and use the `nyaml` tool
 
 - [Getting started with `nyaml`](howtos/howto.md)
+- [How to cite `nyaml`](references/how-to-cite.md)
 
 </div>
 
