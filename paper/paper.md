@@ -54,11 +54,11 @@ authors:
     affiliation: 1
 
 affiliations:
-  - name: Physics Department and CSMB, Humboldt-Universität zu Berlin, Berlin, Germany
+  - name: Physics Department and CSMB, Humboldt-Universität zu Berlin, Zum Großen Windkanal 2, D-12489 Berlin, Germany
     index: 1
-  - name: Lehrstuhl für Angewandte Physik, Friedrich-Alexander-Universität Erlangen-Nürnberg, Erlangen, Germany
+  - name: Lehrstuhl für Angewandte Physik, Friedrich-Alexander-Universität Erlangen-Nürnberg, Staudtstr. 7, D-91058 Erlangen, Germany
     index: 2
-  - name: Department Heterogeneous Reactions, Max Planck Institute for Chemical Energy Conversion, Mülheim an der Ruhr, Germany
+  - name: Department Heterogeneous Reactions, Max Planck Institute for Chemical Energy Conversion, Stiftstraße 34-36, D-45470 Mülheim an der Ruhr, Germany
     index: 3
 
 date: 01 July 2025
@@ -77,9 +77,9 @@ The growth of both the standard and the number of NeXus definition developers ma
 
 # nyaml Converter
 
-The __nyaml__ tool is a Python package, containing the several modules, that provides a command line interface for converting NeXus application definitions or base classes from YAML format (file with a __.yaml__ extension) into the XML format (file with a __.nxdl.xml__ extension) and vice-versa. To write a NeXus application definition or a base class in YAML format, the __nyaml__ package introduces a set of the keywords and syntactic rules (see [Documentation](https://fairmat-nfdi.github.io/nyaml)) that are specific to the NXDL (NeXus Definition Language) in the YAML format.
+The __nyaml__ tool is a Python package developed for converting NeXus application definitions or base classes from YAML format (file with a __.yaml__ extension) into the XML format (file with a __.nxdl.xml__ extension) and vice-versa. The package is published in PyPI and therefore can be installed using python package managers (e.g.__pip__). To write a NeXus application definition or a base class in YAML format, the __nyaml__ package introduces a set of the keywords and syntactic rules (see [Documentation](https://fairmat-nfdi.github.io/nyaml)) that are specific to the NXDL (NeXus Definition Language) in the YAML format.
 
- The __nyaml__ package is designed to be used as a command line tool, but it can also be utilised as a Python module for programmatic use. The package in published in PyPI and therefore can be installed using python package manager __pip__. The converter command is invoked by the __nyaml2nxdl__ registered in the __nyaml.cli__ module [@Click:2025]. In that module, the function __launch_tool__ decides upon the input file type which conversion (either from YAML to XML or XML to YAML) will be invoked and execute the corresponding pipeline of the data workflow (\autoref{fig:nyaml_workflow}).
+The tool is designed to be used as a command line tool, but it can also be utilized as a Python module for programmatic use. The converter command is invoked by the __nyaml2nxdl__ registered in the __nyaml.cli__ module [@Click:2025]. In that module, the function __launch_tool__ decides upon the input file type which conversion (either from YAML to XML or XML to YAML) will be invoked and execute the corresponding pipeline of the data workflow (\autoref{fig:nyaml_workflow}).
 
 ![Converter workflow for nyaml tool, XML to YAML and vice-versa \label{fig:nyaml_workflow}](assets/workflow-1.pdf){ width=75% }
 
@@ -105,11 +105,11 @@ By attaching the XML content and its hash to the YAML output, the tool enables l
 
 # Evaluation from NIAC
 
-The NeXus International Advisory Committee (NIAC) is the governing body responsible for overseeing the development and maintenance of the NeXus data standard. A core responsibility of the NIAC is the stewardship of the NeXus Definition Language (NXDL), the XML-based schema that defines the hierarchical structure and semantics of NeXus data files [Koennecke:2015]. As part of its mission to facilitate the standardization of NeXus definitions in NXDL, NIAC has recently reviewed and formally accepted the __nyaml__ tool. Following a successful evaluation, NIAC has approved __nyaml__ and endorsed it as the recommended tool for preparing NeXus definition proposals. In support of this decision, the official NeXus definition repository was updated to integrate __nyaml__ into its workflow through the addition of two makefile targets: 'make nyaml', which converts existing definitions from the canonical nxdl.xml format into .yaml, and 'make nxdl', which detects modified or newly added .yaml files and converts them back into valid nxdl.xml format for submission and version control. This integration ensures that contributions made in .nyaml are compatible with the existing XML-based infrastructure. The adoption of __nyaml__ by NIAC reflects an ongoing commitment to fostering community engagement and modernising the technical tools underpinning the NeXus standard [@NIAC:2025].
+The NeXus International Advisory Committee (NIAC) is the governing body responsible for overseeing the development and maintenance of the NeXus data standard. A core responsibility of the NIAC is the stewardship of the NeXus Definition Language (NXDL), the XML-based schema that defines the hierarchical structure and semantics of NeXus data files [Koennecke:2015]. As part of its mission to facilitate the standardization of NeXus definitions in NXDL, NIAC has recently reviewed and formally accepted the __nyaml__ tool. Following a successful evaluation, NIAC has approved __nyaml__ and endorsed it as the recommended tool for preparing NeXus definition proposals. In support of this decision, the official NeXus definition repository was updated to integrate __nyaml__ into its workflow through the addition of two makefile targets: 'make nyaml', which converts existing definitions from the canonical nxdl.xml format into .yaml, and 'make nxdl', which detects modified or newly added .yaml files and converts them back into valid nxdl.xml format for submission and version control. This integration ensures that contributions made in .nyaml are compatible with the existing XML-based infrastructure. The adoption of __nyaml__ by NIAC reflects an ongoing commitment to fostering community engagement and modernizing the technical tools underpinning the NeXus standard [@NIAC:2025].
 
 # Acknowledgements
 The __nyaml__ software development is funded by the German National Research Data Infrastructure
-(NDFI) consortia FAIRmat (Deutsche Forschungsgemeinschaft DFG, 460197019).
+(NFDI) consortia FAIRmat (Deutsche Forschungsgemeinschaft DFG, 460197019).
 
 # References
 

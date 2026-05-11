@@ -6,6 +6,12 @@ Draxl
 Florian
 Forschungsgemeinschaft
 Heiko
+# Skip spelling check for the following words
+
+# Doc related words
+mkdocs
+Könnecke
+NXmpes
 IUPAC
 José
 Könnecke
@@ -58,3 +64,42 @@ someint
 somevalue
 val
 sourceline
+Forschungsgemeinschaft
+
+## Paper related words
+Angewandte
+Brockhauser
+CSMB
+Dobener
+Draxl
+Erlangen
+Florian
+Forschungsgemeinschaft
+Großen
+Heiko
+José
+Koennecke
+Kühbach
+Lehrstuhl
+Lukas
+Markus
+Márquez
+Mozumder
+Mülheim
+NFDI
+NIAC
+NXDL
+Pielsticker
+Physik
+Prieto
+Sandor
+Shabih
+Sherjeel
+Staudtstr
+Stiftstraße
+Universität
+Windkanal
+autoref
+lxml
+nyaml
+orcid
