@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 title: 'nyaml: A Python package that converts NeXus application definitions and base classes from the NXDL XML format to the YAML format and vice versa'
-version: 0.2.3
+version: 1.0.0
 message:
   If you use this software, please cite it using the
   metadata from this file.
