@@ -1,0 +1,24 @@
+extends: default
+
+ignore: |
+  .git/
+  .venv/
+  .PE*/
+  build/
+  site/
+  nyaml.egg-info/
+  src/nyaml.egg-info/
+  **/*.dist-info/
+
+rules:
+  document-start: disable
+  comments-indentation: disable
+  line-length:
+    max: 160
+    level: warning
+    allow-non-breakable-words: true
+    allow-non-breakable-inline-mappings: true
+  truthy: disable
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
