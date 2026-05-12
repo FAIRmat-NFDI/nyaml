@@ -1,6 +1,6 @@
 cff-version: 1.2.0
-title: 'nyaml: A Python package that converts NeXus application definitions and base classes from the NXDL XML format to the YAML format and vice versa'
-version: 1.0.1
+title: 'nyaml: Format Converter for the NeXus Data Model'
+version: 1.0.2
 message:
   If you use this software, please cite it using the
   metadata from this file.
@@ -40,9 +40,9 @@ authors:
   - given-names: Heiko B.
     family-names: Weber
     orcid: 'https://orcid.org/0000-0002-6403-9022'
-doi: 10.5281/zenodo.13860810
+doi: 10.5281/zenodo.20135563
 repository-code: 'https://github.com/FAIRmat-NFDI/nyaml'
-url: https://doi.org/10.5281/zenodo.13860810
+url: https://doi.org/10.5281/zenodo.20135563
 abstract:
   nyaml is a Python software tool designed for developers and users of the NeXus data exchange format
   (https://www.nexusformat.org/). The tool converts files that follow the NeXus Definition Language
