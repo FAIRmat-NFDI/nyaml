@@ -35,3 +35,6 @@ jobs:
           sed -i '/^funding:/,$d' CITATION.cff 
 
           uv run --with cffconvert cffconvert --validate --format zenodo || exit 1
+      - name: Validate yaml rules in CITATION.cff
+        run: |
+          uv run --with yamllint yamllint -c .yamllint.yml CITATION.cff || exit 1
