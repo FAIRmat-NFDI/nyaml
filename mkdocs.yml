@@ -11,6 +11,7 @@ nav:
       - Contributing: tutorials/contributing.md
   - How-to guides:
       - Getting started with nyaml: howtos/howto.md
+      - How to cite: references/how-to-cite.md
   - Explanation:
       - Introduction to NeXus: https://manual.nexusformat.org/index.html
       - Motivation behind the nyaml tool: learn/explanations.md

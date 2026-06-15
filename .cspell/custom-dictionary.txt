@@ -31,8 +31,11 @@ Sandor
 Shabih
 Sherjeel
 appdef
+bibtex
 fspath
 infty
+issn
+jabref
 lxml
 mkdocs
 mkuehbach
